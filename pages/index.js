@@ -5,56 +5,54 @@ import Table from 'react-bootstrap/Table'
 import axios from 'axios'
 import supertrend from '../utils/supertrend'
 
-export async function getServerSideProps({ query }) {
-  const markets = query.markets?.split(',') || ['usd', 'eth', 'btc']
-  const days = query.days || 30
-  const atrPeriods = query.atrPeriods || 10
-  const multiplier = query.multiplier || 1.5
-  try {
-    const coins = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/coins/markets?vs_currency=usd`)
-    let results = []
-    for (let coin of coins.data) {
-      const ohlcRoutes = markets.map(market => market !== coin.symbol ? `${process.env.NEXT_PUBLIC_API_URL}/coins/${coin.id}/ohlc?vs_currency=${market}&days=${days}` : '')
-      let trends = []
-      for (let route of ohlcRoutes) {
-        try {
-          if (route) {
-            const response = await axios.get(route)
-            console.log('request took place')
-            await new Promise(resolve => setTimeout(resolve, 1500))
-            let trend = supertrend(response.data, { atrPeriods, multiplier })
-            trends.push(trend[trend.length - 1] || '')
-          } else {
-            return ''
-          }
-        } catch (error) {
-          console.log(error.message)
-          console.log(`Error retrieving history ${route}`)
+const FETCH_ERROR = 'FETCH_ERROR'
+
+export async function getStaticProps() {
+  const markets = ['usd', 'eth', 'btc']
+  const days = 30
+  const atrPeriods = 5
+  const multiplier = 1.5
+
+  const coins = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/coins/markets?vs_currency=usd`)
+  let results = []
+  for (let coin of coins.data.slice(0, 10)) {
+    const ohlcRoutes = markets.map(market => {
+      if(market === coin.symbol) { return '' }
+
+      return `${process.env.NEXT_PUBLIC_API_URL}/coins/${coin.id}/ohlc?vs_currency=${market}&days=${days}`
+    })
+    let trends = []
+    for (let route of ohlcRoutes) {
+      try {
+        if (route) {
+          console.log(`Requesting ${route}`)
+          const response = await axios.get(route)
+          // REFACTOR: Move this to the FE in order to be able to filter data
+          let trend = supertrend(response.data, { atrPeriods, multiplier })
+          trends.push(trend[trend.length - 1] || '')
+          // In order to not hit the free Coingecko API rate limit of 50 calls/min
+          await new Promise((res) => setTimeout(res, 1200))
+        } else {
           trends.push('')
         }
+      } catch (error) {
+        console.error(`Error retrieving history for ${route}`)
+        console.error(error.message)
+        trends.push(FETCH_ERROR)
       }
-      let trend = [...trends].filter(entry => entry === 'buy').length
-      // Figure out if there are more buys than sells
-      trend = trend >= Math.round(trends.length / 2) ? 'buy' : 'sell'
-      results.push([coin.id, trends, trend].flat())
     }
-    return ({
-      props: {
-        markets,
-        results
-      }
-    })
-  } catch (error) {
-    console.log(error.message)
+    results.push([coin.symbol, ...trends])
   }
   return ({
     props: {
-      markets
-    }
+      markets,
+      results
+    },
+    revalidate: 60 * 60 * 24
   })
 }
 
-export default function Home({ markets, results = [] }) {
+export default function Home({ markets, results }) {
   return (
     <Container className='mt-5'>
       <Row>
@@ -66,12 +64,23 @@ export default function Home({ markets, results = [] }) {
               {
                 markets.map(market => <th key={`market-${market}`} className="text-center">{market.toUpperCase()}</th>)
               }
-              <th className="text-center">Trend</th>
             </tr>
           </thead>
           <tbody>
               {
-                results.map((result, index) => <tr key={`row-${index}`}>{result.map(res => <td key={`value-${res}`} className="text-center">{res}</td>)}</tr>)
+                results.map((result) => {
+                  return (
+                    <tr key={`row-${result[0]}`}>
+                      {result.map((res) => {
+                        const value = res === FETCH_ERROR ? 'API Error' : res;
+                        return (
+                          // eslint-disable-next-line react/jsx-key
+                          <td className="text-center">{value}</td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })
               }
           </tbody>
         </Table>
