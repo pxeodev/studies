@@ -23,18 +23,20 @@ export async function getStaticProps() {
     })
     let trends = []
     for (let route of ohlcRoutes) {
+      if (!route) {
+        trends.push('')
+        continue
+      }
       try {
-        if (route) {
           console.log(`Requesting ${route}`)
           const response = await axios.get(route)
           // REFACTOR: Move this to the FE in order to be able to filter data
-          let trend = supertrend(response.data, { atrPeriods, multiplier })
+        // REFACTOR: The supertrend should only take the OHLC data as parameters without volume
+        // REFACTOR: The supertrend return value should only be binary buy/sell
+        let trend = supertrend(response.data.slice(0,12), { atrPeriods, multiplier })
           trends.push(trend[trend.length - 1] || '')
           // In order to not hit the free Coingecko API rate limit of 50 calls/min
           await new Promise((res) => setTimeout(res, 1200))
-        } else {
-          trends.push('')
-        }
       } catch (error) {
         console.error(`Error retrieving history for ${route}`)
         console.error(error.message)
