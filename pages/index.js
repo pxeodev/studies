@@ -3,6 +3,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Table from 'react-bootstrap/Table'
 import axios from 'axios'
+import chunk from 'lodash/chunk'
+
 import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
 
@@ -31,10 +33,29 @@ export async function getStaticProps() {
       try {
         console.log(`Requesting ${route}`)
         const response = await axios.get(route)
+
+        // Convert 4 hour chunks into days
+        let ohlcs = response.data
+        ohlcs.reverse()
+        ohlcs = chunk(ohlcs, 6)
+        // Remove the last chunk if it's not containing a full day
+        if (ohlcs[ohlcs.length - 1].length < 6) {
+          ohlcs.pop()
+        }
+        ohlcs = ohlcs.map((dailyOhlcs) => {
+          const dayOpen = dailyOhlcs[dailyOhlcs.length - 1][1]
+          const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc[2]))
+          const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc[3]))
+          const dayClose = dailyOhlcs[0][4]
+
+          return [dayOpen, dayHigh, dayLow, dayClose]
+        })
+        ohlcs.reverse()
+
         // REFACTOR: Move this to the FE in order to be able to filter data
         // REFACTOR: The supertrend should only take the OHLC data as parameters without volume
         // REFACTOR: The supertrend return value should only be binary buy/sell
-        let trend = supertrend(response.data, { atrPeriods, multiplier })
+        let trend = supertrend(ohlcs, { atrPeriods, multiplier })
         trends.push(trend[trend.length - 1] || '')
         // In order to not hit the free Coingecko API rate limit of 50 calls/min
         await new Promise((res) => setTimeout(res, 1200))
