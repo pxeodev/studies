@@ -8,7 +8,7 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
       return [...entry, 0]
     }
     // Max of (High-Low, High-Close, Low-Close)
-    const tr = Math.max(...[entry[2] - entry[3], Math.abs(entry[2] - data[index - 1][4]), Math.abs(entry[3] - data[index - 1][4])]) || 0
+    const tr = Math.max(...[entry[1] - entry[2], Math.abs(entry[1] - data[index - 1][3]), Math.abs(entry[2] - data[index - 1][3])]) || 0
     return [...entry, round(tr, 10)]
   })
   .map((entry, index, array) => {
@@ -21,9 +21,9 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
       .reduce((previous, next) => previous + next, 0) / options.atrPeriods
     const roundedAtrSMA = round(atrSMA, 10)
 
-    const basicUpperband = (entry[2] + entry[3]) / 2 + options.multiplier * atrSMA
+    const basicUpperband = (entry[1] + entry[2]) / 2 + options.multiplier * atrSMA
     const roundedBasicUpperband = round(basicUpperband, 10)
-    const basicLowerband = (entry[2] + entry[3]) / 2 - options.multiplier * atrSMA
+    const basicLowerband = (entry[1] + entry[2]) / 2 - options.multiplier * atrSMA
     const roundedBasicLowerband = round(basicLowerband, 10)
 
     let newEntry = [...entry, roundedAtrSMA, roundedBasicUpperband, roundedBasicLowerband]
@@ -37,14 +37,14 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
   .reduce((previousResult, currentEntry, index) => {
     if (index <= options.atrPeriods) { return [...previousResult, currentEntry] }
 
-    const previousClose = previousResult[index -1][4]
+    const previousClose = previousResult[index -1][3]
 
-    const previousFinalUpperband = previousResult[index - 1][9]
-    const currentBasicUpperband = currentEntry[7]
+    const previousFinalUpperband = previousResult[index - 1][8]
+    const currentBasicUpperband = currentEntry[6]
     const finalUpperband = (currentBasicUpperband < previousFinalUpperband || previousClose > previousFinalUpperband) ? currentBasicUpperband : previousFinalUpperband
 
-    const previousFinalLowerband = previousResult[index - 1][10]
-    const currentBasicLowerband = currentEntry[8]
+    const previousFinalLowerband = previousResult[index - 1][9]
+    const currentBasicLowerband = currentEntry[7]
     const finalLowerband = (currentBasicLowerband > previousFinalLowerband || previousClose < previousFinalLowerband) ? currentBasicLowerband : previousFinalLowerband
 
     return [...previousResult, [...currentEntry, finalUpperband, finalLowerband]]
@@ -52,12 +52,12 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
   .map((entry, index, array) => {
     if (index < options.atrPeriods) { return '' }
 
-    const previousSuperTrend = array[index - 1][11]
-    const previousFinalUpperband = array[index - 1][9]
-    const previousFinalLowerband = array[index - 1][10]
-    const currentClose = entry[4]
-    const currentFinalUpperband = entry[9]
-    const currentFinalLowerband = entry[10]
+    const previousSuperTrend = array[index - 1][10]
+    const previousFinalUpperband = array[index - 1][8]
+    const previousFinalLowerband = array[index - 1][9]
+    const currentClose = entry[3]
+    const currentFinalUpperband = entry[8]
+    const currentFinalLowerband = entry[9]
 
     let supertrendIndicator;
     if (previousSuperTrend === previousFinalUpperband && currentClose <= currentFinalUpperband) {
@@ -72,7 +72,7 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
 
     entry.push(supertrendIndicator)
 
-    return entry[4] < supertrendIndicator ? 'sell' : 'buy'
+    return entry[3] < supertrendIndicator ? 'sell' : 'buy'
   })
 }
 

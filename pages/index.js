@@ -53,7 +53,6 @@ export async function getStaticProps() {
         ohlcs.reverse()
 
         // REFACTOR: Move this to the FE in order to be able to filter data
-        // REFACTOR: The supertrend should only take the OHLC data as parameters without volume
         // REFACTOR: The supertrend return value should only be binary buy/sell
         let trend = supertrend(ohlcs, { atrPeriods, multiplier })
         trends.push(trend[trend.length - 1] || '')
