@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Table from 'react-bootstrap/Table'
 import axios from 'axios'
+import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
 
 const FETCH_ERROR = 'FETCH_ERROR'
@@ -43,7 +44,16 @@ export async function getStaticProps() {
         trends.push(FETCH_ERROR)
       }
     }
-    results.push([coin.symbol, ...trends])
+    let superSupertrend;
+    const superTrends = trends.filter(trend => trend.length)
+    if (trends.includes(FETCH_ERROR)) {
+      superSupertrend = FETCH_ERROR
+    } else if (superTrends.length === 2) {
+      superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : 'tie'
+    } else {
+      superSupertrend = mode(superTrends)
+    }
+    results.push([coin.symbol, ...trends, superSupertrend])
   }
   return ({
     props: {
@@ -66,6 +76,7 @@ export default function Home({ markets, results }) {
               {
                 markets.map(market => <th key={`market-${market}`} className="text-center">{market.toUpperCase()}</th>)
               }
+              <th className="text-center bg-secondary text-white">Super SuperTrend</th>
             </tr>
           </thead>
           <tbody>
@@ -73,11 +84,19 @@ export default function Home({ markets, results }) {
                 results.map((result) => {
                   return (
                     <tr key={`row-${result[0]}`}>
-                      {result.map((res) => {
+                      {result.map((res, idx, arr) => {
                         const value = res === FETCH_ERROR ? 'API Error' : res;
+                        const classNames = ["text-center"]
+                        if (arr.length - 1 === idx) {
+                          if (value === 'buy') {
+                            classNames.push("bg-info")
+                          } if (value === 'sell') {
+                            classNames.push("bg-warning")
+                          }
+                        }
                         return (
                           // eslint-disable-next-line react/jsx-key
-                          <td className="text-center">{value}</td>
+                          <td className={classNames.join(' ')}>{value}</td>
                         );
                       })}
                     </tr>
