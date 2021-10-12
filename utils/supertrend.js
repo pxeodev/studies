@@ -64,7 +64,7 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
       supertrendIndicator = currentFinalUpperband
     } else if (previousSuperTrend === previousFinalUpperband && currentClose > currentFinalUpperband) {
       supertrendIndicator = currentFinalLowerband
-    } else if (previousSuperTrend === previousFinalLowerband && currentClose >= currentFinalUpperband) {
+    } else if (previousSuperTrend === previousFinalLowerband && currentClose >= currentFinalLowerband) {
       supertrendIndicator = currentFinalLowerband
     } else if (previousSuperTrend === previousFinalLowerband && currentClose < currentFinalLowerband) {
       supertrendIndicator = currentFinalUpperband
