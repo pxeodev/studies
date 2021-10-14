@@ -73,7 +73,11 @@ export async function getStaticProps() {
     } else {
       superSupertrend = mode(superTrends)
     }
-    results.push([coin.symbol, ...trends, superSupertrend])
+    results.push({
+      coin: coin.symbol,
+      trends,
+      superSupertrend
+    })
   }
   return ({
     props: {
@@ -89,34 +93,32 @@ export default function Home({ markets, results }) {
     <Container className='mt-5'>
       <Row>
         <Col>
-        <Table striped bordered hover>
+        <Table bordered spellCheck={false}>
           <thead>
             <tr>
               <th className="text-center bg-primary text-white">Coin</th>
               {
                 markets.map(market => <th key={`market-${market}`} className="text-center">{market.toUpperCase()}</th>)
               }
-              <th className="text-center bg-secondary text-white">Super SuperTrend</th>
             </tr>
           </thead>
           <tbody>
               {
                 results.map((result) => {
+                  const classNames = []
+                  if (result.superSupertrend === 'buy') {
+                    classNames.push("bg-info")
+                  } if (result.superSupertrend === 'sell') {
+                    classNames.push("bg-warning")
+                  }
                   return (
-                    <tr key={`row-${result[0]}`}>
-                      {result.map((res, idx, arr) => {
+                    <tr key={result.coin} className={classNames}>
+                      <th className="text-center text-uppercase" scope="row">{result.coin}</th>
+                      {result.trends.map((res) => {
                         const value = res === FETCH_ERROR ? 'API Error' : res;
-                        const classNames = ["text-center"]
-                        if (arr.length - 1 === idx) {
-                          if (value === 'buy') {
-                            classNames.push("bg-info")
-                          } if (value === 'sell') {
-                            classNames.push("bg-warning")
-                          }
-                        }
                         return (
                           // eslint-disable-next-line react/jsx-key
-                          <td className={classNames.join(' ')}>{value}</td>
+                          <td className="text-center">{value}</td>
                         );
                       })}
                     </tr>
