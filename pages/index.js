@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Table from 'react-bootstrap/Table'
 import axios from 'axios'
 import * as rax from 'retry-axios'
-import chunk from 'lodash/chunk'
+import groupBy from 'lodash/groupBy'
 
 import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
@@ -82,21 +82,19 @@ export default function Home({ coinsOHLCs }) {
                 coinsOHLCs.map((coinOHLC) => {
                   const trends = coinOHLC.data.map((coinOHLCdata) => {
                     // Convert 4 hour chunks into days
-                    coinOHLCdata.reverse()
-                    coinOHLCdata = chunk(coinOHLCdata, 6)
-                    // Remove the last chunk if it's not containing a full day
-                    if (coinOHLCdata[coinOHLCdata.length - 1]?.length < 6) {
-                      coinOHLCdata.pop()
-                    }
+                    coinOHLCdata = groupBy(coinOHLCdata, (tohlc) => {
+                      const date = new Date(tohlc[0])
+                      return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
+                    })
+                    coinOHLCdata = Object.values(coinOHLCdata)
                     coinOHLCdata = coinOHLCdata.map((dailyOhlcs) => {
-                      const dayOpen = dailyOhlcs[dailyOhlcs.length - 1][1]
+                      const dayOpen = dailyOhlcs[0][1]
                       const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc[2]))
                       const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc[3]))
-                      const dayClose = dailyOhlcs[0][4]
+                      const dayClose = dailyOhlcs[dailyOhlcs.length - 1][4]
 
                       return [dayOpen, dayHigh, dayLow, dayClose]
                     })
-                    coinOHLCdata.reverse()
                     let trend = supertrend(coinOHLCdata, { atrPeriods, multiplier })
                     return trend[trend.length - 1] || ''
                   })
