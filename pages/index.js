@@ -77,11 +77,12 @@ export async function getStaticProps() {
 export default function Home({ coinsOHLCs }) {
   const [marketCapMin, setMarketCapMin] = useState(coinsOHLCs[coinsOHLCs.length - 1].marketCap)
   const [marketCapMax, setMarketCapMax] = useState(coinsOHLCs[0].marketCap)
+  const [coinNameFilter, setCoinNameFilter] = useState('')
 
   const displayedCoins = coinsOHLCs.filter((coinOHLC) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
-    return coinOHLC.marketCap <= max && coinOHLC.marketCap >= min
+    return coinOHLC.marketCap <= max && coinOHLC.marketCap >= min && coinOHLC.coin.toLowerCase().includes(coinNameFilter)
   })
   return (
     <Form>
@@ -94,6 +95,14 @@ export default function Home({ coinsOHLCs }) {
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Max Market cap</Form.Label>
             <Form.Control type="number" value={marketCapMax} onChange={(e) => setMarketCapMax(e.target.value)}/>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Label>Search for a coin name</Form.Label>
+            <Form.Control
+              type="search"
+              value={coinNameFilter}
+              onChange={(e) => setCoinNameFilter(e.target.value)}
+            />
           </Form.Group>
           <Col>
           <Table bordered spellCheck={false}>
