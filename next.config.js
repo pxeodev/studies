@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
   experimental: {
-    staticPageGenerationTimeout: 60 * 15
+    staticPageGenerationTimeout: 60 * 60
   }
 }
