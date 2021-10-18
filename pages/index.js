@@ -13,10 +13,11 @@ const markets = ['usd', 'eth', 'btc']
 const days = 30
 const atrPeriods = 5
 const multiplier = 1.5
+const excludedMarkets = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd']
 
 export async function getStaticProps() {
   const coinGeckoAPI = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: 'https://api.coingecko.com/api/v3',
     timeout: 30000
   })
   coinGeckoAPI.defaults.raxConfig = {
@@ -24,8 +25,8 @@ export async function getStaticProps() {
   }
   rax.attach(coinGeckoAPI)
 
-  const coinsMarketResponse = await coinGeckoAPI.get('/coins/markets?vs_currency=usd')
-  let coinsMarketData = coinsMarketResponse.data
+  const coinsMarketResponse = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250')
+  let coinsMarketData = coinsMarketResponse.data.filter(coinMarket => !excludedMarkets.includes(coinMarket.symbol))
   if (process.env.NODE_ENV == "development") {
     coinsMarketData = coinsMarketData.slice(0, 3)
   }
@@ -35,7 +36,7 @@ export async function getStaticProps() {
     const ohlcRoutes = markets.map(market => {
       if(market === coinMarketData.symbol) { return '' }
 
-      return `${process.env.NEXT_PUBLIC_API_URL}/coins/${coinMarketData.id}/ohlc?vs_currency=${market}&days=${days}`
+      return `https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${market}&days=${days}`
     })
     let data = []
     for (let route of ohlcRoutes) {
