@@ -14,6 +14,13 @@ const days = 30
 const atrPeriods = 5
 const multiplier = 1.5
 const excludedMarkets = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd']
+const signals = {
+  buy: 'buy',
+  sell: 'sell',
+  strongBuy: 'strong buy',
+  strongSell: 'strong sell',
+  tie: 'tie'
+}
 
 export async function getStaticProps() {
   const coinGeckoAPI = axios.create({
@@ -103,15 +110,23 @@ export default function Home({ coinsOHLCs }) {
                   let superSupertrend
                   const superTrends = trends.filter(trend => trend.length)
                   if (superTrends.length === 2) {
-                    superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : 'tie'
+                    superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : signals.tie
+                  } else if (superTrends.every(tr => tr === signals.buy)) {
+                    superSupertrend = signals.strongBuy
+                  } else if (superTrends.every(tr => tr === signals.sell)) {
+                    superSupertrend = signals.strongSell
                   } else {
                     superSupertrend = mode(superTrends)
                   }
                   const classNames = []
-                  if (superSupertrend === 'buy') {
+                  if (superSupertrend === signals.buy) {
                     classNames.push("bg-info")
-                  } if (superSupertrend === 'sell') {
+                  } else if (superSupertrend === signals.sell) {
                     classNames.push("bg-warning")
+                  } else if (superSupertrend === signals.strongBuy) {
+                    classNames.push("bg-success")
+                  } else if (superSupertrend === signals.strongSell) {
+                    classNames.push("bg-danger")
                   }
                   return (
                     <tr key={coinOHLC.coin} className={classNames}>
