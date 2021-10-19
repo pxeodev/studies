@@ -7,7 +7,7 @@ import axios from 'axios'
 import * as rax from 'retry-axios'
 import groupBy from 'lodash/groupBy'
 import isFinite from 'lodash/isFinite'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
@@ -81,6 +81,18 @@ export default function Home({ coinsData }) {
   const [coinNameFilter, setCoinNameFilter] = useState('')
   const [atrPeriods, setAtrPeriods] = useState(5)
   const [multiplier, setMultiplier] = useState(1.5)
+  const setValidAtrPeriods = useCallback((e) => {
+    const newAtrPeriod = parseInt(e.target.value)
+    if (isFinite(newAtrPeriod)) {
+      setAtrPeriods(newAtrPeriod)
+    }
+  }, [])
+  const setValidMulitiplier = useCallback((e) => {
+    const newMultiplier = parseFloat(e.target.value)
+    if (isFinite(newMultiplier)) {
+      setMultiplier(newMultiplier)
+    }
+  }, [])
 
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
@@ -178,7 +190,7 @@ export default function Home({ coinsData }) {
               required={true}
               value={atrPeriods}
               min="1"
-              onChange={(e) => setAtrPeriods(Number(e.target.value))}
+              onChange={(e) => setValidAtrPeriods(e)}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -189,7 +201,7 @@ export default function Home({ coinsData }) {
               step=".01"
               min=".01"
               value={multiplier}
-              onChange={(e) => setMultiplier(Number(e.target.value))}
+              onChange={(e) => setValidMulitiplier(e)}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
