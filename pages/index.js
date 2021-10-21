@@ -99,7 +99,7 @@ export default function Home({ coinsData }) {
     const min = marketCapMin || Number.NEGATIVE_INFINITY
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
-           coinData.symbol.toLowerCase().includes(coinNameFilter)
+           coinData.symbol.toLowerCase().includes(coinNameFilter.toLowerCase())
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
     const trends = coinData.ohlcs.map((coinOHLCdata) => {
