@@ -64,13 +64,13 @@ export async function getStaticProps() {
       marketCap: coinMarketData.market_cap
     })
   }
-  return ({
+  return {
     props: {
       markets,
       coinsData
     },
-    revalidate: 60 * 60 * 24
-  })
+    revalidate: 60 * 60 * 4
+  }
 }
 
 export default function Home({ coinsData }) {
