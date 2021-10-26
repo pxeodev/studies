@@ -41,8 +41,10 @@ export async function getStaticProps() {
 
   let coinsData = []
   for (let coinMarketData of coinsMarketData) {
-    const ohlcRoutes = markets.map(market => {
-      if(market === coinMarketData.symbol) { return '' }
+    const ohlcRequests = quoteSymbols.map((quoteSymbol) => {
+      if(coinMarketData.symbol === quoteSymbol) {
+        return {}
+      }
 
       return `https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${market}&days=${days}`
     })
@@ -215,7 +217,7 @@ export default function Home({ coinsData }) {
               <tr>
                 <th className="text-center bg-primary text-white">Coin</th>
                 {
-                  markets.map(market => <th key={`market-${market}`} className="text-center">{market.toUpperCase()}</th>)
+                  quoteSymbols.map(quoteSymbol => <th key={`market-${quoteSymbol}`} className="text-center">{quoteSymbol.toUpperCase()}</th>)
                 }
               </tr>
             </thead>
@@ -236,7 +238,7 @@ export default function Home({ coinsData }) {
                       <tr key={coinData.symbol} className={classNames}>
                         <th className="text-center text-uppercase" scope="row">{coinData.symbol}</th>
                         {coinData.trends.map((trend, idx) =>
-                          <td key={markets[idx]} className="text-center">
+                          <td key={quoteSymbols[idx]} className="text-center">
                             {trend[0] && `${trend[0]} (${trend[1]})`}
                           </td>
                         )}
