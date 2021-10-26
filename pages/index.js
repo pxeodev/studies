@@ -12,7 +12,7 @@ import { useState, useCallback } from 'react'
 import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
 
-const markets = ['usd', 'eth', 'btc']
+const quoteSymbols = ['usdt', 'eth', 'btc']
 const days = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'cvxcrv', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc']
 const signals = {
