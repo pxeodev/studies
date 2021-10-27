@@ -7,6 +7,7 @@ import axios from 'axios'
 import * as rax from 'retry-axios'
 import groupBy from 'lodash/groupBy'
 import isFinite from 'lodash/isFinite'
+import isSameDay from 'date-fns/isSameDay'
 import { useState, useCallback } from 'react'
 
 import mode from '../utils/mode'
@@ -94,6 +95,7 @@ export default function Home({ coinsData }) {
       setMultiplier(newMultiplier)
     }
   }, [])
+  const today = new Date()
 
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
@@ -104,6 +106,11 @@ export default function Home({ coinsData }) {
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
     const trends = coinData.ohlcs.map((coinOHLCdata) => {
+      // Remove todays 4 hour signals to avoid repainting of the current day
+      coinOHLCdata = coinOHLCdata.filter((tohlc) => {
+        const date = new Date(tohlc[0])
+        return !isSameDay(date, today)
+      })
       // Convert 4 hour chunks into days
       coinOHLCdata = groupBy(coinOHLCdata, (tohlc) => {
         const date = new Date(tohlc[0])
