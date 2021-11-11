@@ -49,8 +49,10 @@ export async function getStaticProps() {
   cryptowatchAPI.interceptors.request.use(AxiosLogger.requestLogger);
   rax.attach(cryptowatchAPI)
 
-  const coinsMarketResponse = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250')
-  let coinsMarketData = coinsMarketResponse.data.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
+  const coinMarketsPage1 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250')
+  const coinMarketsPage2 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
+  let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data]
+  coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
   coinsMarketData = coinsMarketData.map((data) => ({...data, symbol: data.symbol.toLowerCase()}))
   if (process.env.NODE_ENV == "development") {
     coinsMarketData = coinsMarketData.slice(0, 3)
