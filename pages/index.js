@@ -19,6 +19,7 @@ import { subHours } from 'date-fns'
 const quoteSymbols = ['usd', 'eth', 'btc']
 const days = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'cvxcrv', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd']
+const excludedTokens = ['thorchain-erc20']
 const signals = {
   buy: 'buy',
   sell: 'sell',
@@ -53,6 +54,7 @@ export async function getStaticProps() {
   const coinMarketsPage2 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
   let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data]
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
+  coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
   coinsMarketData = coinsMarketData.map((data) => ({...data, symbol: data.symbol.toLowerCase()}))
   if (process.env.NODE_ENV == "development") {
     coinsMarketData = coinsMarketData.slice(0, 8)
