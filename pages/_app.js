@@ -9,6 +9,9 @@ function MyApp({ Component, pageProps }) {
         <title>Coinrotator</title>
         <meta name="description" content="Daily Supertrend values for the top 250 crypto currency tokens."/>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet"></link>
       </Head>
         <div>
           <div>
