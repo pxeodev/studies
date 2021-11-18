@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import "../styles/ant.less";
 import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
