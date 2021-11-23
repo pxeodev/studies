@@ -5,11 +5,15 @@ import groupBy from 'lodash/groupBy'
 import isFinite from 'lodash/isFinite'
 import subDays from 'date-fns/subDays'
 import { useState, useCallback } from 'react'
+import { subHours } from 'date-fns'
+import { Typography, Button } from 'antd'
 
 import mode from '../utils/mode'
 import supertrend from '../utils/supertrend'
 import isSameUTCDay from '../utils/isSameUTCDay'
-import { subHours } from 'date-fns'
+import styles from '../styles/index.module.css'
+
+const { Title } = Typography;
 
 const quoteSymbols = ['usd', 'eth', 'btc']
 const days = 30
@@ -52,7 +56,7 @@ export async function getStaticProps() {
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
   coinsMarketData = coinsMarketData.map((data) => ({...data, symbol: data.symbol.toLowerCase()}))
   if (process.env.NODE_ENV == "development") {
-    coinsMarketData = coinsMarketData.slice(0, 8)
+    coinsMarketData = coinsMarketData.slice(0, 3)
   }
 
   const cryptowatchMarketsResponse = await cryptowatchAPI.get('/markets')
@@ -229,7 +233,11 @@ export default function Home({ coinsData }) {
       .every(trendLength => trendLength >= min && trendLength <= max)
   })
 
-  return <>Body</>
+  return <>
+    <Title className={styles.title}>Rotate. Your. Dinero. Amigo.</Title>
+    <div className={styles.subTitle}>Use the SuperTrend to find promising coins. Swap you portfolio to be on a constant bull-trend. This is not financial advise.</div>
+    <Button className={styles.marketHealth} type="primary">Market Health</Button>
+  </>
   // return (
   //   <Form>
   //     <Container className='mt-5'>

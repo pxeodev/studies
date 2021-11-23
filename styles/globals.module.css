@@ -1,0 +1,63 @@
+.header {
+  background: white;
+  padding: 0;
+  position: static;
+  width: 100%;
+  z-index: 1;
+  height: 60px;
+}
+
+.logo {
+  flex-grow: 1;
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.logoSvg {
+  top: 4px;
+  left: -4px;
+}
+
+.logoTitle {
+  font-size: 20px;
+  line-height: 28px;
+  color: #262626;
+  margin-left: 5px;
+}
+
+.darkMode {
+  background: #F5F5F5;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 4px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 65px 25px;
+}
+
+.footer {
+  background: white;
+  text-align: center;
+  padding: 12px;
+}
+
+.footerTitle {
+  color: #262626;
+}
+
+.footerLove {
+  margin-bottom: 0;
+  margin-top: 4px;
+}
+
+.gaLink {
+  font-weight: bold;
+  color: #2F54EB;
+}

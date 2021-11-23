@@ -1,24 +1,41 @@
-import '../styles/globals.css'
-import "../styles/ant.less";
+import "../styles/ant.less"
+import styles from '../styles/globals.module.css'
 import Head from 'next/head'
+import Image from 'next/image'
+import { Layout, Menu } from 'antd'
+
+import useDarkMode from '../hooks/usedarkmode'
+import DarkModeSwitch from '../components/DarkModeSwitch'
+
+const { Header, Content, Footer } = Layout;
 
 function MyApp({ Component, pageProps }) {
+  const [darkMode, setDarkMode] = useDarkMode();
+
   return (
     <>
       <Head>
-        <title>Coinrotator</title>
-        <meta name="description" content="Daily Supertrend values for the top 250 crypto currency tokens."/>
+        <title>CoinRotator</title>
+        <meta name="description" content="Daily Supertrend values for the top 500 crypto currency tokens."/>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet"></link>
       </Head>
-        <div>
-          <div>
-            <div href="#home">Coinrotator - Daily Supertrend</div>
-          </div>
-        </div>
-        <Component {...pageProps} className="mt-5" />
+        <Header className={styles.header}>
+          <Menu mode="horizontal">
+            <Menu.Item key="logo" className={styles.logo} data-id="logo">
+              <Image src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
+              <span className={styles.logoTitle}><b>Coin</b>Rotator</span>
+            </Menu.Item>
+            <Menu.Item key="faq">FAQ</Menu.Item>
+            <Menu.Item key="dark-mode"><DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode}/></Menu.Item>
+          </Menu>
+        </Header>
+        <Content className={styles.content}>
+          <Component {...pageProps} />
+        </Content>
+        <Footer className={styles.footer}>
+          <b className={styles.footerTitle}>CoinRotator</b>
+          <p className={styles.footerLove}>Made with 💙 by <a className={styles.gaLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a></p>
+        </Footer>
     </>
   )
 }
