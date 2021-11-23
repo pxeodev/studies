@@ -236,7 +236,7 @@ export default function Home({ coinsData }) {
   return <>
     <Title className={styles.title}>Rotate. Your. Dinero. Amigo.</Title>
     <div className={styles.subTitle}>Use the SuperTrend to find promising coins. Swap you portfolio to be on a constant bull-trend. This is not financial advise.</div>
-    <Button className={styles.marketHealth} type="primary">Market Health</Button>
+    {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
   </>
   // return (
   //   <Form>
