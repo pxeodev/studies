@@ -72,7 +72,7 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
 
     entry.push(supertrendIndicator)
 
-    return entry[3] < supertrendIndicator ? 'sell' : 'buy'
+    return entry[3] < supertrendIndicator ? 'Sell' : 'Buy'
   })
 }
 

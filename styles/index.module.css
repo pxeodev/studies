@@ -6,10 +6,92 @@
 .subTitle {
   font-size: 16px !important;
   line-height: 24px !important;
-  color: #8C8C8C;
   max-width: 928px;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
 .marketHealth {
   margin-top: 20px;
+}
+
+.formRow {
+  width: 100%;
+}
+
+.signalRow {
+  margin-bottom: 32px;
+}
+
+.noFormBorderRight {
+  border-right: none;
+}
+
+.noFormBorderLeft {
+  border-left: none;
+}
+
+.noFormBorderTop {
+  border-top: none;
+}
+
+.parameterCard {
+  background: #FAFAFA;
+}
+
+.formLabel {
+  margin-bottom: 8px;
+}
+
+.formRangeInput {
+  width: 120px;
+  margin-right: 12px;
+}
+
+.formRangeLabel {
+  margin-right: 12px;
+}
+
+.formSelect {
+  width: 320px;
+}
+
+.formButton {
+  background: #FAFAFA;
+  margin-right: 12px;
+}
+
+.tableRow {
+  width: 100%;
+}
+
+.coinsTable {
+  width: 100%;
+}
+
+.coinsTable table {
+  border: 1px solid #F0F0F0;
+  border-radius: 2px;
+}
+
+.coinsTable table > thead tr th {
+  font-weight: bold;
+}
+
+.coinsTable table .ant-tag {
+  margin-right: 0;
+}
+
+.tableCoinWrapper > :first-child {
+  top: 2px;
+}
+
+.tableCoinName {
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.tableCoinSymbol {
+  text-transform: uppercase;
+  margin-left: 5px;
 }

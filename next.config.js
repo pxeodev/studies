@@ -5,5 +5,8 @@ module.exports = withLess({
     /* ... */
   },
   reactStrictMode: true,
-  staticPageGenerationTimeout: 60 * 60
+  staticPageGenerationTimeout: 60 * 60,
+  images: {
+    domains: ['assets.coingecko.com'],
+  },
 });

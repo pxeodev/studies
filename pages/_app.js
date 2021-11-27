@@ -2,10 +2,11 @@ import "../styles/ant.less"
 import styles from '../styles/globals.module.css'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Typography } from 'antd'
 
 import useDarkMode from '../hooks/usedarkmode'
 import DarkModeSwitch from '../components/DarkModeSwitch'
+import Paragraph from "antd/lib/skeleton/Paragraph"
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,7 +35,9 @@ function MyApp({ Component, pageProps }) {
         </Content>
         <Footer className={styles.footer}>
           <b className={styles.footerTitle}>CoinRotator</b>
-          <p className={styles.footerLove}>Made with 💙 by <a className={styles.gaLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a></p>
+          <Typography.Paragraph className={styles.footerLove} type="secondary">
+            Made with 💙 by <a className={styles.gaLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
+          </Typography.Paragraph>
         </Footer>
     </>
   )

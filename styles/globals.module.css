@@ -23,7 +23,6 @@
 .logoTitle {
   font-size: 20px;
   line-height: 28px;
-  color: #262626;
   margin-left: 5px;
 }
 
@@ -46,10 +45,6 @@
   background: white;
   text-align: center;
   padding: 12px;
-}
-
-.footerTitle {
-  color: #262626;
 }
 
 .footerLove {
