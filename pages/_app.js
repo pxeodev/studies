@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
               <Image src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
               <span className={styles.logoTitle}><b>Coin</b>Rotator</span>
             </Menu.Item>
-            <Menu.Item key="faq">FAQ</Menu.Item>
+            {/* <Menu.Item key="faq">FAQ</Menu.Item> */}
             {/* <Menu.Item key="dark-mode"><DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode}/></Menu.Item> */}
           </Menu>
         </Header>
