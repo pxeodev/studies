@@ -210,9 +210,12 @@ export default function Home({ coinsData }) {
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
+    const matchesNameFilter = coinNameFilter === '' ||
+      coinData.name.toLowerCase().includes(coinNameFilter.toLowerCase()) ||
+      coinData.symbol.toLowerCase().includes(coinNameFilter.toLowerCase())
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
-           coinData.symbol.toLowerCase().includes(coinNameFilter.toLowerCase())
+           matchesNameFilter
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
     const trends = coinData.ohlcs.map((ohcls) => {
