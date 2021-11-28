@@ -13,6 +13,12 @@
 
 .logo:hover {
   text-decoration: none;
+  color: #262626 !important;
+  transition: none !important;
+}
+
+.logo::after {
+  border-bottom: 0 !important;
 }
 
 .logoSvg {
