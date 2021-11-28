@@ -5,7 +5,7 @@ import * as AxiosLogger from 'axios-logger'
 import groupBy from 'lodash/groupBy'
 import isFinite from 'lodash/isFinite'
 import subDays from 'date-fns/subDays'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { subHours } from 'date-fns'
 import Image from 'next/image'
 import { Typography, Card, Row, Col, Input, Button, Select, Table, Tag } from 'antd'
@@ -174,6 +174,12 @@ export default function Home({ coinsData }) {
   const [coinNameFilter, setCoinNameFilter] = useState('')
   const [atrPeriods, setAtrPeriods] = useState(5)
   const [multiplier, setMultiplier] = useState(1.5)
+
+  const inputRef = useRef(null)
+  useEffect(() => {
+    inputRef.current.input?.focus();
+  })
+
   const setValidAtrPeriods = useCallback((e) => {
     const newAtrPeriod = parseInt(e.target.value)
     if (isFinite(newAtrPeriod)) {
@@ -390,7 +396,7 @@ export default function Home({ coinsData }) {
       <Col span={6}>
         <Card className={styles.formCard}>
           <div className={styles.formLabel}>Coin</div>
-          <Search autoFocus placeholder="Bitcoin, ETH, Polygon..." allowClear onSearch={setCoinNameFilter} size="large"></Search>
+          <Search ref={inputRef} placeholder="Bitcoin, ETH, Polygon..." allowClear onSearch={setCoinNameFilter} size="large"></Search>
         </Card>
       </Col>
       <Col span={3}><Card className={classnames(styles.formCard, styles.noFormBorderRight, styles.noFormBorderLeft, styles.parameterCard)}>
