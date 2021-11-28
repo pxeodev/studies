@@ -362,15 +362,15 @@ export default function Home({ coinsData }) {
       render: (superSupertrend) => {
         switch (superSupertrend) {
           case signals.strongBuy:
-            return <Tag color="#52C41A">Buy</Tag>
+            return <Tag className={styles.tableTag} color="#52C41A">Buy</Tag>
           case signals.buy:
-            return <Tag color="#13C2C2">Buy</Tag>
+            return <Tag className={styles.tableTag} color="#13C2C2">Buy</Tag>
           case signals.sell:
-            return <Tag color="#FAAD14">Sell</Tag>
+            return <Tag className={styles.tableTag} color="#FAAD14">Sell</Tag>
           case signals.strongSell:
-            return <Tag color="#F5222D">Sell</Tag>
+            return <Tag className={styles.tableTag} color="#F5222D">Sell</Tag>
           default:
-            return <Tag color="#2F54EB">Tie</Tag>
+            return <Tag className={styles.tableTag} color="#2F54EB">Tie</Tag>
         }
       }
     },
