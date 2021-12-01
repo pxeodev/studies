@@ -367,9 +367,11 @@ export default function Home({ coinsData }) {
       title: 'Coin',
       dataIndex: 'coinData',
       render: (coinData) => {
+        const imageSrc = coinData.thumb.replace('/large/', '/thumb/')
         return (
           <span className={styles.tableCoinWrapper}>
-            <Image className={styles.tableCoinImage} src={coinData.thumb} alt={coinData.name} width="16" height="16"/>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={imageSrc} alt={coinData.name} className={styles.tableCoinThumb} />
             <span className={styles.tableCoinName}>{coinData.name}</span>
             <span className={styles.tableCoinSymbol}>{coinData.symbol}</span>
           </span>

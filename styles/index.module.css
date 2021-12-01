@@ -93,6 +93,11 @@
   margin-left: 5px;
 }
 
+.tableCoinThumb {
+  width: 16px;
+  height: 16px;
+}
+
 .tableCoinSymbol {
   text-transform: uppercase;
   margin-left: 5px;
