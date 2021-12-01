@@ -23,6 +23,7 @@ const days = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'cvxcrv', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'rsr', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'musd', 'qc', 'dgd', 'eurs', 'susd']
 const excludedTokens = ['thorchain-erc20']
 const signals = {
+  all: 'All',
   buy: 'Buy',
   sell: 'Sell',
   neutral: 'Neutral'
@@ -163,11 +164,15 @@ export async function getStaticProps() {
 }
 
 export default function Home({ coinsData }) {
-  const [marketCapMin, setMarketCapMin] = useState(coinsData[coinsData.length - 1].marketCap)
-  const [marketCapMax, setMarketCapMax] = useState(coinsData[0].marketCap)
+  const defaultMarketCapMin = coinsData[coinsData.length - 1].marketCap
+  const defaultMarketCapMax = coinsData[0].marketCap
+  const defaultTrendType = signals.all
+
+  const [marketCapMin, setMarketCapMin] = useState(defaultMarketCapMin)
+  const [marketCapMax, setMarketCapMax] = useState(defaultMarketCapMax)
   const [trendLengthMin, setTrendLengthMin] = useState('')
   const [trendLengthMax, setTrendLengthMax] = useState('')
-  const [trendType, setTrendType] = useState('all')
+  const [trendType, setTrendType] = useState(defaultTrendType)
   const [coinNameFilter, setCoinNameFilter] = useState('')
   const [atrPeriods, setAtrPeriods] = useState(5)
   const [multiplier, setMultiplier] = useState(1.5)
@@ -209,6 +214,26 @@ export default function Home({ coinsData }) {
       setTrendLengthMax(newTrendLengthMax)
     }
   }, [])
+  const setValidMarketCapMin = useCallback((e) => {
+    let newMarketCapMin = e.target.value
+    if (newMarketCapMin === '') {
+      setMarketCapMin(defaultMarketCapMin)
+    }
+    newMarketCapMin = parseInt(newMarketCapMin)
+    if (isFinite(newMarketCapMin)) {
+      setMarketCapMin(newMarketCapMin)
+    }
+  }, [defaultMarketCapMin])
+  const setValidMarketCapMax = useCallback((e) => {
+    let newMarketCapMax = e.target.value
+    if (newMarketCapMax === '') {
+      setMarketCapMax(defaultMarketCapMax)
+    }
+    newMarketCapMax = parseInt(newMarketCapMax)
+    if (isFinite(newMarketCapMax)) {
+      setMarketCapMax(newMarketCapMax)
+    }
+  }, [defaultMarketCapMax])
 
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
@@ -272,7 +297,7 @@ export default function Home({ coinsData }) {
       .every(trendLength => trendLength >= min && trendLength <= max)
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
-    if (trendType === 'all') {
+    if (trendType === signals.all) {
       return true
     } else if (trendType === signals.buy) {
       return coinData.superSupertrend === signals.buy
@@ -402,9 +427,9 @@ export default function Home({ coinsData }) {
       </Card></Col>
       <Col span={12}><Card className={styles.formCard}>
         <div className={styles.formLabel}>Market Cap</div>
-        <Input className={styles.formRangeInput} size="large" onChange={setMarketCapMin} value={marketCapMin} placeholder="$1"></Input>
+        <Input className={styles.formRangeInput} size="large" onChange={setValidMarketCapMin} value={marketCapMin} placeholder="$1"></Input>
         <Text type="secondary" className={styles.formRangeLabel}>TO</Text>
-        <Input className={styles.formRangeInput} size="large" onChange={setMarketCapMax} value={marketCapMax} placeholder="$100,000"></Input>
+        <Input className={styles.formRangeInput} size="large" onChange={setValidMarketCapMax} value={marketCapMax} placeholder="$100,000"></Input>
         <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
         <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
         <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
@@ -415,7 +440,7 @@ export default function Home({ coinsData }) {
       <Col span={6}><Card className={classnames(styles.formCard, styles.noFormBorderTop, styles.noFormBorderRight)}>
         <div className={styles.formLabel}>Signal</div>
         <Select size="large" value={trendType} onChange={setTrendType} className={styles.formSelect}>
-          <Option value="all">All</Option>
+          <Option value={signals.all}>All</Option>
           <Option value={signals.buy}>Buy</Option>
           <Option value={signals.sell}>Sell</Option>
         </Select>
