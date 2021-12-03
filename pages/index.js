@@ -79,30 +79,33 @@ export async function getStaticProps() {
         inverse = true
         matchingMarkets = cryptowatchMarkets.filter((market) => market.pair === `${quoteSymbol}${coinMarketData.symbol}` && market.active)
       }
-      const bestMarket = matchingMarkets.find((market) => market.exchange === 'binance') ||
-                         matchingMarkets.find((market) => market.exchange === 'bitfinex') ||
-                         matchingMarkets.find((market) => market.exchange === 'huobi') ||
-                         matchingMarkets[0]
+      // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
+      let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
+      marketPriority.reverse()
+      matchingMarkets = matchingMarkets.sort((a, b) => marketPriority.indexOf(b.exchange) - marketPriority.indexOf(a.exchange))
 
-      if (!bestMarket) {
+      if (!matchingMarkets.length) {
         return {
           coinGecko: true,
-          route: `https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${quoteSymbol}&days=${days}`
+          routes: [`https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${quoteSymbol}&days=${days}`]
         }
       }
 
       let after = subDays(new Date(), days)
       after = Math.round(after.valueOf() / 1000)
+      const routes = matchingMarkets.map((market) =>
+        `https://api.cryptowat.ch/markets/${market.exchange}/${market.pair}/ohlc?periods=86400&after=${after}`
+      )
 
       return {
-        route: `https://api.cryptowat.ch/markets/${bestMarket.exchange}/${bestMarket.pair}/ohlc?periods=86400&after=${after}`,
+        routes,
         inverse
       }
     })
     let ohlcs = []
     const today = new Date()
-    for (let { route, inverse, coinGecko } of ohlcRequests) {
-      if (!route) {
+    for (let { routes, inverse, coinGecko } of ohlcRequests) {
+      if (!routes.length) {
         ohlcs.push([])
         continue
       }
@@ -110,7 +113,7 @@ export async function getStaticProps() {
       if (coinGecko) {
         // In order to not hit the free Coingecko API rate limit of 50 calls/min
         await new Promise((res) => setTimeout(res, 1200))
-        const response = await coinGeckoAPI.get(route)
+        const response = await coinGeckoAPI.get(routes[0])
         let ohlcData = response.data
         // Remove todays 4 hour signals to avoid repainting of the current day
         ohlcData = ohlcData.filter((tohlc) => {
@@ -132,8 +135,14 @@ export async function getStaticProps() {
         })
         ohlcs.push(ohlcData)
       } else {
+        let ohlcData = []
+        for (let route of routes) {
         const response = await cryptowatchAPI.get(route)
-        let ohlcData = response.data.result['86400']
+          ohlcData = response.data.result['86400']
+          if (ohlcData.length >= days) {
+            break
+          }
+        }
         // Don't include data of the current day to avoid repainting
         ohlcData = ohlcData.filter((frame) => {
           let date = new Date(frame[0] * 1000)
