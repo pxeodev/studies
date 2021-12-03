@@ -7,7 +7,6 @@ import isFinite from 'lodash/isFinite'
 import subDays from 'date-fns/subDays'
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { subHours } from 'date-fns'
-import Image from 'next/image'
 import { Typography, Card, Row, Col, Input, Button, Select, Table, Tag } from 'antd'
 
 import supertrend from '../utils/supertrend'
@@ -65,9 +64,7 @@ export async function getStaticProps() {
 
   const cryptowatchMarketsResponse = await cryptowatchAPI.get('/markets')
   let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
-  console.log(cryptowatchMarkets)
   cryptowatchMarkets = cryptowatchMarkets.filter(market => market.active)
-  console.log(cryptowatchMarkets)
 
   let coinsData = []
   let after = subDays(new Date(), days)
@@ -83,10 +80,11 @@ export async function getStaticProps() {
       }
 
       let matchingMarkets = cryptowatchMarkets.filter((market) => {
-        if (market.pair === `${coinMarketData.symbol}${quoteSymbol}`) {
+        const realQuoteSymbol = quoteSymbol === 'usd' ? 'usdt' : quoteSymbol
+        if (market.pair === `${coinMarketData.symbol}${realQuoteSymbol}`) {
           market.inverse = false
           return true
-        } else if (market.pair === `${quoteSymbol}${coinMarketData.symbol}`) {
+        } else if (market.pair === `${realQuoteSymbol}${coinMarketData.symbol}`) {
           market.inverse = true
           return true
         } else {
@@ -113,6 +111,10 @@ export async function getStaticProps() {
     let ohlcs = []
     const today = new Date()
     for (let ohlcEndPoints of ohlcPerQuoteSymbolEndpoints) {
+      if (!ohlcEndPoints.length) {
+        ohlcs.push([])
+        continue
+      }
       for (let { route, inverse, coinGecko } of ohlcEndPoints) {
       if (coinGecko) {
         await new Promise((res) => setTimeout(res, 1200))
