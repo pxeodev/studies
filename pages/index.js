@@ -423,7 +423,7 @@ export default function Home({ coinsData }) {
 
   return <>
     <Title className={styles.title}>Rotate. Your. Dinero. Amigo.</Title>
-    <Paragraph className={styles.subTitle} type="secondary">Use the SuperTrend to find promising coins. Swap your portfolio to be in a constant bull market. This is not financial advice.</Paragraph>
+    <Paragraph className={styles.subTitle} type="secondary">Use the SuperTrend to find promising coins. Swap your portfolio to be in a constant bull market.</Paragraph>
     {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
     <Row className={styles.formRow}>
       <Col span={6}>
