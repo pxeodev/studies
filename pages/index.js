@@ -14,7 +14,6 @@ import isSameUTCDay from '../utils/isSameUTCDay'
 import styles from '../styles/index.module.css'
 
 const { Title, Paragraph, Text } = Typography;
-const { Search } = Input;
 const { Option } = Select;
 
 const quoteSymbols = ['usd', 'eth', 'btc']
@@ -430,7 +429,7 @@ export default function Home({ coinsData }) {
       <Col span={6}>
         <Card className={styles.formCard}>
           <div className={styles.formLabel}>Coin</div>
-          <Search ref={inputRef} placeholder="Bitcoin, ETH, Polygon..." allowClear onSearch={setCoinNameFilter} size="large"></Search>
+          <Input ref={inputRef} placeholder="Bitcoin, ETH, Polygon..." allowClear onChange={(e) => setCoinNameFilter(e.target.value)} size="large"></Input>
         </Card>
       </Col>
       <Col span={3}><Card className={classnames(styles.formCard, styles.noFormBorderRight, styles.noFormBorderLeft, styles.parameterCard)}>
