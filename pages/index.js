@@ -64,56 +64,59 @@ export async function getStaticProps() {
   }
 
   const cryptowatchMarketsResponse = await cryptowatchAPI.get('/markets')
-  const cryptowatchMarkets = cryptowatchMarketsResponse.data.result
+  let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
+  console.log(cryptowatchMarkets)
+  cryptowatchMarkets = cryptowatchMarkets.filter(market => market.active)
+  console.log(cryptowatchMarkets)
 
   let coinsData = []
+  let after = subDays(new Date(), days)
+  after = Math.round(after.valueOf() / 1000)
+  // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
+  let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
+  marketPriority.reverse()
+
   for (let coinMarketData of coinsMarketData) {
-    const ohlcRequests = quoteSymbols.map((quoteSymbol) => {
+    const ohlcPerQuoteSymbolEndpoints = quoteSymbols.map((quoteSymbol) => {
       if(coinMarketData.symbol === quoteSymbol) {
-        return ''
+        return []
       }
 
-      let inverse = false
-      let matchingMarkets = cryptowatchMarkets.filter((market) => market.pair === `${coinMarketData.symbol}${quoteSymbol}` && market.active)
-      if (!matchingMarkets.length) {
-        inverse = true
-        matchingMarkets = cryptowatchMarkets.filter((market) => market.pair === `${quoteSymbol}${coinMarketData.symbol}` && market.active)
+      let matchingMarkets = cryptowatchMarkets.filter((market) => {
+        if (market.pair === `${coinMarketData.symbol}${quoteSymbol}`) {
+          market.inverse = false
+          return true
+        } else if (market.pair === `${quoteSymbol}${coinMarketData.symbol}`) {
+          market.inverse = true
+          return true
+        } else {
+          return false
       }
-      // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
-      let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
-      marketPriority.reverse()
+      })
+
       matchingMarkets = matchingMarkets.sort((a, b) => marketPriority.indexOf(b.exchange) - marketPriority.indexOf(a.exchange))
 
-      if (!matchingMarkets.length) {
+      const endPoints = matchingMarkets.map((market) => {
         return {
-          coinGecko: true,
-          routes: [`https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${quoteSymbol}&days=${days}`]
+          inverse: market.inverse,
+          route: `https://api.cryptowat.ch/markets/${market.exchange}/${market.pair}/ohlc?periods=86400&after=${after}`
         }
-      }
+      })
 
-      let after = subDays(new Date(), days)
-      after = Math.round(after.valueOf() / 1000)
-      const routes = matchingMarkets.map((market) =>
-        `https://api.cryptowat.ch/markets/${market.exchange}/${market.pair}/ohlc?periods=86400&after=${after}`
-      )
+      endPoints.push({
+        coinGecko: true,
+        route: `https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${quoteSymbol}&days=${days}`
+      })
 
-      return {
-        routes,
-        inverse
-      }
+      return endPoints
     })
     let ohlcs = []
     const today = new Date()
-    for (let { routes, inverse, coinGecko } of ohlcRequests) {
-      if (!routes.length) {
-        ohlcs.push([])
-        continue
-      }
-
+    for (let ohlcEndPoints of ohlcPerQuoteSymbolEndpoints) {
+      for (let { route, inverse, coinGecko } of ohlcEndPoints) {
       if (coinGecko) {
-        // In order to not hit the free Coingecko API rate limit of 50 calls/min
         await new Promise((res) => setTimeout(res, 1200))
-        const response = await coinGeckoAPI.get(routes[0])
+          const response = await coinGeckoAPI.get(route)
         let ohlcData = response.data
         // Remove todays 4 hour signals to avoid repainting of the current day
         ohlcData = ohlcData.filter((tohlc) => {
@@ -135,13 +138,11 @@ export async function getStaticProps() {
         })
         ohlcs.push(ohlcData)
       } else {
-        let ohlcData = []
-        for (let route of routes) {
         const response = await cryptowatchAPI.get(route)
-          ohlcData = response.data.result['86400']
-          if (ohlcData.length >= days) {
-            break
-          }
+          let ohlcData = response.data.result['86400']
+          // Sometimes cryptowatch can't give us all the OHLC data, because a coin just recently got listed on an exchange
+          if (ohlcData.length < days) {
+            continue
         }
         // Don't include data of the current day to avoid repainting
         ohlcData = ohlcData.filter((frame) => {
@@ -155,6 +156,8 @@ export async function getStaticProps() {
           ohlcData = ohlcData.map((frame) => [1 / frame[0], 1 / frame[1], 1 / frame[2], 1 / frame[3]])
         }
         ohlcs.push(ohlcData)
+          break
+        }
       }
     }
     coinsData.push({
