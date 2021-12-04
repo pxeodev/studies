@@ -1,6 +1,7 @@
 .title {
   font-size: 30px !important;
   line-height: 38px !important;
+  text-align: center;
 }
 
 .subTitle {
@@ -17,9 +18,6 @@
 
 .formRow {
   width: 100%;
-}
-
-.signalRow {
   margin-bottom: 32px;
 }
 
@@ -53,7 +51,7 @@
 }
 
 .formSelect {
-  width: 320px;
+  width: 396px;
 }
 
 .formButton {
