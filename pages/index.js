@@ -115,49 +115,49 @@ export async function getStaticProps() {
         continue
       }
       for (let { route, inverse, coinGecko } of ohlcEndPoints) {
-      if (coinGecko) {
-        await new Promise((res) => setTimeout(res, 1200))
+        if (coinGecko) {
+          await new Promise((res) => setTimeout(res, 1200))
           const response = await coinGeckoAPI.get(route)
-        let ohlcData = response.data
-        // Remove todays 4 hour signals to avoid repainting of the current day
-        ohlcData = ohlcData.filter((tohlc) => {
-          const date = new Date(tohlc[0])
-          return !isSameUTCDay(date, today)
-        })
-        ohlcData = groupBy(ohlcData, (tohlc) => {
-          const date = new Date(tohlc[0])
-          return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
-        })
-        ohlcData = Object.values(ohlcData)
-        ohlcData = ohlcData.map((dailyOhlcs) => {
-          const dayOpen = dailyOhlcs[0][1]
-          const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc[2]))
-          const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc[3]))
-          const dayClose = dailyOhlcs[dailyOhlcs.length - 1][4]
+          let ohlcData = response.data
+          // Remove todays 4 hour signals to avoid repainting of the current day
+          ohlcData = ohlcData.filter((tohlc) => {
+            const date = new Date(tohlc[0])
+            return !isSameUTCDay(date, today)
+          })
+          ohlcData = groupBy(ohlcData, (tohlc) => {
+            const date = new Date(tohlc[0])
+            return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
+          })
+          ohlcData = Object.values(ohlcData)
+          ohlcData = ohlcData.map((dailyOhlcs) => {
+            const dayOpen = dailyOhlcs[0][1]
+            const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc[2]))
+            const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc[3]))
+            const dayClose = dailyOhlcs[dailyOhlcs.length - 1][4]
 
-          return [dayOpen, dayHigh, dayLow, dayClose]
-        })
-        ohlcs.push(ohlcData)
-      } else {
-        const response = await cryptowatchAPI.get(route)
+            return [dayOpen, dayHigh, dayLow, dayClose]
+          })
+          ohlcs.push(ohlcData)
+        } else {
+          const response = await cryptowatchAPI.get(route)
           let ohlcData = response.data.result['86400']
           // Sometimes cryptowatch can't give us all the OHLC data, because a coin just recently got listed on an exchange
           if (ohlcData.length < days) {
             continue
-        }
-        // Don't include data of the current day to avoid repainting
-        ohlcData = ohlcData.filter((frame) => {
-          let date = new Date(frame[0] * 1000)
-          // We have to subtract 1 hour from the date, as it's given in it's midnight format and would be recognized as the next day instead
-          date = subHours(date, 1)
-          return !isSameUTCDay(date, today)
-        })
-        ohlcData = ohlcData.map((frame) => [frame[1], frame[2], frame[3], frame[4]])
-        if (inverse) {
-          ohlcData = ohlcData.map((frame) => [1 / frame[0], 1 / frame[1], 1 / frame[2], 1 / frame[3]])
-        }
-        ohlcs.push(ohlcData)
-          break
+          }
+          // Don't include data of the current day to avoid repainting
+          ohlcData = ohlcData.filter((frame) => {
+            let date = new Date(frame[0] * 1000)
+            // We have to subtract 1 hour from the date, as it's given in it's midnight format and would be recognized as the next day instead
+            date = subHours(date, 1)
+            return !isSameUTCDay(date, today)
+          })
+          ohlcData = ohlcData.map((frame) => [frame[1], frame[2], frame[3], frame[4]])
+          if (inverse) {
+            ohlcData = ohlcData.map((frame) => [1 / frame[0], 1 / frame[1], 1 / frame[2], 1 / frame[3]])
+          }
+          ohlcs.push(ohlcData)
+            break
         }
       }
     }
@@ -177,6 +177,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ coinsData }) {
+  const defaultCoinNameFilter = ''
   const defaultMarketCapMin = coinsData[coinsData.length - 1].marketCap
   const defaultMarketCapMax = coinsData[0].marketCap
   const defaultTrendType = signals.all
@@ -186,7 +187,7 @@ export default function Home({ coinsData }) {
   const [trendLengthMin, setTrendLengthMin] = useState('')
   const [trendLengthMax, setTrendLengthMax] = useState('')
   const [trendType, setTrendType] = useState(defaultTrendType)
-  const [coinNameFilter, setCoinNameFilter] = useState('')
+  const [coinNameFilter, setCoinNameFilter] = useState(defaultCoinNameFilter)
   const [atrPeriods, setAtrPeriods] = useState(5)
   const [multiplier, setMultiplier] = useState(1.5)
 
@@ -248,12 +249,18 @@ export default function Home({ coinsData }) {
     }
   }, [defaultMarketCapMax])
 
+  const coinsFilter = coinNameFilter
+    .replace(/\s/g, '')
+    .split(',')
+    .map((coinName) => coinName.toLowerCase())
+    .filter((coinName) => coinName !== '')
+
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
-    const matchesNameFilter = coinNameFilter === '' ||
-      coinData.name.toLowerCase().includes(coinNameFilter.toLowerCase()) ||
-      coinData.symbol.toLowerCase().includes(coinNameFilter.toLowerCase())
+    const coinSymbolLower = coinData.symbol.toLowerCase()
+    const coinNameLower = coinData.name.toLowerCase()
+    const matchesNameFilter = coinNameFilter === '' || coinsFilter.some((coinName) => coinNameLower.includes(coinName) || coinSymbolLower.includes(coinName))
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
            matchesNameFilter
@@ -429,7 +436,14 @@ export default function Home({ coinsData }) {
       <Col span={6}>
         <Card className={styles.formCard}>
           <div className={styles.formLabel}>Coin</div>
-          <Input ref={inputRef} placeholder="Bitcoin, ETH, Polygon..." allowClear onChange={(e) => setCoinNameFilter(e.target.value)} size="large"></Input>
+          <Input
+            ref={inputRef}
+            placeholder="Bitcoin, ETH, Polygon..."
+            allowClear
+            value={coinNameFilter}
+            onChange={(e) => setCoinNameFilter(e.target.value)}
+            size="large"
+          />
         </Card>
       </Col>
       <Col span={3}><Card className={classnames(styles.formCard, styles.noFormBorderRight, styles.noFormBorderLeft, styles.parameterCard)}>
