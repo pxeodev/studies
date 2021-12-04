@@ -22,8 +22,17 @@
 }
 
 .logoSvg {
-  top: 4px;
-  left: -4px;
+  margin-bottom: 8px;
+}
+
+@keyframes coin-flip {
+  0%   { transform: translateY(0) rotate3d(0, 1, 0, 0deg); }
+  50%  { transform: translateY(-6px) rotate3d(0, 1, 0, 180deg); }
+  100% { transform: translateY(0) rotate3d(0, 1, 0, 359deg); }
+}
+
+.logo:hover .logoSvg {
+  animation: coin-flip 1s ease-out;
 }
 
 .logoTitle {

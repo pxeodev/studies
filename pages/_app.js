@@ -23,7 +23,8 @@ function MyApp({ Component, pageProps }) {
         <Header className={styles.header}>
           <Menu mode="horizontal">
             <Menu.Item key="logo" className={styles.logo} data-id="logo">
-              <Image src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
               <span className={styles.logoTitle}><b>Coin</b>Rotator</span>
             </Menu.Item>
             {/* <Menu.Item key="faq">FAQ</Menu.Item> */}
