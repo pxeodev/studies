@@ -8,7 +8,7 @@ import subDays from 'date-fns/subDays'
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { subHours } from 'date-fns'
 import { useRouter } from 'next/router'
-import { Typography, Card, Row, Col, Input, Button, Select, Table, Tag, Modal, Divider, Switch } from 'antd'
+import { Typography, Card, Row, Col, Input, Button, Select, Table, Tag, Modal, Divider, Switch, Grid } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined } from '@ant-design/icons'
 
 import supertrend from '../utils/supertrend'
@@ -18,6 +18,7 @@ import styles from '../styles/index.module.css'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
+const { useBreakpoint } = Grid;
 
 const quoteSymbols = ['usd', 'eth', 'btc']
 const days = 30
@@ -198,6 +199,8 @@ export default function Home({ coinsData }) {
   const [multiplier, setMultiplier] = useState(1.5)
   const [filterModalVisible, setFilterModalVisible] = useState(false)
   const [showWeeklySignals, setShowWeeklySignals] = useState(false)
+
+  const screens = useBreakpoint();
 
   const inputRef = useRef(null)
   useEffect(() => {
@@ -461,6 +464,8 @@ export default function Home({ coinsData }) {
     },
   ];
 
+  const buttonSize = screens.xs ? 'small' : screens.xl ? 'large' : 'medium'
+
   return <>
     <Title className={styles.title}>Rotate. Your. Dinero. Amigo.</Title>
     <Paragraph className={styles.subTitle} type="secondary">Use the SuperTrend to find promising coins. Swap your portfolio to be in a constant bull market.</Paragraph>
@@ -496,6 +501,7 @@ export default function Home({ coinsData }) {
             size="large"
             onClick={() => setFilterModalVisible(true)}
             icon={<SlidersOutlined />}
+            className={styles.formAllFilters}
           >
             All Filters
           </Button>
@@ -545,29 +551,29 @@ export default function Home({ coinsData }) {
             <div className={styles.formLabel}>Market Cap</div>
           </Col>
         </Row>
-        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={12}>
-          <Col className="gutter-row" flex="auto">
+        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" xs={10} md={11}>
             <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMin} value={marketCapMin} placeholder="$1"></Input>
           </Col>
-          <Col className="gutter-row" flex="20px">
+          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
             <Text type="secondary">TO</Text>
           </Col>
-          <Col className="gutter-row" flex="auto">
+          <Col className="gutter-row" xs={11} md={11}>
             <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMax} value={marketCapMax} placeholder="$100,000"></Input>
           </Col>
         </Row>
-        <Row>
-          <Col flex={1}>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
+        <Row justify="space-between">
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
           </Col>
-          <Col flex={1}>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
           </Col>
-          <Col flex={1}>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
           </Col>
-          <Col flex={1}>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedMarketCap4}>$10B+</Button>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
           </Col>
         </Row>
         <Divider />
@@ -576,29 +582,29 @@ export default function Home({ coinsData }) {
             <div className={styles.formLabel}>Signal Streak</div>
           </Col>
         </Row>
-        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={12}>
-          <Col className="gutter-row" flex="auto">
+        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" xs={10} md={11}>
             <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMin} value={trendLengthMin} placeholder="1"></Input>
           </Col>
-          <Col className="gutter-row" flex="30px">
+          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
             <Text type="secondary">TO</Text>
           </Col>
-          <Col className="gutter-row" flex="auto">
+          <Col className="gutter-row" xs={11} md={11}>
             <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMax} value={trendLengthMax} placeholder="50"></Input>
           </Col>
         </Row>
-        <Row>
+        <Row justify="space-between">
           <Col>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedTrendLength1}>1-5</Button>
+            <Button size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
           </Col>
           <Col>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedTrendLength2}>5-10</Button>
+            <Button size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
           </Col>
           <Col>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedTrendLength3}>10-20</Button>
+            <Button size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
           </Col>
           <Col>
-            <Button size="large" className={styles.formButton} onClick={setPredefinedTrendLength4}>20+</Button>
+            <Button size="large" onClick={setPredefinedTrendLength4}>20+</Button>
           </Col>
         </Row>
       </Modal>

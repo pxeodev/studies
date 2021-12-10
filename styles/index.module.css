@@ -52,7 +52,15 @@
   margin-right: 12px;
 }
 
+.formRangeLabel {
+  text-align: center;
+}
+
 .formSelect {
+  width: 100%;
+}
+
+.formAllFilters {
   width: 100%;
 }
 
@@ -91,6 +99,12 @@
 .tableCoinName {
   font-weight: bold;
   margin-left: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .tableCoinName {
+    display: block;
+  }
 }
 
 .tableCoinThumb {
