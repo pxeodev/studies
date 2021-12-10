@@ -18,19 +18,20 @@
 
 .formRow {
   width: 100%;
-  margin-bottom: 32px;
 }
 
-.noFormBorderRight {
-  border-right: none;
+.formCard {
+  width: 100%;
 }
 
-.noFormBorderLeft {
-  border-left: none;
+.formCard {
+  margin-bottom: 12px;
 }
 
-.noFormBorderTop {
-  border-top: none;
+@media screen and (max-width: 768px) {
+  .formCol {
+    margin-bottom: 12px;
+  }
 }
 
 .parameterCard {
