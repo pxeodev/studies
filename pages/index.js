@@ -9,7 +9,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { subHours } from 'date-fns'
 import { useRouter } from 'next/router'
 import { Typography, Card, Row, Col, Input, Button, Select, Table, Tag, Modal, Divider, Switch, Grid, Layout } from 'antd'
-import { CloseCircleOutlined, SlidersOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
 
 import supertrend from '../utils/supertrend'
 import isSameUTCDay from '../utils/isSameUTCDay'
@@ -561,6 +561,16 @@ export default function Home({ coinsData }) {
       title="Filters"
       onCancel={() => setFilterModalVisible(false)}
       footer={[
+        <Button
+          key="apply"
+          onClick={() => setFilterModalVisible(false)}
+          size="large"
+          type="primary"
+          icon={<CheckCircleOutlined />}
+          className={styles.applyFilterModal}
+        >
+          Apply Filters
+        </Button>,
         <Button
           key="reset"
           onClick={resetFilters}
