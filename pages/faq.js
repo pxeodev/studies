@@ -24,10 +24,10 @@ export default function Faq() {
           <p>Yes! CoinRotator provides three forms of signals. Buy, HODL, and Sell. When Bitcoin is weak, sell signals are better than buy signals.</p>
         </Panel>
         <Panel header="What is CoinRotator based on?" key="3">
-          <p>Primarily on the SuperTrend indicator. CoinRotator's default settings are faster than the respective indicator found on Tradingview.</p>
+          <p>Primarily on the SuperTrend indicator. CoinRotator&apos;s default settings are faster than the respective indicator found on Tradingview.</p>
         </Panel>
         <Panel header="How accurate are the CoinRotator signals?" key="4">
-          <p>They are not designed to be a complete trading system. You'll need to check the trend health of the overall market before taking any position. Check out the Twitter feed for your chosen coin, and then check Bitcoin. If things look positive (or excessively negative, for that matter), it's a likely winner.</p>
+          <p>They are not designed to be a complete trading system. You&apos;ll need to check the trend health of the overall market before taking any position. Check out the Twitter feed for your chosen coin, and then check Bitcoin. If things look positive (or excessively negative, for that matter), it&apos;s a likely winner.</p>
         </Panel>
         <Panel header="Do you have any backtest data?" key="5">
           <p>Q1 2022.</p>
@@ -36,7 +36,7 @@ export default function Faq() {
           <p>Q1 2022</p>
         </Panel>
         <Panel header="Why does my coin say 'Buy', but it's down a lot today?" key="7">
-          <p>CoinRotator is still in beta. Small conversions between coins create some curious bugs. We have marked most of these markets, but possibly we missed one. You can always message us if you're unsure. @CoinRotator</p>
+          <p>CoinRotator is still in beta. Small conversions between coins create some curious bugs. We have marked most of these markets, but possibly we missed one. You can always message us if you&apos;re unsure. @CoinRotator</p>
         </Panel>
       </Collapse>
     </Content>);
