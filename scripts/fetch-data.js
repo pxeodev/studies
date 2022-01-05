@@ -135,9 +135,10 @@ const script = async () => {
         if (coinGecko) {
           await new Promise((res) => setTimeout(res, 1200))
           const response = await coinGeckoAPI.get(route)
+          const closeTime = new Date(frame[0])
           ohlcData = response.data.map((frame) => {
             return {
-              closeTime: frame[0],
+              closeTime,
               open: frame[1],
               high: frame[2],
               low: frame[3],
@@ -146,7 +147,7 @@ const script = async () => {
               quoteSymbol
             }
           })
-          ohlcData = ohlcData.filter((ohlc) => new Date(ohlc.closeTime) < now)
+          ohlcData = ohlcData.filter((ohlc) => ohlc.closeTime < now)
           ohlcs = [...ohlcs, ...ohlcData]
         } else {
           const response = await cryptowatchAPI.get(route)
