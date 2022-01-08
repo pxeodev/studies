@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import endOfDay from 'date-fns/endOfDay';
 import subDays from 'date-fns/subDays';
+import isEmpty from 'lodash/isEmpty';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.css'
@@ -117,11 +118,13 @@ export default function Coin(coin) {
               @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
             </Tag>
           </a>
-          <a href={coin.homepage} target="_blank" rel="noreferrer">
-            <Tag icon={<GlobalOutlined />} color="#262626" className={styles.linkTag}>
-              {new URL(coin.homepage).host}
-            </Tag>
-          </a>
+          { isEmpty(coin.homepage) ? <></> : (
+            <a href={coin.homepage} target="_blank" rel="noreferrer">
+              <Tag icon={<GlobalOutlined />} color="#262626" className={styles.linkTag}>
+                {new URL(coin.homepage).host}
+              </Tag>
+            </a>
+          )}
         </Space>
       </Card.Grid>
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard1)}>
