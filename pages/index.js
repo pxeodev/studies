@@ -7,25 +7,17 @@ import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-
 import endOfYesterday from 'date-fns/endOfYesterday';
 import endOfDay from 'date-fns/endOfDay';
 import subDays from 'date-fns/subDays';
-import groupBy from 'lodash/groupBy'
-import mapValues from 'lodash/mapValues'
 
-import supertrend from '../utils/supertrend'
-import convertToWeeklySignals from '../utils/convertToWeeklySignals'
 import prisma from '../lib/prisma'
 import styles from '../styles/index.module.css'
+import convertToDailySignals from '../utils/convertToDailySignals';
+import getTrends from '../utils/getTrends';
+import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
 const { useBreakpoint } = Grid;
 const { Content } = Layout;
-
-const signals = {
-  all: 'All',
-  buy: 'Buy',
-  sell: 'Sell',
-  hodl: 'HODL'
-}
 
 export async function getStaticProps() {
   let coinsData = await prisma.coin.findMany({
@@ -57,24 +49,7 @@ export async function getStaticProps() {
     }
   })
   coinsData = coinsData.map((coinData) => {
-    let { ohlcs } = coinData
-
-    ohlcs = groupBy(ohlcs, 'quoteSymbol')
-
-    for (const [quoteSymbol, quoteOhlcs] of Object.entries(ohlcs)) {
-      let dailyQuoteSymbolOhlcs = groupBy(quoteOhlcs, (ohlc) => `${ohlc.closeTime.getUTCFullYear()}-${ohlc.closeTime.getUTCMonth()}-${ohlc.closeTime.getUTCDate()}`)
-
-      // TODO: Find out if this is correct, it doesn't seem so
-      // And that the daily values correspond to the API
-      ohlcs[quoteSymbol] = Object.values(dailyQuoteSymbolOhlcs).map((dailyOhlcs) => {
-        const dayOpen = Number(dailyOhlcs[dailyOhlcs.length - 1].open)
-        const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc.high))
-        const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc.low))
-        const dayClose = Number(dailyOhlcs[0].close)
-
-        return [dayOpen, dayHigh, dayLow, dayClose]
-      })
-    }
+    const ohlcs = convertToDailySignals(coinData.ohlcs)
 
     return {
       ...coinData,
@@ -103,8 +78,6 @@ export default function Home({ coinsData }) {
   const defaultTrendLengthMax = ''
   const defaultTrendType = signals.all
   const defaultCoinNameFilter = ''
-  const defaultAtrPeriods = 5
-  const defaultMultiplier = 1.5
 
   const [marketCapMin, setMarketCapMin] = useState(defaultMarketCapMin)
   const [marketCapMax, setMarketCapMax] = useState(defaultMarketCapMax)
@@ -215,41 +188,11 @@ export default function Home({ coinsData }) {
            matchesNameFilter
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
-    const trends = mapValues(coinData.ohlcs, (ohlcs) => {
-      if (showWeeklySignals) {
-        ohlcs = convertToWeeklySignals(ohlcs)
-      }
-      const trends = supertrend(ohlcs, { atrPeriods, multiplier })
-      const lastTrend = trends[trends.length - 1] || ''
-      let trendLength = 0
-      for (let i = trends.length - 1; i > 0; i--) {
-        if (lastTrend === trends[i]) {
-          trendLength++
-        } else {
-          break
-        }
-      }
-      return [lastTrend, trendLength]
-    })
-    let superSupertrend
-    const superTrends = Object.values(trends).map(trend => trend[0]).filter(trend => trend.length)
-    if (superTrends.length === 2) {
-      superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : signals.hodl
-    } else if (superTrends.every(tr => tr === signals.buy)) {
-      superSupertrend = signals.buy
-    } else if (superTrends.every(tr => tr === signals.sell)) {
-      superSupertrend = signals.sell
-    } else {
-      superSupertrend = signals.hodl
-    }
+    const [trends, superSupertrend] = getTrends(coinData.ohlcs, atrPeriods, multiplier)
 
     return {
       ...coinData,
       trends,
-      symbol: coinData.symbol,
-      thumb: coinData.images.thumb,
-      name: coinData.name,
-      marketCap: coinData.marketCap,
       superSupertrend,
     }
   })
@@ -282,8 +225,9 @@ export default function Home({ coinsData }) {
   const tableData = displayedCoinData.map((coinData) => {
     const data = {
       coinData: {
+        id: coinData.id,
         symbol: coinData.symbol,
-        thumb: coinData.thumb,
+        images: coinData.images,
         name: coinData.name
       },
       marketCap: coinData.marketCap,
@@ -348,14 +292,13 @@ export default function Home({ coinsData }) {
       title: 'Coin',
       dataIndex: 'coinData',
       render: (coinData) => {
-        const imageSrc = coinData.thumb.replace('/large/', '/thumb/')
         return (
-          <span className={styles.tableCoinWrapper}>
+          <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imageSrc} alt={coinData.name} className={styles.tableCoinThumb} loading="lazy"/>
+            <img src={coinData.images.large} alt={coinData.name} className={styles.tableCoinThumb} loading="lazy"/>
             <span className={styles.tableCoinName}>{coinData.name}</span>
             <span className={styles.tableCoinSymbol}>{coinData.symbol}</span>
-          </span>
+          </>
         )
       }
     },
