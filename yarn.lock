@@ -5861,6 +5861,11 @@ react-server-dom-webpack@0.0.0-experimental-3c4c1c470-20211021:
     neo-async "^2.6.1"
     object-assign "^4.1.1"
 
+react-ts-tradingview-widgets@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.0.8.tgz#33006a2000bf98e540918000223afde3afa39d93"
+  integrity sha512-LOnqSx5gIfNwrXYzNlCI3afzNToWuPpiWohvk0eJmNiAyOHnIhzEsKpFp5lWMf9GUhMEDnd5Y2LlIO6s8fJp1w==
+
 react@17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
