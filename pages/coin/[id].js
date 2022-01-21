@@ -108,12 +108,6 @@ export default function Coin(coin) {
           <Tag>{coin.symbol.toUpperCase()}</Tag>
         </Space>
       </Card.Grid>
-      <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceCard)}>
-        <Space>
-          <Text className={styles.cardHeader}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol' }).format(coin.currentPriceUsd)}</Text>
-          {signalTag}
-        </Space>
-      </Card.Grid>
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard)}>
         <Space>
           <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
