@@ -64,7 +64,9 @@ export async function getStaticProps() {
       ohlcs
     }
   })
-  const categories = uniq(coinsData.flatMap(coin => coin.categories))
+  let categories = coinsData.flatMap(coin => coin.categories)
+  categories = uniq(categories)
+  categories = categories.sort((a, b) => a.localeCompare(b))
   return {
     props: {
       coinsData,
