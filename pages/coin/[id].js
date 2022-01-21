@@ -184,7 +184,12 @@ export default function Coin(coin) {
         ) : <></>
       }
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.chartGrid)}>
-        <AdvancedRealTimeChart autosize range="5D" symbol={`${coin.symbol.toUpperCase()}USDT`}></AdvancedRealTimeChart>
+        <AdvancedRealTimeChart
+          autosize
+          interval="D"
+          symbol={`${coin.symbol.toUpperCase()}USDT`}
+        >
+        </AdvancedRealTimeChart>
       </Card.Grid>
     </Card>
     <Table
