@@ -216,6 +216,7 @@ export default function Coin(coin) {
           autosize
           interval="D"
           symbol={`${coin.symbol.toUpperCase()}USDT`}
+              hide_side_toolbar={screens.xs}
         >
         </AdvancedRealTimeChart>
       </Card.Grid>
