@@ -47,7 +47,7 @@ export async function getStaticProps() {
             lte: endOfYesterday(),
           }
         },
-        orderBy: { closeTime: 'desc' }
+        orderBy: { closeTime: 'asc' }
       }
     }
   })
