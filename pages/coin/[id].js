@@ -1,4 +1,4 @@
-import { Button, Breadcrumb, Card, Layout, Typography, Space, Tag, Table } from 'antd';
+import { Button, Breadcrumb, Card, Layout, Typography, Space, Tag, Table, Grid } from 'antd';
 import Link from 'next/link'
 import { TwitterOutlined, GlobalOutlined } from '@ant-design/icons';
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
@@ -54,6 +54,23 @@ export default function Coin(coin) {
     {
       title: 'Exchange',
       dataIndex: 'name',
+      responsive: ['sm'],
+      render: (name, data) => {
+        return (
+          <Space className={styles.exchangeSpace}>
+            <b>{name}</b>
+            <a href={data.tradeLink} target="_blank" rel="noopener noreferrer">
+              <Button type="primary">Trade</Button>
+            </a>
+          </Space>
+        )
+      }
+    },
+    {
+      title: 'Exchange',
+      dataIndex: 'name',
+      responsive: ['xs'],
+      width: 200,
       render: (name, data) => {
         return (
           <Space className={styles.exchangeSpace}>
@@ -97,6 +114,11 @@ export default function Coin(coin) {
     },
   ];
 
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
+  const notation = screens.xs ? 'compact' : 'standard'
+
   return <Content className={styles.content}>
     <Breadcrumb className={styles.breadcrumb}>
       <Breadcrumb.Item><Link href="/">Home</Link></Breadcrumb.Item>
@@ -134,29 +156,29 @@ export default function Coin(coin) {
         <div className={styles.labelValueGroup}>
           <div className={styles.label}>Market Cap</div>
           <Space wrap>
-            <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol' }).format(coin.marketCap)}</span>
+            <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.marketCap)}</span>
             <Tag>#{coin.marketCapRank}</Tag>
           </Space>
         </div>
         <div className={styles.labelValueGroup}>
           <div className={styles.label}>All-Time High</div>
-          <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20 }).format(coin.ath)}</div>
+          <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
         </div>
         <div className={styles.labelValueGroup}>
           <div className={styles.label}>All-Time Low</div>
-          <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20 }).format(coin.atl)}</div>
+          <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
         </div>
       </Card.Grid>
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
         { coin.fullyDilutedValuation ? (
           <div className={styles.labelValueGroup}>
             <div className={styles.label}>Fully Diluted Valuation</div>
-            <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol' }).format(coin.fullyDilutedValuation)}</div>
+            <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.fullyDilutedValuation)}</div>
           </div>
         ) : <></>}
         <div className={styles.labelValueGroup}>
           <div className={styles.label}>Circulating Supply</div>
-          <div className={styles.value}>{new Intl.NumberFormat([]).format(coin.circulatingSupply)}</div>
+          <div className={styles.value}>{new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}</div>
         </div>
       </Card.Grid>
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.tagCard)}>
