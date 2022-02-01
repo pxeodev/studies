@@ -137,7 +137,7 @@ export default function Coin(coin) {
         {signalTag}
       </Card.Grid>
       <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard)}>
-        <Space>
+            <Space wrap>
           <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
             <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
               @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
