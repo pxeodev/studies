@@ -13,7 +13,7 @@ const { Header, Footer } = Layout;
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = useDarkMode();
   const router = useRouter();
-  const currentUrl = `https://coinrotator.app${router.asPath}`
+  const currentUrl = `https://www.coinrotator.app${router.asPath}`
   pageProps.currentUrl = currentUrl
 
   return (
