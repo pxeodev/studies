@@ -43,7 +43,6 @@ export async function getStaticProps() {
         },
         where: {
           closeTime: {
-            gte: endOfDay(subDays(new Date(), 30)),
             lte: endOfYesterday(),
           }
         },

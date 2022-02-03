@@ -287,7 +287,6 @@ export async function getStaticProps({ params }) {
       },
       where: {
         closeTime: {
-          gte: endOfDay(subDays(new Date(), 30)),
           lte: endOfYesterday(),
         }
       },
