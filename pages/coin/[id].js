@@ -5,8 +5,6 @@ import { TwitterOutlined, GlobalOutlined } from '@ant-design/icons';
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
-import endOfDay from 'date-fns/endOfDay';
-import subDays from 'date-fns/subDays';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.css'
@@ -126,7 +124,7 @@ export default function Coin(coin) {
 
   const notation = screens.xs ? 'compact' : 'standard'
 
-  const metaTitle = `${coin.name} | ${new Intl.DateTimeFormat([], { dateStyle: 'full' }).format(new Date())} | ${signal} | Rotate into the Freshest Crypto Signals Daily.`
+  const metaTitle = `${coin.name} | ${signal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
   const metaDescription = `Coinrotator issues a daily signal for ${coin.name}. Always be on the right side of the market.`
 
   return (
