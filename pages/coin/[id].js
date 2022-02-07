@@ -130,7 +130,7 @@ export default function Coin(coin) {
   const notation = screens.xs ? 'compact' : 'standard'
 
   const metaTitle = `${coin.name} | ${signal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
-  const metaDescription = `Coinrotator issues a daily signal for ${coin.name}. Always be on the right side of the market.`
+  const metaDescription = `Coinrotator issues a daily signal for ${coin.name}. Always be on the right side of the cryptomarket.`
 
   return (
     <>
