@@ -155,7 +155,7 @@ export default function Coin(coin) {
       </Head>
       <Content className={styles.content}>
         <Breadcrumb className={styles.breadcrumb}>
-          <Breadcrumb.Item><Link href="/">Home</Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item>{coin.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Card>
@@ -248,15 +248,17 @@ export default function Coin(coin) {
                   // eslint-disable-next-line @next/next/no-img-element
                   coin.similarCoins.map(coin =>
                     (
-                      <Link href={`/coin/${coin.id}`} key={coin.id} passHref>
-                        <Tag
-                          className={styles.similarCoinLink}
-                          // eslint-disable-next-line @next/next/no-img-element
-                          icon={<img className={styles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
-                          key={coin.name}
-                        >
-                          {coin.name}
-                        </Tag>
+                      <Link href={`/coin/${coin.id}`} key={coin.id}>
+                        <a>
+                          <Tag
+                            className={styles.similarCoinLink}
+                            // eslint-disable-next-line @next/next/no-img-element
+                            icon={<img className={styles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
+                            key={coin.name}
+                          >
+                            {coin.name}
+                          </Tag>
+                        </a>
                       </Link>
                     )
                   )

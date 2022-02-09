@@ -27,15 +27,19 @@ function MyApp({ Component, pageProps }) {
       <Header className={styles.header}>
         <Menu mode="horizontal">
           <Menu.Item key="logo" className={styles.logo} data-id="logo">
-            <Link href="/" passHref>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
+            <Link href="/">
+              <a>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/coin.svg" alt="Logo" height={24} width={24} className={styles.logoSvg}/>
+              </a>
             </Link>
-            <Link href="/" passHref>
-              <span className={styles.logoTitle}><b>Coin</b>Rotator</span>
+            <Link href="/">
+              <a>
+                <span className={styles.logoTitle}><b>Coin</b>Rotator</span>
+              </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="faq"><Link href="/faq">FAQ</Link></Menu.Item>
+          <Menu.Item key="faq"><Link href="/faq"><a>FAQ</a></Link></Menu.Item>
           {/* <Menu.Item key="dark-mode"><DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode}/></Menu.Item> */}
         </Menu>
       </Header>
