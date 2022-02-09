@@ -198,30 +198,30 @@ export default function Coin(coin) {
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard1)}>
             <div className={styles.labelValueGroup}>
-              <Title level={2} className={styles.label}>Market Cap</Title>
+              <Title level={3} className={styles.label}>Market Cap</Title>
               <Space wrap>
                 <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
             <div className={styles.labelValueGroup}>
-              <Title level={2} className={styles.label}>All-Time High</Title>
+              <Title level={3} className={styles.label}>All-Time High</Title>
               <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
             </div>
             <div className={styles.labelValueGroup}>
-              <Title level={2} className={styles.label}>All-Time Low</Title>
+              <Title level={3} className={styles.label}>All-Time Low</Title>
               <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
             </div>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
             { coin.fullyDilutedValuation ? (
               <div className={styles.labelValueGroup}>
-                <Title level={2} className={styles.label}>Fully Diluted Valuation</Title>
+                <Title level={3} className={styles.label}>Fully Diluted Valuation</Title>
                 <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
             <div className={styles.labelValueGroup}>
-              <Title level={2} className={styles.label}>Circulating Supply</Title>
+              <Title level={3} className={styles.label}>Circulating Supply</Title>
               <div className={styles.value}>
                 {new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}
                 { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
@@ -229,13 +229,13 @@ export default function Coin(coin) {
             </div>
             { coin.totalSupply ? (
               <div className={styles.labelValueGroup}>
-                <Title level={2} className={styles.label}>Total Supply</Title>
+                <Title level={3} className={styles.label}>Total Supply</Title>
                 <div className={styles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.tagCard)}>
-            <Title level={2} className={styles.label}>Tags</Title>
+            <Title level={3} className={styles.label}>Tags</Title>
             {
               coin.categories.map(tag => <Tag key={tag}>{tag}</Tag>)
             }
@@ -243,7 +243,7 @@ export default function Coin(coin) {
           {
             coin.similarCoins.length ? (
               <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.similarCoinCard)}>
-                <Title level={2} className={styles.label}>Similar Coins</Title>
+                <Title level={3} className={styles.label}>Similar Coins</Title>
                 {
                   // eslint-disable-next-line @next/next/no-img-element
                   coin.similarCoins.map(coin =>
