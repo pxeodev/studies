@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { useState, useEffect } from 'react';
 import { Breadcrumb, Button, Card, Grid, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
@@ -321,22 +322,16 @@ export async function getStaticProps({ params }) {
       orderBy: { closeTime: 'asc' }
     }}
   })
-  const similarCoins = await prisma.coin.findMany({
-    where: {
-      categories: {
-        hasSome: coinData.categories
-      },
-      id: {
-        not: coinData.id
-      }
-    },
-    take: 10,
-    select: {
-      id: true,
-      name: true,
-      images: true,
-    }
-  })
+  const similarCoins = await prisma.$queryRaw`
+    SELECT id, images, name, count(*)
+    FROM "Coin",
+    unnest(array[${Prisma.join(coinData.categories)}]) unnested_categories
+    WHERE categories @> array[unnested_categories]
+    AND id != ${coinData.id}
+    GROUP BY id
+    ORDER BY 4 desc, 1
+    LIMIT 10;
+  `;
   let ohlcs = coinData.ohlcs.map(ohlc => ({
     ...ohlc,
     open: Number(ohlc.open),
