@@ -42,10 +42,9 @@
   width: 25%;
 }
 
-.cardHeader {
+.h1Title {
   font-size: 24px !important;
-  font-weight: bold;
-  line-height: 32px;
+  line-height: 32px !important;
   margin-bottom: 0 !important;
 }
 
@@ -58,8 +57,11 @@
 }
 
 .label {
-  color: #8C8C8C;
-  line-height: 24px;
+  color: #8C8C8C !important;
+  line-height: 24px !important;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  margin-bottom: 0 !important;
 }
 
 .value {
@@ -77,8 +79,9 @@
   margin-right: 5px;
 }
 
-.exchangesTable {
-  margin-top: 32px;
+.exchangeTitle {
+  margin: 1em 0 0.5em !important;
+  text-align: center;
 }
 
 .exchangesTable table {

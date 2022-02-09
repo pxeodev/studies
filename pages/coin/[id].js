@@ -163,7 +163,7 @@ export default function Coin(coin) {
             <Space>
               {/* // eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
-              <Title className={styles.cardHeader}>{coin.name}</Title>
+              <Title className={styles.h1Title}>{coin.name}</Title>
               <Tag>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
@@ -198,30 +198,30 @@ export default function Coin(coin) {
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard1)}>
             <div className={styles.labelValueGroup}>
-              <div className={styles.label}>Market Cap</div>
+              <Title level={2} className={styles.label}>Market Cap</Title>
               <Space wrap>
                 <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
             <div className={styles.labelValueGroup}>
-              <div className={styles.label}>All-Time High</div>
+              <Title level={2} className={styles.label}>All-Time High</Title>
               <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
             </div>
             <div className={styles.labelValueGroup}>
-              <div className={styles.label}>All-Time Low</div>
+              <Title level={2} className={styles.label}>All-Time Low</Title>
               <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
             </div>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
             { coin.fullyDilutedValuation ? (
               <div className={styles.labelValueGroup}>
-                <div className={styles.label}>Fully Diluted Valuation</div>
+                <Title level={2} className={styles.label}>Fully Diluted Valuation</Title>
                 <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
             <div className={styles.labelValueGroup}>
-              <div className={styles.label}>Circulating Supply</div>
+              <Title level={2} className={styles.label}>Circulating Supply</Title>
               <div className={styles.value}>
                 {new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}
                 { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
@@ -229,13 +229,13 @@ export default function Coin(coin) {
             </div>
             { coin.totalSupply ? (
               <div className={styles.labelValueGroup}>
-                <div className={styles.label}>Total Supply</div>
+                <Title level={2} className={styles.label}>Total Supply</Title>
                 <div className={styles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.tagCard)}>
-            <div className={styles.label}>Tags</div>
+            <Title level={2} className={styles.label}>Tags</Title>
             {
               coin.categories.map(tag => <Tag key={tag}>{tag}</Tag>)
             }
@@ -243,7 +243,7 @@ export default function Coin(coin) {
           {
             coin.similarCoins.length ? (
               <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.similarCoinCard)}>
-                <div className={styles.label}>Similar Coins</div>
+                <Title level={2} className={styles.label}>Similar Coins</Title>
                 {
                   // eslint-disable-next-line @next/next/no-img-element
                   coin.similarCoins.map(coin =>
@@ -277,6 +277,7 @@ export default function Coin(coin) {
             </AdvancedRealTimeChart>
           </Card.Grid>
         </Card>
+        <Title level={2} className={classnames(styles.h1Title, styles.exchangeTitle)}>{coin.symbol.toUpperCase()} Markets</Title>
         <Table
           columns={columns}
           dataSource={tableData}
