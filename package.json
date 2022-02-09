@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npx prisma migrate deploy && next build",
+    "postbuild": "next-sitemap",
     "fetch-data": "parcel build scripts/fetch-data.js --no-source-maps",
     "start": "next start",
     "lint": "next lint"
@@ -33,7 +34,8 @@
   },
   "devDependencies": {
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.2"
+    "eslint-config-next": "11.1.2",
+    "next-sitemap": "^2.1.13"
   },
   "engines": {
     "node": ">=14.18.0"
