@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }) {
       <Footer className={styles.footer}>
         <b className={styles.footerTitle}>CoinRotator</b>
         <Typography.Paragraph className={styles.footerLove} type="secondary">
-          Made with 💙 by <a className={styles.gaLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
+          Proudly funded in part by <a className={styles.gaLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
         </Typography.Paragraph>
       </Footer>
     </>
