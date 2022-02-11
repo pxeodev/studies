@@ -7,13 +7,16 @@ import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/i
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
+import round from 'lodash/round';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.css'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
 import convertToDailySignals from '../../utils/convertToDailySignals'
-import round from 'lodash/round';
+import BuyTag from '../../components/BuyTag'
+import SellTag from '../../components/SellTag'
+import HodlTag from '../../components/HodlTag'
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -25,15 +28,15 @@ export default function Coin(coin) {
   switch (superSuperTrend) {
     case signals.buy:
       signal = 'Buy'
-      signalTag = <Tag color="#52C41A">Buy</Tag>
+      signalTag = <BuyTag />
       break;
     case signals.sell:
       signal = 'Sell'
-      signalTag = <Tag color="#F5222D">Sell</Tag>
+      signalTag = <SellTag />
       break;
     default:
       signal = 'HODL'
-      signalTag = <Tag color="#2F54EB">HODL</Tag>
+      signalTag = <HodlTag />
   }
   let url
   try {
