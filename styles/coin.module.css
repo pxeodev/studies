@@ -28,7 +28,7 @@
 .chartGrid {
   display: block;
   width: 100%;
-  height: 300px !important;
+  height: 450px !important;
 }
 
 #coinChart {
@@ -129,6 +129,7 @@
   .chartGrid {
     padding: 0;
     padding-bottom: 16px;
+    height: 350px !important;
   }
 }
 
