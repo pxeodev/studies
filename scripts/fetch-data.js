@@ -58,9 +58,15 @@ const script = async () => {
   let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
   marketPriority.reverse()
 
+  console.log("DEBUG CODE")
+
   for (let coinMarketData of coinsMarketData) {
     const coinData = (await coinGeckoAPI.get(`/coins/${coinMarketData.id}`)).data
     await new Promise((res) => setTimeout(res, 1200))
+
+    console.log("DATABASE URL AND PRISMA CONFIG")
+    console.debug(process.env.DATABASE_URL)
+    console.debug(prisma._engineConfig)
 
     const dbCoinData = {
       symbol: coinMarketData.symbol,
