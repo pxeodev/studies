@@ -79,7 +79,7 @@ const script = async () => {
       circulatingSupply: coinData.market_data.circulating_supply,
       totalSupply: coinData.market_data.total_supply,
       tickers: coinData.tickers,
-      categories: categories[coinMarketData.symbol],
+      categories: categories[`${coinMarketData.symbol}-${coinMarketData.name}`],
     }
 
     await prisma.coin.upsert({
