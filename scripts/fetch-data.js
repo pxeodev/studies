@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
 
 import { quoteSymbols } from '../utils/variables'
-import getCategories from '../utils/getCategories'
+import { getCategoriesByCoin } from '../utils/categories'
 import prisma from '../lib/prisma'
 
 dotenv.config();
@@ -36,7 +36,7 @@ const script = async () => {
   cryptowatchAPI.interceptors.request.use(AxiosLogger.requestLogger);
   rax.attach(cryptowatchAPI)
 
-  const categories = await getCategories();
+  const categories = await getCategoriesByCoin();
 
   const coinMarketsPage1 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250')
   const coinMarketsPage2 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=2')

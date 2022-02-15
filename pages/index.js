@@ -1,6 +1,5 @@
 import classnames from 'classnames';
 import isFinite from 'lodash/isFinite'
-import uniq from 'lodash/uniq'
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Grid, Layout } from 'antd'
@@ -12,6 +11,7 @@ import styles from '../styles/index.module.css'
 import convertToDailySignals from '../utils/convertToDailySignals';
 import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
 import HomePageTable from '../components/HomePageTable';
+import { getCategories } from '../utils/categories';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -62,9 +62,7 @@ export async function getStaticProps() {
       ohlcs
     }
   })
-  let categories = coinsData.flatMap(coin => coin.categories)
-  categories = uniq(categories)
-  categories = categories.sort((a, b) => a.localeCompare(b))
+  let categories = await getCategories()
   return {
     props: {
       coinsData,
