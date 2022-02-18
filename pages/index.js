@@ -73,7 +73,7 @@ export async function getStaticProps() {
 
 export default function Home({ coinsData, categories }) {
   const router = useRouter()
-  const portfolio = router.query.portfolio
+  const { portfolio: portfolioParam, category: categoryParam } = router.query
 
   const defaultMarketCapMin = coinsData[coinsData.length - 1].marketCap
   const defaultMarketCapMax = coinsData[0].marketCap
@@ -88,7 +88,7 @@ export default function Home({ coinsData, categories }) {
   const [trendLengthMin, setTrendLengthMin] = useState(defaultTrendLengthMin)
   const [trendLengthMax, setTrendLengthMax] = useState(defaultTrendLengthMax)
   const [trendType, setTrendType] = useState(defaultTrendType)
-  const [category, setCategory] = useState(defaultCategory)
+  const [categoryFilter, setCategoryFilter] = useState(defaultCategory)
   const [coinNameFilter, setCoinNameFilter] = useState(defaultCoinNameFilter)
   const [atrPeriods, setAtrPeriods] = useState(defaultAtrPeriods)
   const [multiplier, setMultiplier] = useState(defaultMultiplier)
@@ -111,10 +111,15 @@ export default function Home({ coinsData, categories }) {
     inputRef.current.input?.focus();
   }, [])
   useEffect(() => {
-    if (portfolio) {
-      setCoinNameFilter(portfolio)
+    if (portfolioParam) {
+      setCoinNameFilter(portfolioParam)
     }
-  }, [portfolio])
+  }, [portfolioParam])
+  useEffect(() => {
+    if (categoryParam) {
+      setCategoryFilter(categoryParam)
+    }
+  }, [categoryParam])
 
   const setValidAtrPeriods = useCallback((e) => {
     const newAtrPeriod = parseInt(e.target.value)
@@ -172,9 +177,22 @@ export default function Home({ coinsData, categories }) {
     setCoinNameFilter(newCoinNames)
     router.replace({
       pathname: router.pathname,
-      query: { portfolio: newCoinNames }
+      query: {
+        portfolio: newCoinNames,
+        category: categoryFilter
+      }
     }, null, { shallow: true })
-  }, [router])
+  }, [router, categoryFilter])
+  const setCategory = useCallback((newCategory) => {
+    setCategoryFilter(newCategory)
+    router.replace({
+      pathname: router.pathname,
+      query: {
+        category: newCategory,
+        portfolio: portfolioParam
+      }
+    }, null, { shallow: true })
+  }, [router, portfolioParam])
 
   const coinsFilter = coinNameFilter
     .replace(/\s/g, '')
@@ -223,7 +241,7 @@ export default function Home({ coinsData, categories }) {
     setCoinName(defaultCoinNameFilter)
     setAtrPeriods(defaultAtrPeriods)
     setMultiplier(defaultMultiplier)
-  }, [defaultTrendType, defaultCategory, setCoinName, resetMarketCap, resetTrendLength])
+  }, [defaultTrendType, defaultCategory, setCoinName, resetMarketCap, resetTrendLength, setCategory])
 
   const buttonSize = screens.xs ? 'small' : screens.xl ? 'large' : 'medium'
 
@@ -231,7 +249,7 @@ export default function Home({ coinsData, categories }) {
     const marketCapFilterApplied = marketCapMin !== defaultMarketCapMin || marketCapMax !== defaultMarketCapMax
     const trendLengthFilterApplied = trendLengthMin !== defaultTrendLengthMin || trendLengthMax !== defaultTrendLengthMax
     const trendTypeFilterApplied = trendType !== defaultTrendType
-    const categoryFilterApplied = category !== defaultCategory
+    const categoryFilterApplied = categoryFilter !== defaultCategory
     const coinNameFilterApplied = coinNameFilter !== defaultCoinNameFilter
     const atrPeriodsFilterApplied = atrPeriods !== defaultAtrPeriods
     const multiplierFilterApplied = multiplier !== defaultMultiplier
@@ -297,7 +315,7 @@ export default function Home({ coinsData, categories }) {
             </Col>
             <Col xs={24} md={6} className={styles.formCol}>
               <div className={styles.formLabel}>Category</div>
-              <Select size="large" value={category} onChange={setCategory} className={styles.formSelect}>
+              <Select size="large" value={categoryFilter} onChange={setCategory} className={styles.formSelect}>
                 <Option value={defaultCategory} key="all">All</Option>
                 {
                   categories.map((category) => <Option value={category} key={category}>{category}</Option>)
@@ -436,7 +454,7 @@ export default function Home({ coinsData, categories }) {
             trendLengthMax={trendLengthMax}
             coinNameFilter={coinNameFilter}
             coinsFilter={coinsFilter}
-            category={category}
+            category={categoryFilter}
             trendType={trendType}
             defaultCategory={defaultCategory}
             atrPeriods={atrPeriods}
