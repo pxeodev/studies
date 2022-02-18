@@ -1,4 +1,6 @@
 import groupBy from 'lodash/groupBy'
+import minBy from 'lodash/minBy'
+import maxBy from 'lodash/maxBy'
 import subSeconds from 'date-fns/subSeconds'
 
 export default function convertToDailySignals(ohlcs) {
@@ -13,10 +15,10 @@ export default function convertToDailySignals(ohlcs) {
     })
 
     ohlcs[quoteSymbol] = Object.values(dailyQuoteSymbolOhlcs).map((dailyOhlcs) => {
-      const dayOpen = Number(dailyOhlcs[dailyOhlcs.length - 1].open)
+      const dayOpen = Number(minBy(dailyOhlcs, 'closeTime').open)
       const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc.high))
       const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc.low))
-      const dayClose = Number(dailyOhlcs[0].close)
+      const dayClose = Number(maxBy(dailyOhlcs, 'closeTime').close)
 
       return [dayOpen, dayHigh, dayLow, dayClose]
     })
