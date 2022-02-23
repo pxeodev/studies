@@ -12,7 +12,7 @@ const Footer = ({ topCoins, topCategories }) => {
   const logo = <>
     <Logo className={styles.logo}/>
     <Paragraph type="secondary">
-      This website is for informational purposes only, you should not construe any such information or other material as investment or financial advice.
+      This website is for informational purposes only. Users should not consider anything here as investment or financial advice. Nfa.
     </Paragraph>
   </>
 
