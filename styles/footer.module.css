@@ -12,7 +12,7 @@
 }
 
 .logo {
-  height: inherit;
+  height: inherit !important;
   margin-bottom: 5px;
 }
 
