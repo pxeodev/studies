@@ -290,181 +290,179 @@ export default function Home({ coinsData, categories }) {
   }
 
   return (
-    <>
-      <Content className={styles.content}>
-        <Title className={styles.title}>Swap Into The Most Profitable Coins</Title>
-        <Paragraph className={styles.subTitle} type="secondary">Use Coinrotator to find the most promising cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
-        {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
-        <Card className={styles.formCard}>
-          <Row className={styles.formRow} type="flex" gutter={16}>
-            <Col xs={24} md={6} className={styles.formCol}>
-              <div className={styles.formLabel}>Coin</div>
-              <Input
-                ref={inputRef}
-                placeholder="Bitcoin, ETH, Polygon..."
-                allowClear
-                value={coinNameFilter}
-                onChange={(e) => setCoinName(e.target.value)}
-                size="large"
-              />
-            </Col>
-            <Col xs={24} md={6} className={styles.formCol}>
-              <div className={styles.formLabel}>Signal</div>
-              <Select size="large" value={trendType} onChange={setTrendType} className={styles.formSelect}>
-                <Option value={signals.all}>All</Option>
-                <Option value={signals.buy}>Buy</Option>
-                <Option value={signals.sell}>Sell</Option>
-              </Select>
-            </Col>
-            <Col xs={24} md={6} className={styles.formCol}>
-              <div className={styles.formLabel}>Category</div>
-              <Select size="large" value={categoryFilter} onChange={setCategory} className={styles.formSelect}>
-                <Option value={defaultCategory} key="all">All</Option>
-                {
-                  categories.map((category) => <Option value={category} key={category}>{category}</Option>)
-                }
-              </Select>
-            </Col>
-            <Col xs={24} md={6}>
-              <div className={classnames(styles.formLabel, styles.hiddenFormLabel)}>&nbsp;</div>
-              <Button
-                size="large"
-                onClick={() => setFilterModalVisible(true)}
-                icon={<SlidersOutlined />}
-                className={styles.formAllFilters}
-              >
-                All Filters
-              </Button>
-            </Col>
-          </Row>
-          {renderAppliedFilters()}
-        </Card>
-        <Modal
-          visible={filterModalVisible}
-          title="Filters"
-          onCancel={() => setFilterModalVisible(false)}
-          footer={[
-            <Button
-              key="apply"
-              onClick={() => setFilterModalVisible(false)}
+    <Content className={styles.content}>
+      <Title className={styles.title}>Swap Into The Most Profitable Coins</Title>
+      <Paragraph className={styles.subTitle} type="secondary">Use Coinrotator to find the most promising cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
+      {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
+      <Card className={styles.formCard}>
+        <Row className={styles.formRow} type="flex" gutter={16}>
+          <Col xs={24} md={6} className={styles.formCol}>
+            <div className={styles.formLabel}>Coin</div>
+            <Input
+              ref={inputRef}
+              placeholder="Bitcoin, ETH, Polygon..."
+              allowClear
+              value={coinNameFilter}
+              onChange={(e) => setCoinName(e.target.value)}
               size="large"
-              type="primary"
-              icon={<CheckCircleOutlined />}
-              className={styles.applyFilterModal}
-            >
-              Apply Filters
-            </Button>,
+            />
+          </Col>
+          <Col xs={24} md={6} className={styles.formCol}>
+            <div className={styles.formLabel}>Signal</div>
+            <Select size="large" value={trendType} onChange={setTrendType} className={styles.formSelect}>
+              <Option value={signals.all}>All</Option>
+              <Option value={signals.buy}>Buy</Option>
+              <Option value={signals.sell}>Sell</Option>
+            </Select>
+          </Col>
+          <Col xs={24} md={6} className={styles.formCol}>
+            <div className={styles.formLabel}>Category</div>
+            <Select size="large" value={categoryFilter} onChange={setCategory} className={styles.formSelect}>
+              <Option value={defaultCategory} key="all">All</Option>
+              {
+                categories.map((category) => <Option value={category} key={category}>{category}</Option>)
+              }
+            </Select>
+          </Col>
+          <Col xs={24} md={6}>
+            <div className={classnames(styles.formLabel, styles.hiddenFormLabel)}>&nbsp;</div>
             <Button
-              key="reset"
-              onClick={resetFilters}
               size="large"
-              danger
-              type="primary"
-              icon={<CloseCircleOutlined />}
+              onClick={() => setFilterModalVisible(true)}
+              icon={<SlidersOutlined />}
+              className={styles.formAllFilters}
             >
-              Reset Filters
+              All Filters
             </Button>
-          ]}
-        >
-          {/* <Row className={styles.formRow} justify="space-between">
-            <Col>
-              <span>Weekly Signals</span>
-            </Col>
-            <Col>
-              <Switch checked={showWeeklySignals} onChange={setShowWeeklySignals} />
-            </Col>
-          </Row>
-          <Divider /> */}
-          <Row className={styles.formRow} gutter={16}>
-            <Col span={12} className="gutter-row">
-              <div className={styles.formLabel}>ATR periods</div>
-              <Input size="large" onChange={setValidAtrPeriods} value={atrPeriods}></Input>
-            </Col>
-            <Col span={12} className="gutter-row">
-              <div className={styles.formLabel}>Multiplier</div>
-              <Input size="large" onChange={setValidMulitiplier} value={multiplier}></Input>
-            </Col>
-          </Row>
-          <Divider />
-          <Row>
-            <Col>
-              <div className={styles.formLabel}>Market Cap</div>
-            </Col>
-          </Row>
-          <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
-            <Col className="gutter-row" xs={10} md={11}>
-              <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMin} value={marketCapMin} placeholder="$1"></Input>
-            </Col>
-            <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
-              <Text type="secondary">TO</Text>
-            </Col>
-            <Col className="gutter-row" xs={11} md={11}>
-              <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMax} value={marketCapMax} placeholder="$100,000"></Input>
-            </Col>
-          </Row>
-          <Row justify="space-between">
-            <Col>
-              <Button size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
-            </Col>
-            <Col>
-              <Button size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
-            </Col>
-            <Col>
-              <Button size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
-            </Col>
-            <Col>
-              <Button size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
-            </Col>
-          </Row>
-          <Divider />
-          <Row>
-            <Col>
-              <div className={styles.formLabel}>Signal Streak</div>
-            </Col>
-          </Row>
-          <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
-            <Col className="gutter-row" xs={10} md={11}>
-              <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMin} value={trendLengthMin} placeholder="1"></Input>
-            </Col>
-            <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
-              <Text type="secondary">TO</Text>
-            </Col>
-            <Col className="gutter-row" xs={11} md={11}>
-              <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMax} value={trendLengthMax} placeholder="50"></Input>
-            </Col>
-          </Row>
-          <Row justify="space-between">
-            <Col>
-              <Button size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
-            </Col>
-            <Col>
-              <Button size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
-            </Col>
-            <Col>
-              <Button size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
-            </Col>
-            <Col>
-              <Button size="large" onClick={setPredefinedTrendLength4}>20+</Button>
-            </Col>
-          </Row>
-        </Modal>
-        <Row className={styles.tableGridRow}>
-          <HomePageTable
-            coinsData={coinsData}
-            marketCapMax={marketCapMax}
-            marketCapMin={marketCapMin}
-            trendLengthMin={trendLengthMin}
-            trendLengthMax={trendLengthMax}
-            coinNameFilter={coinNameFilter}
-            coinsFilter={coinsFilter}
-            category={categoryFilter}
-            trendType={trendType}
-            defaultCategory={defaultCategory}
-            atrPeriods={atrPeriods}
-            multiplier={multiplier}
-          />
+          </Col>
         </Row>
-      </Content>
-    </>
+        {renderAppliedFilters()}
+      </Card>
+      <Modal
+        visible={filterModalVisible}
+        title="Filters"
+        onCancel={() => setFilterModalVisible(false)}
+        footer={[
+          <Button
+            key="apply"
+            onClick={() => setFilterModalVisible(false)}
+            size="large"
+            type="primary"
+            icon={<CheckCircleOutlined />}
+            className={styles.applyFilterModal}
+          >
+            Apply Filters
+          </Button>,
+          <Button
+            key="reset"
+            onClick={resetFilters}
+            size="large"
+            danger
+            type="primary"
+            icon={<CloseCircleOutlined />}
+          >
+            Reset Filters
+          </Button>
+        ]}
+      >
+        {/* <Row className={styles.formRow} justify="space-between">
+          <Col>
+            <span>Weekly Signals</span>
+          </Col>
+          <Col>
+            <Switch checked={showWeeklySignals} onChange={setShowWeeklySignals} />
+          </Col>
+        </Row>
+        <Divider /> */}
+        <Row className={styles.formRow} gutter={16}>
+          <Col span={12} className="gutter-row">
+            <div className={styles.formLabel}>ATR periods</div>
+            <Input size="large" onChange={setValidAtrPeriods} value={atrPeriods}></Input>
+          </Col>
+          <Col span={12} className="gutter-row">
+            <div className={styles.formLabel}>Multiplier</div>
+            <Input size="large" onChange={setValidMulitiplier} value={multiplier}></Input>
+          </Col>
+        </Row>
+        <Divider />
+        <Row>
+          <Col>
+            <div className={styles.formLabel}>Market Cap</div>
+          </Col>
+        </Row>
+        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" xs={10} md={11}>
+            <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMin} value={marketCapMin} placeholder="$1"></Input>
+          </Col>
+          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
+            <Text type="secondary">TO</Text>
+          </Col>
+          <Col className="gutter-row" xs={11} md={11}>
+            <Input className={classnames(styles.filterModalInput)} size="large" onChange={setValidMarketCapMax} value={marketCapMax} placeholder="$100,000"></Input>
+          </Col>
+        </Row>
+        <Row justify="space-between">
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
+          </Col>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
+          </Col>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
+          </Col>
+          <Col>
+            <Button size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
+          </Col>
+        </Row>
+        <Divider />
+        <Row>
+          <Col>
+            <div className={styles.formLabel}>Signal Streak</div>
+          </Col>
+        </Row>
+        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" xs={10} md={11}>
+            <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMin} value={trendLengthMin} placeholder="1"></Input>
+          </Col>
+          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
+            <Text type="secondary">TO</Text>
+          </Col>
+          <Col className="gutter-row" xs={11} md={11}>
+            <Input className={styles.filterModalInput} size="large" onChange={setValidTrendLengthMax} value={trendLengthMax} placeholder="50"></Input>
+          </Col>
+        </Row>
+        <Row justify="space-between">
+          <Col>
+            <Button size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
+          </Col>
+          <Col>
+            <Button size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
+          </Col>
+          <Col>
+            <Button size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
+          </Col>
+          <Col>
+            <Button size="large" onClick={setPredefinedTrendLength4}>20+</Button>
+          </Col>
+        </Row>
+      </Modal>
+      <Row className={styles.tableGridRow}>
+        <HomePageTable
+          coinsData={coinsData}
+          marketCapMax={marketCapMax}
+          marketCapMin={marketCapMin}
+          trendLengthMin={trendLengthMin}
+          trendLengthMax={trendLengthMax}
+          coinNameFilter={coinNameFilter}
+          coinsFilter={coinsFilter}
+          category={categoryFilter}
+          trendType={trendType}
+          defaultCategory={defaultCategory}
+          atrPeriods={atrPeriods}
+          multiplier={multiplier}
+        />
+      </Row>
+    </Content>
   );
 }

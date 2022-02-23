@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import classnames from 'classnames'
+
 import styles from '../styles/logo.module.css'
 
-const Logo = () => {
+const Logo = ({ className = '' }) => {
   return (
-    <span className={styles.logo}>
+    <span className={classnames(styles.logo, className)}>
       <Link href="/" key="img">
         <a>
           {/* eslint-disable-next-line @next/next/no-img-element */}

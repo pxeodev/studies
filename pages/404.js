@@ -1,0 +1,20 @@
+import { Layout, Typography } from 'antd';
+
+import globalData from '../lib/globalData';
+import styles from '../styles/404.module.css';
+
+export default function Custom404() {
+  return (
+    <Layout.Content className={styles.content}>
+      <Typography.Title>
+        404 - Page Not Found
+      </Typography.Title>
+    </Layout.Content>
+  )
+}
+
+export async function getStaticProps() {
+  const appData = await globalData();
+
+  return { props: { appData } };
+}
