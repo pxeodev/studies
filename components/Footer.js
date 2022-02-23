@@ -65,7 +65,7 @@ const Footer = ({ topCoins, topCategories }) => {
     <Space direction="vertical" size={12}>
       <Text type="secondary" strong>Social Media</Text>
       <Space size={12}>
-        <a href="https://discord.gg/gwTUngQv" target="_blank" rel="noreferrer" className={styles.socialLink}>
+        <a href="https://discord.gg/zfnxHyrhSK" target="_blank" rel="noreferrer" className={styles.socialLink}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/discord.svg" alt="Discord Logo" className={styles.socialImage}/>
         </a>
