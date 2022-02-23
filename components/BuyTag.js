@@ -1,6 +1,9 @@
 import { Tag } from 'antd'
-import styles from '../styles/signalTags.module.css'
+import classnames from 'classnames'
 
-const BuyTag = () => <Tag className={styles.tag} color="#52C41A">Buy</Tag>
+import styles from '../styles/signalTags.module.less'
+import variables from '../styles/variables.module.less'
+
+const BuyTag = ({ className = '' }) => <Tag className={classnames(styles.tag, className)} color={variables.successColor}>Buy</Tag>
 
 export default BuyTag

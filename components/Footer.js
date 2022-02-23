@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { Layout, Typography, Row, Col, Space, Divider } from 'antd'
 
-import styles from '../styles/footer.module.css'
+import styles from '../styles/footer.module.less'
 import Logo from './Logo'
-import useBreakpoint from '../utils/useBreakPoint'
+import useBreakPoint from '../utils/useBreakPoint'
 
 const Footer = ({ topCoins, topCategories }) => {
   const { Footer: AntFooter } = Layout;
@@ -81,7 +81,7 @@ const Footer = ({ topCoins, topCategories }) => {
     </Space>
   </>
 
-  const screens = useBreakpoint();
+  const screens = useBreakPoint();
 
   let grid;
 

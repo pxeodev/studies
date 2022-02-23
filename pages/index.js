@@ -7,7 +7,7 @@ import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-
 import endOfYesterday from 'date-fns/endOfYesterday';
 
 import prisma from '../lib/prisma'
-import styles from '../styles/index.module.css'
+import styles from '../styles/index.module.less'
 import convertToDailySignals from '../utils/convertToDailySignals';
 import useBreakpoint from '../utils/useBreakpoint';
 import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'

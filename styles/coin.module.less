@@ -1,3 +1,5 @@
+@import './variables.module.less';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -17,7 +19,7 @@
 }
 
 .signalWarning:hover path {
-  fill: #8c8c8c;
+  fill: @text-color-secondary;
 }
 
 .cardGrid {
@@ -57,7 +59,7 @@
 }
 
 .label {
-  color: #8C8C8C !important;
+  color: @text-color-secondary !important;
   line-height: 24px !important;
   font-size: 14px !important;
   font-weight: normal !important;
@@ -65,7 +67,7 @@
 }
 
 .value {
-  color: #262626;
+  color: @fake-black;
   line-height: 24px;
   font-weight: bold;
 }
@@ -100,14 +102,14 @@
 }
 
 .trustScoreGreen {
-  background: #52C41A;
+  background: @success-color;
 }
 
 .trustScoreRed {
-  background: #F5222D;
+  background: @error-color;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: @screen-sm) {
   .nameCard {
     width: 100% !important;
   }
@@ -133,7 +135,7 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: @screen-md) {
   .priceCard {
     box-shadow: none;
   }
@@ -147,7 +149,7 @@
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: @screen-lg) {
   .tagCard, .similarCoinCard {
     min-height: unset;
   }

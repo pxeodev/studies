@@ -1,3 +1,5 @@
+@import './variables.module.less';
+
 .content {
   display: flex;
   flex-direction: column;
@@ -23,7 +25,7 @@
 }
 
 .fakeLink {
-  color: #262626;
+  color: @fake-black;
 }
 
 .marketHealth {
@@ -42,14 +44,14 @@
   margin-bottom: 12px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: @screen-md) {
   .formCol {
     margin-bottom: 12px;
   }
 }
 
 .parameterCard {
-  background: #FAFAFA;
+  background: @fake-white;
 }
 
 .formLabel {
@@ -80,7 +82,7 @@
 }
 
 .formButton {
-  background: #FAFAFA;
+  background: @fake-white;
   margin-right: 12px;
 }
 
@@ -99,7 +101,7 @@
 }
 
 .coinsTable table {
-  border: 1px solid #F0F0F0;
+  border: 1px solid white;
   border-radius: 2px;
 }
 

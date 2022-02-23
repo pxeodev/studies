@@ -1,10 +1,13 @@
-import { Tag, Table } from 'antd'
+import { Table } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import styles from '../styles/index.module.css'
+import BuyTag from './BuyTag'
+import SellTag from './SellTag'
+import HodlTag from './HodlTag'
+import styles from '../styles/index.module.less'
 import { signals } from '../utils/variables'
-import getTrends from '../utils/getTrends';
+import getTrends from '../utils/getTrends'
 
 const HomePageTable = ({
     coinsData,
@@ -117,11 +120,11 @@ const HomePageTable = ({
       render: (superSupertrend) => {
         switch (superSupertrend) {
           case signals.buy:
-            return <Tag className={styles.tableTag} color="#52C41A">Buy</Tag>
+            return <BuyTag className={styles.tableTag} />
           case signals.sell:
-            return <Tag className={styles.tableTag} color="#F5222D">Sell</Tag>
+            return <SellTag className={styles.tableTag} />
           default:
-            return <Tag className={styles.tableTag} color="#2F54EB">HODL</Tag>
+            return <HodlTag className={styles.tableTag} />
         }
       }
     },

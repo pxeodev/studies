@@ -1,3 +1,5 @@
+@import './variables.module.less';
+
 @keyframes coin-flip {
   0%   { transform: translateY(0) rotate3d(0, 1, 0, 0deg); }
   50%  { transform: translateY(-6px) rotate3d(0, 1, 0, 180deg); }
@@ -16,7 +18,7 @@
 }
 
 .logo:hover {
-  color: #262626 !important;
+  color: @fake-black !important;
 }
 
 .logo:hover .logoSvg {
@@ -24,7 +26,7 @@
 }
 
 .logoTitle {
-  color: #262626 !important;
+  color: @fake-black !important;
   font-size: 20px;
   line-height: 28px;
   margin-left: 5px;

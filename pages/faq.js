@@ -1,7 +1,7 @@
 import { Breadcrumb, Typography, Collapse, Layout } from 'antd';
 import Link from 'next/link'
 
-import styles from '../styles/faq.module.css'
+import styles from '../styles/faq.module.less'
 import BuyTag from '../components/BuyTag'
 import SellTag from '../components/SellTag'
 import HodlTag from '../components/HodlTag'

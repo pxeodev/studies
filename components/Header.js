@@ -1,6 +1,6 @@
 import { Layout, Menu } from 'antd'
 
-import styles from '../styles/header.module.css'
+import styles from '../styles/header.module.less'
 import Logo from './Logo'
 
 const Header = () => {

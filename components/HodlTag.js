@@ -1,6 +1,9 @@
 import { Tag } from 'antd'
-import styles from '../styles/signalTags.module.css'
+import classnames from 'classnames'
 
-const HodlTag = () => <Tag className={styles.tag} color="#2F54EB">HODL</Tag>
+import styles from '../styles/signalTags.module.less'
+import variables from '../styles/variables.module.less'
+
+const HodlTag = ({ className = '' }) => <Tag className={classnames(styles.tag, className)} color={variables.primaryColor}>HODL</Tag>
 
 export default HodlTag

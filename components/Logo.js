@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import classnames from 'classnames'
 
-import styles from '../styles/logo.module.css'
+import styles from '../styles/logo.module.less'
 
 const Logo = ({ className = '' }) => {
   return (

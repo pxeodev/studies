@@ -10,7 +10,8 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import round from 'lodash/round';
 
 import prisma from '../../lib/prisma'
-import styles from '../../styles/coin.module.css'
+import styles from '../../styles/coin.module.less'
+import variables from '../../styles/variables.module.less'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
 import convertToDailySignals from '../../utils/convertToDailySignals'
@@ -189,7 +190,7 @@ export default function Coin(coin) {
               </a>
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color="#262626" className={styles.linkTag}>
+                  <Tag icon={<GlobalOutlined />} color={variables.fakeBlack} className={styles.linkTag}>
                     {url}
                   </Tag>
                 </a>
