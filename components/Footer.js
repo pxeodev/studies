@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Layout, Typography, Row, Col, Space } from 'antd'
+import { Layout, Typography, Row, Col, Space, Divider } from 'antd'
 
 import styles from '../styles/footer.module.css'
 import Logo from './Logo'
@@ -12,11 +12,14 @@ const Footer = ({ topCoins, topCategories }) => {
     <AntFooter className={styles.footer}>
       <div className={styles.mainFooter}>
         <Row gutter={30}>
-          <Col span={8}>
+          <Col span={7}>
             <Logo className={styles.logo}/>
             <Paragraph type="secondary">
               This website is for informational purposes only, you should not construe any such information or other material as investment or financial advice.
             </Paragraph>
+          </Col>
+          <Col>
+            <Divider type="vertical" className={styles.divider} />
           </Col>
           <Col span={4}>
             <Space direction="vertical" size={12}>
