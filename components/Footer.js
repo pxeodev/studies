@@ -26,7 +26,7 @@ const Footer = ({ topCoins, topCategories }) => {
               <Text type="secondary" strong>Top Coins</Text>
               {topCoins.map(coin =>
                 (
-                  <Link href={`/coins/${coin.id}`} key={coin.id} passHref>
+                  <Link href={`/coin/${coin.id}`} key={coin.id} passHref>
                     <LinkText>
                       {coin.name}
                     </LinkText>
