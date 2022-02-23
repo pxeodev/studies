@@ -1,13 +1,11 @@
 .footer {
   margin-top: 64px;
   padding: 0;
-  height: 286px;
   background: inherit;
 }
 
 .mainFooter {
   padding: 24px;
-  height: 240px;
   background: white;
 }
 
@@ -16,9 +14,18 @@
   margin-bottom: 5px;
 }
 
-.divider {
+.verticalDivider {
   height: 100%;
   margin: 0;
+}
+
+.horizontalDivider {
+  margin-top: 15px !important;
+  margin-bottom: 30px !important;
+}
+
+.bottomRow {
+  margin-top: 20px;
 }
 
 .footerTitle {
