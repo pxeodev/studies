@@ -1,6 +1,6 @@
 import { useMediaQuery } from 'react-responsive'
 
-const useBreakpoint = () => {
+const useBreakPoint = () => {
   const xl = useMediaQuery({ query: '(min-width: 1440px)' })
   const lg = useMediaQuery({ query: '(min-width: 900px)' })
   const md = useMediaQuery({ query: '(min-width: 600px)' })
@@ -9,4 +9,4 @@ const useBreakpoint = () => {
   return { xl, lg, md, sm }
 }
 
-export default useBreakpoint;
+export default useBreakPoint;

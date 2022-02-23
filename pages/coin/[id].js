@@ -15,7 +15,7 @@ import variables from '../../styles/variables.module.less'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
 import convertToDailySignals from '../../utils/convertToDailySignals'
-import useBreakpoint from '../../utils/useBreakpoint'
+import useBreakPoint from '../../utils/useBreakPoint'
 import BuyTag from '../../components/BuyTag'
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
@@ -123,7 +123,7 @@ export default function Coin(coin) {
     },
   ];
 
-  const screens = useBreakpoint();
+  const screens = useBreakPoint();
   let [isHoverable, setIsHoverable] = useState(true);
   useEffect(() => {
     setIsHoverable(!window.matchMedia( "(hover: none)" ).matches)
@@ -162,7 +162,7 @@ export default function Coin(coin) {
         <Card>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard)}>
             <Space>
-              {/* // eslint-disable-next-line @next/next/no-img-element */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
               <Title className={styles.h1Title}>{coin.name}</Title>
               <Tag>{coin.symbol.toUpperCase()}</Tag>

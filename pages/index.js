@@ -9,7 +9,7 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import prisma from '../lib/prisma'
 import styles from '../styles/index.module.less'
 import convertToDailySignals from '../utils/convertToDailySignals';
-import useBreakpoint from '../utils/useBreakpoint';
+import useBreakPoint from '../utils/useBreakPoint';
 import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
 import HomePageTable from '../components/HomePageTable';
 import { getCategories } from '../utils/categories';
@@ -107,7 +107,7 @@ export default function Home({ coinsData, categories }) {
     setTrendLengthMax(defaultTrendLengthMax)
   }, [defaultTrendLengthMin, defaultTrendLengthMax])
 
-  const screens = useBreakpoint();
+  const screens = useBreakPoint();
 
   const inputRef = useRef(null)
   useEffect(() => {
