@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { useState, useEffect } from 'react';
 import { Breadcrumb, Button, Card, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
@@ -20,6 +19,7 @@ import BuyTag from '../../components/BuyTag'
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
 import globalData from '../../lib/globalData';
+import useIsHoverable from '../../utils/useIsHoverable';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -124,10 +124,7 @@ export default function Coin(coin) {
   ];
 
   const screens = useBreakPoint();
-  let [isHoverable, setIsHoverable] = useState(true);
-  useEffect(() => {
-    setIsHoverable(!window.matchMedia( "(hover: none)" ).matches)
-  }, [setIsHoverable])
+  const isHoverable = useIsHoverable();
 
   let circulatingSupplyPercentage
   if (coin.circulatingSupply && coin.totalSupply) {

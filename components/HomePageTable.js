@@ -1,6 +1,7 @@
-import { Table } from 'antd'
+import { Table, Tooltip } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { QuestionCircleFilled } from '@ant-design/icons';
 
 import BuyTag from './BuyTag'
 import SellTag from './SellTag'
@@ -8,6 +9,7 @@ import HodlTag from './HodlTag'
 import styles from '../styles/index.module.less'
 import { signals } from '../utils/variables'
 import getTrends from '../utils/getTrends'
+import useIsHoverable from '../utils/useIsHoverable';
 
 const HomePageTable = ({
     coinsData,
@@ -25,6 +27,8 @@ const HomePageTable = ({
   }) => {
 
   const router = useRouter()
+  const isHoverable = useIsHoverable()
+
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
@@ -113,19 +117,37 @@ const HomePageTable = ({
       }
     },
     {
-      title: 'Signal',
+      title: <>
+        <span>Signal</span>
+        <Tooltip
+            placement={'right'}
+            trigger={isHoverable ? 'hover' : 'click'}
+            title="Coinrotator signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include Buy, Sell and Hodl. They are updated once daily. NFA."
+        >
+          <QuestionCircleFilled className={styles.signalExplanation} />
+        </Tooltip>
+      </>,
       dataIndex: 'superSupertrend',
-      align: 'center',
-      width: 72,
+      width: 100,
       render: (superSupertrend) => {
+        let tag;
         switch (superSupertrend) {
           case signals.buy:
-            return <BuyTag className={styles.tableTag} />
+            tag = <BuyTag className={styles.tableTag} />
+            break
           case signals.sell:
-            return <SellTag className={styles.tableTag} />
+            tag = <SellTag className={styles.tableTag} />
+            break
           default:
-            return <HodlTag className={styles.tableTag} />
+            tag = <HodlTag className={styles.tableTag} />
         }
+
+        return (
+          <>
+            {tag}
+
+          </>
+        )
       }
     },
     {
