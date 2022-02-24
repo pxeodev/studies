@@ -2431,14 +2431,7 @@ debug@^3.2.6, debug@^3.2.7:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.1, debug@^4.1.1, debug@^4.3.1:
-  version "4.3.2"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.2.tgz"
-  integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
-  dependencies:
-    ms "2.1.2"
-
-debug@^4.1.0:
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.3"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.3.tgz"
   integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
@@ -3179,15 +3172,10 @@ flatted@^3.1.0:
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.2.tgz"
   integrity sha512-JaTY/wtrcSyvXJl4IMFHPKyFur1sE9AUqc0QnhOaJ0CxHtAoIV8pYDzeEfAaNEtGkOfq4gr3LBFmdXW5mOQFnA==
 
-follow-redirects@^1.0.0:
-  version "1.14.6"
-  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.6.tgz"
-  integrity sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==
-
-follow-redirects@^1.14.0:
-  version "1.14.4"
-  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.4.tgz"
-  integrity sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==
+follow-redirects@^1.0.0, follow-redirects@^1.14.0:
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
 
 foreach@^2.0.5:
   version "2.0.5"
@@ -4403,15 +4391,10 @@ nanocolors@^0.1.0:
   resolved "https://registry.npmjs.org/nanocolors/-/nanocolors-0.1.12.tgz"
   integrity sha512-2nMHqg1x5PU+unxX7PGY7AuYxl2qDx7PSrTRjizr8sxdd3l/3hBuWWaki62qmtYm2U5i4Z5E7GbjlyDFhs9/EQ==
 
-nanoid@^3.1.23:
-  version "3.1.25"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.1.25.tgz"
-  integrity sha512-rdwtIXaXCLFAQbnfqDRnI6jaRHp9fTcYBjtFKE8eezcZ7LuLjhUaQGNeMXf1HmRoCH32CLz6XwX0TtxEOS/A3Q==
-
-nanoid@^3.1.30:
-  version "3.1.30"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.1.30.tgz"
-  integrity sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==
+nanoid@^3.1.23, nanoid@^3.1.30:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.1.tgz#6347a18cac88af88f58af0b3594b723d5e99bb35"
+  integrity sha512-n6Vs/3KGyxPQd6uO0eH4Bv0ojGSUvuLlIHtC3Y0kEO23YRge8H9x1GCzLn28YX0H66pMkxuaeESFq4tKISKwdw==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -6619,10 +6602,10 @@ stylis@3.5.4:
   resolved "https://registry.npmjs.org/stylis/-/stylis-3.5.4.tgz"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.npmjs.org/superjson/-/superjson-1.8.0.tgz"
-  integrity sha512-8FWCa0T9JQ9kVax9nmRqEEebhbRGmU3IV1gevZWQGJRFmSNVN4hnyfb0858aWeEOoS3atwnhjYGleRQHTGI/lA==
+superjson@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.8.1.tgz#c0fe510b8ff71c3bde5733a125623994ca9ec608"
+  integrity sha512-RaBKdbsYj29Ky+XcdE11pJAyKXPrqiCV269koH2WAlpeHh/9qnK0ET84GiVWvnutiufyDolK/vS2jtdFYr341w==
   dependencies:
     debug "^4.3.1"
     lodash.clonedeep "^4.5.0"
