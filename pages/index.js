@@ -251,21 +251,17 @@ export default function Home({ coinsData, categories }) {
   const renderAppliedFilters = () => {
     const marketCapFilterApplied = marketCapMin !== defaultMarketCapMin || marketCapMax !== defaultMarketCapMax
     const trendLengthFilterApplied = trendLengthMin !== defaultTrendLengthMin || trendLengthMax !== defaultTrendLengthMax
-    const trendTypeFilterApplied = trendType !== defaultTrendType
-    const categoryFilterApplied = categoryFilter !== defaultCategory
     const coinNameFilterApplied = coinNameFilter !== defaultCoinNameFilter
     const atrPeriodsFilterApplied = atrPeriods !== defaultAtrPeriods
     const multiplierFilterApplied = multiplier !== defaultMultiplier
-    const anyFiltersApplied =
+    const advancedFiltersApplied =
       marketCapFilterApplied ||
       trendLengthFilterApplied ||
-      trendTypeFilterApplied ||
-      categoryFilterApplied ||
       coinNameFilterApplied ||
       atrPeriodsFilterApplied ||
       multiplierFilterApplied
 
-    if (!anyFiltersApplied || !screens.sm) {
+    if (!advancedFiltersApplied || !screens.sm) {
       return null
     }
     return ([
