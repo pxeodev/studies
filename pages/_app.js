@@ -10,7 +10,7 @@ import Header from '../components/Header'
 function MyApp({ Component, pageProps }) {
   const [darkMode, setDarkMode] = useDarkMode();
   const router = useRouter();
-  const currentUrl = `${process.env.SITE_URL}${router.asPath}`
+  const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`
   pageProps.currentUrl = currentUrl
 
   const {topCoins, topCategories} = pageProps.appData
