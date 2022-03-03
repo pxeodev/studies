@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
+        <meta charset="UTF-8"/>
         <title key="title">CoinRotator</title>
         <meta name="description" key="description" content="Coinrotator screens the top 1000 crypto coins daily for fresh signals. Always be on the right side of the market."/>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
