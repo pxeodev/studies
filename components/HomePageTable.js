@@ -139,7 +139,28 @@ const HomePageTable = ({
         </Tooltip>
       </>,
       dataIndex: 'superSupertrend',
-      width: 100,
+      width: 120,
+      sorter: (a, b, sortOrder) => {
+        if (a.superSupertrend === b.superSupertrend) {
+          if (sortOrder === 'ascend') {
+            return a.coinData.name.localeCompare(b.coinData.name)
+          } else {
+            return b.coinData.name.localeCompare(a.coinData.name)
+          }
+        } else {
+          if (a.superSupertrend === signals.sell) {
+            return -1
+          } else if (a.superSupertrend === signals.hodl) {
+            if (b.superSupertrend === signals.sell) {
+              return 1
+            } else {
+              return -1
+            }
+          } else {
+            return 1
+          }
+        }
+      },
       render: (superSupertrend) => {
         let tag;
         switch (superSupertrend) {
