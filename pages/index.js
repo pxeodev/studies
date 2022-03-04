@@ -16,7 +16,7 @@ import { getCategories } from '../utils/categories';
 import globalData from '../lib/globalData';
 
 const { Title, Paragraph, Text } = Typography;
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 const { Content } = Layout;
 
 export async function getStaticProps() {
@@ -247,6 +247,20 @@ export default function Home({ coinsData, categories }) {
   }, [defaultTrendType, defaultCategory, setCoinName, resetMarketCap, resetTrendLength, setCategory])
 
   const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
+  const priorityCategories = categories.filter((category) => {
+    return [
+      'Avalanche Ecosystem',
+      'Cosmos Ecosystem',
+      'Solana Ecosystem',
+      'Near Ecosystem',
+      'Play to Earn',
+      'Metaverse',
+      'Meme',
+      'Terra Ecosystem',
+      'Web 3.0'
+    ].includes(category)
+  })
+  const restCategories = categories.filter(category => !priorityCategories.includes(category))
 
   const renderAppliedFilters = () => {
     const marketCapFilterApplied = marketCapMin !== defaultMarketCapMin || marketCapMax !== defaultMarketCapMax
@@ -313,12 +327,14 @@ export default function Home({ coinsData, categories }) {
             >
               <Option value={signals.all}>All</Option>
               <Option value={signals.buy}>Buy</Option>
+              <Option value={signals.hodl}>HODL</Option>
               <Option value={signals.sell}>Sell</Option>
             </Select>
           </Col>
           <Col xs={24} md={6} className={styles.formCol}>
             <label className={styles.formLabel} htmlFor="category">Category</label>
             <Select
+              showSearch
               size="large"
               value={categoryFilter}
               onChange={setCategory}
@@ -326,9 +342,16 @@ export default function Home({ coinsData, categories }) {
               className={styles.formSelect}
             >
               <Option value={defaultCategory} key="all">All</Option>
-              {
-                categories.map((category) => <Option value={category} key={category}>{category}</Option>)
-              }
+              <OptGroup label="Popular categories">
+                {
+                  priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                }
+              </OptGroup>
+              <OptGroup label="Other categories">
+                {
+                  restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                }
+              </OptGroup>
             </Select>
           </Col>
           <Col xs={24} md={6}>
