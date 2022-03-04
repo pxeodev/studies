@@ -87,6 +87,7 @@ const HomePageTable = ({
 
   const tableData = displayedCoinData.map((coinData) => {
     const data = {
+      key: `${coinData.id}-${coinData.name}`,
       coinData: {
         id: coinData.id,
         symbol: coinData.symbol,
