@@ -113,6 +113,7 @@ const HomePageTable = ({
     {
       title: 'Coin',
       dataIndex: 'coinData',
+      sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData) => {
         return (
           <Link href={`/coin/${coinData.id}`}>
