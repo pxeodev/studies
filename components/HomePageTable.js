@@ -178,7 +178,7 @@ const HomePageTable = ({
   ];
 
   // The table rows are 56px high.
-  const tableHeight = 10 * 56;
+  const tableHeight = 9 * 56;
   const vComponents = useMemo(() => {
 		return VList({
 			height: tableHeight
