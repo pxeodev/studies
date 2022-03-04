@@ -320,6 +320,7 @@ export default function Home({ coinsData, categories }) {
           <Col xs={24} md={6} className={styles.formCol}>
             <label className={styles.formLabel} htmlFor="category">Category</label>
             <Select
+              showSearch
               size="large"
               value={categoryFilter}
               onChange={setCategory}
