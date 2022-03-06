@@ -1,19 +1,28 @@
+@import '~antd/lib/style/themes/default.less';
 @import './variables.module.less';
 
 .footer {
-  margin-top: 64px;
   padding: 0;
   background: inherit;
+  border-top: 1px solid @divider-color;
 }
 
 .mainFooter {
   padding: 24px;
   background: white;
+
+  @media (max-width: @screen-lg) {
+    padding: 24px 16px;
+  }
 }
 
 .logo {
   height: inherit !important;
-  margin-bottom: 5px;
+  margin-bottom: 12px; 
+}
+
+.text {
+  margin-bottom: 0 !important;
 }
 
 .verticalDivider {
@@ -22,12 +31,12 @@
 }
 
 .horizontalDivider {
-  margin-top: 15px !important;
-  margin-bottom: 30px !important;
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
 }
 
 .bottomRow {
-  margin-top: 20px;
+  margin-top: 32px;
 }
 
 .footerTitle {
@@ -45,7 +54,7 @@
 }
 
 .socialLink:hover {
-  background-color: #e8e8e8;
+  background-color: @divider-color;
 }
 
 .socialImage {
@@ -53,13 +62,17 @@
 }
 
 .sponsor {
-  padding: 12px;
+  font-weight: regular;
+  padding: 12px 8px;
   text-align: center;
   margin-bottom: 0 !important;
-  margin-top: 4px;
 }
 
 .sponsorLink {
   font-weight: bold;
-  color: @primary-color;
+  color: @primary-color !important;
+
+  &:hover {
+    color: @link-hover-color !important;
+  }
 }

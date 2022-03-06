@@ -11,7 +11,7 @@ const Footer = ({ topCoins, topCategories }) => {
 
   const logo = <>
     <Logo className={styles.logo}/>
-    <Paragraph type="secondary">
+    <Paragraph type="secondary" className={styles.text}>
       This website is for informational purposes only. Users should not consider anything here as investment or financial advice. NFA.
     </Paragraph>
   </>
@@ -87,11 +87,11 @@ const Footer = ({ topCoins, topCategories }) => {
 
   if (screens.xl) {
     grid = (
-      <Row gutter={30}>
-        <Col span={6}>
+      <Row gutter={32}>
+        <Col span={4}>
           {logo}
         </Col>
-        <Col span={2}>
+        <Col xs>
           {verticalDivider}
         </Col>
         <Col span={4}>
@@ -117,7 +117,7 @@ const Footer = ({ topCoins, topCategories }) => {
         <Row>
           <Col span={24}>{horizontalDivider}</Col>
         </Row>
-        <Row gutter={15}>
+        <Row gutter={16}>
           <Col span={6}>
             {topCoinsBlock}
           </Col>

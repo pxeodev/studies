@@ -1,3 +1,6 @@
+@import '~antd/lib/style/themes/default.less';
+@import './variables.module.less';
+
 .header {
   background: white;
   padding: 0;
@@ -5,6 +8,17 @@
   width: 100%;
   z-index: 1;
   height: 60px;
+
+  ul {
+    li {
+      flex-grow: unset !important;
+      padding: 0 24px !important;
+
+      @media (max-width: @screen-sm) {
+        padding: 0 16px !important;
+      }
+    }
+  }
 }
 
 .logo {

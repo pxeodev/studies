@@ -300,7 +300,7 @@ export default function Home({ coinsData, categories }) {
   return (
     <Content className={styles.content}>
       <Title className={styles.title}>Swap Into The Most Profitable Coins</Title>
-      <Paragraph className={styles.subTitle} type="secondary">Use Coinrotator to find the most promising cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
+      <Paragraph className={styles.subTitle} type="secondary">Use <span className={styles.subTitleHighlight}>CoinRotator</span> to find the most promising cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
       {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
       <Card className={styles.formCard}>
         <Row className={styles.formRow} type="flex" gutter={16}>
