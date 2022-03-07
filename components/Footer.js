@@ -88,7 +88,7 @@ const Footer = ({ topCoins, topCategories }) => {
   if (screens.xl) {
     grid = (
       <Row gutter={32}>
-        <Col span={4}>
+        <Col span={6}>
           {logo}
         </Col>
         <Col xs>
