@@ -25,10 +25,9 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 export default function Coin(coin) {
-  const [_trends, superSuperTrend] = getTrends(coin.ohlcs, defaultAtrPeriods, defaultMultiplier)
   let signal
   let signalTag
-  switch (superSuperTrend) {
+  switch (coin.superSuperTrend) {
     case signals.buy:
       signal = 'Buy'
       signalTag = <BuyTag />
@@ -341,6 +340,7 @@ export async function getStaticProps({ params }) {
     close: Number(ohlc.close),
   }))
   ohlcs = convertToDailySignals(ohlcs)
+  const [_trends, superSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier)
   return {
     props: {
       ...coinData,
@@ -351,7 +351,7 @@ export async function getStaticProps({ params }) {
       circulatingSupply: Number(coinData.circulatingSupply),
       totalSupply: Number(coinData.totalSupply),
       similarCoins,
-      ohlcs,
+      superSuperTrend,
       appData
     }
   }
