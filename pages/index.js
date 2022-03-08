@@ -404,7 +404,7 @@ export default function Home({ coinsData, categories }) {
         </Row>
         <Row className={styles.explainerRow}>
           <Col>
-            <Text type="secondary">Weekly signals are based on the weekly Supertrend and only update at 00:00 UTC Monday. Selecting this option will override the Daily signals.</Text>
+            <Text type="secondary">Weekly signals only update at 00:00 UTC each Monday. Selecting this option will override the Daily signals.</Text>
           </Col>
         </Row>
         <Divider />
