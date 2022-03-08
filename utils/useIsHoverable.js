@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const useIsHoverable = () => {
-  let [isHoverable, setIsHoverable] = useState(true);
+  let [isHoverable, setIsHoverable] = useState(false);
   useEffect(() => {
     setIsHoverable(!window.matchMedia( "(hover: none)" ).matches)
   }, [setIsHoverable])
