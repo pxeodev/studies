@@ -1,5 +1,7 @@
 import round from 'lodash/round'
 
+import { signals } from '../utils/variables'
+
 // Taken from https://tradingtuitions.com/supertrend-indicator-excel-sheet-with-realtime-buy-sell-signals/
 const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) => {
   return data
@@ -72,7 +74,7 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
 
     entry.push(supertrendIndicator)
 
-    return entry[3] < supertrendIndicator ? 'Sell' : 'Buy'
+    return entry[3] < supertrendIndicator ? signals.sell : signals.buy
   })
 }
 

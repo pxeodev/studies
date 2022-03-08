@@ -34,11 +34,19 @@ const HomePageTable = ({
   const superTrends = useMemo(() => {
     const cache = {}
     coinsData.forEach(coin => {
-      cache[coin.id] = getTrends(coin.ohlcs, atrPeriods, multiplier, showWeeklySignals)
+      cache[coin.id] = getTrends(coin.ohlcs, atrPeriods, multiplier, false)
     })
     return cache
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [atrPeriods, multiplier, showWeeklySignals])
+  }, [atrPeriods, multiplier])
+  const weeklySuperTrends = useMemo(() => {
+    const cache = {}
+    coinsData.forEach(coin => {
+      cache[coin.id] = getTrends(coin.ohlcs, atrPeriods, multiplier, true)
+    })
+    return cache
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [atrPeriods, multiplier])
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
@@ -52,7 +60,12 @@ const HomePageTable = ({
            matchesCategory
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
-    const [trends, superSupertrend] = superTrends[coinData.id]
+    let trends, superSupertrend;
+    if (showWeeklySignals) {
+      [trends, superSupertrend] = weeklySuperTrends[coinData.id]
+    } else {
+      [trends, superSupertrend] = superTrends[coinData.id]
+    }
 
     return {
       ...coinData,
