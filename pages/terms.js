@@ -28,7 +28,7 @@ export default function Faq() {
       <Paragraph className={styles.paragraph}>If you breach any of these Terms, the above license will terminate automatically.</Paragraph>
       <Title level={2} className={styles.subtitle}>Prohibited Activities</Title>
       <Paragraph className={styles.paragraph}>You agree that you will not:</Paragraph>
-      <ul>
+      <ul className={styles.list}>
         <li>Copy, modify or create derivative works of the Service or any Content;</li>
         <li>Copy, manipulate or aggregate any Content (including data) for the purpose of making it available to any third party;</li>
         <li>Trade, sell, rent, loan, lease or license any Content or access to the Service, whether commercially or free of charge;</li>
