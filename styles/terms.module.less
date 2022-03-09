@@ -3,13 +3,25 @@
 .content {
   display: flex;
   flex-direction: column;
-  padding: 25px 25px;
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 0 auto !important;
+  padding: 16px 24px 64px 24px;
+
+  @media (max-width: @screen-md) {
+    padding: 16px 24px 32px 24px;
+  }
+
+  @media (max-width: @screen-sm) {
+    padding: 16px 16px 32px 16px;
+  }
 }
 
 .breadcrumbs {
   margin-bottom: 48px;
+
+  @media (max-width: @screen-md) {
+    margin-bottom: 32px;
+  }
 }
 
 .title {
@@ -17,25 +29,57 @@
   font-size: 30px !important;
   line-height: 38px !important;
   font-weight: normal !important;
-  margin-bottom: 24px 0 !important;
+  margin-bottom: 24px !important;
+
+  @media (max-width: @screen-md) {
+    margin-bottom: 16px !important;
+  }
 }
 
 .termsTitleBoldPart {
   font-weight: 600;
 }
 
+.subtitle {
+  &:extend(.title);
+  margin-top: 24px !important;
+
+  @media (max-width: @screen-md) {
+    margin-top: 16px !important;
+  }
+}
+
 .paragraph {
   font-size: 16px !important;
   line-height: 24px !important;
   margin-bottom: 24px !important;
-}
 
-@media screen and (max-width: @screen-md) {
-  .breadcrumbs {
-    margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 0 !important;
   }
 
-  .title {
-    margin-top: 16px !important;
+  @media (max-width: @screen-md) {
+    margin-bottom: 16px !important;
+  }
+}
+
+.list {
+  margin-bottom: 24px !important;
+  padding-left: 48px !important;
+
+  @media (max-width: @screen-md) {
+    margin-bottom: 16px !important;
+    padding-left: 32px !important;
+  }
+
+  li {
+    font-size: 16px !important;
+    line-height: 24px !important;
+    margin-bottom: 12px !important;
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
   }
 }
