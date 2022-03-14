@@ -20,7 +20,7 @@ model Coin {
   description String
   homepage String
   twitter String
-  twitterFollowers Int
+  twitterFollowers Int?
   currentPriceUsd Decimal
   ath Decimal
   atl Decimal
