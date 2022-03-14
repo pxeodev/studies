@@ -26,6 +26,7 @@
     "next-superjson": "^0.0.2",
     "next-with-less": "^2.0.5",
     "parcel": "^2.3.2",
+    "prisma": "^3.9.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-responsive": "^9.0.0-beta.6",
