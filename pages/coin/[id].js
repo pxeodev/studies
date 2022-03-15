@@ -32,15 +32,15 @@ export default function Coin(coin) {
   switch (coin.superSuperTrend) {
     case signals.buy:
       signal = 'Buy'
-      signalTag = <BuyTag />
+      signalTag = <a href="#markets"><BuyTag /></a>
       break;
     case signals.sell:
       signal = 'Sell'
-      signalTag = <SellTag />
+      signalTag = <a href="#markets"><SellTag /></a>
       break;
     default:
       signal = 'HODL'
-      signalTag = <HodlTag />
+      signalTag = <a href="#markets"><HodlTag /></a>
   }
   let url
   try {
@@ -300,7 +300,13 @@ export default function Coin(coin) {
             </AdvancedRealTimeChart>
           </Card.Grid>
         </Card>
-        <Title level={2} className={classnames(styles.h1Title, styles.exchangeTitle)}>{coin.symbol.toUpperCase()} Markets</Title>
+        <Title
+          level={2}
+          id="markets"
+          className={classnames(styles.h1Title, styles.exchangeTitle)}
+        >
+          {coin.symbol.toUpperCase()} Markets
+        </Title>
         <Table
           columns={columns}
           dataSource={tableData}
