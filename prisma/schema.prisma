@@ -31,6 +31,8 @@ model Coin {
   totalSupply Decimal?
   ohlcs Ohlc[]
   tickers Json
+  default_platform String?
+  platforms Json?
 
   @@index([marketCapRank])
 }
