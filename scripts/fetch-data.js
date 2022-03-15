@@ -3,6 +3,7 @@ import * as rax from 'retry-axios'
 import * as AxiosLogger from 'axios-logger'
 import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
+import pickBy from 'lodash/pickBy'
 
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'
@@ -63,9 +64,19 @@ const script = async () => {
     const coinData = (await coinGeckoAPI.get(`/coins/${coinMarketData.id}`)).data
     await new Promise((res) => setTimeout(res, 1200))
 
+    let platforms;
+    if (Object.keys(coinData.platforms)?.length) {
+      platforms = pickBy(coinData.platforms, contract => contract.length)
+      if (!Object.keys(platforms).length) {
+        platforms = undefined
+      }
+    }
+
     const dbCoinData = {
       symbol: coinMarketData.symbol,
       name: coinMarketData.name,
+      default_platform: coinData.asset_platform_id,
+      platforms,
       images: coinData.image,
       description: coinData.description.en,
       homepage: coinData.links.homepage[0],
