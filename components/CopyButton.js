@@ -2,7 +2,7 @@ import { CopyFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
 
 import addToClipboard from '../utils/addToClipboard';
-import styles from '../styles/CopyButton.module.less';
+import styles from '../styles/copyButton.module.less';
 
 const CopyButton = ({ text, after }) => {
   const onClick = useCallback((e) => {
