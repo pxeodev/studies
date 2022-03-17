@@ -176,7 +176,7 @@ export default function Coin(coin) {
     platforms = (
       <>
         <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
-          <Space size={12}>
+          <Space size={12} wrap>
             <ContractTag
               image={coin.images.large}
               defaultPlatform={coin.defaultPlatform}
@@ -238,7 +238,7 @@ export default function Coin(coin) {
             </Space>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceDetailCard)}>
-            <Space size={12} className={styles.trendTags}>
+            <Space size={12} className={styles.trendTags} wrap>
               {Object.keys(coin.trends).map((trendKey) => {
                 const trend = coin.trends[trendKey]
                 const trendText = `${trend[0]} (${trend[1]})`
