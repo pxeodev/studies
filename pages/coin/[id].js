@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { Breadcrumb, Button, Card, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Layout, notification, Select, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
 import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/icons';
@@ -7,6 +7,7 @@ import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import round from 'lodash/round';
+import startCase from 'lodash/startCase';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.less'
@@ -20,6 +21,8 @@ import BuyTag from '../../components/BuyTag'
 import ContractTag from '../../components/ContractTag';
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
+import MetaMaskButton from '../../components/MetaMaskButton'
+import CopyButton from '../../components/CopyButton'
 import globalData from '../../lib/globalData';
 import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
 import useIsHoverable from '../../utils/useIsHoverable';
@@ -126,19 +129,63 @@ export default function Coin(coin) {
   }
   const notation = screens.sm ? 'standard' : 'compact'
   let platforms;
+  const upperCaseSymbol = coin.symbol.toUpperCase();
   if (coin.platforms.length) {
+    let otherPlatforms = <></>;
+    if (coin.platforms.length > 1) {
+      otherPlatforms = (
+        <Select
+          placeholder="More"
+          className={styles.platformSelector}
+          dropdownClassName={styles.platformDropdown}
+          dropdownMatchSelectWidth={false}
+        >
+          {coin.platforms.slice(1).map((platformData) => {
+            const [platform, address] = platformData
+            const displayedAddress = `${address.substr(0, 6)}...${address.substr(-6)}`
+            let metamaskButton;
+            if (coin.defaultPlatform === platform) {
+              metamaskButton = <MetaMaskButton
+                symbol={upperCaseSymbol}
+                image={coin.images.large}
+                address={address}
+              />
+            }
+            const afterCopy = () => {
+              notification.open({
+                description: 'Smart contract address copied.'
+              })
+            }
+            return (
+              <Select.Option key={platform} disabled className={styles.platformOptions}>
+                <Space className={styles.platformSpace}>
+                  <Space direction="vertical" size={2}>
+                    <b>{startCase(platform)}</b>
+                    {displayedAddress}
+                  </Space>
+                  {metamaskButton}
+                  <CopyButton text={address} after={afterCopy}/>
+                </Space>
+              </Select.Option>
+            )
+          })}
+        </Select>
+      )
+    }
     platforms = (
       <>
         <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
-          <ContractTag
-            image={coin.images.large}
-            defaultPlatform={coin.defaultPlatform}
-            platform={coin.platforms[0][0]}
-            symbol={coin.symbol.toUpperCase()}
-            address={coin.platforms[0][1]}
-          />
+          <Space size={12}>
+            <ContractTag
+              image={coin.images.large}
+              defaultPlatform={coin.defaultPlatform}
+              platform={coin.platforms[0][0]}
+              symbol={upperCaseSymbol}
+              address={coin.platforms[0][1]}
+            />
+            {otherPlatforms}
+          </Space>
         </Card.Grid>
-        {otherPlatforms}
       </>
     );
   }

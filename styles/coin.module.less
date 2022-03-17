@@ -33,6 +33,33 @@
   min-height: 64px;
 }
 
+.platformDropdown {
+  padding: 0 !important;
+}
+
+.platformSelector {
+  line-height: 32px;
+
+  & :global(.ant-select-selection-placeholder) {
+    color: black;
+  }
+}
+
+.platformOptions {
+  cursor: default;
+  color: @text-color;
+
+  &:hover {
+    background: @geekblue-1;
+  }
+}
+
+.platformSpace {
+  gap: unset !important;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .chartGrid {
   display: block;
   width: 100%;
