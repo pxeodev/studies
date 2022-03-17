@@ -130,7 +130,8 @@ export default function Coin(coin) {
   const notation = screens.sm ? 'standard' : 'compact'
   let platforms;
   const upperCaseSymbol = coin.symbol.toUpperCase();
-  if (coin.platforms.length) {
+  const hasContractData = Boolean(coin.platforms.length);
+  if (hasContractData) {
     let otherPlatforms = <></>;
     if (coin.platforms.length > 1) {
       otherPlatforms = (
@@ -264,7 +265,7 @@ export default function Coin(coin) {
             </Card.Grid>
           ) : ''}
           {platforms}
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, { [styles.socialSoloCard]: !hasContractData })}>
             <Space wrap>
               <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                 <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
