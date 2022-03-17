@@ -16,7 +16,6 @@ const CopyButton = ({ text, after }) => {
 
     copy()
   }, [after, text]);
-
   return <CopyFilled className={styles.icon} onClick={onClick} color="red"/>
 }
 
