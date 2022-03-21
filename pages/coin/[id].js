@@ -216,7 +216,7 @@ export default function Coin(coin) {
           <Breadcrumb.Item>{coin.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Card>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard, styles.smallCard)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
@@ -224,7 +224,7 @@ export default function Coin(coin) {
               <Tag>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceCard, styles.smallCard)}>
             <Space>
               {signalTag}
               <Tooltip
@@ -237,7 +237,7 @@ export default function Coin(coin) {
               </Tooltip>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceDetailCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceDetailCard, styles.smallCard)}>
             <Space size={12} className={styles.trendTags} wrap>
               {Object.keys(coin.trends).map((trendKey) => {
                 const trend = coin.trends[trendKey]
@@ -253,7 +253,7 @@ export default function Coin(coin) {
                 placement={screens.sm ? 'bottom' : 'bottomRight'}
                 overlayClassName={styles.tooltip}
                 trigger={isHoverable ? 'hover' : 'click'}
-                title="The numbers in parenthesis indicate the signal streak - how many days a coin has been a Buy or Sell against USD, BTC or ETH."
+                title="The numbers in parenthesis indicate the signal streak - how many days a coin has been a Buy or Sell against ETH, BTC or USD."
               >
                 <InfoCircleFilled className={styles.signalWarning} />
               </Tooltip>
@@ -265,7 +265,7 @@ export default function Coin(coin) {
             </Card.Grid>
           ) : ''}
           {platforms}
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, { [styles.socialSoloCard]: !hasContractData })}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, styles.smallCard, { [styles.socialSoloCard]: !hasContractData })}>
             <Space wrap>
               <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                 <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
