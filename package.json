@@ -7,6 +7,7 @@
     "build": "npx prisma migrate deploy && next build",
     "postbuild": "next-sitemap",
     "fetch-data": "parcel build scripts/fetch-data.js --no-source-maps",
+    "bot": "parcel build scripts/bot.js --no-source-maps",
     "start": "next start",
     "lint": "next lint"
   },
