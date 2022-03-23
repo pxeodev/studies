@@ -29,8 +29,6 @@ const bot = async () => {
     const yesterday = endOfYesterday();
     const thirtyDaysAgo = subDays(new Date(), 30)
 
-    throw('test sentry!')
-
     let coinsData = await prisma.coin.findMany({
       orderBy: { marketCapRank: 'asc' },
       take: 1000,
