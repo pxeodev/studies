@@ -1,0 +1,55 @@
+@import './variables.module.less';
+
+.tag {
+  line-height: 30px !important;
+  margin-right: 0 !important;
+  cursor: pointer;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+  margin-top: -2px;
+}
+
+.metamask {
+  margin-top: -2px;
+}
+
+.metamask:hover {
+  cursor: pointer;
+}
+
+.platform {
+  color: @text-color-secondary;
+}
+
+.platformDropdown {
+  padding: 0 !important;
+}
+
+.platformSelector {
+  line-height: 32px;
+
+  & :global(.ant-select-selection-placeholder) {
+    color: black;
+  }
+}
+
+.platformOptions {
+  cursor: default;
+  color: @text-color;
+
+  &:hover {
+    background: @geekblue-1;
+  }
+}
+
+.platformSpace {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.metamaskButton {
+  margin-right: 10px;
+}

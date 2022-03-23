@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { Breadcrumb, Button, Card, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Layout, notification, Select, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
 import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/icons';
@@ -13,14 +13,18 @@ import styles from '../../styles/coin.module.less'
 import variables from '../../styles/variables.module.less'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
+import getChainsData from '../../utils/getChainsData'
+import getPlatformData from '../../utils/getPlatformData'
 import convertToDailySignals from '../../utils/convertToDailySignals'
 import useBreakPoint from '../../utils/useBreakPoint'
 import BuyTag from '../../components/BuyTag'
+import ContractTagAndMore from '../../components/ContractTagAndMore';
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
 import globalData from '../../lib/globalData';
 import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
 import useIsHoverable from '../../utils/useIsHoverable';
+import { getDescriptionByCoin } from '../../utils/coinDescriptions';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -31,15 +35,15 @@ export default function Coin(coin) {
   switch (coin.superSuperTrend) {
     case signals.buy:
       signal = 'Buy'
-      signalTag = <BuyTag />
+      signalTag = <a href="#markets"><BuyTag /></a>
       break;
     case signals.sell:
       signal = 'Sell'
-      signalTag = <SellTag />
+      signalTag = <a href="#markets"><SellTag /></a>
       break;
     default:
       signal = 'HODL'
-      signalTag = <HodlTag />
+      signalTag = <a href="#markets"><HodlTag /></a>
   }
   let url
   try {
@@ -148,7 +152,7 @@ export default function Coin(coin) {
           <Breadcrumb.Item>{coin.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Card>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard, styles.smallCard)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
@@ -156,7 +160,7 @@ export default function Coin(coin) {
               <Tag>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceCard, styles.smallCard)}>
             <Space>
               {signalTag}
               <Tooltip
@@ -169,7 +173,44 @@ export default function Coin(coin) {
               </Tooltip>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard)}>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.priceDetailCard, styles.smallCard)}>
+            <Space size={12} className={styles.trendTags} wrap>
+              {Object.keys(coin.trends).map((trendKey) => {
+                const trend = coin.trends[trendKey]
+                const trendText = `${trend[0]} (${trend[1]})`
+                return (
+                  <Tag key={trendKey}>
+                    <span className={styles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                    {trendText}
+                  </Tag>
+                )
+              })}
+              <Tooltip
+                placement={screens.sm ? 'bottom' : 'bottomRight'}
+                overlayClassName={styles.tooltip}
+                trigger={isHoverable ? 'hover' : 'click'}
+                title="The numbers in parenthesis indicate the signal streak - how many days a coin has been a Buy or Sell against ETH, BTC or USD."
+              >
+                <InfoCircleFilled className={styles.signalWarning} />
+              </Tooltip>
+            </Space>
+          </Card.Grid>
+          {coin.description ? (
+            <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.descriptionCard)}>
+                {coin.description}
+            </Card.Grid>
+          ) : ''}
+          {coin.platforms.length ? (
+            <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
+              <ContractTagAndMore
+                images={coin.images}
+                platforms={coin.platforms}
+                symbol={coin.symbol}
+                chainsData={coin.chainsData}
+              />
+            </Card.Grid>
+          ) : <></>}
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, styles.smallCard, { [styles.socialSoloCard]: !coin.platforms.length })}>
             <Space wrap>
               <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                 <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
@@ -272,7 +313,13 @@ export default function Coin(coin) {
             </AdvancedRealTimeChart>
           </Card.Grid>
         </Card>
-        <Title level={2} className={classnames(styles.h1Title, styles.exchangeTitle)}>{coin.symbol.toUpperCase()} Markets</Title>
+        <Title
+          level={2}
+          id="markets"
+          className={classnames(styles.h1Title, styles.exchangeTitle)}
+        >
+          {coin.symbol.toUpperCase()} Markets
+        </Title>
         <Table
           columns={columns}
           dataSource={tableData}
@@ -342,8 +389,12 @@ export async function getStaticProps({ params }) {
     close: Number(ohlc.close),
   }))
   ohlcs = convertToDailySignals(ohlcs)
-  const [_trends, superSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier)
+  const [trends, superSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier)
   delete coinData.ohlcs
+  const description = await getDescriptionByCoin(coinData.symbol)
+
+  const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
+  const chainsData = await getChainsData();
   return {
     props: {
       ...coinData,
@@ -355,7 +406,11 @@ export async function getStaticProps({ params }) {
       totalSupply: Number(coinData.totalSupply),
       similarCoins,
       superSuperTrend,
-      appData
+      trends,
+      appData,
+      description,
+      platforms,
+      chainsData
     }
   }
 }

@@ -125,12 +125,16 @@
   width: 10px;
 }
 
-.signalExplanation path {
-  fill: @icon-bg;
-}
+.signalExplanation {
+  path {
+    fill: @icon-bg;
+  }
 
-.signalExplanation:hover path {
-  fill: @text-color-secondary;
+  &:hover {
+    path {
+      fill: @text-color-secondary;
+    }
+  }
 }
 
 .tableTag {

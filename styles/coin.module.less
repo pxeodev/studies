@@ -10,6 +10,17 @@
   margin-bottom: 32px;
 }
 
+.trendTags :global(.ant-tag) {
+  border: none !important;
+  margin-right: 0 !important;
+  line-height: 20px !important;
+  padding: 2px 4px !important;
+}
+
+.trendKey {
+  color: @text-color-secondary;
+}
+
 .signalWarning path {
   fill: @icon-bg;
 }
@@ -21,6 +32,31 @@
 .cardGrid {
   padding: 16px;
   min-height: 64px;
+}
+
+// temp CSS, will align items to center
+.smallCard {
+  display: flex;
+}
+
+.nameCard, .priceCard {
+  width: 25%;
+}
+
+.priceDetailCard {
+  width: 50%;
+}
+
+.descriptionCard {
+  width: 100%;
+}
+
+.contractCard, .socialCard {
+  width: 50%;
+}
+
+.socialSoloCard {
+  width: 100% !important;
 }
 
 .chartGrid {
@@ -105,29 +141,17 @@
   background: @error-color;
 }
 
-@media screen and (max-width: @screen-sm) {
-  .nameCard {
-    width: 100% !important;
-  }
-
-  .priceCard {
-    width: 100% !important;
-  }
-
-  .socialCard, .cardData {
-    width: 100%;
-    min-height: unset;
-  }
-
+@media screen and (max-width: @screen-lg) {
   .tagCard, .similarCoinCard {
     min-height: unset;
-    width: 100% !important;
   }
 
-  .chartGrid {
-    padding: 0;
-    padding-bottom: 16px;
-    height: 350px !important;
+  .nameCard, .priceCard, .dataCard1, .dataCard2, .tagCard, .similarCoinCard {
+    width: 50%;
+  }
+
+  .priceDetailCard, .contractCard {
+    width: 100%;
   }
 }
 
@@ -145,16 +169,24 @@
   }
 }
 
-@media screen and (max-width: @screen-lg) {
-  .tagCard, .similarCoinCard {
+@media screen and (max-width: @screen-sm) {
+  .nameCard, .priceCard, .priceDetailCard {
+    width: 100%;
+  }
+
+  .socialCard, .cardData {
+    width: 100% !important;
     min-height: unset;
   }
 
-  .nameCard, .priceCard, .dataCard1, .dataCard2, .tagCard, .similarCoinCard {
-    width: 50%;
+  .tagCard, .similarCoinCard {
+    min-height: unset;
+    width: 100%;
   }
 
-  .socialCard {
-    width: 100%;
+  .chartGrid {
+    padding: 0;
+    padding-bottom: 16px;
+    height: 350px !important;
   }
 }
