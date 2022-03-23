@@ -7,22 +7,20 @@ import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import round from 'lodash/round';
-import startCase from 'lodash/startCase';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.less'
 import variables from '../../styles/variables.module.less'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
+import getChainsData from '../../utils/getChainsData'
 import getPlatformData from '../../utils/getPlatformData'
 import convertToDailySignals from '../../utils/convertToDailySignals'
 import useBreakPoint from '../../utils/useBreakPoint'
 import BuyTag from '../../components/BuyTag'
-import ContractTag from '../../components/ContractTag';
+import ContractTagAndMore from '../../components/ContractTagAndMore';
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
-import MetaMaskButton from '../../components/MetaMaskButton'
-import CopyButton from '../../components/CopyButton'
 import globalData from '../../lib/globalData';
 import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
 import useIsHoverable from '../../utils/useIsHoverable';
@@ -128,68 +126,6 @@ export default function Coin(coin) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
   const notation = screens.sm ? 'standard' : 'compact'
-  let platforms;
-  const upperCaseSymbol = coin.symbol.toUpperCase();
-  const hasContractData = Boolean(coin.platforms.length);
-  if (hasContractData) {
-    let otherPlatforms = <></>;
-    if (coin.platforms.length > 1) {
-      otherPlatforms = (
-        <Select
-          placeholder="More"
-          className={styles.platformSelector}
-          dropdownClassName={styles.platformDropdown}
-          dropdownMatchSelectWidth={false}
-        >
-          {coin.platforms.slice(1).map((platformData) => {
-            const [platform, address] = platformData
-            const displayedAddress = `${address.substr(0, 6)}...${address.substr(-6)}`
-            let metamaskButton;
-            if (coin.defaultPlatform === platform) {
-              metamaskButton = <MetaMaskButton
-                symbol={upperCaseSymbol}
-                image={coin.images.large}
-                address={address}
-              />
-            }
-            const afterCopy = () => {
-              notification.open({
-                description: 'Smart contract address copied.'
-              })
-            }
-            return (
-              <Select.Option key={platform} disabled className={styles.platformOptions}>
-                <Space className={styles.platformSpace}>
-                  <Space direction="vertical" size={2}>
-                    <b>{startCase(platform)}</b>
-                    {displayedAddress}
-                  </Space>
-                  {metamaskButton}
-                  <CopyButton text={address} after={afterCopy}/>
-                </Space>
-              </Select.Option>
-            )
-          })}
-        </Select>
-      )
-    }
-    platforms = (
-      <>
-        <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
-          <Space size={12} wrap>
-            <ContractTag
-              image={coin.images.large}
-              defaultPlatform={coin.defaultPlatform}
-              platform={coin.platforms[0][0]}
-              symbol={upperCaseSymbol}
-              address={coin.platforms[0][1]}
-            />
-            {otherPlatforms}
-          </Space>
-        </Card.Grid>
-      </>
-    );
-  }
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${signal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${signal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
@@ -264,8 +200,17 @@ export default function Coin(coin) {
                 {coin.description}
             </Card.Grid>
           ) : ''}
-          {platforms}
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, { [styles.socialSoloCard]: !hasContractData })}>
+          {coin.platforms.length ? (
+            <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
+              <ContractTagAndMore
+                images={coin.images}
+                platforms={coin.platforms}
+                symbol={coin.symbol}
+                chainsData={coin.chainsData}
+              />
+            </Card.Grid>
+          ) : <></>}
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, { [styles.socialSoloCard]: !coin.platforms.length })}>
             <Space wrap>
               <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                 <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
@@ -449,6 +394,7 @@ export async function getStaticProps({ params }) {
   const description = await getDescriptionByCoin(coinData.symbol)
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
+  const chainsData = await getChainsData();
   return {
     props: {
       ...coinData,
@@ -464,6 +410,7 @@ export async function getStaticProps({ params }) {
       appData,
       description,
       platforms,
+      chainsData
     }
   }
 }

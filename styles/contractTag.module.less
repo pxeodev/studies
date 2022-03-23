@@ -23,3 +23,33 @@
 .platform {
   color: @text-color-secondary;
 }
+
+.platformDropdown {
+  padding: 0 !important;
+}
+
+.platformSelector {
+  line-height: 32px;
+
+  & :global(.ant-select-selection-placeholder) {
+    color: black;
+  }
+}
+
+.platformOptions {
+  cursor: default;
+  color: @text-color;
+
+  &:hover {
+    background: @geekblue-1;
+  }
+}
+
+.platformSpace {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.metamaskButton {
+  margin-right: 10px;
+}

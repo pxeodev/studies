@@ -1,0 +1,218 @@
+Chain_Name,Chain_ID,Chain_Currency,Chain_Image_URL
+Ethereum Mainnet,1,ETH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_ethereum.jpg&w=32&q=75
+Binance Smart Chain Mainnet,56,BNB,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_binance.jpg&w=32&q=75
+Avalanche C-Chain,43114,AVAX,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_avalanche.jpg&w=32&q=75
+Fantom Opera,250,FTM,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_fantom.jpg&w=32&q=75
+Polygon Mainnet,137,MATIC,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_polygon.jpg&w=32&q=75
+Cronos Mainnet Beta,25,CRO,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_cronos.jpg&w=32&q=75
+Arbitrum One,42161,ETH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_arbitrum.jpg&w=32&q=75
+Klaytn Mainnet Cypress,8217,KLAY,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_klaytn.jpg&w=32&q=75
+Harmony Mainnet Shard 0,1666600000,ONE,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_harmony.jpg&w=32&q=75
+Metis Andromeda Mainnet,1088,METIS,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_metis.jpg&w=32&q=75
+Huobi ECO Chain Mainnet,128,HT,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_heco.jpg&w=32&q=75
+Aurora Mainnet,1313161554,ETH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_aurora.jpg&w=32&q=75
+Celo Mainnet,42220,CELO,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_celo.jpg&w=32&q=75
+Optimism,10,ETH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_optimism.jpg&w=32&q=75
+Gnosis Chain (formerly xDai),100,xDAI,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_xdai.jpg&w=32&q=75
+Theta Mainnet,361,TFUEL,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_theta.jpg&w=32&q=75
+Moonriver,1285,MOVR,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_moonriver.jpg&w=32&q=75
+Emerald Paratime Mainnet,42262,ROSE,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_oasis.jpg&w=32&q=75
+Fusion Mainnet,32659,FSN,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_fusion.jpg&w=32&q=75
+Telos EVM Mainnet,40,TLOS,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_telos.jpg&w=32&q=75
+RSK Mainnet,30,RBTC,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_rsk.jpg&w=32&q=75
+Moonbeam,1284,GLMR,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_moonbeam.jpg&w=32&q=75
+IoTeX Network Mainnet,4689,IOTX,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_iotex.jpg&w=32&q=75
+OKExChain Mainnet,66,OKT,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_okexchain.jpg&w=32&q=75
+Boba Network,288,ETH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_boba.jpg&w=32&q=75
+Wanchain,888,WAN,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_wanchain.jpg&w=32&q=75
+KCC Mainnet,321,KCS,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_kucoin.jpg&w=32&q=75
+Velas EVM Mainnet,106,VLX,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_velas.jpg&w=32&q=75
+Smart Bitcoin Cash,10000,BCH,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_smartbch.jpg&w=32&q=75
+Songbird Canary-Network,19,SGB,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_songbird.jpg&w=32&q=75
+CoinEx Smart Chain Mainnet,52,cet,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_csc.jpg&w=32&q=75
+Fuse Mainnet,122,FUSE,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_fuse.jpg&w=32&q=75
+Shiden,336,SDN,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_shiden.jpg&w=32&q=75
+Elastos Smart Chain,20,ELA,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_elastos.jpg&w=32&q=75
+Callisto Mainnet,820,CLO,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_callisto.jpg&w=32&q=75
+ThunderCore Mainnet,108,TT,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_thundercore.jpg&w=32&q=75
+Meter Mainnet,82,MTR,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_meter.jpg&w=32&q=75
+TomoChain,88,TOMO,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_tomochain.jpg&w=32&q=75
+Energy Web Chain,246,EWT,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_energyweb.jpg&w=32&q=75
+Syscoin Mainnet,57,SYS,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_syscoin.jpg&w=32&q=75
+Ubiq,8,UBQ,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_ubiq.jpg&w=32&q=75
+Polis Mainnet,333999,POLIS,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_polis.jpg&w=32&q=75
+Zyx Mainnet,55,ZYX,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_zyx.jpg&w=32&q=75
+High Performance Blockchain,269,HPB,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_hpb.jpg&w=32&q=75
+GoChain,60,GO,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_gochain.jpg&w=32&q=75
+Palm,11297108109,PALM,https://chainlist.org/_next/image?url=https%3A%2F%2Fdefillama.com%2Fchain-icons%2Frsz_palm.jpg&w=32&q=75
+Expanse Network,2,EXP,https://assets.coingecko.com/coins/images/339/small/expanse.png?1548125867
+ThaiChain,7,TCH,
+Metadium Mainnet,11,META,https://assets.coingecko.com/coins/images/5247/small/META_Logo_black.png?1548833790
+Flare Mainnet,14,FLR,
+Diode Prenet,15,DIODE,
+ThaiChain 2.0 ThaiFi,17,TFI,
+ELA-DID-Sidechain Mainnet,22,ELA,https://assets.coingecko.com/coins/images/2780/small/Elastos.png?1597048112
+Dithereum Mainnet,24,DTH,
+ShibaChain,27,SHIB,https://assets.coingecko.com/coins/images/11939/small/shiba.png?1622619446
+Genesis L1,29,L1,
+GoodData Mainnet,33,GooD,
+TBWG Chain,35,TBG,
+Valorbit,38,VAL,
+Darwinia Crab Network,44,CRAB,https://assets.coingecko.com/coins/images/11666/small/cring.png?1592449505
+XinFin Network Mainnet,50,XDC,
+Ontology Mainnet,58,ONG,https://assets.coingecko.com/coins/images/5716/small/ONG_logo.png?1583481389
+EOS Mainnet,59,EOS,https://assets.coingecko.com/coins/images/738/small/eos-eos-logo.png?1547034481
+Ethereum Classic Mainnet,61,ETC,https://assets.coingecko.com/coins/images/453/small/ethereum-classic-logo.png?1547034169
+Ellaism,64,ELLA,https://assets.coingecko.com/coins/images/1083/small/ella.png?1572092141
+SoterOne Mainnet,68,SOTER,
+IDChain Mainnet,74,EIDI,
+Mix,76,MIX,
+POA Network Sokol,77,SPOA,
+PrimusChain mainnet,78,PETH,
+GeneChain,80,RNA,
+GateChain Mainnet,86,GT,https://assets.coingecko.com/coins/images/8183/small/gt.png?1556085624
+Nova Network,87,SNT,
+Garizon Stage0,90,GAR,
+Garizon Stage1,91,GAR,
+Garizon Stage2,92,GAR,
+Garizon Stage3,93,GAR,
+NEXT Smart Chain,96,NEXT,
+POA Network Core,99,POA,https://assets.coingecko.com/coins/images/3157/small/poa-network.png?1548331565
+EtherInc,101,ETI,https://assets.coingecko.com/coins/images/3734/small/etherinc.png?1547394330
+EtherLite Chain,111,ETL,https://assets.coingecko.com/coins/images/16892/small/M1A63Kr.png?1625554938
+Fuse Sparknet,123,SPARK,
+Decentralized Web Mainnet,124,DWU,
+OYchain Mainnet,126,OY,
+Factory 127 Mainnet,127,FETH,
+DAX CHAIN,142,DAX,
+Lightstreams Mainnet,163,PHT,https://assets.coingecko.com/coins/images/4092/small/Lightstreams-Photon.png?1563892247
+Seele Mainnet,186,Seele,https://assets.coingecko.com/coins/images/3294/small/seele.png?1548608910
+BMC Mainnet,188,BTM,https://assets.coingecko.com/coins/images/1087/small/2qNyrhUxEmnGCKi.png?1630048151
+BitTorrent Chain Mainnet,199,BTT,https://assets.coingecko.com/coins/images/22457/small/btt_logo.png?1643857231
+Arbitrum on xDai,200,xDAI,
+Freight Trust Network,211,0xF,
+Permission,222,ASK,https://assets.coingecko.com/coins/images/12521/small/rjQjTU3c_400x400.jpg?1600383907
+Setheum,258,SETM,
+SUR Blockchain Network,262,SRN,
+Web3Q Mainnet,333,W3Q,
+PulseChain Mainnet,369,PLS,
+Lisinski,385,LISINSKI,
+Rupaya,499,RUPX,
+Double-A Chain Mainnet,512,AAC,
+Vela1 Chain Mainnet,555,CLASS,
+Tao Network,558,TAO,
+Karura Network,686,KAR,https://assets.coingecko.com/coins/images/17172/small/karura.jpeg?1626782066
+BlockChain Station Mainnet,707,BCS,
+cheapETH,777,cTH,
+Acala Network,787,ACA,https://assets.coingecko.com/coins/images/20634/small/upOKBONH_400x400.jpg?1647420536
+Haic,803,HAIC,
+Ambros Chain Mainnet,880,AMBR,
+Nepal Blockchain Network,977,YETI,
+Lucky Network,998,L99,
+Evrice Network,1010,EVC,
+Newton,1012,NEW,
+Sakura,1022,SKU,https://assets.coingecko.com/coins/images/17830/small/sakura.png?1645084532
+Clover Mainnet,1024,CLV,https://assets.coingecko.com/coins/images/15278/small/clover.png?1645084454
+Conflux eSpace,1030,CFX,https://assets.coingecko.com/coins/images/13079/small/3vuYMbjN.png?1631512305
+MathChain,1139,MATH,https://assets.coingecko.com/coins/images/11335/small/2020-05-19-token-200.png?1589940590
+Iora Chain,1197,IORA,
+World Trade Technical Chain Mainnet,1202,WTT,
+Popcateum Mainnet,1213,POP,
+EnterChain Mainnet,1214,ENTER,
+HALO Mainnet,1280,HO,
+Moonbase Alpha,1287,DEV,
+Moonrock,1288,ROC,
+Catecoin Chain Mainnet,1618,CATE,
+Atheios,1620,ATH,
+Btachain,1657,BTA,
+Teslafunds,1856,TSF,
+EtherGem,1987,EGEM,
+Edgeware Mainnet,2021,EDG,
+Rangers Protocol Mainnet,2025,RPG,https://assets.coingecko.com/coins/images/18791/small/tO8MlqiM_400x400.png?1633421196
+Ecoball Mainnet,2100,ECO,
+Evanesco Mainnet,2213,EVA,
+Kortho Mainnet,2559,KTO,
+Paribu Net Mainnet,3400,PRB,
+Bittex Mainnet,3690,BTX,
+DYNO Mainnet,3966,DYNO,
+EraSwap Mainnet,5197,ES,
+Uzmi Network Mainnet,5315,UZMI,
+Wegochain Rubidium Mainnet,5869,RBD,
+Pixie Chain Mainnet,6626,PIX,
+Shyft Mainnet,7341,SHYFT,https://assets.coingecko.com/coins/images/14534/small/TOKEN-Gradient.png?1616768352
+Teleport,8000,TELE,
+TOOL Global Mainnet,8723,OLO,
+bloxberg,8995,U+25B3,
+Evmos,9001,EVMOS,
+Genesis Coin,9100,GNC,
+Blockchain Genesis Mainnet,10101,GEN,
+WAGMI,11111,WGM,
+Singularity ZERO Mainnet,12052,ZERO,
+Phoenix Mainnet,13381,PHX,
+MetaDot Mainnet,16000,MTT,
+BTCIX Network,19845,BTCIX,
+omChain Mainnet,21816,OML,
+Webchain,24484,WEB,
+MintMe.com Coin,24734,MINTME,
+Ethersocial Network,31102,ESN,
+Energi Mainnet,39797,NRG,https://assets.coingecko.com/coins/images/5795/small/3218.png?1604798557
+pegglecoin,42069,peggle,
+Athereum,43110,ATH,
+REI Network,47805,REI,
+REI Chain Mainnet,55555,REI,
+eCredits Mainnet,63000,ECS,
+Thinkium Mainnet Chain 0,70000,TKM,
+Thinkium Mainnet Chain 1,70001,TKM,
+Thinkium Mainnet Chain 2,70002,TKM,
+Thinkium Mainnet Chain 103,70103,TKM,
+UB Smart Chain,99999,UBC,
+QuarkChain Mainnet Root,100000,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 0,100001,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 1,100002,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 2,100003,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 3,100004,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 4,100005,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 5,100006,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 6,100007,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Mainnet Shard 7,100008,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+BROChain Mainnet,108801,BRO,
+QuarkChain Devnet Root,110000,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 0,110001,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 1,110002,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 2,110003,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 3,110004,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 4,110005,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 5,110006,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 6,110007,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+QuarkChain Devnet Shard 7,110008,QKC,https://assets.coingecko.com/coins/images/3849/small/quarkchain.png?1548387524
+Akroma,200625,AKA,
+Alaya Mainnet,201018,atp,
+PlatON Mainnet,210425,lat,https://assets.coingecko.com/coins/images/15430/small/PlatON-Black.png?1623852513
+ARTIS sigma1,246529,ATS,
+Social Smart Chain Mainnet,281121,$OC,
+Vision - Mainnet,888888,VS,
+Eluvio Content Fabric,955305,ELV,
+Etho Protocol,1313114,ETHO,
+Xerom,1313500,XERO,
+Musicoin,7762959,MUSIC,
+PepChain Churchill,13371337,TPEP,
+IOLite,18289463,ILT,
+quarkblockchain,20181205,QKI,
+Auxilium Network Mainnet,28945486,AUX,
+Joys Digital Mainnet,35855456,JOYS,
+Aquachain,61717561,AQUA,
+Gather Mainnet Network,192837465,GTH,https://assets.coingecko.com/coins/images/12458/small/Gather-Logo-Working-File.png?1599981686
+Neon EVM DevNet,245022926,NEON,
+Neon EVM MainNet,245022934,NEON,
+OneLedger Mainnet,311752642,OLT,https://assets.coingecko.com/coins/images/3422/small/One_Ledger.jpeg?1547038108
+Gather Tesnet Network,356256156,GTH,https://assets.coingecko.com/coins/images/12458/small/Gather-Logo-Working-File.png?1599981686
+Gather Devnet Network,486217935,GTH,https://assets.coingecko.com/coins/images/12458/small/Gather-Logo-Working-File.png?1599981686
+IPOS Network,1122334455,IPOS,
+Aurora Betanet,1313161556,ETH,https://assets.coingecko.com/coins/images/20582/small/aurora.jpeg?1637250883
+Harmony Mainnet Shard 1,1666600001,ONE,https://assets.coingecko.com/coins/images/4344/small/Y88JAze.png?1565065793
+Harmony Mainnet Shard 2,1666600002,ONE,https://assets.coingecko.com/coins/images/4344/small/Y88JAze.png?1565065793
+Harmony Mainnet Shard 3,1666600003,ONE,https://assets.coingecko.com/coins/images/4344/small/Y88JAze.png?1565065793
+DataHopper,2021121117,HOP,
+Pirl,3125659152,PIRL,
+Ntity Mainnet,197710212030,NTT,
+Molereum Network,6022140761023,MOLE,

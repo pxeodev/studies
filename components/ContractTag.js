@@ -6,19 +6,17 @@ import MetaMaskButton from '../components/MetaMaskButton'
 import styles from '../styles/contractTag.module.less'
 import addToClipboard from '../utils/addToClipboard'
 
-const ContractTag = ({ image, defaultPlatform, platform, symbol, address, decimals=18 }) => {
+const ContractTag = ({ image, platform, symbol, address, decimals=18, chainData }) => {
   const displayedAddress = `${address.substr(0, 6)}...${address.substr(-4)}`
 
-  let metamaskButton;
-  if (defaultPlatform === platform) {
-    metamaskButton = <MetaMaskButton
-      className={styles.metamask}
-      symbol={symbol}
-      image={image}
-      decimals={decimals}
-      address={address}
-    />
-  }
+  const metamaskButton = <MetaMaskButton
+    className={styles.metamask}
+    symbol={symbol}
+    image={image}
+    decimals={decimals}
+    address={address}
+    chainId={chainData?.id}
+  />
 
   const showSuccessNotification = () => {
     notification.open({
