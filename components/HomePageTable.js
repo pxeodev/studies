@@ -196,6 +196,7 @@ const HomePageTable = ({
     columns.push({
       title: 'Market Cap',
       dataIndex: 'marketCap',
+      sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
       render: (marketCap) => {
         const formatter = new Intl.NumberFormat([], {
           notation: 'compact',
