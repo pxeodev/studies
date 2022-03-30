@@ -33,6 +33,8 @@ model Coin {
   tickers Json
   defaultPlatform String?
   platforms Json?
+  dailyChange Decimal @default(0.0)
+  weeklyChange Decimal @default(0.0)
 
   @@index([marketCapRank])
 }
