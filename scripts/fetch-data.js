@@ -4,6 +4,7 @@ import * as AxiosLogger from 'axios-logger'
 import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
 import pickBy from 'lodash/pickBy'
+import union from 'lodash/union'
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
@@ -48,9 +49,16 @@ const script = async () => {
   let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data, ...coinMarketsPage3.data, ...coinMarketsPage4.data]
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
-  coinsMarketData = coinsMarketData.map((data) => ({...data, symbol: data.symbol.toLowerCase()}))
+  let coinIds = coinsMarketData.map(({ id }) => id)
+  let databaseCoinIds = await prisma.coin.findMany({
+    select: {
+      id: true
+    }
+  })
+  databaseCoinIds = databaseCoinIds.map(({ id }) => id)
+  coinIds = union(coinIds, databaseCoinIds)
   if (process.env.NODE_ENV == "development") {
-    coinsMarketData = coinsMarketData.slice(0, 3)
+    coinIds = coinIds.slice(0, 3)
   }
 
   const cryptowatchMarketsResponse = await cryptowatchAPI.get('/markets')
@@ -61,8 +69,9 @@ const script = async () => {
   let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
   marketPriority.reverse()
 
-  for (let coinMarketData of coinsMarketData) {
-    const coinData = (await coinGeckoAPI.get(`/coins/${coinMarketData.id}`)).data
+  for (let coinId of coinIds) {
+    const coinData = (await coinGeckoAPI.get(`/coins/${coinId}`)).data
+    const symbol = coinData.symbol.toLowerCase()
     await new Promise((res) => setTimeout(res, 1200))
 
     let platforms;
@@ -74,8 +83,8 @@ const script = async () => {
     }
 
     const dbCoinData = {
-      symbol: coinMarketData.symbol,
-      name: coinMarketData.name,
+      symbol,
+      name: coinData.name,
       defaultPlatform: coinData.asset_platform_id,
       platforms,
       images: coinData.image,
@@ -92,13 +101,13 @@ const script = async () => {
       circulatingSupply: coinData.market_data.circulating_supply,
       totalSupply: coinData.market_data.total_supply,
       tickers: coinData.tickers,
-      categories: categories[`${coinMarketData.symbol}-${coinMarketData.name}`],
+      categories: categories[`${symbol}-${coinData.name}`],
     }
 
     await prisma.coin.upsert({
-      where: { id: coinMarketData.id },
+      where: { id: coinId },
       create: {
-        id: coinMarketData.id,
+        id: coinId,
         ...dbCoinData
       },
       update: dbCoinData,
@@ -106,16 +115,16 @@ const script = async () => {
 
     let cryptoWatchAfterParam = Math.round((subDays(new Date(), fetchOhlcDays)).valueOf() / 1000)
     const ohlcPerQuoteSymbolEndpoints = quoteSymbols.map((quoteSymbol) => {
-      if(coinMarketData.symbol === quoteSymbol) {
+      if(symbol === quoteSymbol) {
         return []
       }
 
       let matchingMarkets = cryptowatchMarkets.filter((market) => {
         const realQuoteSymbol = quoteSymbol === 'usd' ? 'usdt' : quoteSymbol
-        if (market.pair === `${coinMarketData.symbol}${realQuoteSymbol}`) {
+        if (market.pair === `${symbol}${realQuoteSymbol}`) {
           market.inverse = false
           return true
-        } else if (market.pair === `${realQuoteSymbol}${coinMarketData.symbol}`) {
+        } else if (market.pair === `${realQuoteSymbol}${symbol}`) {
           market.inverse = true
           return true
         } else {
@@ -135,7 +144,7 @@ const script = async () => {
 
       endPoints.push({
         coinGecko: true,
-        route: `https://api.coingecko.com/api/v3/coins/${coinMarketData.id}/ohlc?vs_currency=${quoteSymbol}&days=${fetchOhlcDays}`,
+        route: `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=${quoteSymbol}&days=${fetchOhlcDays}`,
         quoteSymbol
       })
 
@@ -160,7 +169,7 @@ const script = async () => {
               high: frame[2],
               low: frame[3],
               close: frame[4],
-              coinId: coinMarketData.id,
+              coinId: coinId,
               quoteSymbol
             }
           })
@@ -181,7 +190,7 @@ const script = async () => {
               high: frame[2],
               low: frame[3],
               close: frame[4],
-              coinId: coinMarketData.id,
+              coinId: coinId,
               quoteSymbol
             }
           })
