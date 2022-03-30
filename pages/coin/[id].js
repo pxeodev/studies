@@ -402,6 +402,8 @@ export async function getStaticProps({ params }) {
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),
       circulatingSupply: Number(coinData.circulatingSupply),
       totalSupply: Number(coinData.totalSupply),
+      dailyChange: Number(coinData.dailyChange),
+      weeklyChange: Number(coinData.weeklyChange),
       similarCoins,
       superSuperTrend,
       trends,
