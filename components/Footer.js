@@ -77,6 +77,10 @@ const Footer = ({ topCoins, topCategories }) => {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/medium.svg" alt="Medium Logo" className={styles.socialImage} width={24} height={24}/>
         </a>
+        <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank" rel="noreferrer" className={styles.socialLink}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/telegram.svg" alt="Telegram Logo" className={styles.socialImage} width={24} height={24}/>
+        </a>
       </Space>
     </Space>
   </>
@@ -133,7 +137,7 @@ const Footer = ({ topCoins, topCategories }) => {
         </Row>
       </>
     )
-  } else {
+  } else if (screens.md) {
     grid = (
       <span>
         <Row>
@@ -155,6 +159,35 @@ const Footer = ({ topCoins, topCategories }) => {
             {quickLinksBlock}
           </Col>
           <Col span={12}>
+            {socialMediaBlock}
+          </Col>
+        </Row>
+      </span>
+    )
+  } else {
+    grid = (
+      <span>
+        <Row>
+          <Col span={24}>{logo}</Col>
+        </Row>
+        <Row>
+          <Col span={24}>{horizontalDivider}</Col>
+        </Row>
+        <Row gutter={10}>
+          <Col span={12}>
+            {topCoinsBlock}
+          </Col>
+          <Col span={12}>
+            {topCategoriesBlock}
+          </Col>
+        </Row>
+        <Row gutter={10}>
+          <Col span={24} className={styles.bottomRow}>
+            {quickLinksBlock}
+          </Col>
+        </Row>
+        <Row gutter={10} className={styles.bottomRow}>
+          <Col span={24}>
             {socialMediaBlock}
           </Col>
         </Row>
