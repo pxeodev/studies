@@ -4,6 +4,7 @@ import * as AxiosLogger from 'axios-logger'
 import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
 import pickBy from 'lodash/pickBy'
+import isNil from 'lodash/isNil'
 import union from 'lodash/union'
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -17,6 +18,7 @@ dotenv.config();
 const fetchOhlcDays = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'cvxcrv', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'rsr', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'musd', 'qc', 'dgd', 'eurs', 'susd', 'sai', 'cusd', 'alusd', 'seur', 'ethbull', 'eeur', 'eth2x-fli']
 const excludedTokens = ['thorchain-erc20']
+const noRankError = 'no-rank-error'
 
 const script = async () => {
   const coinGeckoAPI = axios.create({
@@ -73,8 +75,11 @@ const script = async () => {
     let coinData
     try {
       coinData = (await coinGeckoAPI.get(`/coins/${coinId}`)).data
+      if (isNil(coinData.market_data.market_cap_rank)) {
+        throw(noRankError)
+      }
     } catch (e) {
-      if (e.response.status === 404) {
+      if (e === noRankError || e.response.status === 404) {
         // CoinGecko doesn't know this coin, so we assume it got delisted
         await prisma.ohlc.deleteMany({
           where: {
