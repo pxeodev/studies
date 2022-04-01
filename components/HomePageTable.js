@@ -119,8 +119,48 @@ const HomePageTable = ({
     }
   })
 
+  const screens = useBreakPoint();
+  let columnsConfig
+  if (screens.lg) {
+    columnsConfig = {
+      coinData: {},
+      superSupertrend: {
+        width: 120,
+      },
+      marketCap: {
+        width: 150,
+      },
+      dailyChange: {
+        width: 130,
+      },
+      weeklyChange: {
+        width: 130,
+      },
+    }
+  }
+  else {
+    columnsConfig = {
+      coinData: {
+        width: 150,
+        fixed: 'left',
+      },
+      superSupertrend: {
+        width: 120,
+      },
+      marketCap: {
+        width: 150,
+      },
+      dailyChange: {
+        width: 130,
+      },
+      weeklyChange: {
+        width: 130,
+      },
+    }
+  }
   const columns = [
     {
+      ...columnsConfig.coinData,
       title: 'Coin',
       dataIndex: 'coinData',
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
@@ -138,6 +178,7 @@ const HomePageTable = ({
       }
     },
     {
+      ...columnsConfig.superSupertrend,
       title: <>
         <span>Signal</span>
         <Tooltip
@@ -149,7 +190,6 @@ const HomePageTable = ({
         </Tooltip>
       </>,
       dataIndex: 'superSupertrend',
-      width: 120,
       sorter: (a, b, sortOrder) => {
         if (a.superSupertrend === b.superSupertrend) {
           if (sortOrder === 'ascend') {
@@ -192,14 +232,10 @@ const HomePageTable = ({
         )
       }
     },
-  ];
-
-  const screens = useBreakPoint();
-  if (screens.sm) {
-    columns.push({
+    {
+      ...columnsConfig.marketCap,
       title: 'Market Cap',
       dataIndex: 'marketCap',
-      width: '20%',
       sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
       render: (marketCap) => {
         const formatter = new Intl.NumberFormat([], {
@@ -214,13 +250,11 @@ const HomePageTable = ({
           </>
         )
       }
-    })
-  }
-  if (screens.md) {
-    columns.push({
+    },
+    {
+      ...columnsConfig.dailyChange,
       title: '24h Change',
       dataIndex: 'dailyChange',
-      width: 120,
       sorter: (a, b) => a.dailyChange - b.dailyChange,
       render: (dailyChange) => {
         const formatter = new Intl.NumberFormat([], {
@@ -233,9 +267,9 @@ const HomePageTable = ({
       }
     },
     {
+      ...columnsConfig.weeklyChange,
       title: '7d Change',
       dataIndex: 'weeklyChange',
-      width: 120,
       sorter: (a, b) => a.weeklyChange - b.weeklyChange,
       render: (weeklyChange) => {
         const formatter = new Intl.NumberFormat([], {
@@ -246,8 +280,8 @@ const HomePageTable = ({
         })
         return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{formatter.format(weeklyChange)}%</span>)
       }
-    })
-  }
+    }
+  ];
 
   // The table rows are 56px high.
   const tableHeight = 9 * 56;
