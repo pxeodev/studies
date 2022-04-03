@@ -120,50 +120,12 @@ const HomePageTable = ({
   })
 
   const screens = useBreakPoint();
-  const isServer = typeof window === 'undefined';
-  let columnsConfig
-  if (isServer || screens.lg) {
-    columnsConfig = {
-      coinData: {},
-      superSupertrend: {
-        width: 120,
-      },
-      marketCap: {
-        width: 150,
-      },
-      dailyChange: {
-        width: 130,
-      },
-      weeklyChange: {
-        width: 130,
-      },
-    }
-  }
-  else {
-    columnsConfig = {
-      coinData: {
-        width: 150,
-        fixed: 'left',
-      },
-      superSupertrend: {
-        width: 120,
-      },
-      marketCap: {
-        width: 150,
-      },
-      dailyChange: {
-        width: 130,
-      },
-      weeklyChange: {
-        width: 130,
-      },
-    }
-  }
+
   const columns = [
     {
-      ...columnsConfig.coinData,
       title: 'Coin',
       dataIndex: 'coinData',
+      fixed: screens.lg ? null : 'left',
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData) => {
         return (
@@ -179,7 +141,7 @@ const HomePageTable = ({
       }
     },
     {
-      ...columnsConfig.superSupertrend,
+      width: 120,
       title: <>
         <span>Signal</span>
         <Tooltip
@@ -234,9 +196,9 @@ const HomePageTable = ({
       }
     },
     {
-      ...columnsConfig.marketCap,
       title: 'Market Cap',
       dataIndex: 'marketCap',
+      width: 150,
       sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
       render: (marketCap) => {
         const formatter = new Intl.NumberFormat([], {
@@ -253,9 +215,9 @@ const HomePageTable = ({
       }
     },
     {
-      ...columnsConfig.dailyChange,
       title: '24h Change',
       dataIndex: 'dailyChange',
+      width: 130,
       sorter: (a, b) => a.dailyChange - b.dailyChange,
       render: (dailyChange) => {
         const formatter = new Intl.NumberFormat([], {
@@ -268,9 +230,9 @@ const HomePageTable = ({
       }
     },
     {
-      ...columnsConfig.weeklyChange,
       title: '7d Change',
       dataIndex: 'weeklyChange',
+      width: 130,
       sorter: (a, b) => a.weeklyChange - b.weeklyChange,
       render: (weeklyChange) => {
         const formatter = new Intl.NumberFormat([], {
