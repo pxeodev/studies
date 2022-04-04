@@ -71,6 +71,7 @@ const script = async () => {
   let marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx']
   marketPriority.reverse()
 
+  coinIds = ['compound-basic-attention-token']
   for (let coinId of coinIds) {
     let coinData
     try {
@@ -107,6 +108,8 @@ const script = async () => {
       }
     }
 
+    const dailyChange = coinData.market_data.price_change_percentage_24h || undefined
+    const weeklyChange = coinData.market_data.price_change_percentage_7d || undefined
     const dbCoinData = {
       symbol,
       name: coinData.name,
@@ -127,8 +130,8 @@ const script = async () => {
       totalSupply: coinData.market_data.total_supply,
       tickers: coinData.tickers,
       categories: categories[`${symbol}-${coinData.name}`],
-      dailyChange: coinData.market_data.price_change_percentage_24h,
-      weeklyChange: coinData.market_data.price_change_percentage_7d,
+      dailyChange: dailyChange,
+      weeklyChange: weeklyChange,
     }
 
     await prisma.coin.upsert({
