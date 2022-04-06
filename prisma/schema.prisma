@@ -21,7 +21,6 @@ model Coin {
   homepage String
   twitter String
   twitterFollowers Int?
-  currentPriceUsd Decimal
   ath Decimal
   atl Decimal
   marketCap BigInt

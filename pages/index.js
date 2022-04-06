@@ -58,7 +58,6 @@ export async function getStaticProps() {
 
     return {
       ...coinData,
-      currentPriceUsd: Number(coinData.currentPriceUsd),
       ath: Number(coinData.ath),
       atl: Number(coinData.atl),
       fullyDilutedValue: Number(coinData.fullyDilutedValue),

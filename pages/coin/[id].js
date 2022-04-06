@@ -399,7 +399,6 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       ...coinData,
-      currentPriceUsd: Number(coinData.currentPriceUsd),
       ath: Number(coinData.ath),
       atl: Number(coinData.atl),
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),

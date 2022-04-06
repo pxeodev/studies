@@ -119,7 +119,6 @@ const script = async () => {
       homepage: coinData.links.homepage[0],
       twitter: coinData.links.twitter_screen_name,
       twitterFollowers: coinData.community_data.twitter_followers,
-      currentPriceUsd: coinData.market_data.current_price.usd,
       ath: coinData.market_data.ath.usd,
       atl: coinData.market_data.atl.usd,
       marketCap: coinData.market_data.market_cap.usd,
