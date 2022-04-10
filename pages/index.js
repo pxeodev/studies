@@ -89,13 +89,13 @@ export default function Home({ coinsData, categories }) {
   const defaultMarketCapMax = coinsData[0].marketCap
   const defaultTrendLengthMin = ''
   const defaultTrendLengthMax = ''
-  const defaultTrendType = signals.all
   const defaultShowWeeklySignals = false
 
   const defaultFormState = useMemo(() =>
     ({
       category: 'all',
-      portfolio: ''
+      portfolio: '',
+      trendType: signals.all
     })
   , [])
   const [formState, formDispatch] = useReducer((state, action) => {
@@ -111,6 +111,12 @@ export default function Home({ coinsData, categories }) {
         return {
           ...state,
           portfolio: action.payload
+        }
+      case 'SET_TREND_TYPE':
+        if (isNil(action.payload)) { return state }
+        return {
+          ...state,
+          trendType: action.payload
         }
       case 'RESET':
         return defaultFormState
@@ -149,13 +155,13 @@ export default function Home({ coinsData, categories }) {
 
     formDispatch({ type: 'SET_PORTFOLIO', payload: router.query.portfolio })
     formDispatch({ type: 'SET_CATEGORY', payload: router.query.category })
+    formDispatch({ type: 'SET_TREND_TYPE', payload: router.query.trendType })
   }, [router.isReady, router.query])
 
   const [marketCapMin, setMarketCapMin] = useState(defaultMarketCapMin)
   const [marketCapMax, setMarketCapMax] = useState(defaultMarketCapMax)
   const [trendLengthMin, setTrendLengthMin] = useState(defaultTrendLengthMin)
   const [trendLengthMax, setTrendLengthMax] = useState(defaultTrendLengthMax)
-  const [trendType, setTrendType] = useState(defaultTrendType)
   const [atrPeriods, setAtrPeriods] = useState(defaultAtrPeriods)
   const [multiplier, setMultiplier] = useState(defaultMultiplier)
   const [filterModalVisible, setFilterModalVisible] = useState(false)
@@ -275,12 +281,11 @@ export default function Home({ coinsData, categories }) {
   const resetFilters = useCallback(() => {
     resetMarketCap()
     resetTrendLength()
-    setTrendType(defaultTrendType)
     formDispatch({ type: 'RESET' })
     setAtrPeriods(defaultAtrPeriods)
     setMultiplier(defaultMultiplier)
     setShowWeeklySignals(defaultShowWeeklySignals)
-  }, [defaultTrendType, defaultShowWeeklySignals, resetMarketCap, resetTrendLength, setShowWeeklySignals])
+  }, [defaultShowWeeklySignals, resetMarketCap, resetTrendLength, setShowWeeklySignals])
 
   const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
   const priorityCategories = categories.filter((category) => {
@@ -361,8 +366,8 @@ export default function Home({ coinsData, categories }) {
             <label className={styles.formLabel} htmlFor="signal">Signal</label>
             <Select
               size="large"
-              value={trendType}
-              onChange={setTrendType}
+              value={formState.trendType}
+              onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
               id="signal"
               className={styles.formSelect}
             >
@@ -560,7 +565,7 @@ export default function Home({ coinsData, categories }) {
           portfolio={formState.portfolio}
           portfolioFilter={portfolioFilter}
           category={formState.category}
-          trendType={trendType}
+          trendType={formState.trendType}
           defaultCategory={defaultFormState.category}
           atrPeriods={atrPeriods}
           multiplier={multiplier}
