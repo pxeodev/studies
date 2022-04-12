@@ -143,7 +143,7 @@ const HomePageTable = ({
     {
       width: 120,
       title: <>
-        <span>Signal</span>
+        <span>Trend</span>
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
