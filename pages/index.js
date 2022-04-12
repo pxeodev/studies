@@ -86,17 +86,17 @@ export async function getStaticProps() {
 export default function Home({ coinsData, categories }) {
   const router = useRouter()
 
-  const defaultTrendLengthMin = ''
-  const defaultTrendLengthMax = ''
 
   const defaultFormState = useMemo(() =>
-    ({
+  ({
       category: 'all',
       portfolio: '',
       trendType: signals.all,
       weeklySignals: false,
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
+      trendLengthMin: '',
+      trendLengthMax: '',
     })
   , [coinsData])
   const [portfolioInputValue, setPortfolioInputValue] = useState(defaultFormState.portfolio)
@@ -161,6 +161,36 @@ export default function Home({ coinsData, categories }) {
           ...state,
           marketCapMax: newMarketCapMax
         }
+      case 'SET_TREND_LENGTH_MIN':
+        let trendLengthMin
+        if (action.payload === '') {
+          trendLengthMin = defaultFormState.trendLengthMin
+        } else {
+          trendLengthMin = parseInt(action.payload)
+          if (!isFinite(trendLengthMin)) {
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          trendLengthMin: trendLengthMin
+        }
+      case 'SET_TREND_LENGTH_MAX':
+        let trendLengthMax
+        if (action.payload === '') {
+          trendLengthMax = defaultFormState.trendLengthMax
+        } else {
+          trendLengthMax = parseInt(action.payload)
+          if (!isFinite(trendLengthMax)) {
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          trendLengthMax: trendLengthMax
+        }
       case 'RESET':
         return defaultFormState
       default:
@@ -206,6 +236,8 @@ export default function Home({ coinsData, categories }) {
         weeklySignals: router.query.weeklySignals,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
+        trendLengthMin: router.query.trendLengthMin,
+        trendLengthMax: router.query.trendLengthMax,
       }
     })
   }, [router.isReady, router.query])
@@ -213,16 +245,9 @@ export default function Home({ coinsData, categories }) {
     formDispatch({ type: 'SET_PORTFOLIO', payload: portfolio })
   }, 400), [])
   useEffect(() => setPortfolioDebounced(portfolioInputValue), [portfolioInputValue, setPortfolioDebounced])
-  const [trendLengthMin, setTrendLengthMin] = useState(defaultTrendLengthMin)
-  const [trendLengthMax, setTrendLengthMax] = useState(defaultTrendLengthMax)
   const [atrPeriods, setAtrPeriods] = useState(defaultAtrPeriods)
   const [multiplier, setMultiplier] = useState(defaultMultiplier)
   const [filterModalVisible, setFilterModalVisible] = useState(false)
-
-  const resetTrendLength = useCallback(() => {
-    setTrendLengthMin(defaultTrendLengthMin)
-    setTrendLengthMax(defaultTrendLengthMax)
-  }, [defaultTrendLengthMin, defaultTrendLengthMax])
 
   const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
@@ -244,26 +269,6 @@ export default function Home({ coinsData, categories }) {
     const newMultiplier = parseFloat(e.target.value)
     if (isFinite(newMultiplier)) {
       setMultiplier(newMultiplier)
-    }
-  }, [])
-  const setValidTrendLengthMin = useCallback((e) => {
-    let newTrendLengthMin = e.target.value
-    if (newTrendLengthMin === '') {
-      setTrendLengthMin('')
-    }
-    newTrendLengthMin = parseInt(newTrendLengthMin)
-    if (isFinite(newTrendLengthMin)) {
-      setTrendLengthMin(newTrendLengthMin)
-    }
-  }, [])
-  const setValidTrendLengthMax = useCallback((e) => {
-    let newTrendLengthMax = e.target.value
-    if (newTrendLengthMax === '') {
-      setTrendLengthMax('')
-    }
-    newTrendLengthMax = parseInt(newTrendLengthMax)
-    if (isFinite(newTrendLengthMax)) {
-      setTrendLengthMax(newTrendLengthMax)
     }
   }, [])
 
@@ -291,27 +296,26 @@ export default function Home({ coinsData, categories }) {
   }, [coinsData])
 
   const setPredefinedTrendLength1 = useCallback(() => {
-    setTrendLengthMin(1)
-    setTrendLengthMax(5)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 1})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 5})
   }, [])
   const setPredefinedTrendLength2 = useCallback(() => {
-    setTrendLengthMin(5)
-    setTrendLengthMax(10)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 5})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 10})
   }, [])
   const setPredefinedTrendLength3 = useCallback(() => {
-    setTrendLengthMin(10)
-    setTrendLengthMax(20)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 10})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 20})
   }, [])
   const setPredefinedTrendLength4 = useCallback(() => {
-    setTrendLengthMin(20)
-    setTrendLengthMax('')
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 20})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: ''})
   }, [])
   const resetFilters = useCallback(() => {
-    resetTrendLength()
     formDispatch({ type: 'RESET' })
     setAtrPeriods(defaultAtrPeriods)
     setMultiplier(defaultMultiplier)
-  }, [resetTrendLength])
+  }, [])
 
   const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
   const priorityCategories = categories.filter((category) => {
@@ -332,7 +336,8 @@ export default function Home({ coinsData, categories }) {
   const renderAppliedFilters = () => {
     const marketCapFilterApplied = Number(formState.marketCapMin) !== Number(defaultFormState.marketCapMin) ||
                                    Number(formState.marketCapMax) !== Number(defaultFormState.marketCapMax)
-    const trendLengthFilterApplied = trendLengthMin !== defaultTrendLengthMin || trendLengthMax !== defaultTrendLengthMax
+    const trendLengthFilterApplied = Number(formState.trendLengthMin) !== Number(defaultFormState.trendLengthMin) ||
+                                     Number(formState.trendLengthMax) !== Number(defaultFormState.trendLengthMax)
     const atrPeriodsFilterApplied = atrPeriods !== defaultAtrPeriods
     const multiplierFilterApplied = multiplier !== defaultMultiplier
     const showWeeklySignalsFilterApplied = formState.weeklySignals !== defaultFormState.weeklySignals
@@ -362,7 +367,10 @@ export default function Home({ coinsData, categories }) {
             }}>Market Cap: {formatter.format(formState.marketCapMin)} - {formatter.format(formState.marketCapMax)}</Tag>
           )}
           {trendLengthFilterApplied && (
-            <Tag color="geekblue" closable onClose={resetTrendLength}>Signal Streak: {trendLengthMin} - {trendLengthMax}</Tag>
+            <Tag color="geekblue" closable onClose={() => {
+              formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: defaultFormState.trendLengthMin })
+              formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: defaultFormState.trendLengthMax })
+            }}>Signal Streak: {formState.trendLengthMin} - {formState.trendLengthMax}</Tag>
           )}
           {atrPeriodsFilterApplied && (
             <Tag color="geekblue" closable onClose={() => setAtrPeriods(defaultAtrPeriods)}>ATR periods: {atrPeriods}</Tag>
@@ -555,8 +563,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={styles.filterModalInput}
               size="large"
-              onChange={setValidTrendLengthMin}
-              value={trendLengthMin}
+              onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: e.target.value }) }}
+              value={formState.trendLengthMin}
               placeholder="1"
               aria-label="Trend Length Min"
             />
@@ -568,8 +576,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={styles.filterModalInput}
               size="large"
-              onChange={setValidTrendLengthMax}
-              value={trendLengthMax}
+              onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: e.target.value }) }}
+              value={formState.trendLengthMax}
               placeholder="50"
               aria-label="Trend Length Max"
             />
@@ -595,8 +603,8 @@ export default function Home({ coinsData, categories }) {
           coinsData={coinsData}
           marketCapMax={formState.marketCapMax}
           marketCapMin={formState.marketCapMin}
-          trendLengthMin={trendLengthMin}
-          trendLengthMax={trendLengthMax}
+          trendLengthMin={formState.trendLengthMin}
+          trendLengthMax={formState.trendLengthMax}
           portfolio={formState.portfolio}
           portfolioFilter={portfolioFilter}
           category={formState.category}
