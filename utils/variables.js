@@ -2,8 +2,8 @@ export const quoteSymbols = ['usd', 'eth', 'btc']
 
 export const signals = {
   all: 'All',
-  buy: 'Buy',
-  sell: 'Sell',
+  buy: 'Up',
+  sell: 'Down',
   hodl: 'HODL'
 }
 
