@@ -1,6 +1,10 @@
 import classnames from 'classnames';
+import debounce from 'lodash/debounce'
 import isFinite from 'lodash/isFinite'
-import { useState, useCallback, useEffect, useRef } from 'react'
+import isEqual from 'lodash/isEqual'
+import isNil from 'lodash/isNil'
+import pickBy from 'lodash/pickBy'
+import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
@@ -80,180 +84,238 @@ export async function getStaticProps() {
 
 export default function Home({ coinsData, categories }) {
   const router = useRouter()
-  const { portfolio: portfolioParam, category: categoryParam } = router.query
-
-  const defaultMarketCapMin = coinsData[coinsData.length - 1].marketCap
-  const defaultMarketCapMax = coinsData[0].marketCap
-  const defaultTrendLengthMin = ''
-  const defaultTrendLengthMax = ''
-  const defaultTrendType = signals.all
-  const defaultCategory = 'all'
-  const defaultCoinNameFilter = ''
-  const defaultShowWeeklySignals = false
-
-  const [marketCapMin, setMarketCapMin] = useState(defaultMarketCapMin)
-  const [marketCapMax, setMarketCapMax] = useState(defaultMarketCapMax)
-  const [trendLengthMin, setTrendLengthMin] = useState(defaultTrendLengthMin)
-  const [trendLengthMax, setTrendLengthMax] = useState(defaultTrendLengthMax)
-  const [trendType, setTrendType] = useState(defaultTrendType)
-  const [categoryFilter, setCategoryFilter] = useState(defaultCategory)
-  const [coinNameFilter, setCoinNameFilter] = useState(defaultCoinNameFilter)
-  const [atrPeriods, setAtrPeriods] = useState(defaultAtrPeriods)
-  const [multiplier, setMultiplier] = useState(defaultMultiplier)
+  const defaultFormState = useMemo(() =>
+  ({
+      category: 'all',
+      portfolio: '',
+      trendType: signals.all,
+      weeklySignals: false,
+      marketCapMin: coinsData[coinsData.length - 1].marketCap,
+      marketCapMax: coinsData[0].marketCap,
+      trendLengthMin: '',
+      trendLengthMax: '',
+      atrPeriods: defaultAtrPeriods,
+      multiplier: defaultMultiplier,
+    })
+  , [coinsData])
+  const [portfolioInputValue, setPortfolioInputValue] = useState(defaultFormState.portfolio)
   const [filterModalVisible, setFilterModalVisible] = useState(false)
-  const [showWeeklySignals, setShowWeeklySignals] = useState(defaultShowWeeklySignals)
+  const [formState, formDispatch] = useReducer((state, action) => {
+    switch (action.type) {
+      case 'SET_FROM_ROUTE_PARAMS':
+        const routeParams = pickBy(action.payload, (value) => !isNil(value))
+        return {
+          ...state,
+          ...routeParams
+        }
+      case 'SET_CATEGORY':
+        if (isNil(action.payload)) { return state }
+        return {
+          ...state,
+          category: action.payload
+        }
+      case 'SET_PORTFOLIO':
+        if (isNil(action.payload)) { return state }
+        return {
+          ...state,
+          portfolio: action.payload
+        }
+      case 'SET_TREND_TYPE':
+        if (isNil(action.payload)) { return state }
+        return {
+          ...state,
+          trendType: action.payload
+        }
+      case 'SET_WEEKLY_SIGNALS':
+        return {
+          ...state,
+          weeklySignals: action.payload
+        }
+      case 'SET_MARKET_CAP_MIN':
+        let newMarketCapMin
+        if (action.payload === '') {
+          newMarketCapMin = defaultFormState.marketCapMin
+        } else {
+          newMarketCapMin = parseInt(action.payload)
+          if (!isFinite(newMarketCapMin)) {
+            break;
+          }
+        }
 
-  const resetMarketCap = useCallback(() => {
-    setMarketCapMin(defaultMarketCapMin)
-    setMarketCapMax(defaultMarketCapMax)
-  }, [defaultMarketCapMin, defaultMarketCapMax])
-  const resetTrendLength = useCallback(() => {
-    setTrendLengthMin(defaultTrendLengthMin)
-    setTrendLengthMax(defaultTrendLengthMax)
-  }, [defaultTrendLengthMin, defaultTrendLengthMax])
+        return {
+          ...state,
+          marketCapMin: newMarketCapMin
+        }
+      case 'SET_MARKET_CAP_MAX':
+        let newMarketCapMax
+        if (action.payload === '') {
+          newMarketCapMax = defaultFormState.marketCapMax
+        } else {
+          newMarketCapMax = parseInt(action.payload)
+          if (!isFinite(newMarketCapMax)) {
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          marketCapMax: newMarketCapMax
+        }
+      case 'SET_TREND_LENGTH_MIN':
+        let trendLengthMin
+        if (action.payload === '') {
+          trendLengthMin = defaultFormState.trendLengthMin
+        } else {
+          trendLengthMin = parseInt(action.payload)
+          if (!isFinite(trendLengthMin)) {
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          trendLengthMin: trendLengthMin
+        }
+      case 'SET_TREND_LENGTH_MAX':
+        let trendLengthMax
+        if (action.payload === '') {
+          trendLengthMax = defaultFormState.trendLengthMax
+        } else {
+          trendLengthMax = parseInt(action.payload)
+          if (!isFinite(trendLengthMax)) {
+            break;
+          }
+        }
+
+        return {
+          ...state,
+          trendLengthMax: trendLengthMax
+        }
+      case 'SET_ATR_PERIODS':
+        const newAtrPeriods = parseFloat(action.payload)
+        if (!isFinite(newAtrPeriods)) {
+          break
+        }
+
+        return {
+          ...state,
+          atrPeriods: newAtrPeriods
+        }
+      case 'SET_MULTIPLIER':
+        const newMultiplier = parseFloat(action.payload)
+        if (!isFinite(newMultiplier)) {
+          break
+        }
+
+        return {
+          ...state,
+          multiplier: newMultiplier
+        }
+      case 'RESET':
+        return defaultFormState
+      default:
+        return state
+    }
+  }, defaultFormState)
+  useEffect(() => {
+    if (router.isReady) {
+      const changedParams = pickBy(formState, (value, key) => {
+        return value !== router.query[key]
+      })
+      const changedParamsThatAreDefault = Object.keys(changedParams).filter((key) => {
+        return changedParams[key] === defaultFormState[key]
+      })
+      if (Object.keys(changedParams).length > 0) {
+        let query = {
+          ...router.query,
+          ...changedParams
+        }
+        changedParamsThatAreDefault.forEach(defaultParam => {
+          delete query[defaultParam]
+        })
+        if (!isEqual(query, router.query)) {
+          router.push({
+            pathname: router.pathname,
+            query
+          }, null, { shallow: true })
+        }
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState, defaultFormState])
+  useEffect(() => {
+    if (!router.isReady) { return; }
+
+    setPortfolioInputValue(router.query.portfolio)
+    formDispatch({
+      type: 'SET_FROM_ROUTE_PARAMS',
+      payload: {
+        category: router.query.category,
+        portfolio: router.query.portfolio,
+        trendType: router.query.trendType,
+        weeklySignals: router.query.weeklySignals,
+        marketCapMin: router.query.marketCapMin,
+        marketCapMax: router.query.marketCapMax,
+        trendLengthMin: router.query.trendLengthMin,
+        trendLengthMax: router.query.trendLengthMax,
+        atrPeriods: router.query.atrPeriods,
+        multiplier: router.query.multiplier,
+      }
+    })
+  }, [router.isReady, router.query])
+  const setPortfolioDebounced = useCallback(debounce((portfolio) => {
+    formDispatch({ type: 'SET_PORTFOLIO', payload: portfolio })
+  }, 400), [])
+  useEffect(() => setPortfolioDebounced(portfolioInputValue), [portfolioInputValue, setPortfolioDebounced])
 
   const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
-
   const inputRef = useRef(null)
   useEffect(() => {
     if (isHoverable) {
       inputRef.current.input?.focus();
     }
   }, [isHoverable])
-  useEffect(() => {
-    if (portfolioParam) {
-      setCoinNameFilter(portfolioParam)
-    }
-  }, [portfolioParam])
-  useEffect(() => {
-    if (categoryParam) {
-      setCategoryFilter(categoryParam)
-    }
-  }, [categoryParam])
 
-  const setValidAtrPeriods = useCallback((e) => {
-    const newAtrPeriod = parseInt(e.target.value)
-    if (isFinite(newAtrPeriod)) {
-      setAtrPeriods(newAtrPeriod)
-    }
-  }, [])
-  const setValidMulitiplier = useCallback((e) => {
-    const newMultiplier = parseFloat(e.target.value)
-    if (isFinite(newMultiplier)) {
-      setMultiplier(newMultiplier)
-    }
-  }, [])
-  const setValidTrendLengthMin = useCallback((e) => {
-    let newTrendLengthMin = e.target.value
-    if (newTrendLengthMin === '') {
-      setTrendLengthMin('')
-    }
-    newTrendLengthMin = parseInt(newTrendLengthMin)
-    if (isFinite(newTrendLengthMin)) {
-      setTrendLengthMin(newTrendLengthMin)
-    }
-  }, [])
-  const setValidTrendLengthMax = useCallback((e) => {
-    let newTrendLengthMax = e.target.value
-    if (newTrendLengthMax === '') {
-      setTrendLengthMax('')
-    }
-    newTrendLengthMax = parseInt(newTrendLengthMax)
-    if (isFinite(newTrendLengthMax)) {
-      setTrendLengthMax(newTrendLengthMax)
-    }
-  }, [])
-  const setValidMarketCapMin = useCallback((e) => {
-    let newMarketCapMin = e.target.value
-    if (newMarketCapMin === '') {
-      setMarketCapMin(defaultMarketCapMin)
-    }
-    newMarketCapMin = parseInt(newMarketCapMin)
-    if (isFinite(newMarketCapMin)) {
-      setMarketCapMin(newMarketCapMin)
-    }
-  }, [defaultMarketCapMin])
-  const setValidMarketCapMax = useCallback((e) => {
-    let newMarketCapMax = e.target.value
-    if (newMarketCapMax === '') {
-      setMarketCapMax(defaultMarketCapMax)
-    }
-    newMarketCapMax = parseInt(newMarketCapMax)
-    if (isFinite(newMarketCapMax)) {
-      setMarketCapMax(newMarketCapMax)
-    }
-  }, [defaultMarketCapMax])
-  const setCoinName = useCallback((newCoinNames) => {
-    setCoinNameFilter(newCoinNames)
-    router.replace({
-      pathname: router.pathname,
-      query: {
-        portfolio: newCoinNames,
-        category: categoryFilter
-      }
-    }, null, { shallow: true })
-  }, [router, categoryFilter])
-  const setCategory = useCallback((newCategory) => {
-    setCategoryFilter(newCategory)
-    router.replace({
-      pathname: router.pathname,
-      query: {
-        category: newCategory,
-        portfolio: portfolioParam
-      }
-    }, null, { shallow: true })
-  }, [router, portfolioParam])
-
-  const coinsFilter = coinNameFilter
+  const portfolioFilter = formState.portfolio
     .replace(/\s/g, '')
     .split(',')
     .map((coinName) => coinName.toLowerCase())
     .filter((coinName) => coinName.length)
 
   const setPredefinedMarketCap1 = useCallback(() => {
-    setMarketCapMin(0)
-    setMarketCapMax(100000000)
+    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 0 })
+    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 100000000 })
   }, [])
   const setPredefinedMarketCap2 = useCallback(() => {
-    setMarketCapMin(100000000)
-    setMarketCapMax(1000000000)
+    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 100000000 })
+    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 1000000000 })
   }, [])
   const setPredefinedMarketCap3 = useCallback(() => {
-    setMarketCapMin(1000000000)
-    setMarketCapMax(10000000000)
+    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 1000000000 })
+    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 10000000000 })
   }, [])
   const setPredefinedMarketCap4 = useCallback(() => {
-    setMarketCapMin(10000000000)
-    setMarketCapMax(coinsData[0].marketCap)
+    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 10000000000 })
+    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: coinsData[0].marketCap })
   }, [coinsData])
 
   const setPredefinedTrendLength1 = useCallback(() => {
-    setTrendLengthMin(1)
-    setTrendLengthMax(5)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 1})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 5})
   }, [])
   const setPredefinedTrendLength2 = useCallback(() => {
-    setTrendLengthMin(5)
-    setTrendLengthMax(10)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 5})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 10})
   }, [])
   const setPredefinedTrendLength3 = useCallback(() => {
-    setTrendLengthMin(10)
-    setTrendLengthMax(20)
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 10})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 20})
   }, [])
   const setPredefinedTrendLength4 = useCallback(() => {
-    setTrendLengthMin(20)
-    setTrendLengthMax('')
+    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 20})
+    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: ''})
   }, [])
-  const resetFilters = useCallback(() => {
-    resetMarketCap()
-    resetTrendLength()
-    setTrendType(defaultTrendType)
-    setCategory(defaultCategory)
-    setCoinName(defaultCoinNameFilter)
-    setAtrPeriods(defaultAtrPeriods)
-    setMultiplier(defaultMultiplier)
-    setShowWeeklySignals(defaultShowWeeklySignals)
-  }, [defaultTrendType, defaultCategory, defaultShowWeeklySignals, setCoinName, resetMarketCap, resetTrendLength, setCategory, setShowWeeklySignals])
 
   const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
   const priorityCategories = categories.filter((category) => {
@@ -272,11 +334,13 @@ export default function Home({ coinsData, categories }) {
   const restCategories = categories.filter(category => !priorityCategories.includes(category))
 
   const renderAppliedFilters = () => {
-    const marketCapFilterApplied = marketCapMin !== defaultMarketCapMin || marketCapMax !== defaultMarketCapMax
-    const trendLengthFilterApplied = trendLengthMin !== defaultTrendLengthMin || trendLengthMax !== defaultTrendLengthMax
-    const atrPeriodsFilterApplied = atrPeriods !== defaultAtrPeriods
-    const multiplierFilterApplied = multiplier !== defaultMultiplier
-    const showWeeklySignalsFilterApplied = showWeeklySignals !== defaultShowWeeklySignals
+    const marketCapFilterApplied = Number(formState.marketCapMin) !== Number(defaultFormState.marketCapMin) ||
+                                   Number(formState.marketCapMax) !== Number(defaultFormState.marketCapMax)
+    const trendLengthFilterApplied = Number(formState.trendLengthMin) !== Number(defaultFormState.trendLengthMin) ||
+                                     Number(formState.trendLengthMax) !== Number(defaultFormState.trendLengthMax)
+    const atrPeriodsFilterApplied = formState.atrPeriods !== defaultAtrPeriods
+    const multiplierFilterApplied = formState.multiplier !== defaultMultiplier
+    const showWeeklySignalsFilterApplied = formState.weeklySignals !== defaultFormState.weeklySignals
     const advancedFiltersApplied =
       marketCapFilterApplied ||
       trendLengthFilterApplied ||
@@ -287,24 +351,35 @@ export default function Home({ coinsData, categories }) {
     if (!advancedFiltersApplied || !screens.sm) {
       return null
     }
+
+    const formatter = new Intl.NumberFormat([], {
+      notation: 'compact',
+      maximumFractionDigits: 2,
+    })
     return ([
       <Divider key="divider"/>,
       <Row key="applied-filters">
         <Col span={24}>
           {marketCapFilterApplied && (
-            <Tag color="geekblue" closable onClose={resetMarketCap}>Market Cap: {marketCapMin} - {marketCapMax}</Tag>
+            <Tag color="geekblue" closable onClose={() => {
+              formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: defaultFormState.marketCapMin })
+              formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: defaultFormState.marketCapMax })
+            }}>Market Cap: {formatter.format(formState.marketCapMin)} - {formatter.format(formState.marketCapMax)}</Tag>
           )}
           {trendLengthFilterApplied && (
-            <Tag color="geekblue" closable onClose={resetTrendLength}>Signal Streak: {trendLengthMin} - {trendLengthMax}</Tag>
+            <Tag color="geekblue" closable onClose={() => {
+              formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: defaultFormState.trendLengthMin })
+              formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: defaultFormState.trendLengthMax })
+            }}>Signal Streak: {formState.trendLengthMin} - {formState.trendLengthMax}</Tag>
           )}
           {atrPeriodsFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => setAtrPeriods(defaultAtrPeriods)}>ATR periods: {atrPeriods}</Tag>
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_ATR_PERIODS', payload: defaultFormState.atrPeriods })}>ATR periods: {formState.atrPeriods}</Tag>
           )}
           {multiplierFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => setMultiplier(defaultMultiplier)}>Multiplier: {multiplier}</Tag>
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_MULTIPLIER', payload: defaultFormState.multiplier })}>Multiplier: {formState.multiplier}</Tag>
           )}
-          {showWeeklySignalsFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => setShowWeeklySignals(defaultShowWeeklySignals)}>Weekly signals</Tag>
+          {formState.weeklySignals && (
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly signals</Tag>
           )}
         </Col>
       </Row>
@@ -325,8 +400,8 @@ export default function Home({ coinsData, categories }) {
               ref={inputRef}
               placeholder="Bitcoin, ETH, Polygon..."
               allowClear
-              value={coinNameFilter}
-              onChange={(e) => setCoinName(e.target.value)}
+              value={portfolioInputValue}
+              onChange={(e) => setPortfolioInputValue(e.target.value)}
               size="large"
             />
           </Col>
@@ -334,8 +409,8 @@ export default function Home({ coinsData, categories }) {
             <label className={styles.formLabel} htmlFor="signal">Signal</label>
             <Select
               size="large"
-              value={trendType}
-              onChange={setTrendType}
+              value={formState.trendType}
+              onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
               id="signal"
               className={styles.formSelect}
             >
@@ -350,12 +425,12 @@ export default function Home({ coinsData, categories }) {
             <Select
               showSearch
               size="large"
-              value={categoryFilter}
-              onChange={setCategory}
+              value={formState.category}
+              onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
               id="category"
               className={styles.formSelect}
             >
-              <Option value={defaultCategory} key="all">All</Option>
+              <Option value={defaultFormState.category} key="all">All</Option>
               <OptGroup label="Popular categories">
                 {
                   priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
@@ -398,7 +473,7 @@ export default function Home({ coinsData, categories }) {
           </Button>,
           <Button
             key="reset"
-            onClick={resetFilters}
+            onClick={() => formDispatch({ type: 'RESET' })}
             size="large"
             danger
             type="primary"
@@ -413,7 +488,7 @@ export default function Home({ coinsData, categories }) {
             <span>Weekly Signals</span>
           </Col>
           <Col>
-            <Switch checked={showWeeklySignals} onChange={setShowWeeklySignals} />
+            <Switch checked={formState.weeklySignals} onChange={(checked) => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: checked })} />
           </Col>
         </Row>
         <Row className={styles.explainerRow}>
@@ -425,11 +500,11 @@ export default function Home({ coinsData, categories }) {
         <Row className={styles.formRow} gutter={16}>
           <Col span={12} className="gutter-row">
             <label className={styles.formLabel} htmlFor="atr-periods">ATR periods</label>
-            <Input size="large" onChange={setValidAtrPeriods} value={atrPeriods} id="atr-periods"></Input>
+            <Input size="large" onChange={(e) => formDispatch({ type: 'SET_ATR_PERIODS', payload: e.target.value })} value={formState.atrPeriods} id="atr-periods"></Input>
           </Col>
           <Col span={12} className="gutter-row">
             <label className={styles.formLabel} htmlFor="multiplier">Multiplier</label>
-            <Input size="large" onChange={setValidMulitiplier} value={multiplier} id="multiplier"></Input>
+            <Input size="large" onChange={(e) => formDispatch({ type: 'SET_MULTIPLIER', payload: e.target.value })} value={formState.multiplier} id="multiplier"></Input>
           </Col>
         </Row>
         <Divider />
@@ -443,8 +518,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={classnames(styles.filterModalInput)}
               size="large"
-              onChange={setValidMarketCapMin}
-              value={marketCapMin}
+              onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: e.target.value })}
+              value={formState.marketCapMin}
               placeholder="$1"
               aria-label="Market Cap Min"
             />
@@ -456,8 +531,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={classnames(styles.filterModalInput)}
               size="large"
-              onChange={setValidMarketCapMax}
-              value={marketCapMax}
+              onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: e.target.value })}
+              value={formState.marketCapMax}
               placeholder="$100,000"
               aria-label="Market Cap Max"
             />
@@ -488,8 +563,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={styles.filterModalInput}
               size="large"
-              onChange={setValidTrendLengthMin}
-              value={trendLengthMin}
+              onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: e.target.value }) }}
+              value={formState.trendLengthMin}
               placeholder="1"
               aria-label="Trend Length Min"
             />
@@ -501,8 +576,8 @@ export default function Home({ coinsData, categories }) {
             <Input
               className={styles.filterModalInput}
               size="large"
-              onChange={setValidTrendLengthMax}
-              value={trendLengthMax}
+              onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: e.target.value }) }}
+              value={formState.trendLengthMax}
               placeholder="50"
               aria-label="Trend Length Max"
             />
@@ -526,18 +601,18 @@ export default function Home({ coinsData, categories }) {
       <Row className={styles.tableGridRow}>
         <HomePageTable
           coinsData={coinsData}
-          marketCapMax={marketCapMax}
-          marketCapMin={marketCapMin}
-          trendLengthMin={trendLengthMin}
-          trendLengthMax={trendLengthMax}
-          coinNameFilter={coinNameFilter}
-          coinsFilter={coinsFilter}
-          category={categoryFilter}
-          trendType={trendType}
-          defaultCategory={defaultCategory}
-          atrPeriods={atrPeriods}
-          multiplier={multiplier}
-          showWeeklySignals={showWeeklySignals}
+          marketCapMax={formState.marketCapMax}
+          marketCapMin={formState.marketCapMin}
+          trendLengthMin={formState.trendLengthMin}
+          trendLengthMax={formState.trendLengthMax}
+          portfolio={formState.portfolio}
+          portfolioFilter={portfolioFilter}
+          category={formState.category}
+          trendType={formState.trendType}
+          defaultCategory={defaultFormState.category}
+          atrPeriods={formState.atrPeriods}
+          multiplier={formState.multiplier}
+          showWeeklySignals={formState.weeklySignals}
         />
       </Row>
     </Content>
