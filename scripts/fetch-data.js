@@ -121,7 +121,7 @@ const script = async () => {
       twitterFollowers: coinData.community_data.twitter_followers,
       ath: coinData.market_data.ath.usd,
       atl: coinData.market_data.atl.usd,
-      marketCap: coinData.market_data.market_cap.usd,
+      marketCap: Math.ceil(coinData.market_data.market_cap.usd),
       marketCapRank: coinData.market_data.market_cap_rank,
       fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd,
       circulatingSupply: coinData.market_data.circulating_supply,
