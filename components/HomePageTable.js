@@ -209,7 +209,7 @@ const HomePageTable = ({
         })
         return (
           <>
-            {formatter.format(marketCap)}
+            {formatter.format(Number(marketCap))}
           </>
         )
       }
