@@ -105,7 +105,7 @@ export default function Coin(coin) {
         return new Intl.NumberFormat([], {
           style: 'currency',
           currency: 'USD',
-          currencyDisplay: 'narrowSymbol'
+          currencyDisplay: 'symbol'
         }).format(volume)
       }
     })
@@ -233,24 +233,24 @@ export default function Coin(coin) {
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>Market Cap</Title>
               <Space wrap>
-                <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.marketCap)}</span>
+                <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>All-Time High</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
+              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
             </div>
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>All-Time Low</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
+              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
             </div>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
             { coin.fullyDilutedValuation ? (
               <div className={styles.labelValueGroup}>
                 <Title level={3} className={styles.label}>Fully Diluted Valuation</Title>
-                <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', notation }).format(coin.fullyDilutedValuation)}</div>
+                <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
             <div className={styles.labelValueGroup}>
