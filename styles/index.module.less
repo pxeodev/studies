@@ -129,10 +129,20 @@
 
 .signalExplanation {
   margin-left: 15px;
-}
 
-.signalExplanation svg {
-  width: 10px;
+  svg {
+    width: 10px;
+  }
+
+  path {
+    fill: @cr-icon-fill;
+  }
+
+  &:hover {
+    path {
+      fill: @cr-icon-fill-hover;
+    }
+  }
 }
 
 .tableTag {

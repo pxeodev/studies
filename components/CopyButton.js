@@ -1,5 +1,6 @@
 import { CopyFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
+import styles from '../styles/copyButton.module.less';
 
 import addToClipboard from '../utils/addToClipboard';
 
@@ -15,7 +16,7 @@ const CopyButton = ({ text, after }) => {
 
     copy()
   }, [after, text]);
-  return <CopyFilled onClick={onClick} color="red"/>
+  return <CopyFilled onClick={onClick} className={styles.icon}/>
 }
 
 export default CopyButton
