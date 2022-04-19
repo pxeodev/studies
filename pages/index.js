@@ -379,7 +379,7 @@ export default function Home({ coinsData, categories }) {
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_MULTIPLIER', payload: defaultFormState.multiplier })}>Multiplier: {formState.multiplier}</Tag>
           )}
           {formState.weeklySignals && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly signals</Tag>
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly trends</Tag>
           )}
         </Col>
       </Row>
@@ -406,7 +406,7 @@ export default function Home({ coinsData, categories }) {
             />
           </Col>
           <Col xs={24} md={6} className={styles.formCol}>
-            <label className={styles.formLabel} htmlFor="signal">Signal</label>
+            <label className={styles.formLabel} htmlFor="signal">Trend</label>
             <Select
               size="large"
               value={formState.trendType}
@@ -415,9 +415,9 @@ export default function Home({ coinsData, categories }) {
               className={styles.formSelect}
             >
               <Option value={signals.all}>All</Option>
-              <Option value={signals.buy}>Buy</Option>
+              <Option value={signals.buy}>UP</Option>
               <Option value={signals.hodl}>HODL</Option>
-              <Option value={signals.sell}>Sell</Option>
+              <Option value={signals.sell}>DOWN</Option>
             </Select>
           </Col>
           <Col xs={24} md={6} className={styles.formCol}>
@@ -485,7 +485,7 @@ export default function Home({ coinsData, categories }) {
       >
         <Row className={styles.formRow} justify="space-between">
           <Col>
-            <span>Weekly Signals</span>
+            <span>Weekly trends</span>
           </Col>
           <Col>
             <Switch checked={formState.weeklySignals} onChange={(checked) => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: checked })} />
@@ -493,7 +493,7 @@ export default function Home({ coinsData, categories }) {
         </Row>
         <Row className={styles.explainerRow}>
           <Col>
-            <Text type="secondary">Weekly signals only update at 00:00 UTC each Monday. Selecting this option will override the Default signals.</Text>
+            <Text type="secondary">Weekly trends only update at 00:00 UTC each Monday. Selecting this option will override the Default trends.</Text>
           </Col>
         </Row>
         <Divider />
@@ -555,7 +555,7 @@ export default function Home({ coinsData, categories }) {
         <Divider />
         <Row>
           <Col>
-            <div className={styles.formLabel}>Signal Streak</div>
+            <div className={styles.formLabel}>Trend Streak</div>
           </Col>
         </Row>
         <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>

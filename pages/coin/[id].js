@@ -34,11 +34,11 @@ export default function Coin(coin) {
   let signalTag
   switch (coin.superSuperTrend) {
     case signals.buy:
-      signal = 'Buy'
+      signal = 'UP'
       signalTag = <a href="#markets"><BuyTag /></a>
       break;
     case signals.sell:
-      signal = 'Sell'
+      signal = 'DOWN'
       signalTag = <a href="#markets"><SellTag /></a>
       break;
     default:
@@ -132,7 +132,7 @@ export default function Coin(coin) {
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${signal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${signal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
-  const metaDescription = `Coinrotator issues a daily signal for ${coin.name}. Always be on the right side of the cryptomarket.`
+  const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. Always be on the right side of the cryptomarket.`
 
   return (
     <>
@@ -170,7 +170,7 @@ export default function Coin(coin) {
                 placement={screens.sm ? 'bottom' : 'bottomRight'}
                 overlayClassName={styles.tooltip}
                 trigger={isHoverable ? 'hover' : 'click'}
-                title="Signal is generated daily at 00:00 UTC. Markets may move without a signal change, please use proper risk management."
+                title="Trend is generated daily at 00:00 UTC. Markets may move without a trend change, please use proper risk management."
               >
                 <InfoCircleFilled className={styles.signalWarning} />
               </Tooltip>
@@ -192,7 +192,7 @@ export default function Coin(coin) {
                 placement={screens.sm ? 'bottom' : 'bottomRight'}
                 overlayClassName={styles.tooltip}
                 trigger={isHoverable ? 'hover' : 'click'}
-                title="The numbers in parenthesis indicate the signal streak - how many days a coin has been a Buy or Sell against ETH, BTC or USD."
+                title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD."
               >
                 <InfoCircleFilled className={styles.signalWarning} />
               </Tooltip>

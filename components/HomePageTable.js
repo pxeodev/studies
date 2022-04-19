@@ -143,11 +143,11 @@ const HomePageTable = ({
     {
       width: 120,
       title: <>
-        <span>Signal</span>
+        <span>Trend</span>
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include Buy, Sell and HODL. They are updated once daily. NFA."
+            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily. NFA."
         >
           <QuestionCircleFilled className={styles.signalExplanation} />
         </Tooltip>
