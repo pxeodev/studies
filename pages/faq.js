@@ -58,7 +58,7 @@ export default function Faq() {
           Q2 2022
         </Panel>
         <Panel header="Why does my coin say 'Up', but it's down a lot today?" key="8">
-          Coinrotator issues trends once a day after the daily bar closes at 00:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage day trading based on the screener.
+          Coinrotator issues trends once a day after the daily bar closes at 00:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage blindly following the trend alerts based on the screener.
         </Panel>
       </Collapse>
     </Content>);
