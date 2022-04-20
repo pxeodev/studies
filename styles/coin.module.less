@@ -15,6 +15,10 @@
   margin-right: 0 !important;
   line-height: 20px !important;
   padding: 2px 4px !important;
+
+  @media screen and (max-width: @screen-md) {
+    font-size: 10px;
+  }
 }
 
 .trendKey {
@@ -52,17 +56,23 @@
 
 
 .nameCard {
-  width: 25%;
+  width: 100%;
+}
 
-  @media screen and (max-width: @screen-sm) {
+.dailyPriceCard {
+  width: unset;
+
+  @media screen and (max-width: @screen-lg) {
     width: 100%;
+    box-shadow: none;
   }
 }
 
-.priceDetailCard {
-  width: 50%;
+.weeklyPriceCard {
+  width: unset;
+  box-shadow: none;
 
-  @media screen and (max-width: @screen-sm) {
+  @media screen and (max-width: @screen-lg) {
     width: 100%;
   }
 }
@@ -194,7 +204,7 @@
   }
 }
 
-.nameCard, .priceCard, .dataCard1, .dataCard2, .tagCard, .similarCoinCard {
+.priceCard, .dataCard1, .dataCard2, .tagCard, .similarCoinCard {
   @media screen and (max-width: @screen-lg) {
     width: 50%;
   }
@@ -204,7 +214,7 @@
   }
 }
 
-.priceDetailCard, .contractCard {
+.contractCard {
   @media screen and (max-width: @screen-lg) {
     width: 100%;
   }
