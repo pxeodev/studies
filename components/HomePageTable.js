@@ -62,17 +62,20 @@ const HomePageTable = ({
            matchesCategory
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
-    let trends, superSupertrend;
     if (showWeeklySignals) {
-      [trends, superSupertrend] = weeklySuperTrends[coinData.id]
-    } else {
-      [trends, superSupertrend] = superTrends[coinData.id]
+      const [weeklyTrends, weeklySuperSuperTrend] = weeklySuperTrends[coinData.id]
+      coinData = {
+        ...coinData,
+        weeklyTrends,
+        weeklySuperSuperTrend,
+      }
     }
+    const [dailyTrends, dailySuperSuperTrend] = superTrends[coinData.id]
 
     return {
       ...coinData,
-      trends,
-      superSupertrend,
+      dailyTrends,
+      dailySuperSuperTrend,
     }
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
@@ -81,7 +84,7 @@ const HomePageTable = ({
     let max = parseInt(trendLengthMax)
     max = isFinite(max) ? max : Number.POSITIVE_INFINITY
 
-    const trendValues = Object.values(coinData.trends)
+    const trendValues = Object.values(coinData.dailyTrends)
     const trends = trendValues.filter(trend => trend[0].length)
     if (trends.length === 0) {
       return false;
@@ -95,11 +98,11 @@ const HomePageTable = ({
     if (trendType === signals.all) {
       return true
     } else if (trendType === signals.buy) {
-      return coinData.superSupertrend === signals.buy
+      return coinData.dailySuperSuperTrend === signals.buy
     } else if (trendType === signals.hodl) {
-      return coinData.superSupertrend === signals.hodl
+      return coinData.dailySuperSuperTrend === signals.hodl
     } else if (trendType === signals.sell) {
-      return coinData.superSupertrend === signals.sell
+      return coinData.dailySuperSuperTrend === signals.sell
     }
   })
 
@@ -115,13 +118,14 @@ const HomePageTable = ({
       dailyChange: coinData.dailyChange,
       weeklyChange: coinData.weeklyChange,
       marketCap: coinData.marketCap,
-      superSupertrend: coinData.superSupertrend,
+      dailySuperSuperTrend: coinData.dailySuperSuperTrend,
+      weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
     }
   })
 
   const screens = useBreakPoint();
 
-  const columns = [
+  let columns = [
     {
       title: 'Coin',
       dataIndex: 'coinData',
@@ -143,7 +147,7 @@ const HomePageTable = ({
     {
       width: 120,
       title: <>
-        <span>Trend</span>
+        <span>{showWeeklySignals ? 'Daily ' : ''}Trend</span>
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
@@ -152,19 +156,19 @@ const HomePageTable = ({
           <QuestionCircleFilled className={styles.signalExplanation} />
         </Tooltip>
       </>,
-      dataIndex: 'superSupertrend',
+      dataIndex: 'dailySuperSuperTrend',
       sorter: (a, b, sortOrder) => {
-        if (a.superSupertrend === b.superSupertrend) {
+        if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
           if (sortOrder === 'ascend') {
             return a.marketCap < b.marketCap ? 1 : -1
           } else {
             return b.marketCap < a.marketCap ? 1 : -1
           }
         } else {
-          if (a.superSupertrend === signals.sell) {
+          if (a.dailySuperSuperTrend === signals.sell) {
             return -1
-          } else if (a.superSupertrend === signals.hodl) {
-            if (b.superSupertrend === signals.sell) {
+          } else if (a.dailySuperSuperTrend === signals.hodl) {
+            if (b.dailySuperSuperTrend === signals.sell) {
               return 1
             } else {
               return -1
@@ -174,9 +178,9 @@ const HomePageTable = ({
           }
         }
       },
-      render: (superSupertrend) => {
+      render: (dailySuperSupertrend) => {
         let tag;
-        switch (superSupertrend) {
+        switch (dailySuperSupertrend) {
           case signals.buy:
             tag = <BuyTag className={styles.tableTag} />
             break
@@ -194,57 +198,107 @@ const HomePageTable = ({
           </>
         )
       }
-    },
-    {
-      title: 'Market Cap',
-      dataIndex: 'marketCap',
-      width: 150,
-      sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
-      render: (marketCap) => {
-        const formatter = new Intl.NumberFormat([], {
-          notation: 'compact',
-          compactDisplay: 'long',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
+    }
+  ];
+
+  if (showWeeklySignals) {
+    columns.push({
+      width: 120,
+      title: 'Weekly Trend',
+      dataIndex: 'weeklySuperSuperTrend',
+      sorter: (a, b, sortOrder) => {
+        if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
+          if (sortOrder === 'ascend') {
+            return a.marketCap < b.marketCap ? 1 : -1
+          } else {
+            return b.marketCap < a.marketCap ? 1 : -1
+          }
+        } else {
+          if (a.weeklySuperSuperTrend === signals.sell) {
+            return -1
+          } else if (a.weeklySuperSuperTrend === signals.hodl) {
+            if (b.weeklySuperSuperTrend === signals.sell) {
+              return 1
+            } else {
+              return -1
+            }
+          } else {
+            return 1
+          }
+        }
+      },
+      render: (weeklySuperSuperTrend) => {
+        let tag;
+        switch (weeklySuperSuperTrend) {
+          case signals.buy:
+            tag = <BuyTag className={styles.tableTag} />
+            break
+          case signals.sell:
+            tag = <SellTag className={styles.tableTag} />
+            break
+          default:
+            tag = <HodlTag className={styles.tableTag} />
+        }
+
         return (
           <>
-            {formatter.format(Number(marketCap))}
+            {tag}
+
           </>
         )
       }
-    },
-    {
-      title: '24h Change',
-      dataIndex: 'dailyChange',
-      width: 130,
-      sorter: (a, b) => a.dailyChange - b.dailyChange,
-      render: (dailyChange) => {
-        const formatter = new Intl.NumberFormat([], {
-          notation: 'compact',
-          compactDisplay: 'long',
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 2
-        })
-        return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: dailyChange >= 0 })}>{formatter.format(dailyChange)}%</span>)
-      }
-    },
-    {
-      title: '7d Change',
-      dataIndex: 'weeklyChange',
-      width: 130,
-      sorter: (a, b) => a.weeklyChange - b.weeklyChange,
-      render: (weeklyChange) => {
-        const formatter = new Intl.NumberFormat([], {
-          notation: 'compact',
-          compactDisplay: 'long',
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 2,
-        })
-        return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{formatter.format(weeklyChange)}%</span>)
-      }
+    })
+  }
+
+  columns.push({
+    title: 'Market Cap',
+    dataIndex: 'marketCap',
+    width: 150,
+    sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
+    render: (marketCap) => {
+      const formatter = new Intl.NumberFormat([], {
+        notation: 'compact',
+        compactDisplay: 'long',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+      return (
+        <>
+          {formatter.format(Number(marketCap))}
+        </>
+      )
     }
-  ];
+  },
+  {
+    title: '24h Change',
+    dataIndex: 'dailyChange',
+    width: 130,
+    sorter: (a, b) => a.dailyChange - b.dailyChange,
+    render: (dailyChange) => {
+      const formatter = new Intl.NumberFormat([], {
+        notation: 'compact',
+        compactDisplay: 'long',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 2
+      })
+      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: dailyChange >= 0 })}>{formatter.format(dailyChange)}%</span>)
+    }
+  },
+  {
+    title: '7d Change',
+    dataIndex: 'weeklyChange',
+    width: 130,
+    sorter: (a, b) => a.weeklyChange - b.weeklyChange,
+    render: (weeklyChange) => {
+      const formatter = new Intl.NumberFormat([], {
+        notation: 'compact',
+        compactDisplay: 'long',
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 2,
+      })
+      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{formatter.format(weeklyChange)}%</span>)
+    }
+  })
 
   // The table rows are 56px high.
   const tableHeight = 9 * 56;

@@ -485,7 +485,7 @@ export default function Home({ coinsData, categories }) {
       >
         <Row className={styles.formRow} justify="space-between">
           <Col>
-            <span>Weekly trends</span>
+            <span>Show weekly trends</span>
           </Col>
           <Col>
             <Switch checked={formState.weeklySignals} onChange={(checked) => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: checked })} />
@@ -493,7 +493,7 @@ export default function Home({ coinsData, categories }) {
         </Row>
         <Row className={styles.explainerRow}>
           <Col>
-            <Text type="secondary">Weekly trends only update at 00:00 UTC each Monday. Selecting this option will override the Default trends.</Text>
+            <Text type="secondary">Weekly trends update each Monday at 00:00 UTC.</Text>
           </Col>
         </Row>
         <Divider />
