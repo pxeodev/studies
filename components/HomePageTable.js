@@ -146,7 +146,7 @@ const HomePageTable = ({
     },
     {
       width: 120,
-      title: <>
+      title: <span className={styles.signalTitle}>
         <span>{showWeeklySignals ? 'Daily ' : ''}Trend</span>
         <Tooltip
             placement={'right'}
@@ -155,7 +155,7 @@ const HomePageTable = ({
         >
           <QuestionCircleFilled className={styles.signalExplanation} />
         </Tooltip>
-      </>,
+      </span>,
       dataIndex: 'dailySuperSuperTrend',
       sorter: {
         compare: (a, b, sortOrder) => {
