@@ -138,7 +138,7 @@ export default function Home({ coinsData, categories }) {
         } else {
           newMarketCapMin = parseInt(action.payload)
           if (!isFinite(newMarketCapMin)) {
-            break;
+            return state;
           }
         }
 
@@ -153,7 +153,7 @@ export default function Home({ coinsData, categories }) {
         } else {
           newMarketCapMax = parseInt(action.payload)
           if (!isFinite(newMarketCapMax)) {
-            break;
+            return state;
           }
         }
 
@@ -168,7 +168,7 @@ export default function Home({ coinsData, categories }) {
         } else {
           trendLengthMin = parseInt(action.payload)
           if (!isFinite(trendLengthMin)) {
-            break;
+            return state;
           }
         }
 
@@ -183,7 +183,7 @@ export default function Home({ coinsData, categories }) {
         } else {
           trendLengthMax = parseInt(action.payload)
           if (!isFinite(trendLengthMax)) {
-            break;
+            return state;
           }
         }
 
@@ -194,7 +194,7 @@ export default function Home({ coinsData, categories }) {
       case 'SET_ATR_PERIODS':
         const newAtrPeriods = parseFloat(action.payload)
         if (!isFinite(newAtrPeriods)) {
-          break
+          return state;
         }
 
         return {
@@ -204,7 +204,7 @@ export default function Home({ coinsData, categories }) {
       case 'SET_MULTIPLIER':
         const newMultiplier = parseFloat(action.payload)
         if (!isFinite(newMultiplier)) {
-          break
+          return state;
         }
 
         return {
@@ -212,9 +212,9 @@ export default function Home({ coinsData, categories }) {
           multiplier: newMultiplier
         }
       case 'RESET':
-        return defaultFormState
+        return defaultFormState;
       default:
-        return state
+        return state;
     }
   }, defaultFormState)
   useEffect(() => {
