@@ -157,26 +157,29 @@ const HomePageTable = ({
         </Tooltip>
       </>,
       dataIndex: 'dailySuperSuperTrend',
-      sorter: (a, b, sortOrder) => {
-        if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
-          if (sortOrder === 'ascend') {
-            return a.marketCap < b.marketCap ? 1 : -1
-          } else {
-            return b.marketCap < a.marketCap ? 1 : -1
-          }
-        } else {
-          if (a.dailySuperSuperTrend === signals.sell) {
-            return -1
-          } else if (a.dailySuperSuperTrend === signals.hodl) {
-            if (b.dailySuperSuperTrend === signals.sell) {
-              return 1
+      sorter: {
+        compare: (a, b, sortOrder) => {
+          if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
+            if (sortOrder === 'ascend') {
+              return a.marketCap < b.marketCap ? 1 : -1
             } else {
-              return -1
+              return b.marketCap < a.marketCap ? 1 : -1
             }
           } else {
-            return 1
+            if (a.dailySuperSuperTrend === signals.sell) {
+              return -1
+            } else if (a.dailySuperSuperTrend === signals.hodl) {
+              if (b.dailySuperSuperTrend === signals.sell) {
+                return 1
+              } else {
+                return -1
+              }
+            } else {
+              return 1
+            }
           }
-        }
+        },
+        multiple: 1,
       },
       render: (dailySuperSupertrend) => {
         let tag;
@@ -206,15 +209,11 @@ const HomePageTable = ({
       width: 120,
       title: 'Weekly Trend',
       dataIndex: 'weeklySuperSuperTrend',
-      sorter: (a, b, sortOrder) => {
-        if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
-          if (sortOrder === 'ascend') {
-            return a.marketCap < b.marketCap ? 1 : -1
-          } else {
-            return b.marketCap < a.marketCap ? 1 : -1
-          }
-        } else {
-          if (a.weeklySuperSuperTrend === signals.sell) {
+      sorter: {
+        compare: (a, b) => {
+          if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
+            return 0
+          } else if (a.weeklySuperSuperTrend === signals.sell) {
             return -1
           } else if (a.weeklySuperSuperTrend === signals.hodl) {
             if (b.weeklySuperSuperTrend === signals.sell) {
@@ -225,7 +224,8 @@ const HomePageTable = ({
           } else {
             return 1
           }
-        }
+        },
+        multiple: 2,
       },
       render: (weeklySuperSuperTrend) => {
         let tag;
