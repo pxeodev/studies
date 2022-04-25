@@ -13,8 +13,8 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import prisma from '../lib/prisma'
 import styles from '../styles/index.module.less'
 import convertToDailySignals from '../utils/convertToDailySignals';
-import useBreakPoint from '../utils/useBreakPoint';
-import useIsHoverable from '../utils/useIsHoverable';
+import useBreakPoint from '../hooks/useBreakPoint';
+import useIsHoverable from '../hooks/useIsHoverable';
 import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
 import HomePageTable from '../components/HomePageTable';
 import { getCategories } from '../utils/categories';

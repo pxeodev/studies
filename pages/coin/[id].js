@@ -16,14 +16,14 @@ import getTrends from '../../utils/getTrends'
 import getChainsData from '../../utils/getChainsData'
 import getPlatformData from '../../utils/getPlatformData'
 import convertToDailySignals from '../../utils/convertToDailySignals'
-import useBreakPoint from '../../utils/useBreakPoint'
+import useBreakPoint from '../../hooks/useBreakPoint'
 import BuyTag from '../../components/BuyTag'
 import ContractTagAndMore from '../../components/ContractTagAndMore';
 import SellTag from '../../components/SellTag'
 import HodlTag from '../../components/HodlTag'
 import globalData from '../../lib/globalData';
 import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
-import useIsHoverable from '../../utils/useIsHoverable';
+import useIsHoverable from '../../hooks/useIsHoverable';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
 
 const { Content } = Layout;
@@ -254,7 +254,7 @@ export default function Coin(coin) {
               </a>
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color={variables.fakeBlack} className={styles.linkTag}>
+                  <Tag icon={<GlobalOutlined />} color={variables.black} className={styles.linkTag}>
                     {url}
                   </Tag>
                 </a>

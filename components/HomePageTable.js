@@ -11,8 +11,8 @@ import HodlTag from './HodlTag'
 import styles from '../styles/index.module.less'
 import { signals } from '../utils/variables'
 import getTrends from '../utils/getTrends'
-import useBreakPoint from '../utils/useBreakPoint';
-import useIsHoverable from '../utils/useIsHoverable';
+import useBreakPoint from '../hooks/useBreakPoint'
+import useIsHoverable from '../hooks/useIsHoverable';
 import classNames from 'classnames';
 
 const HomePageTable = ({

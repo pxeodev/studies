@@ -2,7 +2,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import { useCallback } from 'react';
 import { notification } from 'antd'
 
-import useChainId from '../utils/useChainId';
+import useChainId from '../hooks/useChainId';
 
 const MetaMaskButtonWithEthereum = ({ symbol, address, chainId, decimals=18, image, className }) => {
   const currentChainId = useChainId()

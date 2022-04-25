@@ -4,6 +4,10 @@
   line-height: 30px !important;
   margin-right: 0 !important;
   cursor: pointer;
+
+  &:hover {
+    border: 1px solid @cr-primary-color;
+  }
 }
 
 .icon {
@@ -31,8 +35,8 @@
 .platformSelector {
   line-height: 32px;
 
-  &:global(.ant-select-selection-placeholder) {
-    color: black;
+  span {
+    color: @text-color;
   }
 }
 

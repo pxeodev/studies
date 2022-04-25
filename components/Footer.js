@@ -3,7 +3,7 @@ import { Layout, Typography, Row, Col, Space, Divider } from 'antd'
 
 import styles from '../styles/footer.module.less'
 import Logo from './Logo'
-import useBreakPoint from '../utils/useBreakPoint'
+import useBreakPoint from '../hooks/useBreakPoint'
 
 const Footer = ({ topCoins, topCategories }) => {
   const { Footer: AntFooter } = Layout;
