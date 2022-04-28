@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }) {
       {googleAnalytics}
       <Head>
         <title key="title">CoinRotator - The Most Effective Altcoin Trend Screener</title>
-        <meta name="description" key="description" content="Coinrotator screens the top 1000 crypto coins daily for fresh trends. Always be on the right side of the market."/>
+        <meta name="description" key="description" content="Coinrotator screens the top 1000 crypto coins daily for trends. With up to date tokenomics data spot hidden opportunites that inform you earlier than the crowd."/>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="canonical" href={currentUrl} />
       </Head>
