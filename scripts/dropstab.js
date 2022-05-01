@@ -13,6 +13,33 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
+const fetchCoinData = async (url, coinId) => {
+  console.log('Fetch launch data for', coin.symbol);
+  await page.goto(url, {waitUntil: 'domcontentloaded'});
+
+  const hasRoi = await page.evaluate(() => window.find("ROI since ICO"));
+  if (!hasRoi) { return; }
+
+  let price = await page.$eval('[aria-label="Price Statistics"] div:nth-child(2) dd', (element) => element.innerText);
+  price = price.replace('$', '').trim();
+
+  const launchDates = await page.$eval('[aria-label="Price Statistics"] div:nth-child(3) dd', (element) => element.innerText);
+  let [launchDateStart, launchDateEnd] = launchDates.split(' - ');
+  launchDateStart = new Date(Date.parse(launchDateStart));
+  launchDateEnd = new Date(Date.parse(launchDateEnd));
+
+  await prisma.coin.update({
+    where: {
+      id: coinId
+    },
+    data: {
+      launch_price: price,
+      launch_date_start: launchDateStart,
+      launch_date_end: launchDateEnd
+    }
+  })
+}
+
 const getDropsTabData = async (page) => {
   await page.goto('https://dropstab.com/', {waitUntil: 'load'});
   await page.waitForTimeout(2000); // Wait for the next button to become interactive
@@ -88,31 +115,7 @@ const dropsTab = async () => {
     for (const coin of coins) {
       const match = dropsTabData.find((drop) => drop.symbol === coin.symbol.toUpperCase());
       if (match) {
-        console.log('Fetch launch data for', coin.symbol);
-        await page.goto(match.url, {waitUntil: 'domcontentloaded'});
-
-        const hasRoi = await page.evaluate(() => window.find("ROI since ICO"));
-
-        if (!hasRoi) { continue; }
-
-        let price = await page.$eval('[aria-label="Price Statistics"] div:nth-child(2) dd', (element) => element.innerText);
-        price = price.replace('$', '').trim();
-
-        const launchDates = await page.$eval('[aria-label="Price Statistics"] div:nth-child(3) dd', (element) => element.innerText);
-        let [launchDateStart, launchDateEnd] = launchDates.split(' - ');
-        launchDateStart = new Date(Date.parse(launchDateStart));
-        launchDateEnd = new Date(Date.parse(launchDateEnd));
-
-        await prisma.coin.update({
-          where: {
-            id: coin.id
-          },
-          data: {
-            launch_price: price,
-            launch_date_start: launchDateStart,
-            launch_date_end: launchDateEnd
-          }
-        })
+        await fetchCoinData(match.url, coin.id);
       }
     }
   } catch (error) {
