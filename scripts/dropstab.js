@@ -97,10 +97,6 @@ const dropsTab = async () => {
     const page = await browser.newPage();
 
     const dropsTabData = await getDropsTabData(page);
-    await prisma.dropsTab.createMany({
-      data: dropsTabData,
-      skipDuplicates: true
-    })
 
     const coins = await prisma.coin.findMany({
       select: {

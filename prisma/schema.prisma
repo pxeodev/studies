@@ -66,8 +66,3 @@ model CoinTime {
   marketCap BigInt
   volume BigInt
 }
-
-model DropsTab {
-  url String
-  symbol String @id
-}
