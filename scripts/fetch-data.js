@@ -110,6 +110,7 @@ const script = async () => {
     const dailyChange = coinData.market_data.price_change_percentage_24h || undefined
     const weeklyChange = coinData.market_data.price_change_percentage_7d || undefined
     const marketCap = Math.ceil(coinData.market_data.market_cap.usd)
+    const volume = Math.ceil(coinData.market_data.total_volume.usd)
     const dbCoinData = {
       symbol,
       name: coinData.name,
@@ -147,7 +148,7 @@ const script = async () => {
         coinId,
         date: new Date(),
         marketCap,
-        volume: coinData.market_data.total_volume.usd,
+        volume,
       }
     })
 
