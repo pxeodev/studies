@@ -38,6 +38,9 @@ model Coin {
   launch_price Decimal?
   launch_date_start DateTime?
   launch_date_end DateTime?
+  launch_roi_usd Decimal?
+  launch_roi_eth Decimal?
+  launch_roi_btc Decimal?
 
   @@index([marketCapRank])
 }
