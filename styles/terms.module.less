@@ -1,47 +1,25 @@
+@import (reference) './base.module.less';
 @import './variables.module.less';
 
-.content {
-  display: flex;
-  flex-direction: column;
-  max-width: 1440px;
-  margin: 0 auto !important;
-  padding: 16px 24px 64px 24px;
-
-  @media (max-width: @screen-md) {
-    padding: 16px 24px 32px 24px;
-  }
-
-  @media (max-width: @screen-sm) {
-    padding: 16px 16px 32px 16px;
-  }
-}
-
-.breadcrumbs {
-  margin-bottom: 48px;
-
-  @media (max-width: @screen-md) {
-    margin-bottom: 32px;
-  }
-}
-
 .title {
+  &:extend(.title);
+
   text-align: center;
-  font-size: 30px !important;
-  line-height: 38px !important;
   font-weight: normal !important;
   margin-bottom: 24px !important;
 
   @media (max-width: @screen-md) {
     margin-bottom: 16px !important;
   }
-}
 
-.termsTitleBoldPart {
-  font-weight: 600;
+  .bold {
+    font-weight: 600;
+  }
 }
 
 .subtitle {
   &:extend(.title);
+
   margin-top: 24px !important;
 
   @media (max-width: @screen-md) {
@@ -50,17 +28,10 @@
 }
 
 .paragraph {
-  font-size: 16px !important;
-  line-height: 24px !important;
-  margin-bottom: 24px !important;
-
+  &:extend(.paragraph);
 
   &:last-child {
     margin-bottom: 0 !important;
-  }
-
-  @media (max-width: @screen-md) {
-    margin-bottom: 16px !important;
   }
 }
 

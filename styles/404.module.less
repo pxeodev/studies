@@ -1,12 +1,11 @@
+@import (reference) './base.module.less';
 @import './variables.module.less';
 
-.content {
-  display: flex;
-  flex-direction: column;
+.container {
+  &:extend(.container);
+
   justify-content: center;
   align-items: center;
-  max-width: 1440px;
-  margin: 0 auto !important;
   padding: 24px;
   min-height: calc(100vh - 286px - 48px);
 
@@ -22,16 +21,9 @@
   filter: grayscale(1);
 }
 
-.text {
+.textWrapper {
   margin: 24px 0;
   text-align: center;
-}
-
-.title {
-  margin-bottom: 12px !important;
-  font-size: 30px;
-  line-height: 38px;
-  font-weight: 600;
 }
 
 .paragraph {
