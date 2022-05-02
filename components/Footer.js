@@ -1,23 +1,28 @@
+// TP
 import Link from 'next/link'
 import { Layout, Typography, Row, Col, Space, Divider } from 'antd'
 
-import styles from '../styles/footer.module.less'
+// Components and Hooks
 import Logo from './Logo'
 import useBreakPoint from '../hooks/useBreakPoint'
 
+// Styles
+import footerStyles from '../styles/footer.module.less'
+
+// Code
 const Footer = ({ topCoins, topCategories }) => {
   const { Footer: AntFooter } = Layout;
   const { Text, Paragraph, Link: LinkText } = Typography;
 
   const logo = <>
-    <Logo className={styles.logo}/>
-    <Paragraph type="secondary" className={styles.text}>
+    <Logo className={footerStyles.logo}/>
+    <Paragraph type="secondary" className={footerStyles.paragraph}>
       This website is for informational purposes only. Users should not consider anything here as investment or financial advice. NFA.
     </Paragraph>
   </>
 
-  const verticalDivider = <Divider type="vertical" className={styles.verticalDivider} />
-  const horizontalDivider = <Divider className={styles.horizontalDivider} />
+  const verticalDivider = <Divider type="vertical" className={footerStyles.verticalDivider} />
+  const horizontalDivider = <Divider className={footerStyles.horizontalDivider} />
 
   const topCoinsBlock = <>
     <Space direction="vertical" size={12}>
@@ -62,24 +67,24 @@ const Footer = ({ topCoins, topCategories }) => {
   </>
 
   const socialMediaBlock = <>
-    <Space direction="vertical" size={12}>
+    <Space direction="vertical" size={12} className={footerStyles.socials}>
       <Text type="secondary" strong>Social Media</Text>
       <Space size={12}>
-        <a href="https://discord.gg/zfnxHyrhSK" target="_blank" rel="noreferrer" className={styles.socialLink}>
+        <a href="https://discord.gg/zfnxHyrhSK" target="_blank" rel="noreferrer">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/discord.svg" alt="Discord Logo" className={styles.socialImage} width={24} height={19} />
+          <img src="/discord.svg" alt="Discord Logo" width={24} height={19} />
         </a>
-        <a href="https://twitter.com/coinrotatorapp" target="_blank" rel="noreferrer" className={styles.socialLink}>
+        <a href="https://twitter.com/coinrotatorapp" target="_blank" rel="noreferrer">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/twitter.svg" alt="Twitter Logo" className={styles.socialImage} width={24} height={20}/>
+          <img src="/twitter.svg" alt="Twitter Logo" width={24} height={20}/>
         </a>
-        <a href="https://coinrotator.medium.com/" target="_blank" rel="noreferrer" className={styles.socialLink}>
+        <a href="https://coinrotator.medium.com/" target="_blank" rel="noreferrer">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/medium.svg" alt="Medium Logo" className={styles.socialImage} width={24} height={24}/>
+          <img src="/medium.svg" alt="Medium Logo" width={24} height={24}/>
         </a>
-        <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank" rel="noreferrer" className={styles.socialLink}>
+        <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank" rel="noreferrer">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/telegram.svg" alt="Telegram Logo" className={styles.socialImage} width={24} height={24}/>
+          <img src="/telegram.svg" alt="Telegram Logo" width={24} height={24}/>
         </a>
       </Space>
     </Space>
@@ -154,7 +159,7 @@ const Footer = ({ topCoins, topCategories }) => {
             {topCategoriesBlock}
           </Col>
         </Row>
-        <Row gutter={10} className={styles.bottomRow}>
+        <Row gutter={10} className={footerStyles.lastRow}>
           <Col span={12}>
             {quickLinksBlock}
           </Col>
@@ -182,11 +187,11 @@ const Footer = ({ topCoins, topCategories }) => {
           </Col>
         </Row>
         <Row gutter={10}>
-          <Col span={24} className={styles.bottomRow}>
+          <Col span={24} className={footerStyles.lastRow}>
             {quickLinksBlock}
           </Col>
         </Row>
-        <Row gutter={10} className={styles.bottomRow}>
+        <Row gutter={10} className={footerStyles.lastRow}>
           <Col span={24}>
             {socialMediaBlock}
           </Col>
@@ -196,12 +201,12 @@ const Footer = ({ topCoins, topCategories }) => {
   }
 
   return (
-    <AntFooter className={styles.footer}>
-      <div className={styles.mainFooter}>
+    <AntFooter className={footerStyles.wrapper}>
+      <div className={footerStyles.footerPrimary}>
         {grid}
       </div>
-      <Typography.Paragraph className={styles.sponsor} type="secondary">
-        Proudly funded in part by <a className={styles.sponsorLink} href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
+      <Typography.Paragraph className={footerStyles.footerSecondary} type="secondary">
+        Proudly funded in part by <a href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
       </Typography.Paragraph>
     </AntFooter>
   );
