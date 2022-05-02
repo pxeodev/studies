@@ -1,15 +1,11 @@
-// TP
 import Link from 'next/link'
 import { Layout, Typography, Row, Col, Space, Divider } from 'antd'
 
-// Components and Hooks
 import Logo from './Logo'
 import useBreakPoint from '../hooks/useBreakPoint'
 
-// Styles
 import footerStyles from '../styles/footer.module.less'
 
-// Code
 const Footer = ({ topCoins, topCategories }) => {
   const { Footer: AntFooter } = Layout;
   const { Text, Paragraph, Link: LinkText } = Typography;

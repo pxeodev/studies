@@ -1,13 +1,10 @@
-// TP
 import { Breadcrumb, Typography, Layout } from 'antd';
 import Link from 'next/link'
 
-// Styles
 import baseStyles from '../styles/base.module.less'
 import tcStyles from '../styles/terms.module.less'
 import globalData from '../lib/globalData';
 
-// Code
 const { Title, Paragraph } = Typography;
 const { Content } = Layout;
 

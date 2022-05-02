@@ -1,11 +1,8 @@
-// TP
 import Link from 'next/link'
 import classnames from 'classnames'
 
-// Styles
 import logoStyles from '../styles/logo.module.less'
 
-// Code
 const Logo = ({ className = '' }) => {
   return (
     <span className={classnames(logoStyles.logo, className)}>

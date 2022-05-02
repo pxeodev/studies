@@ -1,18 +1,14 @@
-// TP
 import { Breadcrumb, Typography, Collapse, Layout } from 'antd';
 import Link from 'next/link'
 
-// Styles
 import baseStyles from '../styles/base.module.less';
 import faqStyles from '../styles/faq.module.less'
 
-// Components
 import BuyTag from '../components/BuyTag'
 import SellTag from '../components/SellTag'
 import HodlTag from '../components/HodlTag'
 import globalData from '../lib/globalData';
 
-// Code 
 const { Title, Paragraph } = Typography;
 const { Panel } = Collapse;
 const { Content } = Layout;

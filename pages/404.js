@@ -1,14 +1,10 @@
-// TP
 import { Layout, Typography, Button } from 'antd';
 
-// Functions
 import globalData from '../lib/globalData';
 
-// Styles
 import baseStyles from '../styles/base.module.less';
 import notFoundStyles from '../styles/404.module.less';
 
-// Code
 const { Title, Paragraph } = Typography;
 
 export default function Custom404() {

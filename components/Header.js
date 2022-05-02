@@ -1,14 +1,9 @@
-// TP
 import { Layout, Menu } from 'antd'
 
-// Components
 import Logo from './Logo'
 
-// Styles
 import headerStyles from '../styles/header.module.less'
 
-
-// Code
 const Header = () => {
   const { Header: AntHeader } = Layout;
 
