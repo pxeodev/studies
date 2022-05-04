@@ -3,19 +3,20 @@ import levenshtein from 'js-levenshtein';
 import minBy from 'lodash/minBy';
 
 import prisma from '../lib/prisma'
+import isDropstabDiscrepancy from './isDropstabDiscrepancy';
 
 const findMatchingCoinDropstab = async (symbol, name) => {
   symbol = symbol.toLowerCase();
   name = name.toLowerCase();
 
   // TODO: Check if this symbol an anomaly. In that case, we need to find the matching coin by CSV
-  const isSymbolAnomaly = false;
+  const coingeckoSymbol = await isDropstabDiscrepancy(symbol.toUpperCase());
 
   let matchingCoin;
-  if (isSymbolAnomaly) {
-    matchingCoin = await prisma.coin.findOne({
+  if (coingeckoSymbol) {
+    matchingCoin = await prisma.coin.findFirst({
       where: {
-        symbol: isSymbolAnomaly,
+        symbol: coingeckoSymbol.toLowerCase(),
       },
       select: {
         id: true,
