@@ -2,6 +2,8 @@ import * as Sentry from '@sentry/node';
 import levenshtein from 'js-levenshtein';
 import minBy from 'lodash/minBy';
 
+import prisma from '../lib/prisma'
+
 const findMatchingCoinDropstab = async (symbol, name) => {
   symbol = symbol.toLowerCase();
   name = name.toLowerCase();
