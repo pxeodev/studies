@@ -22,7 +22,7 @@ const fetchCoinData = async (url, coin, page) => {
   if (!hasRoi) { return; }
 
   let price = await page.$eval('[aria-label="Price Statistics"] div:nth-child(2) dd', (element) => element.innerText);
-  price = price.replace('$', '').trim();
+  price = price.replace('$', '').replace(',', '').trim();
 
   const launchDates = await page.$eval('[aria-label="Price Statistics"] div:nth-child(3) dd', (element) => element.innerText);
   let [launchDateStart, launchDateEnd] = launchDates.split(' - ');
