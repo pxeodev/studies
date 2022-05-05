@@ -164,7 +164,7 @@ export default function Coin(coin) {
       <Content className={styles.content}>
         <Breadcrumb className={styles.breadcrumb}>
           <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
-          <Breadcrumb.Item>{coin.name}</Breadcrumb.Item>
+          <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
         <Card>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard, styles.smallCard)}>
@@ -425,7 +425,6 @@ export async function getStaticProps({ params }) {
   ohlcs = convertToDailySignals(ohlcs)
   const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
   const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
-  delete coinData.ohlcs
   const description = await getDescriptionByCoin(coinData.symbol)
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
