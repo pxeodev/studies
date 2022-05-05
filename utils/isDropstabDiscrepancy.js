@@ -1,7 +1,9 @@
+import path from 'path'
 import csv from 'csvtojson'
 
 const parseDiscrepancies = async () => {
-  const discrepancies = await csv().fromFile('lib/DropsTab_Coingecko_Discrepancies.csv');
+  const filePath = path.join(__dirname, '../lib/Dropstab_Coingecko_Discrepancies.csv');
+  const discrepancies = await csv().fromFile(filePath);
   return discrepancies
 }
 
