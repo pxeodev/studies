@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
+import * as Sentry from '@sentry/nextjs';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.less'
