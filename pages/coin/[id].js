@@ -443,7 +443,9 @@ export async function getStaticProps({ params }) {
     'fullyDilutedValuation',
     'circulatingSupply',
     'totalSupply',
-    'tickers'
+    'tickers',
+    'twitterFollowers',
+    'homepage'
   ])
   return {
     props: {
