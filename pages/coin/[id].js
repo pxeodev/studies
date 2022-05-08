@@ -444,6 +444,7 @@ export async function getStaticProps({ params }) {
     'circulatingSupply',
     'totalSupply',
     'tickers',
+    'twitter',
     'twitterFollowers',
     'homepage'
   ])
