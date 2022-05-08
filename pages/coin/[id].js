@@ -248,11 +248,13 @@ export default function Coin(coin) {
           ) : <></>}
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, styles.smallCard, { [styles.socialSoloCard]: !coin.platforms.length })}>
             <Space wrap>
-              <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
-                <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
-                  @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
-                </Tag>
-              </a>
+              { coin.twitter ? (
+                <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
+                  <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
+                    @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
+                  </Tag>
+                </a>
+              ) : <></> }
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
                   <Tag icon={<GlobalOutlined />} color={variables.black} className={styles.linkTag}>
