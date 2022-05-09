@@ -264,6 +264,9 @@ export default function Coin(coin) {
               ) : <></>}
             </Space>
           </Card.Grid>
+          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.tokenomicsHeader)}>
+            <Title level={2}>{coin.name} Tokenomics</Title>
+          </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard1)}>
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>Market Cap</Title>
