@@ -52,7 +52,6 @@ export async function getStaticProps() {
         where: {
           closeTime: {
             lte: endOfYesterday(),
-            gte: subWeeks(endOfYesterday(), 16)
           }
         },
         orderBy: { closeTime: 'asc' }
@@ -80,9 +79,7 @@ export async function getStaticProps() {
       ohlcs
     }
   })
-  console.debug('done mapping coin data');
   let categories = await getCategories()
-  console.debug('done building index');
   return {
     props: {
       coinsData,
