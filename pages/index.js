@@ -61,9 +61,7 @@ export async function getStaticProps() {
   if (process.env.NODE_ENV === 'development') {
     coinQuery.take = 20;
   }
-  console.debug('start query coins', coinQuery);
   let coinsData = await prisma.coin.findMany(coinQuery)
-  console.debug('got coin data');
   coinsData = coinsData.map((coinData) => {
     const ohlcs = convertToDailySignals(coinData.ohlcs)
 
