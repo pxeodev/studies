@@ -444,6 +444,7 @@ export async function getStaticProps({ params }) {
     'categories',
     'defaultPlatform',
     'marketCap',
+    'marketCapRank',
     'ath',
     'atl',
     'fullyDilutedValuation',
