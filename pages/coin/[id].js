@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
+import { useCallback } from 'react';
 
 import prisma from '../../lib/prisma'
 import styles from '../../styles/coin.module.less'
@@ -141,10 +142,18 @@ export default function Coin(coin) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
   const notation = screens.sm ? 'standard' : 'compact'
+  const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
-  const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
+  const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. Always be on the right side of the cryptomarket.`
+
+  const renderRoi = useCallback((multiple) => {
+    if (multiple === null || multiple === 1 ) { return null }
+
+    const roi = round((multiple - 1) * 100, 2);
+    return <span className={roi > 0 ? styles.greenRoi : styles.redRoi}>{roi}</span>
+  }, [])
 
   return (
     <>
@@ -343,6 +352,76 @@ export default function Coin(coin) {
               </Card.Grid>
             ) : <></>
           }
+          {
+            (coin.launch_price || coin.launch_date_start || coin.launch_roi_usd) ? (
+              <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.icoCard)}>
+                {
+                  coin.launch_price ? (
+                    <div className={styles.labelValueGroup}>
+                      <Title level={3} className={styles.label}>ICO Price</Title>
+                      <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.launch_price)}</span>
+                    </div>
+                  ) : <></>
+                }
+                {
+                  coin.launch_date_start ? (
+                    <div className={styles.labelValueGroup}>
+                      <Title level={3} className={styles.label}>ICO Date</Title>
+                      {
+                        coin.launch_date_start?.getTime() == coin.launch_date_end?.getTime() ? (
+                          <span className={styles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
+                        ) : (
+                          <>
+                            <span className={styles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
+                            {` - `}
+                            <span className={styles.value}>{dateFormatter.format(coin.launch_date_end)}</span>
+                          </>
+                        )
+                      }
+                    </div>
+                  ) : <></>
+                }
+                {
+                  coin.launch_roi_usd ? (
+                    <Table
+                      className={styles.valueTable}
+                      bordered
+                      dataSource={[
+                        {
+                          key: 'values',
+                          usd: coin.launch_roi_usd,
+                          eth: coin.launch_roi_eth,
+                          btc: coin.launch_roi_btc
+                        },
+                      ]}
+                      columns={[
+                        {
+                          title: 'Currency',
+                          render: () => '% ROI'
+                        },
+                        {
+                          title: 'USD',
+                          dataIndex: 'usd',
+                          render: renderRoi
+                        },
+                        {
+                          title: 'BTC',
+                          dataIndex: 'btc',
+                          render: renderRoi
+                        },
+                        {
+                          title: 'ETH',
+                          dataIndex: 'eth',
+                          render: renderRoi
+                        },
+                      ]}
+                      pagination={{ position: ['none', 'none'] }}
+                    />
+                  ) : <></>
+                }
+              </Card.Grid>
+            ) : <></>
+          }
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.chartGrid)}>
             <AdvancedRealTimeChart
               autosize
@@ -452,7 +531,13 @@ export async function getStaticProps({ params }) {
     'tickers',
     'twitter',
     'twitterFollowers',
-    'homepage'
+    'homepage',
+    'launch_price',
+    'launch_date_start',
+    'launch_date_end',
+    'launch_roi_usd',
+    'launch_roi_eth',
+    'launch_roi_btc',
   ])
   return {
     props: {
@@ -462,6 +547,10 @@ export async function getStaticProps({ params }) {
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),
       circulatingSupply: Number(coinData.circulatingSupply),
       totalSupply: Number(coinData.totalSupply),
+      launch_price: Number(coinData.launch_price),
+      launch_roi_usd: Number(coinData.launch_roi_usd),
+      launch_roi_eth: Number(coinData.launch_roi_eth),
+      launch_roi_btc: Number(coinData.launch_roi_btc),
       platforms,
       chainsData,
       dailyTrends,
