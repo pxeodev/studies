@@ -93,7 +93,7 @@ export default function Coin(coin) {
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
               <Button type="primary">Trade</Button>
-            </a>) : ''
+            </a>) : <></>
           }
 
         </Space>
@@ -242,7 +242,7 @@ export default function Coin(coin) {
             <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.descriptionCard)}>
                 {coin.description}
             </Card.Grid>
-          ) : ''}
+          ) : <></>}
           {coin.platforms.length ? (
             <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
               <PlatformSelect
