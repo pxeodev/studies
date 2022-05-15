@@ -124,6 +124,12 @@ const HomePageTable = ({
   })
 
   const screens = useBreakPoint();
+  const numberFormatter = new Intl.NumberFormat([], {
+    notation: 'compact',
+    compactDisplay: 'long',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
 
   let columns = [
     {
@@ -256,15 +262,9 @@ const HomePageTable = ({
     width: 150,
     sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
     render: (marketCap) => {
-      const formatter = new Intl.NumberFormat([], {
-        notation: 'compact',
-        compactDisplay: 'long',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
       return (
         <>
-          {formatter.format(Number(marketCap))}
+          {numberFormatter.format(Number(marketCap))}
         </>
       )
     }
@@ -275,13 +275,7 @@ const HomePageTable = ({
     width: 130,
     sorter: (a, b) => a.dailyChange - b.dailyChange,
     render: (dailyChange) => {
-      const formatter = new Intl.NumberFormat([], {
-        notation: 'compact',
-        compactDisplay: 'long',
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 2
-      })
-      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: dailyChange >= 0 })}>{formatter.format(dailyChange)}%</span>)
+      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: dailyChange >= 0 })}>{numberFormatter.format(dailyChange)}%</span>)
     }
   },
   {
@@ -290,13 +284,7 @@ const HomePageTable = ({
     width: 130,
     sorter: (a, b) => a.weeklyChange - b.weeklyChange,
     render: (weeklyChange) => {
-      const formatter = new Intl.NumberFormat([], {
-        notation: 'compact',
-        compactDisplay: 'long',
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 2,
-      })
-      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{formatter.format(weeklyChange)}%</span>)
+      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{numberFormatter.format(weeklyChange)}%</span>)
     }
   })
 
