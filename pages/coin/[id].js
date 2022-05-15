@@ -114,13 +114,7 @@ export default function Coin(coin) {
       dataIndex: 'volume',
       sorter: (a, b) => a.volume - b.volume,
       sortOrder: 'descend',
-      render: (volume) => {
-        return new Intl.NumberFormat([], {
-          style: 'currency',
-          currency: 'USD',
-          currencyDisplay: 'symbol'
-        }).format(volume)
-      }
+      render: (volume) => currencyFormatter.format(volume)
     })
     columns.push({
       title: 'Trust score',
@@ -143,6 +137,10 @@ export default function Coin(coin) {
   }
   const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
+  const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
+  const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
+  const numberFormatter = new Intl.NumberFormat([], { notation })
+  const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
@@ -260,7 +258,7 @@ export default function Coin(coin) {
               { coin.twitter ? (
                 <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                   <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
-                    @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
+                    @{coin.twitter}&nbsp;({compactNumberFormatter.format(coin.twitterFollowers)})
                   </Tag>
                 </a>
               ) : <></> }
@@ -280,37 +278,37 @@ export default function Coin(coin) {
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>Market Cap</Title>
               <Space wrap>
-                <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.marketCap)}</span>
+                <span className={styles.value}>{currencyFormatter.format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>All-Time High</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
+              <div className={styles.value}>{preciseCurrencyFormatter.format(coin.ath)}</div>
             </div>
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>All-Time Low</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
+              <div className={styles.value}>{preciseCurrencyFormatter.format(coin.atl)}</div>
             </div>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
             { coin.fullyDilutedValuation ? (
               <div className={styles.labelValueGroup}>
                 <Title level={3} className={styles.label}>Fully Diluted Valuation</Title>
-                <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.fullyDilutedValuation)}</div>
+                <div className={styles.value}>{currencyFormatter.format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
             <div className={styles.labelValueGroup}>
               <Title level={3} className={styles.label}>Circulating Supply</Title>
               <div className={styles.value}>
-                {new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}
+                {numberFormatter.format(coin.circulatingSupply)}
                 { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
               </div>
             </div>
             { coin.totalSupply ? (
               <div className={styles.labelValueGroup}>
                 <Title level={3} className={styles.label}>Total Supply</Title>
-                <div className={styles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
+                <div className={styles.value}>{numberFormatter.format(coin.totalSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
@@ -359,7 +357,7 @@ export default function Coin(coin) {
                   coin.launch_price ? (
                     <div className={styles.labelValueGroup}>
                       <Title level={3} className={styles.label}>ICO Price</Title>
-                      <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.launch_price)}</span>
+                      <span className={styles.value}>{currencyFormatter.format(coin.launch_price)}</span>
                     </div>
                   ) : <></>
                 }
