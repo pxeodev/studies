@@ -1,16 +1,14 @@
+@import (reference) './base.module.less';
 @import './variables.module.less';
 
-.content {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 25px;
+// Coin
+.title {
+  font-size: 24px !important;
+  line-height: 32px !important;
+  margin-bottom: 0 !important;
 }
 
-.breadcrumb {
-  margin-bottom: 32px;
-}
-
-.trendTags :global(.ant-tag) {
+.trendTag :global(.ant-tag) {
   border: none !important;
   margin-right: 0 !important;
   line-height: 20px !important;
@@ -25,7 +23,7 @@
   color: @text-color-secondary;
 }
 
-.signalWarning path {
+.signalExplainer path {
   fill: @cr-icon-fill;
 
   &:hover {
@@ -33,33 +31,20 @@
   }
 }
 
-.cardGrid {
+.section {
   padding: 16px;
   min-height: 64px;
 }
 
-.smallCard {
+.sectionFlex {
   display: flex;
+}
 
-
-.priceCard {
-  width: 25%;
-
-  @media screen and (max-width: @screen-md) {
-    box-shadow: none;
-  }
-
-  @media screen and (max-width: @screen-sm) {
-    width: 100%;
-  }
-}}
-
-
-.nameCard {
+.sectionHeader {
   width: 100%;
 }
 
-.dailyPriceCard {
+.sectionDailyTrend {
   width: unset;
 
   @media screen and (max-width: @screen-lg) {
@@ -68,7 +53,7 @@
   }
 }
 
-.weeklyPriceCard {
+.sectionWeeklyTrend {
   width: unset;
   box-shadow: none;
 
@@ -77,58 +62,11 @@
   }
 }
 
-.descriptionCard {
+.sectionDescription {
   width: 100%;
 }
 
-.socialCard {
-  @media screen and (max-width: @screen-md) {
-    width: 100%;
-  }
-
-  @media screen and (max-width: @screen-sm) {
-    width: 100% !important;
-    min-height: unset;
-  }
-}
-
-.contractCard, .socialCard {
-  width: 50%;
-}
-
-.socialSoloCard {
-  width: 100% !important;
-}
-
-.chartGrid {
-  display: block;
-  width: 100%;
-  height: 450px !important;
-
-  @media screen and (max-width: @screen-sm) {
-    padding: 0;
-    padding-bottom: 16px;
-    height: 350px !important;
-  }
-}
-
-#coinChart {
-  max-width: 700px;
-  margin: auto;
-  height: calc(100% - 16px) !important;
-}
-
-.cardData {
-  min-height: 224px;
-  width: 25%;
-
-  @media screen and (max-width: @screen-sm) {
-    width: 100% !important;
-    min-height: unset;
-  }
-}
-
-.tokenomicsHeader {
+.sectionTokenomicsHeader {
   width: 100%;
 
   h2 {
@@ -138,17 +76,46 @@
   }
 }
 
-.h1Title {
-  font-size: 24px !important;
-  line-height: 32px !important;
-  margin-bottom: 0 !important;
+.sectionContract {
+  @media screen and (max-width: @screen-lg) {
+    width: 100%;
+  }
 }
 
-.linkTag {
-  line-height: 26px;
+.sectionOnline {
+  @media screen and (max-width: @screen-md) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    width: 100% !important;
+    min-height: unset;
+  }
+
+  .button {
+    line-height: 26px;
+  }
 }
 
-.labelValueGroup {
+.sectionContract, .sectionOnline {
+  width: 50%;
+}
+
+.sectionOnlineFW {
+  width: 100% !important;
+}
+
+.sectionData {
+  min-height: 224px;
+  width: 25%;
+
+  @media screen and (max-width: @screen-sm) {
+    width: 100% !important;
+    min-height: unset;
+  }
+}
+
+.data {
   margin-bottom: 16px;
 }
 
@@ -194,44 +161,13 @@
   color: @cr-error-color;
 }
 
-.similarCoinLink {
-  cursor: pointer;
-}
-
 .similarCoin {
+  cursor: pointer;
   margin-bottom: 2px;
   margin-right: 5px;
 }
 
-.exchangeTitle {
-  margin: 1em 0 0.5em !important;
-  text-align: center;
-}
-
-.exchangesTable table {
-  table-layout: fixed !important;
-}
-
-.exchangeSpace {
-  width: 100%;
-  justify-content: space-between;
-}
-
-.trustScore {
-  width: 16px;
-  height: 16px;
-  border-radius: 100px;
-}
-
-.trustScoreGreen {
-  background: @cr-success-color;
-}
-
-.trustScoreRed {
-  background: @cr-error-color;
-}
-
-.icoCard {
+.sectionIco {
   width: 30%;
 
   @media screen and (max-width: @screen-lg) {
@@ -239,7 +175,7 @@
   }
 }
 
-.tagCard .similarCoinCard {
+.sectionTags .sectionSimilarCoins {
   @media screen and (max-width: @screen-lg) {
     min-height: unset;
   }
@@ -250,7 +186,7 @@
   }
 }
 
-.priceCard, .dataCard1, .dataCard2, .tagCard, .similarCoinCard {
+.sectionDataC1, .sectionDataC2, .sectionTags, .sectionSimilarCoins {
   @media screen and (max-width: @screen-lg) {
     width: 50%;
   }
@@ -260,8 +196,51 @@
   }
 }
 
-.contractCard {
-  @media screen and (max-width: @screen-lg) {
-    width: 100%;
+.sectionChart {
+  display: block;
+  width: 100%;
+  height: 450px !important;
+
+  @media screen and (max-width: @screen-sm) {
+    padding: 0;
+    padding-bottom: 16px;
+    height: 350px !important;
   }
+}
+
+#chart {
+  max-width: 700px;
+  margin: auto;
+  height: calc(100% - 16px) !important;
+}
+
+// Market
+
+.marketTitle {
+  margin: 1em 0 0.5em !important;
+  text-align: center;
+  text-align: left;
+}
+
+.marketTable table {
+  table-layout: fixed !important;
+}
+
+.marketSpace {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.marketTrustScore {
+  width: 16px;
+  height: 16px;
+  border-radius: 100px;
+}
+
+.marketTrustScorePositive {
+  background: @cr-success-color;
+}
+
+.marketTrustScoreNegative {
+  background: @cr-error-color;
 }

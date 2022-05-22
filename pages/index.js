@@ -1,25 +1,27 @@
-import classnames from 'classnames';
+import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout } from 'antd'
+import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
+import { useRouter } from 'next/router'
+import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
+import prisma from '../lib/prisma'
+
 import debounce from 'lodash/debounce'
 import isFinite from 'lodash/isFinite'
 import isEqual from 'lodash/isEqual'
 import isNil from 'lodash/isNil'
 import pickBy from 'lodash/pickBy'
-import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
-import { useRouter } from 'next/router'
-import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout } from 'antd'
-import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
 
-import prisma from '../lib/prisma'
-import styles from '../styles/index.module.less'
-import convertToDailySignals from '../utils/convertToDailySignals';
+import HomePageTable from '../components/HomePageTable';
 import useBreakPoint from '../hooks/useBreakPoint';
 import useIsHoverable from '../hooks/useIsHoverable';
 import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
-import HomePageTable from '../components/HomePageTable';
+import convertToDailySignals from '../utils/convertToDailySignals';
 import { getCategories } from '../utils/categories';
 import globalData from '../lib/globalData';
+import classnames from 'classnames';
+
+import indexStyles from '../styles/index.module.less'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option, OptGroup } = Select;
@@ -393,14 +395,13 @@ export default function Home({ coinsData, categories }) {
   }
 
   return (
-    <Content className={styles.content}>
-      <Title className={styles.title}>Swap Into The Most Profitable Coins</Title>
-      <Paragraph className={styles.subTitle} type="secondary">Use <span className={styles.subTitleHighlight}>CoinRotator</span> to find the best price trends in cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
-      {/* <Button className={styles.marketHealth} type="primary">Market Health</Button> */}
-      <Card className={styles.formCard}>
-        <Row className={styles.formRow} type="flex" gutter={16}>
-          <Col xs={24} md={6} className={styles.formCol}>
-            <label className={styles.formLabel} htmlFor="coin-name">Coin</label>
+    <Content className={indexStyles.container}>
+      <Title className={indexStyles.title}>Swap Into The Most Profitable Coins</Title>
+      <Paragraph className={indexStyles.subtitle} type="secondary">Use <span>CoinRotator</span> to find the best price trends in cryptocurrencies. Keep your portfolio in a constant uptrend.</Paragraph>
+      <Card className={indexStyles.filters}>
+        <Row className={indexStyles.row} type="flex" gutter={16}>
+          <Col xs={24} md={6} className={indexStyles.col}>
+            <label htmlFor="coin-name">Coin</label>
             <Input
               id="coin-name"
               ref={inputRef}
@@ -411,14 +412,14 @@ export default function Home({ coinsData, categories }) {
               size="large"
             />
           </Col>
-          <Col xs={24} md={6} className={styles.formCol}>
-            <label className={styles.formLabel} htmlFor="signal">Trend</label>
+          <Col xs={24} md={6} className={indexStyles.col}>
+            <label htmlFor="signal">Trend</label>
             <Select
               size="large"
               value={formState.trendType}
               onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
               id="signal"
-              className={styles.formSelect}
+              className={indexStyles.select}
             >
               <Option value={signals.all}>All</Option>
               <Option value={signals.buy}>UP</Option>
@@ -426,15 +427,15 @@ export default function Home({ coinsData, categories }) {
               <Option value={signals.sell}>DOWN</Option>
             </Select>
           </Col>
-          <Col xs={24} md={6} className={styles.formCol}>
-            <label className={styles.formLabel} htmlFor="category">Category</label>
+          <Col xs={24} md={6} className={indexStyles.col}>
+            <label htmlFor="category">Category</label>
             <Select
               showSearch
               size="large"
               value={formState.category}
               onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
               id="category"
-              className={styles.formSelect}
+              className={indexStyles.select}
             >
               <Option value={defaultFormState.category} key="all">All</Option>
               <OptGroup label="Popular categories">
@@ -454,7 +455,7 @@ export default function Home({ coinsData, categories }) {
               size="large"
               onClick={() => setFilterModalVisible(true)}
               icon={<SlidersOutlined />}
-              className={styles.formAllFilters}
+              className={indexStyles.allFiltersButton}
             >
               All Filters
             </Button>
@@ -473,7 +474,6 @@ export default function Home({ coinsData, categories }) {
             size="large"
             type="primary"
             icon={<CheckCircleOutlined />}
-            className={styles.applyFilterModal}
           >
             Apply Filters
           </Button>,
@@ -489,7 +489,7 @@ export default function Home({ coinsData, categories }) {
           </Button>
         ]}
       >
-        <Row className={styles.formRow} justify="space-between">
+        <Row className={indexStyles.row} justify="space-between">
           <Col>
             <span>Show weekly trends</span>
           </Col>
@@ -497,32 +497,32 @@ export default function Home({ coinsData, categories }) {
             <Switch checked={formState.weeklySignals} onChange={(checked) => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: checked })} />
           </Col>
         </Row>
-        <Row className={styles.explainerRow}>
+        <Row>
           <Col>
             <Text type="secondary">Weekly trends update each Monday at 00:00 UTC.</Text>
           </Col>
         </Row>
         <Divider />
-        <Row className={styles.formRow} gutter={16}>
+        <Row className={indexStyles.row} gutter={16}>
           <Col span={12} className="gutter-row">
-            <label className={styles.formLabel} htmlFor="atr-periods">ATR periods</label>
+            <label htmlFor="atr-periods">ATR periods</label>
             <Input size="large" onChange={(e) => formDispatch({ type: 'SET_ATR_PERIODS', payload: e.target.value })} value={formState.atrPeriods} id="atr-periods"></Input>
           </Col>
           <Col span={12} className="gutter-row">
-            <label className={styles.formLabel} htmlFor="multiplier">Multiplier</label>
+            <label htmlFor="multiplier">Multiplier</label>
             <Input size="large" onChange={(e) => formDispatch({ type: 'SET_MULTIPLIER', payload: e.target.value })} value={formState.multiplier} id="multiplier"></Input>
           </Col>
         </Row>
         <Divider />
         <Row>
           <Col>
-            <div className={styles.formLabel}>Market Cap</div>
+            <div>Market Cap</div>
           </Col>
         </Row>
-        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+        <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
           <Col className="gutter-row" xs={10} md={11}>
             <Input
-              className={classnames(styles.filterModalInput)}
+              className={classnames(indexStyles.modalInput)}
               size="large"
               onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: e.target.value })}
               value={formState.marketCapMin}
@@ -530,12 +530,12 @@ export default function Home({ coinsData, categories }) {
               aria-label="Market Cap Min"
             />
           </Col>
-          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
+          <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
             <Text type="secondary">TO</Text>
           </Col>
           <Col className="gutter-row" xs={11} md={11}>
             <Input
-              className={classnames(styles.filterModalInput)}
+              className={classnames(indexStyles.modalInput)}
               size="large"
               onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: e.target.value })}
               value={formState.marketCapMax}
@@ -561,13 +561,13 @@ export default function Home({ coinsData, categories }) {
         <Divider />
         <Row>
           <Col>
-            <div className={styles.formLabel}>Trend Streak</div>
+            <div>Trend Streak</div>
           </Col>
         </Row>
-        <Row className={styles.filterModalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+        <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
           <Col className="gutter-row" xs={10} md={11}>
             <Input
-              className={styles.filterModalInput}
+              className={indexStyles.modalInput}
               size="large"
               onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: e.target.value }) }}
               value={formState.trendLengthMin}
@@ -575,12 +575,12 @@ export default function Home({ coinsData, categories }) {
               aria-label="Trend Length Min"
             />
           </Col>
-          <Col className={classnames('gutter-row', styles.formRangeLabel)} xs={3} md={2}>
+          <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
             <Text type="secondary">TO</Text>
           </Col>
           <Col className="gutter-row" xs={11} md={11}>
             <Input
-              className={styles.filterModalInput}
+              className={indexStyles.modalInput}
               size="large"
               onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: e.target.value }) }}
               value={formState.trendLengthMax}
@@ -604,7 +604,7 @@ export default function Home({ coinsData, categories }) {
           </Col>
         </Row>
       </Modal>
-      <Row className={styles.tableGridRow}>
+      <Row className={indexStyles.tableRow}>
         <HomePageTable
           coinsData={coinsData}
           marketCapMax={formState.marketCapMax}

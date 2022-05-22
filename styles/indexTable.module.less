@@ -1,0 +1,76 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.table table {
+  // width: 100%;
+  // height: 100%;
+  border: 1px solid white;
+  border-radius: 2px;
+
+  thead tr th {
+    font-weight: bold;
+  }
+
+  colgroup col:first-child {
+    @media screen and (max-width: @screen-lg) {
+      width: 150px;
+    }
+  }
+}
+
+.row {
+  cursor: pointer;
+}
+
+.coin {
+    color: @cr-black;
+
+    .image {
+        width: 16px;
+        height: 16px;
+    }
+
+    .name {
+        font-weight: bold;
+        margin-left: 6px;
+    }
+
+    .symbol {
+        text-transform: uppercase;
+        margin-left: 6px;
+    }
+}
+
+.columnTitle {
+    display: inline-flex;
+    align-items: center;
+}
+
+.columnTooltip {
+  margin-left: 15px;
+  margin-right: 5px;
+
+  svg {
+    width: 10px;
+  }
+
+  path {
+    fill: @cr-icon-fill;
+
+    &:hover {
+        fill: @cr-icon-fill-hover;
+    }
+  }
+}
+
+.tag {
+  margin-right: 0;
+}
+
+.negativeValue {
+  color: @cr-error-color;
+}
+
+.positiveValue {
+  color: @cr-success-color;
+}

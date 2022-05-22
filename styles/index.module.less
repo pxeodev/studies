@@ -1,13 +1,11 @@
+@import (reference) './base.module.less';
 @import './variables.module.less';
 
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container {
+  &:extend(.container);
+
   padding: 64px 24px;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
+  align-items: center;
 
   @media (max-width: @screen-md) {
     padding: 32px 24px;
@@ -19,13 +17,12 @@
 }
 
 .title {
-  margin-bottom: 12px !important;
-  font-size: 30px !important;
-  line-height: 38px !important;
+  &:extend(.title);
+
   text-align: center;
 }
 
-.subTitle {
+.subtitle {
   font-size: 16px !important;
   line-height: 24px !important;
   max-width: 928px;
@@ -35,56 +32,34 @@
   @media (max-width: @screen-md) {
     margin-bottom: 32px !important;
   }
+
+  span {
+    font-weight: 600;
+    color: @cr-black !important;
+  }
 }
 
-.subTitleHighlight {
-  font-weight: 600;
-  color: @cr-black !important;
-}
-
-.fakeLink {
-  color: @cr-black;
-}
-
-.marketHealth {
-  margin-top: 20px;
-}
-
-.formRow {
-  width: 100%;
-}
-
-.explainerRow {
-  margin-top: 5px;
-}
-
-.formCard {
+// Filters 
+.filters {
   width: 100%;
   margin-bottom: 32px;
+
+  .row {
+    width: 100%;
+  }
+
+  .col {
+    @media screen and (max-width: @screen-md) {
+      margin-bottom: 12px;
+    }
+  }
+
+  .select {
+    width: 100%;
+  }
 }
 
-.parameterCard {
-  background: @cr-white;
-}
-
-.formLabel {
-  margin-bottom: 8px;
-}
-
-.formRangeInput {
-  width: 120px;
-  margin-right: 12px;
-}
-
-.formRangeLabel {
-  text-align: center;
-}
-
-.formSelect {
-  width: 100%;
-}
-
-.formAllFilters {
+.allFiltersButton {
   width: 100%;
   margin-top: 22px;
 
@@ -93,101 +68,24 @@
   }
 }
 
-.formButton {
-  background: @cr-white;
-  margin-right: 12px;
-}
-
-.tableGridRow {
-  width: 100%;
-  flex-grow: 1;
-}
-
-.tableRow {
-  cursor: pointer;
-}
-
-.coinsTable {
-  width: 100%;
-  height: 100%;
-}
-
-.coinsTable table {
-  border: 1px solid white;
-  border-radius: 2px;
-}
-
-.coinsTable table > thead tr th {
-  font-weight: bold;
-}
-
-.coinsTable colgroup col:first-child {
-  @media screen and (max-width: @screen-lg) {
-    width: 150px;
-  }
-}
-
-.signalTitle {
-  display: inline-flex;
-  align-items: center;
-}
-
-.signalExplanation {
-  margin-left: 15px;
-  margin-right: 5px;
-
-  svg {
-    width: 10px;
-  }
-
-  path {
-    fill: @cr-icon-fill;
-  }
-
-  &:hover {
-    path {
-      fill: @cr-icon-fill-hover;
-    }
-  }
-}
-
-.tableTag {
-  margin-right: 0;
-}
-
-.tableCoinName {
-  font-weight: bold;
-  margin-left: 5px;
-}
-
-.tableCoinThumb {
-  width: 16px;
-  height: 16px;
-}
-
-.tableCoinSymbol {
-  text-transform: uppercase;
-  margin-left: 5px;
-}
-
-.tableNumberNegative {
-  color: @cr-error-color
-}
-
-.tableNumberPositive {
-  color: @cr-success-color !important;
-}
-
-.filterModalRow {
+.modalRow {
   margin-bottom: 16px;
 }
 
-.filterModalInput {
+.modalInput {
   width: 100%;
 }
 
-.formCol {
-  @media screen and (max-width: @screen-md) {
-    margin-bottom: 12px;
-  }
+.modalRangeInput {
+  width: 120px;
+  margin-right: 12px;
+}
+
+.modalRangeLabel {
+  text-align: center;
+}
+
+.tableRow {
+  width: 100%;
+  flex-grow: 1;
 }

@@ -1,19 +1,20 @@
 import { Table, Tooltip } from 'antd'
+import { QuestionCircleFilled } from '@ant-design/icons';
+import { VList } from 'virtuallist-antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { QuestionCircleFilled } from '@ant-design/icons';
 import { useMemo } from 'react';
-import { VList } from 'virtuallist-antd'
 
 import UpTag from './UpTag'
 import DownTag from './DownTag'
 import HodlTag from './HodlTag'
-import styles from '../styles/index.module.less'
-import { signals } from '../utils/variables'
-import getTrends from '../utils/getTrends'
 import useBreakPoint from '../hooks/useBreakPoint'
 import useIsHoverable from '../hooks/useIsHoverable';
+import getTrends from '../utils/getTrends'
+import { signals } from '../utils/variables'
 import classNames from 'classnames';
+
+import indexTableStyles from '../styles/indexTable.module.less';
 
 const HomePageTable = ({
     coinsData,
@@ -140,11 +141,11 @@ const HomePageTable = ({
       render: (coinData) => {
         return (
           <Link href={`/coin/${coinData.id}`}>
-            <a className={styles.fakeLink}>
+            <a className={indexTableStyles.coin}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coinData.images.large} alt={coinData.name} className={styles.tableCoinThumb} loading="lazy"/>
-              <span className={styles.tableCoinName}>{coinData.name}</span>
-              <span className={styles.tableCoinSymbol}>{coinData.symbol}</span>
+              <img src={coinData.images.large} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
+              <span className={indexTableStyles.name}>{coinData.name}</span>
+              <span className={indexTableStyles.symbol}>{coinData.symbol}</span>
             </a>
           </Link>
         )
@@ -152,14 +153,14 @@ const HomePageTable = ({
     },
     {
       width: 120,
-      title: <span className={styles.signalTitle}>
+      title: <span className={indexTableStyles.columnTitle}>
         <span>{showWeeklySignals ? 'Daily ' : ''}Trend</span>
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
             title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily. NFA."
         >
-          <QuestionCircleFilled className={styles.signalExplanation} />
+          <QuestionCircleFilled className={indexTableStyles.columnTooltip} />
         </Tooltip>
       </span>,
       dataIndex: 'dailySuperSuperTrend',
@@ -191,13 +192,13 @@ const HomePageTable = ({
         let tag;
         switch (dailySuperSupertrend) {
           case signals.buy:
-            tag = <UpTag className={styles.tableTag} />
+            tag = <UpTag className={indexTableStyles.tag} />
             break
           case signals.sell:
-            tag = <DownTag className={styles.tableTag} />
+            tag = <DownTag className={indexTableStyles.tag} />
             break
           default:
-            tag = <HodlTag className={styles.tableTag} />
+            tag = <HodlTag className={indexTableStyles.tag} />
         }
 
         return (
@@ -237,13 +238,13 @@ const HomePageTable = ({
         let tag;
         switch (weeklySuperSuperTrend) {
           case signals.buy:
-            tag = <UpTag className={styles.tableTag} />
+            tag = <UpTag className={indexTableStyles.tag} />
             break
           case signals.sell:
-            tag = <DownTag className={styles.tableTag} />
+            tag = <DownTag className={indexTableStyles.tag} />
             break
           default:
-            tag = <HodlTag className={styles.tableTag} />
+            tag = <HodlTag className={indexTableStyles.tag} />
         }
 
         return (
@@ -275,7 +276,7 @@ const HomePageTable = ({
     width: 130,
     sorter: (a, b) => a.dailyChange - b.dailyChange,
     render: (dailyChange) => {
-      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: dailyChange >= 0 })}>{numberFormatter.format(dailyChange)}%</span>)
+      return (<span className={classNames(indexTableStyles.negativeValue, { [indexTableStyles.positiveValue]: dailyChange >= 0 })}>{numberFormatter.format(dailyChange)}%</span>)
     }
   },
   {
@@ -284,7 +285,7 @@ const HomePageTable = ({
     width: 130,
     sorter: (a, b) => a.weeklyChange - b.weeklyChange,
     render: (weeklyChange) => {
-      return (<span className={classNames(styles.tableNumberNegative, { [styles.tableNumberPositive]: weeklyChange >= 0 })}>{numberFormatter.format(weeklyChange)}%</span>)
+      return (<span className={classNames(indexTableStyles.negativeValue, { [indexTableStyles.positiveValue]: weeklyChange >= 0 })}>{numberFormatter.format(weeklyChange)}%</span>)
     }
   })
 
@@ -303,10 +304,10 @@ const HomePageTable = ({
       onRow={(coin) => ({ onClick: () => {
         router.push(`/coin/${coin.coinData.id}`);
       }}) }
-      rowClassName={styles.tableRow}
+      rowClassName={indexTableStyles.row}
       pagination={{ position: ['none', 'none'], pageSize: 1000 }}
       bordered
-      className={styles.coinsTable}
+      className={indexTableStyles.table}
       scroll={{
 				y: tableHeight
 			}}
