@@ -153,7 +153,7 @@ export default function Coin(coin) {
     if (multiple === null || multiple === 1 ) { return null }
 
     const roi = round((multiple - 1) * 100, 2);
-    return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{numberFormatter.format(roi)}</span>
+    return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{numberFormatter.format(roi)}%</span>
   }, [])
 
   return (
@@ -398,7 +398,7 @@ export default function Coin(coin) {
                       columns={[
                         {
                           title: 'Currency',
-                          render: () => '% ROI'
+                          render: () => 'ROI'
                         },
                         {
                           title: 'USD',
