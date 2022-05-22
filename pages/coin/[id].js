@@ -1,31 +1,34 @@
-import { Prisma } from '@prisma/client'
+import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Layout, notification, Select, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
-import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/icons';
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
-import classnames from 'classnames';
+import { Prisma } from '@prisma/client'
+import prisma from '../../lib/prisma'
+
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
 
-import prisma from '../../lib/prisma'
-import styles from '../../styles/coin.module.less'
-import variables from '../../styles/variables.module.less'
+import UpTag from '../../components/UpTag'
+import PlatformSelect from '../../components/PlatformSelect';
+import DownTag from '../../components/DownTag'
+import HodlTag from '../../components/HodlTag'
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
 import getTrends from '../../utils/getTrends'
 import getChainsData from '../../utils/getChainsData'
 import getPlatformData from '../../utils/getPlatformData'
 import convertToDailySignals from '../../utils/convertToDailySignals'
-import useBreakPoint from '../../hooks/useBreakPoint'
-import UpTag from '../../components/UpTag'
-import PlatformSelect from '../../components/PlatformSelect';
-import DownTag from '../../components/DownTag'
-import HodlTag from '../../components/HodlTag'
-import globalData from '../../lib/globalData';
 import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
-import useIsHoverable from '../../hooks/useIsHoverable';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
+import useBreakPoint from '../../hooks/useBreakPoint'
+import useIsHoverable from '../../hooks/useIsHoverable';
+import globalData from '../../lib/globalData';
+import classnames from 'classnames';
+
+import baseStyles from '../../styles/base.module.less'
+import coinStyles from '../../styles/coin.module.less'
+import variableStyles from '../../styles/variables.module.less'
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -87,7 +90,7 @@ export default function Coin(coin) {
     render: (name, data) => {
       const tradeLink = cleanupExchangeLink(data.tradeLink, data.baseSymbol)
       return (
-        <Space className={styles.exchangeSpace}>
+        <Space className={coinStyles.marketSpace}>
           <b>{name}</b>
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
@@ -127,9 +130,9 @@ export default function Coin(coin) {
       render: (trustScore) => {
         const good = trustScore === 'green'
         const classNames = {
-          [styles.trustScore]: true,
-          [styles.trustScoreGreen]: good,
-          [styles.trustScoreRed]: !good,
+          [coinStyles.marketTrustScore]: true,
+          [coinStyles.marketTrustScorePositive]: good,
+          [coinStyles.marketTrustScoreNegative]: !good,
         }
         return <div className={classnames(classNames)} />
       }
@@ -161,41 +164,41 @@ export default function Coin(coin) {
         <meta property="og:image:height" content="250" />
         <meta property="og:image:type" content="image/png" />
       </Head>
-      <Content className={styles.content}>
-        <Breadcrumb className={styles.breadcrumb}>
+      <Content className={baseStyles.container}>
+        <Breadcrumb className={baseStyles.breadcrumbs}>
           <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
         <Card>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.nameCard, styles.smallCard)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
-              <Title className={styles.h1Title}>{coin.name}</Title>
+              <Title className={coinStyles.title}>{coin.name}</Title>
               <Tag>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.dailyPriceCard, styles.smallCard)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
               <Space>
                 <b>Daily Trend</b>
                 <Tooltip
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
-                  overlayClassName={styles.tooltip}
+                  overlayClassName={coinStyles.tooltip}
                   trigger={isHoverable ? 'hover' : 'click'}
                   title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD."
                 >
-                  <InfoCircleFilled className={styles.signalWarning} />
+                  <InfoCircleFilled className={coinStyles.signalExplainer} />
                 </Tooltip>
               </Space>
-              <Space size={12} className={styles.trendTags} wrap>
+              <Space size={12} className={coinStyles.trendTag} wrap>
                 {dailySignalTag}
                 {Object.keys(coin.dailyTrends).map((trendKey) => {
                   const trend = coin.dailyTrends[trendKey]
                   const trendText = `${trend[0]} (${trend[1]})`
                   return (
                     <Tag key={trendKey}>
-                      <span className={styles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
                       {trendText}
                     </Tag>
                   )
@@ -203,27 +206,27 @@ export default function Coin(coin) {
               </Space>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.weeklyPriceCard, styles.smallCard)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
               <Space>
                 <b>Weekly Trend</b>
                 <Tooltip
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
-                  overlayClassName={styles.tooltip}
+                  overlayClassName={coinStyles.tooltip}
                   trigger={isHoverable ? 'hover' : 'click'}
                   title="The numbers in parenthesis indicate the trend streak - how many weeks a coin has been a UP or DOWN trend against ETH, BTC or USD."
                 >
-                  <InfoCircleFilled className={styles.signalWarning} />
+                  <InfoCircleFilled className={coinStyles.signalExplainer} />
                 </Tooltip>
               </Space>
-              <Space size={12} className={styles.trendTags} wrap>
+              <Space size={12} className={coinStyles.trendTag} wrap>
                 {weeklySignalTag}
                 {Object.keys(coin.weeklyTrends).map((trendKey) => {
                   const trend = coin.weeklyTrends[trendKey]
                   const trendText = `${trend[0]} (${trend[1]})`
                   return (
                     <Tag key={trendKey}>
-                      <span className={styles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
                       {trendText}
                     </Tag>
                   )
@@ -232,12 +235,12 @@ export default function Coin(coin) {
             </Space>
           </Card.Grid>
           {coin.description ? (
-            <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.descriptionCard)}>
+            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
                 {coin.description}
             </Card.Grid>
           ) : ''}
           {coin.platforms.length ? (
-            <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.contractCard)}>
+            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
               <PlatformSelect
                 images={coin.images}
                 platforms={coin.platforms}
@@ -246,67 +249,67 @@ export default function Coin(coin) {
               />
             </Card.Grid>
           ) : <></>}
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.socialCard, styles.smallCard, { [styles.socialSoloCard]: !coin.platforms.length })}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionOnline, coinStyles.sectionFlex, { [coinStyles.sectionOnlineFW]: !coin.platforms.length })}>
             <Space wrap>
               { coin.twitter ? (
                 <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
-                  <Tag icon={<TwitterOutlined />} color="#55ACEE" className={styles.linkTag}>
+                  <Tag icon={<TwitterOutlined />} color="#55ACEE" className={coinStyles.button}>
                     @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
                   </Tag>
                 </a>
               ) : <></> }
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color={variables.black} className={styles.linkTag}>
+                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={coinStyles.button}>
                     {url}
                   </Tag>
                 </a>
               ) : <></>}
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.tokenomicsHeader)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionTokenomicsHeader)}>
             <Title level={2}>{coin.name} Tokenomics</Title>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard1)}>
-            <div className={styles.labelValueGroup}>
-              <Title level={3} className={styles.label}>Market Cap</Title>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC1)}>
+            <div className={coinStyles.data}>
+              <Title level={3} className={coinStyles.label}>Market Cap</Title>
               <Space wrap>
-                <span className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.marketCap)}</span>
+                <span className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
-            <div className={styles.labelValueGroup}>
-              <Title level={3} className={styles.label}>All-Time High</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
+            <div className={coinStyles.data}>
+              <Title level={3} className={coinStyles.label}>All-Time High</Title>
+              <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
             </div>
-            <div className={styles.labelValueGroup}>
-              <Title level={3} className={styles.label}>All-Time Low</Title>
-              <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
+            <div className={coinStyles.data}>
+              <Title level={3} className={coinStyles.label}>All-Time Low</Title>
+              <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
             </div>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.dataCard2)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
             { coin.fullyDilutedValuation ? (
-              <div className={styles.labelValueGroup}>
-                <Title level={3} className={styles.label}>Fully Diluted Valuation</Title>
-                <div className={styles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.fullyDilutedValuation)}</div>
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
+                <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
-            <div className={styles.labelValueGroup}>
-              <Title level={3} className={styles.label}>Circulating Supply</Title>
-              <div className={styles.value}>
+            <div className={coinStyles.data}>
+              <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
+              <div className={coinStyles.value}>
                 {new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}
                 { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
               </div>
             </div>
             { coin.totalSupply ? (
-              <div className={styles.labelValueGroup}>
-                <Title level={3} className={styles.label}>Total Supply</Title>
-                <div className={styles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Total Supply</Title>
+                <div className={coinStyles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.tagCard)}>
-            <Title level={3} className={styles.label}>Tags</Title>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
+            <Title level={3} className={coinStyles.label}>Tags</Title>
             {
               coin.categories.map((tag) => {
                 return (
@@ -319,8 +322,8 @@ export default function Coin(coin) {
           </Card.Grid>
           {
             coin.similarCoins.length ? (
-              <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.cardData, styles.similarCoinCard)}>
-                <Title level={3} className={styles.label}>Similar Coins</Title>
+              <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionSimilarCoins)}>
+                <Title level={3} className={coinStyles.label}>Similar Coins</Title>
                 {
                   // eslint-disable-next-line @next/next/no-img-element
                   coin.similarCoins.map(coin =>
@@ -328,9 +331,9 @@ export default function Coin(coin) {
                       <Link href={`/coin/${coin.id}`} key={coin.id}>
                         <a>
                           <Tag
-                            className={styles.similarCoinLink}
+                            className={coinStyles.similarCoin}
                             // eslint-disable-next-line @next/next/no-img-element
-                            icon={<img className={styles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
+                            icon={<img className={coinStyles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
                             key={coin.name}
                           >
                             {coin.name}
@@ -343,13 +346,13 @@ export default function Coin(coin) {
               </Card.Grid>
             ) : <></>
           }
-          <Card.Grid hoverable={false} className={classnames(styles.cardGrid, styles.chartGrid)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)}>
             <AdvancedRealTimeChart
               autosize
               interval="D"
               symbol={`${coin.symbol.toUpperCase()}USDT`}
               hide_side_toolbar={!screens.sm}
-              container_id={styles.coinChart}
+              container_id={coinStyles.chart}
             >
             </AdvancedRealTimeChart>
           </Card.Grid>
@@ -357,7 +360,7 @@ export default function Coin(coin) {
         <Title
           level={2}
           id="markets"
-          className={classnames(styles.h1Title, styles.exchangeTitle)}
+          className={classnames(coinStyles.title, coinStyles.marketTitle)}
         >
           {coin.symbol.toUpperCase()} Markets
         </Title>
@@ -366,7 +369,7 @@ export default function Coin(coin) {
           dataSource={tableData}
           pagination={{ position: ['none', 'none'], pageSize: 1000 }}
           bordered
-          className={styles.exchangesTable}
+          className={coinStyles.marketTable}
         />
       </Content>
     </>
