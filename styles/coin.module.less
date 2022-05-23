@@ -133,10 +133,46 @@
   font-weight: bold;
 }
 
+.valueTable {
+  margin-top: 5px;
+
+  thead th {
+    font-weight: bold;
+    padding: 8px;
+  }
+
+  tbody {
+    td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    td:first-child {
+      font-weight: bold;
+    }
+  }
+}
+
+.greenRoi {
+  color: @cr-success-color;
+}
+
+.redRoi {
+  color: @cr-error-color;
+}
+
 .similarCoin {
   cursor: pointer;
   margin-bottom: 2px;
   margin-right: 5px;
+}
+
+.sectionIco {
+  width: 30%;
+
+  @media screen and (max-width: @screen-lg) {
+    width: 100%;
+  }
 }
 
 .sectionTags .sectionSimilarCoins {

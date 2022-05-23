@@ -9,6 +9,7 @@ import prisma from '../../lib/prisma'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
+import { useCallback } from 'react';
 
 import UpTag from '../../components/UpTag'
 import PlatformSelect from '../../components/PlatformSelect';
@@ -95,7 +96,7 @@ export default function Coin(coin) {
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
               <Button type="primary">Trade</Button>
-            </a>) : ''
+            </a>) : <></>
           }
 
         </Space>
@@ -116,13 +117,7 @@ export default function Coin(coin) {
       dataIndex: 'volume',
       sorter: (a, b) => a.volume - b.volume,
       sortOrder: 'descend',
-      render: (volume) => {
-        return new Intl.NumberFormat([], {
-          style: 'currency',
-          currency: 'USD',
-          currencyDisplay: 'symbol'
-        }).format(volume)
-      }
+      render: (volume) => currencyFormatter.format(volume)
     })
     columns.push({
       title: 'Trust score',
@@ -144,10 +139,22 @@ export default function Coin(coin) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
   const notation = screens.sm ? 'standard' : 'compact'
+  const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
+  const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
+  const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
+  const numberFormatter = new Intl.NumberFormat([], { notation })
+  const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
-  const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${new Intl.DateTimeFormat([], { dateStyle: 'medium' }).format(new Date())} | Coinrotator`
+  const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. Always be on the right side of the cryptomarket.`
+
+  const renderRoi = useCallback((multiple) => {
+    if (multiple === null || multiple === 1 ) { return null }
+
+    const roi = round((multiple - 1) * 100, 2);
+    return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{numberFormatter.format(roi)}%</span>
+  }, [])
 
   return (
     <>
@@ -238,7 +245,7 @@ export default function Coin(coin) {
             <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
                 {coin.description}
             </Card.Grid>
-          ) : ''}
+          ) : <></>}
           {coin.platforms.length ? (
             <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
               <PlatformSelect
@@ -254,7 +261,7 @@ export default function Coin(coin) {
               { coin.twitter ? (
                 <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
                   <Tag icon={<TwitterOutlined />} color="#55ACEE" className={coinStyles.button}>
-                    @{coin.twitter}&nbsp;({new Intl.NumberFormat([], { notation: 'compact' }).format(coin.twitterFollowers)})
+                  @{coin.twitter}&nbsp;({compactNumberFormatter.format(coin.twitterFollowers)})
                   </Tag>
                 </a>
               ) : <></> }
@@ -274,37 +281,37 @@ export default function Coin(coin) {
             <div className={coinStyles.data}>
               <Title level={3} className={coinStyles.label}>Market Cap</Title>
               <Space wrap>
-                <span className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.marketCap)}</span>
+                <span className={coinStyles.value}>{currencyFormatter.format(coin.marketCap)}</span>
                 <Tag>#{coin.marketCapRank}</Tag>
               </Space>
             </div>
             <div className={coinStyles.data}>
               <Title level={3} className={coinStyles.label}>All-Time High</Title>
-              <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.ath)}</div>
+              <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.ath)}</div>
             </div>
             <div className={coinStyles.data}>
               <Title level={3} className={coinStyles.label}>All-Time Low</Title>
-              <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation }).format(coin.atl)}</div>
+              <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.atl)}</div>
             </div>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
             { coin.fullyDilutedValuation ? (
               <div className={coinStyles.data}>
                 <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
-                <div className={coinStyles.value}>{new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation }).format(coin.fullyDilutedValuation)}</div>
+                <div className={coinStyles.value}>{currencyFormatter.format(coin.fullyDilutedValuation)}</div>
               </div>
             ) : <></>}
             <div className={coinStyles.data}>
               <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
               <div className={coinStyles.value}>
-                {new Intl.NumberFormat([], { notation }).format(coin.circulatingSupply)}
+                {numberFormatter.format(coin.circulatingSupply)}
                 { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
               </div>
             </div>
             { coin.totalSupply ? (
               <div className={coinStyles.data}>
                 <Title level={3} className={coinStyles.label}>Total Supply</Title>
-                <div className={coinStyles.value}>{new Intl.NumberFormat([], { notation }).format(coin.totalSupply)}</div>
+                <div className={coinStyles.value}>{numberFormatter.format(coin.totalSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
@@ -342,6 +349,76 @@ export default function Coin(coin) {
                       </Link>
                     )
                   )
+                }
+              </Card.Grid>
+            ) : <></>
+          }
+          {
+            (coin.launch_price || coin.launch_date_start || coin.launch_roi_usd) ? (
+              <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionIco)}>
+                {
+                  coin.launch_price ? (
+                    <div className={coinStyles.data}>
+                      <Title level={3} className={coinStyles.label}>ICO Price</Title>
+                      <span className={coinStyles.value}>{currencyFormatter.format(coin.launch_price)}</span>
+                    </div>
+                  ) : <></>
+                }
+                {
+                  coin.launch_date_start ? (
+                    <div className={coinStyles.data}>
+                      <Title level={3} className={coinStyles.label}>ICO Date</Title>
+                      {
+                        coin.launch_date_start?.getTime() == coin.launch_date_end?.getTime() ? (
+                          <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
+                        ) : (
+                          <>
+                            <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
+                            {` - `}
+                            <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_end)}</span>
+                          </>
+                        )
+                      }
+                    </div>
+                  ) : <></>
+                }
+                {
+                  coin.launch_roi_usd ? (
+                    <Table
+                      className={coinStyles.valueTable}
+                      bordered
+                      dataSource={[
+                        {
+                          key: 'values',
+                          usd: coin.launch_roi_usd,
+                          eth: coin.launch_roi_eth,
+                          btc: coin.launch_roi_btc
+                        },
+                      ]}
+                      columns={[
+                        {
+                          title: 'Currency',
+                          render: () => 'ROI'
+                        },
+                        {
+                          title: 'USD',
+                          dataIndex: 'usd',
+                          render: renderRoi
+                        },
+                        {
+                          title: 'BTC',
+                          dataIndex: 'btc',
+                          render: renderRoi
+                        },
+                        {
+                          title: 'ETH',
+                          dataIndex: 'eth',
+                          render: renderRoi
+                        },
+                      ]}
+                      pagination={{ position: ['none', 'none'] }}
+                    />
+                  ) : <></>
                 }
               </Card.Grid>
             ) : <></>
@@ -455,7 +532,13 @@ export async function getStaticProps({ params }) {
     'tickers',
     'twitter',
     'twitterFollowers',
-    'homepage'
+    'homepage',
+    'launch_price',
+    'launch_date_start',
+    'launch_date_end',
+    'launch_roi_usd',
+    'launch_roi_eth',
+    'launch_roi_btc',
   ])
   return {
     props: {
@@ -465,6 +548,10 @@ export async function getStaticProps({ params }) {
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),
       circulatingSupply: Number(coinData.circulatingSupply),
       totalSupply: Number(coinData.totalSupply),
+      launch_price: Number(coinData.launch_price),
+      launch_roi_usd: Number(coinData.launch_roi_usd),
+      launch_roi_eth: Number(coinData.launch_roi_eth),
+      launch_roi_btc: Number(coinData.launch_roi_btc),
       platforms,
       chainsData,
       dailyTrends,
