@@ -12,6 +12,8 @@ import * as Tracing from '@sentry/tracing';
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'
 import prisma from '../lib/prisma'
+import { Prisma } from '@prisma/client'
+import { hasPlatforms } from '../utils/coingecko';
 
 dotenv.config();
 
@@ -105,11 +107,13 @@ const script = async () => {
     await new Promise((res) => setTimeout(res, 1200))
 
     let platforms;
-    if (Object.keys(coinData.platforms)?.length) {
+    if (hasPlatforms(coinData.platforms)) {
       platforms = pickBy(coinData.platforms, contract => contract.length)
       if (!Object.keys(platforms).length) {
-        platforms = undefined
+        platforms = Prisma.DbNull
       }
+    } else {
+      platforms = Prisma.DbNull
     }
 
     const dailyChange = coinData.market_data.price_change_percentage_24h || undefined
