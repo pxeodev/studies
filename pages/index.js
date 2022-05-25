@@ -397,7 +397,7 @@ export default function Home({ coinsData, categories }) {
   return (
     <Content className={indexStyles.container}>
       <Title className={indexStyles.title}>Swap Into The Most Profitable Coins</Title>
-      <Paragraph className={indexStyles.subtitle} type="secondary">Use <span>CoinRotator</span> tracks price trends for the top 1,000 cryptocurrencies, all updated daily on a single dashboard. Instantly check the coin screener for each market using our proprietary algorithm.</Paragraph>
+      <Paragraph className={indexStyles.subtitle} type="secondary"><span>CoinRotator</span> tracks price trends for the top 1,000 cryptocurrencies, all updated daily on a single dashboard. Instantly check the coin screener for each market using our proprietary algorithm.</Paragraph>
       <Card className={indexStyles.filters}>
         <Row className={indexStyles.row} type="flex" gutter={16}>
           <Col xs={24} md={6} className={indexStyles.col}>
