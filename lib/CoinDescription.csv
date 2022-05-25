@@ -13,7 +13,7 @@ Shiba Inu,SHIB,"Shiba Inu is an Ethereum-based token that is referred to by some
 Polygon,MATIC,"Polygon is a layer 2 scaling solution working on top of the Ethereum blockchain. What Polygon brings to the table is faster and lower-cost transactions than Ethereum, and these transactions are also irreversible on the Ethereum mainchain.",Huy
 Cronos,CRO,"Cronos is the utility token of Cronos EVM Chain and Crypto.org Chain. The Cronos EVM Chain supports DeFi apps and allows users to port smart contracts and DApps from Ethereum and all EVM compatible chains. Crypto.com itself offers many services like wallet and card app, MCO Visa card,... with the purpose of accelerating the transition of the tradfi economy  into the native cryptocurrency landscape.",Huy
 Litecoin,LTC,"Litecoin is a decentralized internet currency founded 2 years after Bitcoin by former Google engineer Charlie Lee. Litecoin is used to transfer payment around the world with near-zero cost and fast transaction speed. Although it has lagged in development of other chains, it recently deployed an upgrade with the privacy oriented Mimble Wimble which gives it equal footing with other chains dedicated to anonymous transactions.",Huy
-Cosmos,ATOM,"Cosmos is dubbed an “Internet of blockchains” by its founding team. It aims to use open-source tools to streamline transactions between different crypto networks. Cosmos focuses on customizability and interoperability with a goal to create an ecosystem of decentralized networks. Cosmos’s own PoS blockchain is called Cosmos Hub and is powered by ATOM. Many other chains have used the Cosmos SDK to buid out their own networks and is considered a layer zero chain in many theoretical circles.",Huy
+Cosmos,ATOM,Cosmos is dubbed an “Internet of blockchains” by its founding team. It aims to use open-source tools to streamline transactions between different crypto networks. Cosmos focuses on customizability and interoperability with a goal to create an ecosystem of decentralized networks. Cosmos’s own PoS blockchain is called Cosmos Hub and is powered by ATOM. Many other chains have used the Cosmos SDK to buid out their own networks and is considered a layer zero chain in many theoretical circles.,Huy
 Chainlink,LINK,"Chainlink acting as a price oracle provides real-world data to smart contracts. Since most smart contracts can’t execute their terms without relying on external data sources, Chainlink incentivizes data providers to act as a bridge between the two. There are reputation scores and rewards assigned to each provider to further encourage them to provide accurate and useful data.",Huy
 Near Protocol,NEAR,"NEAR protocol is a proof-of-stake (PoS) layer 1 blockchain that utilizes a sharding solution called ‘Nightshade’. This solution only lets each node to store a small subset of the platform’s data, which reduces potential points of failure security-wise. NEAR protocol also includes ‘Rainbow Bridge’, an application that lets users easily transfer Ethereum tokens to NEAR and vice versa.",Huy
 Tron,TRX,The Tron blockchain has 3 layers to its architecture: the Core layer sends coded instructions to the Tron Virtual Machine; the Application layer lets developers create wallets and applications powered by TRX; and the Storage layer stores records of the blockchain’s history and status of smart contracts.,Huy
@@ -76,7 +76,7 @@ Dash,DASH,"Dash is a fork of Bitcoin established in 2014 and is an acronym for �
 Chiliz,CHZ,"Chiliz is a fintech platform that aims to tokenize the sports and entertainment sectors by creating a fan engagement platform. The project essentially gives eSports and sports fans the ability to crowd-manage their favorite leagues, games, and teams. Many Premier League Teams has already issued tokens on the Chiliz network.",Martin
 Frax Share,FXS,"Frax Share is the governance token for the Frax protocol, which uses an algorithmic stablecoin system to provide decentralized and scalable money. It is designed to be volatile and to hold the rights to governance as well as all excess collateral. Furthermore, it incorporates the same ethos of Bitcoin in designing trustless money based on a highly reduced governance structure.",Martin
 Anchor Protocol,ANC,"ANC is Anchor Protocol's governance token, built and backed by Terraform Labs. It is a decentralized lending protocol on the Tera cryptocurrency blockchain. Using the protocol, a portion of Anchor's yield can be captured, so its value increases linearly with Anchor's assets. Powered by Proof of Stake returns across multiple blockchains, Anchor's yield is stable and attractive.",Martin
-Basic Attention Token,BAT,"Basic Attention Token (BAT) is an Ethereum based token specifically designed to be used with the Brave browser in order to facilitate transactions. Brave is a privacy-first browser that features built-in ad blockers among other privacy-oriented features. It provides a means of accounting among advertisers, publishers, and users of a new blockchain-based digital advertising and service platform.
+Basic Attention Token,BAT,"Basic Attention Token (BAT) is an Ethereum based token specifically designed to be used with the Brave browser in order to facilitate transactions. Brave is a privacy-first browser that features built-in ad blockers among other privacy-oriented features. It provides a means of accounting among advertisers, publishers, and users of a new blockchain-based digital advertising and service platform. 
 ",Martin
 GateToken,GT,GateToken (GT) is the official exchange token of the Gate.io exchange and the native token of Gatechain’s public network. The network is dedicated to on-chain safety with customizable time-delay recovery features. These allow for the recovery of blockchain assets even after the compromisation of private keys.,Martin
 BitDAO,BIT,"BitDAO is one of the largest Decentralized Autonomous Organizations (DAO) in the world. BIT is the governance token for the BitDAO ecosystem, which gives users the ability to propose and vote. The project's goal is to create a decentralized tokenized economy that is accessible to everyone. By developing BitDAO DeFi products and supporting DeFi partners and projects, BitDAO will allocate funds for the growth of the DeFi ecosystem.",Martin
@@ -107,7 +107,7 @@ Bancor Network Token,BNT,"Launched in 2017, Bancor was the first DeFi protocol. 
 Sushi,SUSHI,"SushiSwap (SUSHI) is an automated market maker (AMM). A decentralized exchange that provides markets for any given pair of tokens. SushiSwap's main objective is to diversify the AMM market and also provide its users with features not present in past AMMs, such as Uniswap.",Martin
 1inch,1INCH,"1INCH is the native token of the decentralized exchange 1Inch. The Ethereum-based token is used to vote on protocol parameters under the decentralized autonomous organization (DAO) model. Through the platform, users can discover and create the most efficient ways to swap across decentralized exchanges, bringing the best prices to the market.",Martin
 Ankr,ANKR,Ankr is a decentralized blockchain infrastructure provider that has more than 50 Proof-of-Stake networks operating around the world. The network's infrastructure drives cryptocurrency-economy growth while powering a full set of multi-chain tools for Web3 users.,Martin
-Render Token,RNDR,RenderToken (RNDR) deploys a distributed GPU rendering network that is built on the Ethereum blockchain. It connects artists and studios with mining partners who are willing to share their GPU compute power. These node operators are in return rewarded with the RNDR token which can be bought and sold on exchanges.,Martin
+Render Token,RNDR,RenderToken (RNDR) deploys a distributed GPU rendering network that is built on the Ethereum blockchain. It connects artists and studios with mining partners who are willing to share their GPU computing power. These node operators are in return rewarded with the RNDR token which can be bought and sold on exchanges.,Martin
 Zilliqa,ZIL,"Zilliqa is an open-source, permission-free blockchain that can handle thousands of transactions per second. As a second-layer scaling solution, it intends to address the problem of blockchain scalability and speed. The platform hosts many decentralized applications on the platform, as well as staking and yield farming.",Martin
 Gnosis,GNO,GNO is the native Ethereum-based token of the Gnosis Chain. The network builds decentralized infrastructure for the Ethereum ecosystem. Its primary goal is to become a decentralized prediction market that uses the crowd to make predictions.,Martin
 Marinade Staked SOL,MSOL,"Marinade.finance is the very first liquid staking protocol built on the Solana blockchain. The protocol allows users to stake and lock their SOL and in return receive MSOL, which can be freely used in DeFi. The project is moreover supported by the Solana Foundation themselves.",Martin
@@ -213,9 +213,9 @@ NFTrade,NFTD,"NFTrade is a blockchain-agnostic (Meaning you can build or operate
 Elk Finance,ELK,"ElkNet enables fast, safe, cheap, and trustless cross-chain value exchanges across all blockchains through a decentralized network that facilitates cross-chain liquidity. By breaking down the barriers between chains, it makes it so you don't have to think about which chain you are on. A key part of ElkNet is reducing fragmentation and improving cross-chain interoperability.",Đức
 Tethys Finance,TETHYS,Tethys Finance offers a comprehensive decentralized platform to fulfill all types of trading requirements using the lightning-fast Metis network. The TETHYS token is native to the platform and its native cryptocurrency.,Đức
 Etherrock #72,PEBBLE,"The Ethereum-based non-fungible token (NFT) EthereumRock, also known as EthRock, was launched in 2017 and represents various colored rocks. There are 100 EtherRocks in total. PEBBLE is the tokenized version of this series of NFTs.",Đức
-Spartan Protocol Token,SPARTA,"Spartan Protocol is a community-developed and community-run Decentralized Finance (Defi) project. It is built on Binance Smart Chain (BSC). Spartan Protocol focuses on incentivizing liquidity pools and synthetic assets, allowing users to earn revenue by providing liquidity to pools and creating synthetic assets to be staked in Vaults.",Đức
+Spartan Protocol Token,SPARTA,"Spartan Protocol is a community-developed and community-run Decentralized Finance (Defi) project. It is built on Binance Smart Chain (BSC). Spartan Protocol focuses on incentivizing liquidity pools and synthetic assets, allowing users to earn revenue by providing liquidity to pools and creating synthetic assets to be staked in vaults.",Đức
 Mogul Productions,STARS,"MOGUL is a decentralized financing platform for film and entertainment utilizing non-fungible tokens (NFTs). By utilizing blockchain technology, Mogul hopes to transform film production, distribution, and fan participation through transparency, tracking, security, and more.",Đức
-Netswap,NETT,"Netswap is a decentralized exchange (DEX) that utilizes Metis Andromeda (Layer2). Netswap and Uniswap share the same automated market-making (AMM). Netswap’s native governance token, NETT, is fully community-distributed and is capable of trading all tokens issued on both Ethereum and Metis Andromeda.",Đức
+Netswap,NETT,"Netswap is a decentralized exchange (DEX) that utilizes Metis Andromeda (Layer2). Netswap and Uniswap share the same automated market maker (AMM) model. Netswap’s native governance token, NETT, is fully community-distributed and is capable of trading all tokens issued on both Ethereum and Metis Andromeda.",Đức
 Birake,BIR,"Birake mission is to help website owners and customers of its cryptocurrency exchange network reach the biggest trading volume and the biggest database of orders from that area. Birake's native cryptocurrency token is the BIR coin. Unlike other centralized platforms, Birake runs on DEX technology, which is completely secure. With the DEX platform, wallets are completely isolated from the platform.",Đức
 TE-FOOD,TONE,"TE-FOOD is a solution that covers all logistics and food safety activities, as well as supply chain data management. In order to make livestock and fresh food supply information transparent, it provides cost-effective software and identification tools.",Đức
 BlockchainSpace,GUILD,"The blockchain-based metaverse BlockchainSpace enables play-to-earn guilds to scale. Through its academies, BlockchainSpace identifies economic opportunities within the play-to-earn ecosystem and develops tools for empowering gaming communities.",Đức
@@ -234,7 +234,7 @@ Santiment Network Token,SAN,"Santiment Network Token (SAN) is a cryptocurrency u
 Sienna,SIENNA,"Using decentralized technology, Sienna Network allows the trade and lending of financial instruments with total privacy. As the leading privacy-first protocol for DeFi across multiple blockchains, Sienna aims to become the de facto standard for many blockchains. It will initially target Ethereum, the largest blockchain ecosystem, followed by other blockchains such as Geode, Polkadot, and Cosmos in the near future.",Đức
 pBTC35A,PBTC35A,"pBTC35A, pETH18C, and governance token MARS make up the MARS Project. Each pBTC35A represents 1TH/s Bitcoin mining power.",Đức
 Luffy,LUFFY,"The LUFFY token is a deflationary token on the ETH network that aims to build a utility and foster an anime community to bring mass adoption of weebs. LUFFY has a single mission, to build an entire ecosystem for holders and fans alike. LUFFY wants to revolutionize the crypto-verse by creating an ecosystem backed by blockchain that is unparalleled.",Đức
-OpenOcean,OOE,"OpenOcean is the DeFi (Decentralized Finance) and CeFi (Centralized Finance) full aggregator (it purchases mortgages from financial institutions and then securitizes them into mortgage-backed securities (MBSs) for sale). Among OpenOcean's unique offerings is its ability to provide access to both centralized and decentralized exchanges with unparalled trading efficiency. It is also possible to perform cross-chain swaps through the platform, which supports multiple blockchains.",Đức
+OpenOcean,OOE,"OpenOcean is the DeFi (Decentralized Finance) and CeFi (Centralized Finance) full aggregator (it purchases mortgages from financial institutions and then securitizes them into mortgage-backed securities for sale). Among OpenOcean's unique offerings is its ability to provide access to both centralized and decentralized exchanges with unparalled trading efficiency. It is also possible to perform cross-chain swaps through the platform, which supports multiple blockchains.",Đức
 Pluton,PLU,"Founded in London, Plutos is a non-custodial, blockchain-based, digital finance platform. With Plutus, users will be able to manage both cryptocurrency and fiat through the same user interface, conveniently exchange between the two, as well as spend wherever they choose via the Plutus Debit Card or the mobile app. Through its decentralized peer-to-peer trading platform, PlutusDEX, the company facilitates highly secure cryptocurrency and fiat conversions. Pluton (PLU), the company's native utility token, is rewarded to customers for using the service.",Đức
 Grin,GRIN,"Based on the MimbleWimble protocol whitepaper, Grin is an open-source privacy cryptocurrency. To deploy a fully functional cryptocurrency platform and blockchain, Grin seeks to fill the gaps in MimbleWimble. Unlike other cryptocurrencies, Grin is private, scalable, and open source. Unlike Initial Coin Offerings (ICOs), pre-mines, and founder rewards, the Grin project is fully funded by donations.",Đức
 Stakeborg DAO,STANDARD,"Stakeborg DAO is a cryptocurrency token that aims to build a profitable digital colony out of a fully functional cryptocurrency. The STANDARD token is an ERC-20 token that is intended for empowering DAO members to participate in the growth of the digital colony, the community formed by members that will take charge once the DAO is activated. Furthermore, the token is designed to create a fluid economy that encourages all players in the DAO to support each other's efforts to grow the project, thus driving its value up.",Đức
@@ -247,8 +247,8 @@ Infinitecoin,IFC,"The purpose of Infinitecoin is to facilitate stress-free onlin
 Blockchain Monster Hunt,BCMC,"A blockchain metaverse game, Blockchain Monster Hunt is the first game in the world to connect people from multiple blockchain communities. Blockchain Monster Hunt features a variety of monsters abundantly available to play and earn in an abundance of diversity akin to Pokemon GO",Đức
 Clearpool,CPOOL,"Clearpool is a Decentralized Capital Markets Ecosystem, which provides unsecured loans to institutional borrowers directly from the DeFi ecosystem. With Clearpool, market supply and demand forces drive a dynamic interest rate model. Providers of liquidity on Clearpool will earn attractive yields as interest rates on pooled funds are boosted by additional rewards paid in CPOOL - the utility and governance token of Clearpool.",Đức
 Earthcoin,EAC,"Focused on people, environmental sustainability, and freedom, EarthCoin is a scrypt-based coin. At its core, Earthcoin is decentralized, secured, and performs transactions at a fast rate. The ultimate goal of Earthcoin is to become a pure trade-based cryptocurrency.",Đức
-Xfinite Entertainment Token,XET,"Xfinite is a decentralized entertainment ecosystem built onto the Algorithm blockchain. With Xfinite, digital media will be revolutionized by driving innovation in customer experience, data-driven engagement, and ecosystem economics for the benefit of the entire community. This is a technology-based solution that ensures digital transparency and reestablishes trust.",Đức
-Scream,SCREAM,"Powered by FANTOM, Scream is a hugely scalable decentralized lending protocol. Using SCREAM's peer-to-peer lending platforms, you can lend to anyone, directly and anonymously. The goal of SCREAM is to build a high-velocity market for traditional crypto-asset lending services, as well as to improve capital efficiency for a broader range of Fantom-based assets.",Đức
+Xfinite Entertainment Token,XET,"Xfinite is a decentralized entertainment ecosystem built onto the Algorand blockchain. With Xfinite, digital media will be revolutionized by driving innovation in customer experience, data-driven engagement, and ecosystem economics for the benefit of the entire community. This is a technology-based solution that ensures digital transparency and reestablishes trust.",Đức
+Scream,SCREAM,"Powered by Fantom, Scream is a hugely scalable decentralized lending protocol. Using SCREAM's peer-to-peer lending platforms, you can lend to anyone, directly and anonymously. The goal of SCREAM is to build a high-velocity market for traditional crypto-asset lending services, as well as to improve capital efficiency for a broader range of Fantom-based assets.",Đức
 SWFTCOIN,SWFTC,"SWFT Blockchain is a cross-chain swap aggregator, while SWFTC is SWFT Blockchain's native token. In SWFT Blockchain, DeFi, Gamefi, Metaverse, and others are exchanged across chains. In addition to being used as a membership for all SWFT Blockchain products, SWFTC also performs numerous other functions. When a user holds a stake, they can benefit from discounts on transaction fees, community governance, and more.",Đức
 New Order,NEWO,"NEWO (New Order) is a Ethereum-based, next-gen cryptocurrency created by Netwood Entertainment Industry (NEI) to serve digital artists, collectors, e-commerce, content creators, and gamers. NEWO is backed by Newo App, which aims to be the first community-run media. Through promoting new asset classes, chain independence, and machine learning, New Order aims to build a self-governing incubator that can help DeFi innovate.",Đức
 Shuey Rhon Inu,SHUEY,"The Shuey Rhon Inu token is a decentralized, Ethereum-based ERC 20 token that seeks to democratize marginalized sports disciplines around the world. Users can buy Shuey Rhon Inu with another cryptocurrency through decentralized exchanges only. The first step in purchasing Shuey Rhon Inu is buying Ethereum (ETH), which will be used to purchase Shuey Rhon Inu. For doing so, you need a self-custody wallet.",Đức
@@ -258,7 +258,7 @@ Skey Network,SKEY,"The Skey Network forms the missing link between the worlds of
 SHILL Token,SHILL,"The SHILL token is a utility token that can be traded, staked, or voted on within the ecosystem (DAO). Within the Project SEED universe, players can use SHILL as a payment method, a store of value, and a standard for deferred payment. SHILL is used for in-game purchases, paying item rentals, and earning directly through gameplay. SHILL is a multi-chain token, which is available on Solanium (SPL), Gamefi (BSC), and Gamestarter (BSC).",Đức
 Torum,XTM,"Torum is the SocialFi Metaverse ecosystem that is designed especially for cryptocurrency projects and users. This Web 3.0 ecosystem is built on a social media platform at its core, integrated with a DeFi player's yield farming marketplace, a crypto artists' NFT marketplace, and enthusiasts' Avatar NFTs. Bringing crypto enthusiasts together and allowing them to discuss and connect is the goal of Torum.",Đức
 Avocado DAO,AVG,"Through P2E blockchain gaming, Avocado Dao is the largest community of gamers collaborating to create a better future. They believe that blockchain technologies and the metaverse can be beneficial. As a means of making those benefits a reality, the Avocado DAO intends to pursue and facilitate a series of activities that will enrich the ecosystem of blockchain games as well as provide opportunities for members to engage in yield farming.",Đức
-Exeedme,XED,"Built on Polkadot, Exceedme is a decentralized tournament platform for gamers powered by NFTs and DeFi. By participating in matchmaking tournaments or challenging their friends to competitive matches with stakes, players can earn on Exeedme. The community can be encouraged to beta test new titles, and developers can gain critical feedback by tapping into its wisdom.",Đức
+Exeedme,XED,"Built on Polkadot, Exeedme is a decentralized tournament platform for gamers powered by NFTs and DeFi. By participating in matchmaking tournaments or challenging their friends to competitive matches with stakes, players can earn on Exeedme. The community can be encouraged to beta test new titles, and developers can gain critical feedback by tapping into its wisdom.",Đức
 Green Satoshi Token,GST,"STEPN, a blockchain-based game, uses the Green Satoshi Token (GST) as its in-game currency. The STEPN app rewards users for tracking their real-world activities, such as walking and jogging, then uploading their data to the app in exchange for non-fungible tokens (NFTs).",Đức
 AC Milan Fan Token,ACM,"AC Milan fans can earn reward points, gain VIP experiences, and purchase club merch through ACM, providing them with a means of showing their loyalty and support for the club. Like other token-based platforms, such as Ethereum, ACM is based on the principle that the greater your number of tokens, the greater your influence.",Đức
 Troy,TROY,"Troy Trade is a global prime broker that specializes in managing and trading crypto assets. Institutional clients and professionals can enjoy a full range of crypto brokerage services, including spot and margin trading, derivatives, data, custody, lending, and staking on a single account.",Đức
@@ -358,14 +358,13 @@ MiL.k Alliance,MLK,"Milk Coin (MLK) is the key currency used by MiL.k to enable 
 VeThor Token,VTHO,"VeChainThor's public blockchain employs two tokens, one of which is VeThor Token. VTHO plays a crucial role in ensuring the overall functionality of the blockchain, while VeChain Token (VET) is the native token of the platform.",Martin
 Akash Network,AKT,"The Akash Network is a native utility token built with Cosmos SDK that provides governance, security, and a default means to store and exchange value through Akash Token (AKT), a native utility token.",Martin
 Biconomy,BICO,"The Biconomy protocol is a multichain relayer that is aimed at improving the transaction experience and onboarding process for decentralized applications (DApps). With this infrastructure, decentralized application bottlenecks can be solved.",Martin
-Klever,KLV,,Martin
-Alpha Venture,DAOALPHA,,Martin
-Request,REQ,,Martin
-Reef Finance,REEF,,Martin
-StormX,STMX,,Martin
-Verge,XVG,,Martin
-Beta Finance,BETA,,Martin
-Savanna,SVN,,Martin
+Klever,KLV,"With market-leading speed, ironclad security, market maker opportunities, and low fees, Klever Exchange is the place for those who are new to crypto trading but still want a simpler user experience. The Klever Exchange platform is designed and built around what the end-user wants. It is aimed both at users who are taking their first steps and do not yet know what crypto trading is all about, as well as more advanced tools to benefit traders at a later stage.",Martin
+Request,REQ,"REQ (Request) is a utility token that is an essential component of the Request Network, ensuring performance and stability. The Request Network itself is a decentralized payment system based on Ethereum that allows users to request payments and receive money securely. This solution removes the need for third parties, enabling a more secure, cheaper method of payment.",Martin
+Reef Finance,REEF,"Reef is a Fast Layer-1 Blockchain for DeFi, NFT, and Gaming that is dependable, extensible, and efficient. Powered by Substrate Framework, it enables low-cost, instant transactions with a high level of scalability. Additionally, Solidity and EVM support are built-in, making it easy for developers to migrate DApps from Ethereum seamlessly.",Martin
+StormX,STMX,StormX' is a revolutionary Chrome extension and app that lets users earn cryptocurrency in a variety of ways. The STMX token provides users with cryptocurrency rewards when they shop online using the App or browser extension.,Martin
+Verge,XVG,"The Verge cryptocurrency and blockchain were created as a privacy-focused alternative to bitcoin (BTC), offering a fast, efficient, decentralized payment system. Additionally, it supports anonymity networks such as Tor and allows transactions to be sent to stealth addresses.",Martin
+Beta Finance,BETA,"Using Beta Finance, crypto-assets can be borrowed, lent, and shorted without permission on Ethereum. Users have access to an automated and permissionless money market where tokens can freely and automatically be listed. After their launch on Ethereum Mainnet, Beta Finance plans on launching on additional layers one and two solutions.",Martin
+Savanna,SVN,Savanna Finance focuses entirely on its algorithmic cross-chain stable coin protocol which is stabilized with real use-cases throughout the DeFi Ecosystem. SVN is their algorithmic stablecoin designed for price stability currently pegged to the value of one MMF (Mad Meerkat Finance). ,Martin
 Bitcoin Cash,BCH,"Bitcoin Cash is a peer-to-peer cash system. There is no need for third parties and a Central Bank for this hassle-free decentralized cryptocurrency. As a result of a Bitcoin hard fork in August 2017, Bitcoin Cash was created. Due to its larger block size than Bitcoin, Bitcoin Cash allows more transactions per block.",Đức
 LEO Token,LEO,"The LEO Token (LEO) is a utility token intended for use on the Bitfinex exchange and other trading platforms operated by Bitfinex's parent company, iFinex. In addition to strengthening Bitfinex's community, the token is expected to optimize the platform's operations.",Đức
 The Sandbox,SAND,"The Sandbox is a community-driven platform that allows creators to monetize voxel assets (pixel with volume, hence vo-xel) and gaming experiences through blockchain. Through The Sandbox, creators will be able to own their creations as non-fungible tokens (NFTs) and be rewarded for taking part in the ecosystem.",Đức
@@ -597,7 +596,7 @@ Klima DAO,KLIMA,"Klima DAO is a decentralized autonomous organization that aims 
 ",Đức
 Swarm,BZZ,"The Swarm network creates a decentralized storage and communication service by networking peer-to-peer nodes. Powered by the BZZ token and enforced by smart contracts on the Ethereum blockchain, the system is economically self-sustaining.
 ",Đức
-PEAKDEFI,PEAK,"PeakDEFI is a decentralized asset management fund that helps investors and asset managers connect.
+PEAKDEFI,PEAK,"PeakDEFI is a decentralized asset management fund that helps investors and asset managers connect. 
 ",Đức
 Vectorspace AI,VXV,Vectorspace AI offers alternative datasets and a 'feature engineering' platform in addition to machine learning and financial informatics. Researchers who use patent-protected NLP/NLU can accelerate their data-driven innovation and discoveries with Vectorspace AI's correlation matrix datasets.,Đức
 Saito,SAITO,"Blockchain applications can be run directly in your browser with Saito, a Web3 Foundation grant recipient. Instead of passing infrastructure costs to predatory monopolies like Infura, the network pays ISPs instead of miners and stakers.",Đức
@@ -611,10 +610,10 @@ SuperRare,RARE,"The SuperRare NFT platform lets artists' works be hand-picked, a
 Travala.com,AVA,"Binance-backed Travala is the world-leading travel booking platform. Travala's native token, AVA powers The Customer Loyalty Program (Smart Program), Standard Booking Givebacks, Best Price Guarantee, Referral Program, Affiliate Program, and more.",Đức
 c0x,CZRX,"The Compound 0x protocol is an algorithmic, autonomous interest rate protocol created for developers and to unlock the potential of open financial applications.",Đức
 Verus Coin,VRSC,"Verus Coin is a zero-knowledge technology (a mechanism for verifying data, such as transactions and personal information or identification, without giving up control of the information); the project also works to offer Public Blockchains as a Service (PBaaS). Verus Coin uses a new consensus algorithm called Proof of Power, which is a 50/50 PoW/PoS system designed to fix the weaknesses in other PoS systems.",Đức
-Enzyme,MLN,"Through its MLN token, Enzyme allows users to choose investment strategies of your choice - from discretionary to Robo to ETFs to market-making. Security is the top priority for Enzyme. Enzyme's second-generation smart contract platform is thoroughly tested and audited before it is deployed on the mainnet.",Đức
+Enzyme,MLN,"Through its MLN token, Enzyme allows users to choose investment strategies of their choice - from discretionary to Robo to ETFs to market-making. Security is the top priority for Enzyme. Enzyme's second-generation smart contract platform is thoroughly tested and audited before it is deployed on the mainnet.",Đức
 Propy,PRO,"Using blockchain technology, Propy is the first international real estate marketplace. By introducing a fully decentralized marketplace, Propy hopes to solve a number of problems in the real estate industry, such as delayed communication and repetition.",Đức
 Quickswap,QUICK,"A permissionless decentralized exchange (DEX) built on Ethereum and utilizing Matic Network's Layer 2 scalability infrastructure, QuickSwap is a transparent and decentralized platform.",Đức
-Ampleforth,AMPL,"In addition to being Ethereum-based, Ampleforth has an algorithmically controlled circulating supply. Ampleforth is designed to serve as the basis for the new decentralized economy by providing an asset that cannot be diluted by supply inflation and remains separated from the price action of other cryptocurrencies, including Bitcoin (BTC).",Đức
+Ampleforth,AMPL,"Ethereum-based Ampleforth has an algorithmically controlled circulating supply. Ampleforth is designed to serve as the basis for the new decentralized economy by providing an asset that cannot be diluted by supply inflation and remains separated from the price action of other cryptocurrencies, including Bitcoin (BTC).",Đức
 RedFOX Labs,RFOX,"RFOX aims to be the global leader in immersive experiences focused on retail, media, gaming, and rewards on the 3D online universe called metaverse. The RFOX token is available on Ethereum, Binance Smart Chain, and WAX with more chain integrations coming in future updates.",Đức
 Boson Protocol,BOSON,"Developed for electronic commerce transactions, BOSON Protocol is a decentralized infrastructure. Utilizing tokenized futures contracts, the BOSON ecosystem enables the exchange of digital value for real-world products and services.",Đức
 Efforce,WOZX,"Efforce is a decentralized energy efficiency platform with WOZX as the native cryptocurrency token. The principal aim of Efforce is to introduce democratic principles to the energy efficiency industry, which still suffers from early setbacks with financing and global outreach. The WOZX tokens are used as the medium for tokenizing energy savings generated on the Efforce platform and making them usable by anyone.",Đức
@@ -622,90 +621,97 @@ RIZON,ATOLO,"Based on Tindermint, RIZON Blockchain is a digital currency and ass
 DFI.money,YFII,"DFI.money (YFII) is a fork of the popular decentralized finance (DeFi) aggregator platform yearn.finance (YFI). DFI.money's native token is YFII, which is a fixed-supply token earned by liquidity providers as a result of their interaction with the network.YFII also plays the role of the governance token for the DFI.money community.",Đức
 Pylon Protocol,MINE,"Pylon Protocol is a decentralized finance (DeFi) framework for yield-based, principal-protected products and services. Terraform Labs (TFL) developed Pylon, an incentive payment system built on the Terra blockchain, to deliver long-term alignment between users and service providers where payments are rendered in cash flow rather than upfront.",Đức
 Alpaca Finance,ALPACA,"Alpaca Finance is the largest lending protocol on Binance Smart Chain for leveraged yield farming. Using it, lenders earn stable and safe returns on their investments, and lenders offer undercollateralized loans to borrowers so they can take advantage of leveraged yield farming positions, vastly increasing their profits.",Đức
-Linear,LINA,,Đức
-ARPA Chain,ARPA,,Đức
-Uquid Coin,UQC,,Đức
-Handshake,HNS,,Đức
-Tornado Cash,TORN,,Đức
-Nerve Finance,NRV,,Đức
-Haven,XHV,,Đức
-Flamingo Finance,FLM,,Đức
-Circuits of Value,COVAL,,Đức
-LTO Network,LTO,,Đức
-Crabada,CRA,,Đức
-Ethernity Chain,ERN,,Đức
-Shiden Network,SDN,,Đức
-cVault.finance,CORE,,Đức
-DEUS Finance,DEUS,,Đức
-Netvrk,NTVRK,,Đức
-SERO,SERO,,Đức
-ShareToken,SHR,,Đức
-Onston,ONSTON,,Đức
-GuildFi,GF,,Đức
-Phala Network,PHA,,Đức
-QANplatform,QANX,,Đức
-Gains Network,GNS,,Đức
-Oxygen,OXY,,Đức
-Samoyedcoin,SAMO,,Đức
-Tranchess,CHESS,,Đức
-BitShares,BTS,,Đức
-OpenDAO,SOS,,Đức
-Kin,KIN,,Đức
-EverRise,RISE,,Đức
-Presearch,PRE,,Đức
-Sovryn,SOV,,Đức
-DIA,DIA,,Đức
-Somnium Space CUBEs,CUBE,,Đức
-bZx Protocol,BZRX,,Đức
-SingularityDAO,SDAO,,Đức
-DerivaDAO,DDX,,Đức
-Doge Army Token,DGAT,,Đức
-Refereum,RFR,,Đức
-Voxies,VOXEL,,Đức
-AVINOC,AVINOC,,Đức
-Elastos,ELA,,Đức
-TempleDAO,TEMPLE,,Đức
-Ampleforth Governance Token,FORTH,,Đức
-Toucan Protocol: Base Carbon Tonne,BCT,,Đức
-Coin of the champions,COC,,Đức
-Vega Protocol,VEGA,,Đức
-Ambire AdEx,ADX,,Đức
-Tokocrypto,TKO,,Đức
-Manchester City Fan Token,CITY,,Đức
-Qi Dao,QI,,Đức
-COCOS BCX,COCOS,,Đức
-Star Atlas,ATLAS,,Đức
-Bluzelle,BLZ,,Đức
-Dash Diamond,DASHD,,Đức
-DeversiFi,DVF,,Đức
-Woonkly Power,WOOP,,Đức
-Silo Finance,SILO,,Đức
-Contentos,COS,,Đức
-ShibaDoge,SHIBDOGE,,Đức
-PolySwarm,NCT,,Đức
-Ribbon Finance,RBN,,Đức
-BarnBridge,BOND,,Đức
-Rarible,RARI,,Đức
-Cudos,CUDOS,,Đức
-NFTX,NFTX,,Đức
-ApeSwap,BANANA,,Đức
-Hector Finance,HEC,,Đức
-Bytecoin,BCN,,Đức
-Trustswap,SWAP,,Đức
-e-Money,NGM,,Đức
-Streamr XDATA,XDATA,,Đức
-Peony Coin,PNY,,Đức
-Cortex,CTXC,,Đức
-CateCoin,CATE,,Đức
-Rich Quack,QUACK,,Đức
-MixMarvel,MIX,,Đức
-Groestlcoin,GRS,,Đức
-Fuse,FUSE,,Đức
-Mossland,MOC,,Đức
-Bella Protocol,BEL,,Đức
-Aleph.im,ALEPH,,Đức
-Kava Lend,HARD,,Đức
-Litentry,LIT,,Đức
+Linear,LINA,"The Linear protocol defines itself as unlimited in terms of liquidity and allows the creation of synthetic assets. LINA is the native cryptocurrency of the Linear protocol. LINA coin provides the opportunity for extra coins to be earned in the interest yield type in the DeFi protocol, which is used exclusively during the staking and lending phases.",Đức
+ARPA Chain,ARPA,"Enabled by Multi-Party Computation (MPC), blockchain-based ARPA is a layer 2 solution for privacy-preserving computation. ARPA aims to separate data utility from ownership and enable data renting. The ARPA MPC protocol enables multiple entities to analyze data collaboratively and extract data synergies while maintaining the confidentiality and security of each party's data input.",Đức
+Uquid Coin,UQC,"Based on the popular Ethereum’s ERC20 Token, UQC is a decentralized virtual currency. UQC aims to supplement the development of the UQUID Ecosystem. Using UQC, token holders can instantly and effortlessly cash out their tokens.",Đức
+Handshake,HNS,Handshake is a permissionless decentralized system intended to encourage distributed networks of computers to operate a domain name registration system. Handshake aims to provide an alternative to existing certificate authorities and naming systems by having each peer verify and manage the root DNS naming zone.,Đức
+Tornado Cash,TORN,"Ethereum-based Tornado Cash is a decentralized, non-custodial privacy solution. By breaking the on-chain link between the recipient and destination addresses, it improves the privacy of transactions. Tornado Cash utilizes smart contracts that exclusively accept ETH and ERC-20 deposits.",Đức
+Nerve Finance,NRV,"The Nerve automated market maker (AMM) provides traders access to Binance's Smart Chain for trading stablecoins and pegged assets. Nerve's first pool launches with USDT, USDC, and BUSD, three dollar-pegged stablecoins.",Đức
+Haven,XHV,"The Haven network uses XHV as its base currency. Haven is a Proof-of-Work (PoW) cryptocurrency powered by the CryptoNote protocol with a two minutes block time. Haven is based on Monero, which focuses on security, privacy, and untraceable transactions.",Đức
+Flamingo Finance,FLM,"Developed on the Neo blockchain, Flamingo is an interoperable, decentralized full-stack finance protocol. Amongst Flamingo’s five main components are Wrapper - a cross-chain asset gateway, Swap - a liquidity provider that operates on-chain, Vault - an asset manager, and  Perp - an AMM-based contract trading platform that runs indefinitely, and also DAO - a decentralized governance mechanism.",Đức
+Circuits of Value,COVAL,"The Ethereum-based token Circuits of Value, also called COVAL, powers Emblem, a platform where users can create and personally combine ETH, ERC-20, and NFT tokens into a single, tradable token collectively called a Vault. Liquidity providers are rewarded with the ownership of COVAL, which can be used to create Vaults.",Đức
+LTO Network,LTO,"Liquid Task Orchestration, or LTO for short, utilizes its hybrid (2-layer) approach and allows enterprises and governments to maintain compliance with GDPR and retain data privacy while orchestrating inter-organizational workflows in a decentralized way.",Đức
+Ethernity Chain,ERN,Ethernity is a platform based on blockchain technology that helps users take advantage of the rising popularity of non-fungible tokens (NFTs). Ethernity is a decentralized finance (DeFi) crossover project with verified NFTs. All NFTs can be traded on-chain using In the Ethernity ecosystem.,Đức
+Shiden Network,SDN,"Kusama-based Shiden Network is a multi-chain decentralized application layer. Kusama Network uses Shiden Network as a smart contract layer. Ethereum Virtual Machine, WebAssembly, and Layer2 solutions are all supported on the Shiden Network. Furthermore, the platform supports various applications like DeFi, and NFTs, amongst others.",Đức
+cVault.finance,CORE,"The cVault.finance token is the first high yield deflationary token that can be farmed. Users of CORE's ecosystem can earn rewards from a growing number of strategies by providing liquidity to one of three liquidity pools. The liquidity pools provided by CORE are Ethereum, Bitcoin, and DAI.",Đức
+DEUS Finance,DEUS,"DEUS Finance Evolution is a marketplace that offers decentralized financial services. DEUS Finance specializes in ​providing the infrastructure for others to build financial instruments, such as synthetic stock trading platforms and futures trading, amongst others.
+",Đức
+Netvrk,NTVRK,Blockchain-based Netvrk is a metaverse with tools that allow users to play-to-earn using NFTs and Virtual Land.,Đức
+SERO,SERO,SERO is a platform that protects the privacy of Decentralized Applications (DApps). SERO aims to become the next-generation privacy blockchain that integrates smart contracts while enabling not only the issuance of privacy coins but also anonymous assets.,Đức
+ShareToken,SHR,"Ultilizing the ShareRing platform, ShareToken is a utility token that is used to make payments for sharing services across industries and geographies. The ShareRing platform includes the ShareRing application, ShareRing shop, and each ShareRing user’s ID. Aside from being used as payment for transaction fees on the ShareRing network, SHR tokens can also be staked to earn rewards.",Đức
+Onston,ONSTON,"Onston builds a 3D virtual world by linking VR/AR devices to the ONVERSE Platform and ONVERSE Marketplace, an advanced virtual reality metaverse ecosystem that uses blockchain technology.",Đức
+GuildFi,GF,"GuildFi is a Web 3 platform developed to connect players, games, and investors in order to build a community of people who are interested in Play-to-earn games (GameFi) and preparing to enter the Metaverse. GuildFi aims to remove barriers to entry into GameFi by offering scholarships for players interested in GameFi, creating tools for analysis and maximizing earning, and being a learning hub for players interested in GameFi and the Metaverse.",Đức
+Phala Network,PHA,"Phala Network is a protocol for preserving data for privacy purposes, as well as data protection and blockchain smart contracts. Amongst many uses of PHA, the native utility token of the platform, are buying trusted computing resources, governance of the community, staking, and paying transaction fees.",Đức
+QANplatform,QANX,QANplatform (QANX) is the hybrid blockchain platform that is both resistant to cryptanalytic attacks by a quantum computer and also enables developers and enterprises to rapidly build software applications like DApps or DeFi as well as run business processes on the blockchain.,Đức
+Gains Network,GNS,"Gains Network is a decentralized leverage trading platform that allows users to predict the rise and fall of an asset, it also corrects predictions that ultimately lead to profits. With Gains Network, users get an optimized suite of advanced tools and DeFi technologies that will help you create the most comprehensive, global decentralized finance ecosystem.",Đức
+Oxygen,OXY,"Built on top of Solana's network and powered by the Serum’s on-chain infrastructure, Oxygen is a non-custodial, decentralized protocol. The protocol offers lending and borrowing, fund transfers, and token exchanges, among other services.",Đức
+Samoyedcoin,SAMO,"SAMO is a rising digital asset that supports a community that prioritizes integrating Solana users, educating market participants, making personal connections, and assisting one another in navigating life. SAMO is the fastest, most efficient, and most eco-friendly dog coin, it aspires to be Solana's Ambassador.",Đức
+Tranchess,CHESS,"Tranchess (CHESS) is a yield-enhancing asset tracker which offers a variety of risk-return solutions. Also known as Token Queen, the main fund tracks an underlying asset and can be split equally into two sub-funds. BTC is chosen specifically as the first asset to be tracked by Transchess.",Đức
+BitShares,BTS,"Blockchain-based financial platform BitShares provides financial services. Using industry-grade blockchain technology, BitShares Blockchain is ideal for businesses, organizations, or individuals, with a free-market economy and ecosystem.",Đức
+OpenDAO,SOS,"OpenDAO is a digital community with the main goal of leveling the playing field for both creators and collectors. In it, the SOS token is created as a tribute to content creators and content collectors alike for their contributions to the entire NFT ecosystem.",Đức
+Kin,KIN,"Kin is a decentralized cryptocurrency created to be intuitively used in both the Mobile platform and Web apps. Kin rewards developers for their increased usage with a built-in incentive model. The Kin app platform pays developers for creating engaging cryptocurrency-based user experiences, resulting in greater engagement and shared economic benefits for users and developers.",Đức
+EverRise,RISE,"EverRise is a blockchain technology company whose mission is to increase accessibility to decentralized finance by introducing security solutions. EverRise provides investors and developers the tools to access the widest, most secured possible market by utilizing a creative ecosystem of DApps. Powered by the EverRise DApps ecosystem, the EverRise token is a multi-chain, collateralized cryptocurrency.",Đức
+Presearch,PRE,Presearch aims to deal with the shortcoming of traditional search engines by allowing users to monetize the data instead of the other way around. Presearch does this by paying its users to utilize its search engine.,Đức
+Sovryn,SOV,"Sovryn is a permissionless and non-custodial platform for lending, borrowing, and margin trading Bitcoins. Sovryn is a DeFi platform for Bitcoin users that is live on the RSK mainnet, allowing users to trade Bitcoin natively and permissionless on a decentralized application.",Đức
+DIA,DIA,Decentralized Information Assets (DIA) provides financial institutions with a single source of immutable and verified market data for any market and asset type. DIA is the governance token for the DIA platform.,Đức
+Somnium Space CUBEs,CUBE,"Built on the Ethereum blockchain, Somnium Space is a vast virtual reality (VR) world. Somnium Space is an open-source platform that allows users to buy homes, digital land, buildings, and a variety of other in-game assets of value in its online multiverse.",Đức
+bZx Protocol,BZRX,"The bZx protocol enables the building of decentralized applications for margin trading, borrowing, lending, and staking so that lenders, borrowers, and traders can interact with the most flexible decentralized finance protocol across multiple blockchains. bZx is a decentralized, community-run project, with all major protocol changes being decided by the community.",Đức
+SingularityDAO,SDAO,"An AI-driven, decentralized and blockchain-based organization, SingularityDAO governs DynaSets, diversified baskets of cryptocurrencies assets dynamically managed by AI. In SingularityDAO, voting is decided by using the SDAO token (SDAO).",Đức
+DerivaDAO,DDX,"DerivaDAO is a decentralized exchange (DEX) used to trade derivatives on Ethereum. Real-time price feed, fast trade resolution, and a competitive fee structure are amongst DerivaDAO’s key performance advantages over other DEXs.",Đức
+Doge Army Token,DGAT,Doge Army Token (DGAT) is a doge token built specifically for the doge fan community. Doge Army Token aims to cultivate a community that unifies all doge fans. Members of the community are rewarded weekly through redistributions and giveaway events.,Đức
+Refereum,RFR,RFR is an Ethereum-based token used on the Refereum platform. Refereum offers gamers rewards for engaging with their favorite games and streamers.,Đức
+Voxies,VOXEL,"Voxie Tactics, a free-to-play tactical game uses Voxies (VOXEL) as its native utility currency. VOXEL allows players to purchase in-game items such as weapons and armor. As with Voxies NFTs, VOXEL tokens can be purchased within the game and then sold in the secondary market.",Đức
+AVINOC,AVINOC,"AVINOC (AVIation Network Operation Chain) provides a single, consistent, integrated, and permissionless data layer for decentralized, transparent, and global business flight coordination across all general aviation sectors, thereby enhancing cost efficiency and optimizing utilization.",Đức
+Elastos,ELA,"In addition to utilizing blockchain technology, Elastos also provides a peer-to-peer network for communication, centralized data storage, and a decentralized ID system for all users and digital assets. Elastos' main benefit is that it gives you full control over your digital assets, and you don't need to access the internet to use DApps.",Đức
+TempleDAO,TEMPLE,TempleDAO seeks to provide DeFi users with a safe haven where they can escape the volatility of crypto markets and take advantage of investment opportunities that offer high returns and steady price appreciation.,Đức
+Ampleforth Governance Token,FORTH,"By allowing the community to gain control of the protocol, FORTH is the governance token of Ampleforth (AMPL) that completes the AMPL ecosystem. FORTH tokens are available to those who have interacted on-chain with the AMPL ecosystem.",Đức
+Toucan Protocol: Base Carbon Tonne,BCT,"Base Carbon Tonnes (BCT) is an ERC 20 opaque token bridged by the Toucan Protocol. It represents one tonne of carbon from the Verra Verified Carbon Unit (VCU), with each VCU depicting a real emission saving from a project. The Toucan Bridge is the first to allow carbon credit users to bridge their VCUs into crypto.",Đức
+Coin of the champions,COC,"COC is the first Token that has multiple purposes and objectives that is supported by past and present athletes. COC distributes COCs to various non-profit organizations around the world and at both the national and international levels, which will be formalized over time. Holders of the COC tokens can use them in many commercial activities, including the purchase of goods and services.",Đức
+Vega Protocol,VEGA,"Tendermint-based Vega is a proof-of-stake protocol that makes it possible to trade derivatives on a decentralized network with comparable experience to centralized ones. Among many other privileges, Holders of the VEGA governance token are able to vote on the creation of new markets on the network and earn fees from traders through staking and delegating.",Đức
+Ambire AdEx,ADX,"Ambire AdEx is a decentralized solution for online advertising that eliminates fraud, optimizes budgets, and protects user privacy. Ambire AdEx’s open-source protocol for digital advertising is implemented in the ad exchange using Ethereum.",Đức
+Tokocrypto,TKO,"Tokocrypto's TKO cryptocurrency from Indonesia is the first to present a hybrid token model. Tokocrypto Tokens are used for various purposes on the Tokocrypto blockchain platform, including participating in crypto exchanges, deposit and savings programs, cross-platform DeFi applications, and NFT marketplaces.
+",Đức
+Manchester City Fan Token,CITY,"Developed by Socios.com, a Chiliz-based application, Manchester City Fan Token is a fan token. The club's tokens allow holders to influence club decisions, unlock VIP rewards, and access exclusive promotions, games, and recognition.",Đức
+Qi Dao,QI,"QiDao is a community-governed, self-sustaining DeFi protocol built on Polygon that allows users to borrow stablecoins (soft pegged to USD) interest-free against crypto assets.",Đức
+COCOS BCX,COCOS,"COCOS - BlockChain Expedition (BCX) is a platform dedicated to building ""the next generation of the digital game economy"". Cocos-BCX aims to provide developers with a highly convenient and complete multi-platform runtime environment for game development. In the future, COCOS intends to move from the in-game economy which uses fungible tokens to using a blockchain entirely.",Đức
+Star Atlas,ATLAS,"Star Atlas is a space-themed grand strategy game built on the Solana blockchain. In the Star Atlas metaverse, players trade, acquire, and create non-fungible tokens (NFTs) that reflect the value, tangibility, and ownership of real-world assets.",Đức
+Bluzelle,BLZ,"Bluzelle is a decentralized storage network for the creator economy. The Bluzelle platform is censorship-resistant, delivers unparalleled security, and is unmatched in terms of availability. Artists, musicians, scientists, publishers, developers, and creators alike can trust Bluzelle in the protection of their intellectual property.",Đức
+Dash Diamond,DASHD,Users of the DECONOMY ecosystem are rewarded with the Dash Diamond coin for their social behavior.,Đức
+DeversiFi,DVF,"DeversiFi is a layer 2 Ethereum exchange designed to help users take advantage of Decentralised Finance (DeFi). DeversiFi users can swap, trade, yield farm, send and invest in some of the best DeFi interest-earning opportunities without paying Ethereum gas costs, all from the security and control of their private wallet.",Đức
+Woonkly Power,WOOP,"The Woonkly Power (WOOP) is a DeFi protocol that uses Blockchain technology to operate a Decentralized Social Network in which the money advertisers spend to post advertisements is shared with the audience who interacts with it, be it posts, photos, podcasts, videos, or podcasts. WOOP made this possible by operating on its own mainnet (Hyperledger BESU and Polkadot), which is connected to Binance Smart Chain (BSC).",Đức
+Silo Finance,SILO,"Silo Finance (SILO) is a non-custodial lending protocol for borrowing crypto assets with another. The SILO protocol is secure, efficient, and inclusive. With SILO, any token can serve as collateral.",Đức
+Contentos,COS,"The Contentos blockchain protocol aims to establish a decentralized digital market for content that supports all stakeholders, including creators, consumers, and advertisers and rewards them according to their contributions.",Đức
+ShibaDoge,SHIBDOGE,ShibaDoge is a cryptocurrency created by Shiba and Dogecoin whales to benefit both communities. ShibaDoge is a self-deflating token that features anti-whale: wallets are limited to 1% total supply available; self-deflationary: supplies are reduced with every transaction; and anti-botting.,Đức
+PolySwarm,NCT,"PolySwarm, a community, and network for detecting malware uses NCT tokens to power its community. In return for cybersecurity data, NCT rewards are distributed to users. Insights provided by the network are accessed with NCT.",Đức
+Ribbon Finance,RBN,"Ribbon Finance creates structured products that deliver sustainable yields using financial engineering. Ribbon Finance’s first product is designed around automated option strategies that maximize yield. In addition, developers can combine various DeFi derivatives to create arbitrary structured products.",Đức
+BarnBridge,BOND,BarnBridge is a protocol for tokenizing risks. The BarnBridge project extends DeFi's functionality to make it more efficient and flexible. Barnbridge can reduce volatility for conservative investors or increase it for daytraders by tokenizing market fluctuations and exposure to risks.,Đức
+Rarible,RARI,"Rarible is an NFT marketplace and issuance platform that utilizes the RARI token to empower users, especially creators, who actively interact with the protocol. On the Rarible platform, users can easily create non-fungible tokens (NFTs) for digital items such as artwork, games, and more. In order to create a smooth and easy user experience, the platform offers users a fully-featured marketplace that can be filtered and sorted using different categories.",Đức
+Cudos,CUDOS,"Cudos is a Layer 1 network that provides scalable distributed computing directly to smart contracts or bridged blockchains. With Cudos, blockchain developers and services can access a global pool of computing power.",Đức
+NFTX,NFTX,"NFTX is a community-operated protocol and platform for creating non-fungible tokens (NFT) backed by ERC-20 tokens. In addition to enabling the creation and trading of funds, NFTX tracks sought-after collectibles such as CryptoKitties, CypherPunks, and others.",Đức
+ApeSwap,BANANA,"ApeSwap (BANANA) is a decentralized exchange (DEX) for Binance Smart Chain (BSC) tokens. Apeswap offers a complete toolkit for DeFi uses including the purchase of tokens that trade against BANANA, token swaps, providing liquidity, staking, lending and borrowing, IDOs, and margin trading.",Đức
+Hector Finance,HEC,The HEC token is part of a financial center being developed by Hector Finance on the Fantom Opera Chain and beyond.,Đức
+Bytecoin,BCN,"Bytecoin is a private, decentralized cryptocurrency with open source code that everyone can contribute to the development of the Bytecoin network. Bytecoin is the best solution for those who want to keep their finances secured and private.",Đức
+Trustswap,SWAP,"The TrustSwap platform, cryptocurrency, and protocol promise to contribute to a brand new era of decentralized finance (DeFi). TrustSwap aims to achieve this through next-generation multi-chain token swaps and other functionalities that aim to solve existing problems with split payments, subscriptions, and cross-chain token swaps.
+",Đức
+e-Money,NGM,"In addition to being a payment method, e-Money serves as a store of value. e-Money uses NGM as its staking token. By staking their NGM tokens, holders become eligible for NGM rewards.",Đức
+Streamr XDATA,XDATA,"Streamr Network (XDATA) allows you to connect your data to the rest of the world with a bulletproof publisher/subscriber data transfer layer. Streamr promises a fast, scalable, and secured network that can be accessed anywhere as long as Javascript is operable.",Đức
+Peony Coin,PNY,"Peony Coin (PNY) is a proof-of-stake coin using the Scrypt algorithm. Peony Coin allows consumers to directly purchase farm products from farmers. Furthermore, users can participate in farmland, individual animals, special agriculture services, and assets.",Đức
+Cortex,CTXC,"The Cortex platform is an open-source, distributed, peer-to-peer blockchain platform that can be used to execute Artificial Intelligence (AI) models. With Cortex (CTXC), users will be able to infer using cutting-edge machine-learning models using smart contracts on the Cortex blockchain.
+",Đức
+CateCoin,CATE,"The Catecoin (CATE) is the world's first CAT-themed catcoin, launched with the intention of contributing real value to the world of memes. With Catecoin Meme Platform, meme creators can earn with their memes and create NFTs in a decentralized manner.",Đức
+Rich Quack,QUACK,"Rich Quack is another hyper-deflationary Binance Smart Chain (BSC) meme token that aims to generate yields frictionlessly while paying rewards to holders. Rich Quack aims to provide its holders with opportunities to earn money, through investing, building, holding, and winning.",Đức
+MixMarvel,MIX,"Through MIXMARVEL, global players and developers come together as one to create a large-scale virtual 3D world powered by blockchain. The mission of MixMarvel is to build the future of gaming by connecting developers, content creators, and players over shared value networks.
+",Đức
+Groestlcoin,GRS,"Groestlcoin is a proof-of-work cryptocurrency that can be used every day. The average block time for Groestlcoin is one minute, as opposed to Bitcoin's ten. Groestlcoin's developers aim to build a blockchain network in which all existing users have equal chances of mining.
+",Đức
+Fuse,FUSE,"The Fuse Network is an infrastructure that supports token-based applications while being fast and low cost. Offering mobile alternatives to banking and plug-and-play platforms, the project presents a scalable payment system for all. Fuse Network’s growing ecosystem consists of DeFi, NFTs, and payments.",Đức
+Mossland,MOC,"Mossland is a blockchain-based metaverse that connects the virtual and real worlds. Mossland has continuously released applications of virtual reality, augmented reality, and non-fungible tokens (NFTs) for the entertainment industry.
+",Đức
+Bella Protocol,BEL,"Bella's crypto banking platform offers a range of DeFi products to streamline the crypto banking process. Regardless of whether users are new or seasoned, Bella automates everything possible, from subsidizing gas fees to being accessible both on-chain and through Bella’s custodian services.",Đức
+Aleph.im,ALEPH,"Open-source and cross-chain Aleph.im is a decentralized database and identity framework that includes file storage, computing, and file management. Aleph.im's core mission is to help decentralized apps and protocols rid themselves of centralized components and achieve a fully decentralized architecture.
+",Đức
+Kava Lend,HARD,"Kava Lend is a decentralized money market built on the Kava Platform that allows cross-chain lending and borrowing of assets. Deposits can be made with Kava Lend for BTC, XRP, BNB, BUSD, and USDX. Additionally, overcollateralized loans will be supported on the platform.",Đức
+Litentry,LIT,"Litentry provides Decentralized Identity (DID) indexing through a network of substrate-based credit computation, as well as a decentralized identity aggregation protocol across multiple networks. Litentry consists of decentralized identity and user activity data aggregation infrastructure that allows users to aggregate identities from other chains, as well as to match identities and stake identities.",Đức
 Silent Notary,UBSN,"SilentNotary is a multiplatform decentralized service that is used to convert digital events into legally significant evidence, with the purpose of confirming the existence of digital events like digital correspondences, images and videos.",Huy
 Firo,FIRO,"Firo, formerly named Zcoin, is a cryptocurrency that aims to be private digital cash. It accomplishes this by letting users burn their coins and redeem new ones which have an empty transaction history.",Huy
 Token Pocket,TPT,"TokenPocket Token, or TPT, is an applicational token that represents Token Pocket users and developers’ rights in the Token Pocket ecosystem.TPT also serves as an important link between the wallet, users and developers.",Huy
@@ -773,18 +779,18 @@ RAMP,RAMP,"With RAMP, DeFi users can stake tokens on Ethereum platforms without 
 Unizen,ZCX,"Unizen is an operating system for applications that enables cross-chain exchanges. Through a unified interface, Unizen provides a simple means of acquiring any asset, at the best fees, regardless of the trading style. The platform's trading module is powered by Binance Cloud, which enables users to trade with Binance-shared liquidity.",Martin
 Axion,AXN,Axion is a crypto account equivalent to a certificate of deposit (CD) account that promises a steady return based on inflation of 8%. It effectively bridges the gap between mainstream investors and cryptocurrencies.,Martin
 CargoX,CXO,"CargoX provides the ability to send digital documents instantly anywhere in the world. Shipments via CargoX are sent using a blockchain. Its aim is to compete with major carriers such as DHL, Fedex, and UPS.",Martin
-Tracer DAO,TCR,,Martin
-MATH,MATH,,Martin
-Impossible Finance Launchpad,IDIA,,Martin
-MANTRA DAO,OM,,Martin
-Frontier,FRONT,,Martin
-Kleros,PNK,,Martin
-New BitShares,NBS,,Martin
-Rainicorn,RAINI,,Martin
-Revolution Populi,RVP,,Martin
-Zignaly,ZIG,,Martin
-ApolloX,APX,,Martin
-Hotbit Token,HTB,,Martin
+Tracer DAO,TCR,"Tracer DAO (TCR) is an open-source protocol that uses smart contracts for executing derivatives. Tracer Factory templates allow anyone to quickly and easily deploy a derivatives trading market, so they can control their financial risk digitally in real-time. Tracer Perpetual Pools, its brand-new derivatives market, allows anyone to take a short or long position on any underlying asset. The positions are perpetual, non-liquid, fully collateralized, fully fungible, and do not require any upkeep.",Martin
+MATH,MATH,"MATH is a crypto platform that hosts several apps in the MathChain such as Math Wallet, Math DApp Store, Mathpay, etc. Since its founding in 2018, it has been supporting more than 63 public blockchains. The platform allows users to build their portfolios by using automated quantitative trading.",Martin
+Impossible Finance Launchpad,IDIA,"The Impossible Finance Launchpad (IDIA) empowers you with high-quality, fair, and accessible cryptocurrency investment opportunities and is the leading crypto investment platform. Through its accelerator, the launchpad simplifies DeFi investing, trading, and yields.",Martin
+MANTRA DAO,OM,"OM is a native utility token on MANTRA DAO that is used for staking, lending, and governance. It is currently being developed on the RioChain, and will furthermore integrate with the Polkadot ecosystem. The platform is primarily intended to serve as an ecosystem for Web 3.0.",Martin
+Frontier,FRONT,"Founded in 2013, Frontier is an open-source decentralized finance (DeFi) aggregator. Frontier's platform lets you manage stakes, DeFi positions, best-rate asset swaps, determine liquidity, and create and monitor CDPs. Frontier is providing users with the core features of DeFi, regardless of the platform they are using.",Martin
+Kleros,PNK,"The Kleros (PNK) platform launched in July 2018 and provides a decentralized dispute resolution mechanism. The protocol uses blockchain technology and crowdsourcing to arbitrate disputes fairly through an open-source online platform. The protocol essentially works as a mediator between DApps and their users. In the case of a dispute, Kleros charges a fee, payable in ETH, which is provided by the disputing parties or derived from previously escrowed funds.",Martin
+New BitShares,NBS,"New BitShares (NBS) is a platform that supports DeFi businesses and decentralized exchanges by implementing the DPOS consensus. DPOS (Delegated Proof of Stake) is a consensus algorithm developed to ensure that transactions on a blockchain are correctly represented. It is intended as a technology-based democracy implementation, which is secured by a voting and election process to prevent any centralization and malicious use of the blockchain.",Martin
+Rainicorn,RAINI,"Rainicorn is a revolutionary NFT farming platform, which allows its users to mint their own limited edition NFT-based projects. Using $RAINI, you can unlock many interconnected streams of value. You can earn rewards by staking or providing liquidity and redeem them without any additional effort.",Martin
+Revolution Populi,RVP,"Revolution Populi is a crypto project dedicated to returning data sovereignty to the people. The platform is basically an open Web3 ecosystem for apps, ranging from social to financial to games.",Martin
+Zignaly,ZIG,"Through Zignaly, retail investors have a secure way to invest with professional asset managers. Users and traders receive automatically distributed profits, without any upfront payment from Zignaly or the professional trader. With its performance-based business model, the platform is arguably one of the industry's most cost-efficient wealth management tools.",Martin
+ApolloX,APX,"ApolloX is the first crypto derivatives exchange that incorporates both CEX and DEX. Founded in 2021, ApolloX's mission is to lower entry barriers so everyone has access to crypto, not just the elite. The ApolloX platform offers users the option of trading perpetual futures with leverage as high as 50x. $APX is the platform's utility token and is acquired via trading rewards on ApolloX as a reward.",Martin
+Hotbit Token,HTB,"$HTB is a token of the Hotbit trading platform that runs on the Ethereum platform. The exchange platform provides trading services between major digital currencies such as Bitcoin and Ethereum, making it one of the world's leading professional digital asset exchange platforms. Hotbit boasts world-class security and has never experienced any loss of assets due to a security vulnerability.",Martin
 StarTerra,STT,"StarTerra is a special kind of launchpad that is gamified by a system of competition. Built on the Terra ecosystem, StarTerra allows members to stake more STT than the minimum amount required to get their project higher on the ‘leaderboard’, leading to a better chance of winning allocation to buy IDO. There is competition between different tiers (called “factions”) and between projects in the same tier as well.",Huy
 Reflexer Ungovernance Token,FLX,"Reflexer Ungovernance Token (FLX) is a token used on the Rai Reflex Index (RAI) system, an ETH-backed stable asset. FLX can either serve to be automatically created in case the RAI system is underwater as a last resort, or used to ungovern the RAI system: which is to let the community decide how to remove themselves from the protocol.",Huy
 Ovr,OVR,"Ovr is a platform created on the Ethereum blockchain for hosting and visualizing geo-located AR and VR contents. It does this by dividing Earth into 1.6 trillion hexagons, each one representing a unique location. The owner of this location can then host an AR/VR experience on it, including gaming, live events, virtual retail, tourism, and more.",Huy
@@ -805,260 +811,263 @@ Koinos,KOIN,"Koinos describes itself as a brand new blockchain built from the gr
 The Doge NFT,DOG,"The Doge NFT is a gateway to joining the DAOGE, which describes itself as a “a metalabel for fractionalized memes, and an internet cult social club.”",Huy
 Velo,VELO,"The Velo Protocol is a blockchain financial protocol that enables digital credit issuance and smart contract usage to transfer assets. It powers the Velo Labs, which aims to be a unique federated credit exchange network.",Huy
 MovieBloc,MBL,"MovieBloc is a decentralized movie and content distribution platform with a mission to take away the dominant power of the entertainment industry conglomerates. Some of the perks MovieBloc offers are transparent revenue share and audience data to content creators, equal screening opportunities, access to diverse films and content for the viewers, and rewards for contributors who provide curation, subtitles and marketing materials.",Huy
-Cellframe,CELL,,
-Energi,NRG,,
-Banana,BANANA,,
-GET Protocol,GET,,
-LockTrip,LOC,,
-Star Atlas DAO,POLIS,,
-KRYLL,KRL,,
-Orca,ORCA,,
-FUSION,FSN,,
-tBTC,TBTC,,
-HyperCash,HC,,
-Polkaswap,PSWAP,,
-Mimo Governance Token,MIMO,,
-GameZone,GZONE,,
-Futureswap,FST,,
-Oxen,OXEN,,
-Global Coin Research,GCR,,
-Rubic,RBC,,
-Kujira,KUJI,,
-Akropolis,AKRO,,
-VitaDAO,VITA,,
-RAI Finance,SOFI,,
-Gifto,GTO,,
-DXdao,DXD,,
-Numbers Protocol,NUM,,
-Cream,CREAM,,
-Epic Cash,EPIC,,
-Shabu Shabu,KOBE,,
-sEUR,SEUR,,
-Solanium,SLIM,,
-Opulous,OPUL,,
-Aurox Token,URUS,,
-Lossless,LSS,,
-KI,XKI,,
-Snowbank,SB,,
-3X Long Ethereum Token,ETHBULL,,
-Edgeware,EDG,,
-Sipher,SIPHER,,
-BOSAGORA,BOA,,
-Rootkit,ROOT,,
-cLINK,CLINK,,
-dForce Token,DF,,
-Measurable Data Token,MDT,,
-VelasPad,VLXPAD,,
-Polkadex,PDEX,,
-Refinable,FINE,,
-DexTools,DEXT,,
-Metronome,MET,,
-DarkCrypto Share,SKY,,
-PKT,PKT,,
-BoringDAO,BORING,,
-Freeway Token,FWT,,
-Unifi Protocol DAO,UNFI,,
-Stader,SD,,
-Step Finance,STEP,,
-SUKU,SUKU,,
-Epik Prime,EPIK,,
-Aragon Court,ANJ,,
-HOPR,HOPR,,
-V.SYSTEMS,VSYS,,
-YIELD App,YLD,,
-Atari,ATRI,,
-Sentinel,DVPN,,
-Index Cooperative,INDEX,,
-Trias Token,TRIAS,,
-Router Protocol,ROUTE,,
-Nimiq,NIM,,
-Lazio Fan Token,LAZIO,,
-PAID Network,PAID,,
-TerraKRW,KRT,,
-Reimagined Finance,REFI,,
-Spectrum Token,SPEC,,
-Inverse Finance,INV,,
-DarkCrypto,DARK,,
-UXD Stablecoin,UXD,,
-Aventus,AVT,,
-WaykiChain,WICC,,
-Saber,SBR,,
-Hacken Token,HAI,,
-GoChain,GO,,
-SX Network,SX,,
-pNetwork,PNT,,
-Stratos,STOS,,
-Adappter Token,ADP,,
-Apollo DAO,APOLLO,,
-Atletico Madrid Fan Token,ATM,,
-Comdex,CMDX,,
-Friends With Benefits Pro,FWB,,
-OccamFi,OCC,,
-AirSwap,AST,,
-vEmpire DDAO,VEMP,,
-Lattice Token,LTX,,
-ScPrime,SCP,,
-Taboo Token,TABOO,,
-Sandclock,QUARTZ,,
-Yuan Chain Coin,YCC,,
-Sora,XOR,,
-GenesysGo Shadow,SHDW,,
-Ardana,DANA,,
-Mute,MUTE,,
-ADAPad,ADAPAD,,
-Ternoa,CAPS,,
-Permission Coin,ASK,,
-DogeBonk,DOBO,,
-Tokenlon,LON,,
-SpiritSwap,SPIRIT,,
-SwapXI Token,SWAPXI,,
-0chain,ZCN,,
-dotmoovs,MOOV,,
-pTokens BTC,PBTC,,
-Hiblocks,HIBS,,
-GamerCoin,GHX,,
-LGCY Network,LGCY,,
-Instadapp,INST,,
-Spartacus,SPA,,
-FC Barcelona Fan Token,BAR,,
-Paribus,PBX,,
-BTU Protocol,BTU,,
-ForTube,FOR,,
-Block Ape Scissors,BAS,,
-THORSwap,THOR,,
-Civilization,CIV,,
-BoringDAO BTC,OBTC,,
-BUX Token,BUX,,
-veCRV-DAO yVault,YVE-CRVDAO,,
-Mithril,MITH,,
-Wing Finance,WING,,
-Meter Governance,MTRG,,
-Metaverse Index,MVI,,
-LiquidDriver,LQDR,,
-Chain Games,CHAIN,,
-ZKSpace,ZKS,,
-UniLend Finance,UFT,,
-governance ZIL,GZIL,,
-HBTC Captain Token,HBC,,
-Counterparty,XCP,,
-OneLedger,OLT,,
-Vivid Labs,VID,,
-Crypto Raiders,RAIDER,,
-Era Swap Token,ES,,
-Symbiosis Finance,SIS,,
-STAKE,STAKE,,
-Glitch Protocol,GLCH,,
-Lyra Finance,LYRA,,
-Ekta,EKTA,,
-PearDAO,PEX,,
-Solend,SLND,,
-Conscious Value Network,CVNT,,
-InsurAce,INSUR,,
-Ariva,ARV,,
-StackOS,STACK,,
-Popsicle Finance,ICE,,
-Geist Finance,GEIST,,
-Shyft Network,SHFT,,
-VIDT Datalink,VIDT,,
-MarketMove,MOVE,,
-NFTY Token,NFTY,,
-Chain Guardians,CGG,,
-Universe.XYZ,XYZ,,
-Unisocks,SOCKS,,
-88mph,MPH,,
-DeXe,DEXE,,
-ELYSIA,EL,,
-Zombie Inu,ZINU,,
-ERC20,ERC20,,
-Terra World Token,TWD,,
-TRONPAD,TRONPAD,,
-BYTZ,BYTZ,,
-Lunar,LNR,,
-PowerPool Concentrated Voting Power,CVP,,
-Bread,BRD,,
-Tranquil Finance,TRANQ,,
-Quantum Resistant Ledger,QRL,,
-Cake Monster,MONSTA,,
-REVV,REVV,,
-Hot Cross,HOTCROSS,,
-Alkimi,$ADS,,
-ParagonsDAO,PDT,,
-FOAM,FOAM,,
-LBRY Credits,LBC,,
-Hoge Finance,HOGE,,
-RSS3,RSS3,,
-Lunr Token,LUNR,,
-Offshift,XFT,,
-Jade Protocol,JADE,,
-Inter Milan Fan Token,INTER,,
-Altair,AIR,,
-VEED,VEED,,
-Ultiledger,ULT,,
-Pibble,PIB,,
-Everest,ID,,
-Delta Exchange Token,DETO,,
-Jones DAO,JONES,,
-Apollo,APL,,
-Goldfinch,GFI,,
-DeFi Land,DFL,,
-Oraichain Token,ORAI,,
-Stronghold Token,SHX,,
-Hegic,HEGIC,,
-Reddcoin,RDD,,
-Cryptex Finance,CTX,,
-Kylin Network,KYL,,
-Santos FC Fan Token,SANTOS,,
-Tulip Protocol,TULIP,,
-Guild of Guardians,GOG,,
-Dora Factory,DORA,,
-PUTinCoin,PUT,,
-Trisolaris,TRI,,
-WeGro,WEGRO,,
-Pangolin,PNG,,
-AXEL,AXEL,,
-Vertcoin,VTC,,
-Sentivate,SNTVT,,
-Orion Money,ORION,,
-Premia,PREMIA,,
-Opacity,OPCT,,
-FloorDAO,FLOOR,,
-PolkaFoundry,PKF,,
-Media Licensing Token,MLT,,
-Dego Finance,DEGO,,
-Alchemist,MIST,,
-Polkamarkets,POLK,,
-PAC Protocol,PAC,,
-Stake DAO,SDT,,
-XELS,XELS,,
-Dragonchain,DRGN,,
-Strong,STRONG,,
-PIVX,PIVX,,
-DOSE,DOSE,,
-Cardstack,CARD,,
-Umbrella Network,UMB,,
-MultiVAC,MTV,,
-MCDEX,MCB,,
-Trabzonspor Fan Token,TRA,,
-Kuma Inu,KUMA,,
-Safe Haven,SHA,,
-ANGLE,ANGLE,,
-LOOP Finance,LOOP,,
-Neos Credits,NCR,,
-Pendle,PENDLE,,
-LikeCoin,LIKE,,
-Ref Finance,REF,,
-Validity,VAL,,
-Coinweb,CWEB,,
-Gemma Extending Tech,GXT,,
-VFOX,VFOX,,
-Vidya,VIDYA,,
-Internxt,INXT,,
-apM Coin,APM,,
-UniCrypt,UNCX,,
-GAMEE,GMEE,,
-Concave,CNV,,
-Pandacoin,PND,,
-Populous,PPT,,
+Cellframe,CELL,"Cellframe is a network designed to facilitate an infrastructure for secure and scalable cross-chain transfers through its multichain nature. CELL is the native utility token of the Cellframe network, used for staking, taking part in Cellchain auctions and value transferring within the ecosystem.",Huy
+Energi,NRG,"The Energi organization is a blockchain-based financial technology provider with a mission to deliver secure and decentralized financial solutions. The Energi token (NRG) is a PoS cryptocurrency that combines Ethereum smart contract compatibility with a self-funding treasury and a layer 1 and layer 2 protocol. In addition, NRG acts as the governance token for the Energiswap exchange.",Huy
+Banana,BANANA,"Banana is a fuel token for the CyberKongz ecosystem, which generates 2D/3D NFT social avatars for your online persona as well as offering a gamified experience to collect and mint NFTs. As the CyberKongz universe expands, it intends to add more utility to the Banana token.",Huy
+GET Protocol,GET,GET Protocol is a protocol for selling smart tickets for events with an emphasis on combating ticket fraud and using blockchain technology.,Huy
+LockTrip,LOC,"LockTrip uses blockchain technology to create a new travel marketplace without middlemen. As a result, people can save up to 60% on their bookings by getting rid of unnecessary commission fees. There are multiple payment methods to choose from: credit card, popular cryptocurrencies, or the native LOC token (which bypasses payment fees).",Huy
+Star Atlas DAO,POLIS,"Star Atlas aims to be a next-generation gaming metaverse. It uses the Solana protocol to create a serverless and secured gameplay experience, and NFTs to establish an economy that is tangible with real ownership.",Huy
+KRYLL,KRL,Kryll aims to be an automated strategies building platform for people with zero developing skill. People can access Kryll’s marketplace to choose from hundreds of community-created crypto trading strategies and use the platform to run these strategies on the cloud 24/7.,Huy
+Orca,ORCA,"Orca prides itself on being “the most user-friendly DEX on Solana”, striving to bring DeFi to the masses. It acts as an Automated Market Maker (AMM) on which users can swap assets, provide liquidity to earn yield. DeFi projects can also use Orca to integrate swapping, farming and on-chain data into their dApps.",Huy
+FUSION,FSN,"Fusion aims to be an all-inclusive blockchain-based financial platform, which means it offers services that are cross-chain, cross-organization and cross-data source. The project utilizes a hybrid system that combines elements from both PoW and PoS, with the goal of creating an efficient and safe platform.",Huy
+tBTC,TBTC,tBTC is an open-source project designed to enable the safe usage of Bitcoin in Ethereum DeFi apps. It accomplishes this by letting people exchange BTC for TBTC: an ERC-20 compatible token (every TBTC is backed by at least 1 BTC held in reserve.,Huy
+HyperCash,HC,"HyperCash is designed to facilitate value transfers across different blockchains with 2 types of wallets to choose from: white wallets are publicly viewable, while black wallets are private using zero-knowledge proofs.",Huy
+Polkaswap,PSWAP,"Polkaswap is an open-source, automated market maker that runs on the SORA network and is compatible with the Plokadot and Kusama ecosystem.",Huy
+Mimo Governance Token,MIMO,"MIMO is the governance token of the Mimo DeFi platform, which lets people enjoy liquidity from the crypto assets without selling them. Users can do this by depositing their assets into Vaults, then mint stable tokens called PAR against them. Once they return enough PAR to the platform, their assets are unlocked.",Huy
+GameZone,GZONE,"GameZone is a blockchain gaming platform that offers its community early access to new game releases, gaming tokens and NFTsm as well as play-to-earn opportunities, scholarships, tutorials and more.",Huy
+Futureswap,FST,"Futureswap is a decentralized, non-custodial, leverage trading protocol designed to let people gain leveraged exposure on assets. Liquidity providers deposit their assets to earn passive income while this liquidity is used by Futureswap protocol and other AMMs to create leveraged exposure.",Huy
+Oxen,OXEN,"Oxen, formerly known as LOKI, has a mission to build a private cryptocurrency with instant transactions, a powerful PoS network, a secure messaging platform, and a network anonymity layer. The Oxen coin can be used to stake and to purchase name registrations for Oxen’s onion router (an open-source privacy network that enables anonymous web browsing) and private messenger.",Huy
+Global Coin Research,GCR,"Global Coin Research (GCR) is a social cryptocurrency for the decentralized DAO of the same name, designed to be a community of learners and investors. The vision of Global Coin Research is a community where contributors are directly supported by consumers.",Huy
+Rubic,RBC,"Rubic is a multi-chain swap protocol that lets users swap 15,000+ assets on Ethereum, Polygon, Binance Smart Chain, Harmony, Telos, Avalanche, Moonriver, Fantom, Solana, Aurora, NEAR and Arbitrum. Moreover, Rubic is connected to 60 DEXs to offer the best rate for on-chain swaps.",Huy
+Kujira,KUJI,"Kujira is a blockchain-based project that aims to create tools that can be used by everyone, from beginners to seasoned investors, no matter their choice of chain, without requiring them to take on more risk than they can afford.",Martin
+Akropolis,AKRO,"Akropolis is an Ethereum-based project that operates a decentralized financing protocol that aims to develop an autonomous financial ecosystem, including a lending platform and a saving platform. As part of its protocol governance, AKRO, an ERC-20 token, is used across all of the project's products.  ",Martin
+VitaDAO,VITA,"VitalDAO is a community-owned organization that funds early-stage longevity research. The project discovers and funds the most promising longevity research. To contribute to the VitaDAO project, members can buy VITA tokens, earn them from contributions of work, or earn them through intellectual property contributions.",Martin
+RAI Finance,SOFI,"RAI Finance provides access to a range of assets, a high level of liquidity, and a wide range of financial use cases for DeFi users. When combined with the cross-chain compatibility of the Polkadot ecosystem, these features make it possible to eliminate fragmentation across decentralized finance systems by providing new assets and increased liquidity.",Martin
+Gifto,GTO,"The Gifto (GTO) platform is designed to be a universal, decentralized platform for giving virtual gifts. This social game app is the brainchild of the highly successful Asia Innovations Group, which also owns the successful live streaming app Uplive and several other popular social gaming projects.",Martin
+DXdao,DXD,"DXdao describes itself as a cooperative that specializes in the development and governance of decentralized products and services. The DXdao governance system uses reputation-based voting, which means that voting power is not transferable and cannot be bought. The DXD token functions as the engine for the DXdao ecosystem and is eligible for a share of the revenue generated. ENS and binding on-chain votes allow DXdao to manage the blockchain-based treasury and its products completely on-chain.",Martin
+Numbers Protocol,NUM,"NUM is a decentralized photo network built for the upcoming Web 3.0. Using Numbers Protocol's decentralized photo network, digital media can be made more social, valuable, and trusted.",Martin
+Cream,CREAM,"The C.R.E.AM Finance program provides access to financing services for individuals, institutions, and protocols using a decentralized lending protocol. It is a platform that belongs to the yearn.finance's ecosystem. The protocol serves users on Ethereum, Binance, Polygon, and Fantom and is permissionless, open-source, and blockchain agnostic.",Martin
+Epic Cash,EPIC,"Epic Cash marks a true transition toward a truly decentralized internet-based P2P cash system. It embodies the most fundamental element of a private financial system. Aiming to be the most effective anonymous digital money in the world, EPIC wishes to become the strongest currency around the world.",Martin
+Shabu Shabu,KOBE,"As a fork of SushiSwap and YFII, Shabu Shabu Finance provides yield farming tools, such as staking tokens in liquidity pools on the Kobe Swap Exchange and Uniswap Exchange, which will enable traders to capitalize on the flow of capital. Its goal is to become a community-governed finance marketplace with a governance token that would determine how Shabu Finance develops and where it goes.",Martin
+sEUR,SEUR,"sEUR tracks the price of the Euro through a Synthetix-based cryptocurrency. As such, sEUR is a stablecoin that can be used as a medium of exchange, store of value, as well as a method to participate in DeFi protocols like Curve.",Martin
+Solanium,SLIM,"Solanium is a decentralized platform on the Solana blockchain. Token staking, time-weighted polling, and decentralized fundraising are being added to the Solana ecosystem through this platform. Solanum users will be able to participate in token sales and create pools with their SPL tokens.",Martin
+Opulous,OPUL,Opulous is a peer-to-peer DeFi loan platform solution for digital artists. Opulous empowers artists to access funding by bringing decentralized finance to the music industry and provides a launchpad for the first music copyright-backed NFTs.,Martin
+Aurox Token,URUS,"Aurox is a unique crypto trading platform that is used by traders from all over the world, powered by URUSm the platform's DeFi token. Aurox developed proprietary alerts, indicators, and trading protocols so traders can make trading decisions with more confidence.",Martin
+Lossless,LSS,"Lossless is a tool designed to mitigate hacks for token creators. Fraudulent transactions can be frozen based on fraud identification parameters, which return stolen funds back to the account of the owner. To make the DeFi industry safe for future growth, Lossless aims to prevent and undo all upcoming hacks.",Martin
+KI,XKI,"Through an ecosystem of real-life businesses, the Ki Foundation seeks to bridge the gap between CeFi and DeFi. Ki's first market offering is Klub, a platform for private investments that allows high-income individuals to allocate, store, and invest capital.",Martin
+Snowbank,SB,"Snowbank DAO is a protocol on the Avalanche Network. It is a decentralized reserved currency that is backed by a group of assets. Through its staking and minting practices, Snowbank DAO enables the market to participate in economic and game-theoretic dynamics.",Martin
+3X Long Ethereum Token,ETHBULL,"FTX Leveraged tokens, such as ETHBULL, are usually ERC20 & BEP2 tokens that provide leveraged positions in cryptocurrencies. Owning these tokens essentially amplifies their given price volatility. For ETHBULL this volatility is increased by 3x. For example, if the price of ETH moves up 1% your ETHBULL position will increase by 3%.",Martin
+Edgeware,EDG,"With the Edgeware platform, developers can build next-generation, decentralized applications on top of a Substrate blockchain. The Edgeware platform enables the development of high-speed, low-latency, and highly efficient consensus algorithms for blockchain-based decentralized applications (DApps).",Martin
+Sipher,SIPHER,"Sipher is a revolutionary play-to-earn (P2E), live-action, blockchain game with RPG elements. The title has two separate game modes (PVP and PVE) that promise meaningful end-game content, an immersive storyline, and robust classes.",Martin
+BOSAGORA,BOA,"BOSAGORA's platform allows stakeholders to make democratic decisions on what projects to support, allowing for censorship resistance. The BOSAGORA team is developing Trust Contracts, which will provide an easy-to-develop, efficient, and secure way to create contracts using a language everyone can understand.",Martin
+Rootkit,ROOT,"Rootkit is a DeFi protocol using a fixed supply currency in combination with a permanent liquidity lock. It, therefore, creates a mathematical price floor. The floor price represents the lowest possible price for a ROOT token that will ever exist, and there will only ever be 10,000 ROOT.",Martin
+cLINK,CLINK,"cLink is a type of cToken that is distributed to users who lend assets on the Compound network. cTokens are a way for lenders to track how much they've lent, as well as the interest they've earned. A corresponding balance in cTokens is issued to each user who contributes funds to the lending pool.",Martin
+dForce Token,DF,"The dForce team is advocating for the implementation of a complete suite of DeFi protocols as part of the Web3 infrastructure. These protocols include asset management, lending, trading, stakes, and bridge software. Token holders and the community jointly determine key protocol changes in this community-driven project.",Martin
+Measurable Data Token,MDT,"Measurable Data Token (MDT) is a utility token whose purpose is anonymous sharing and monetization of consumer data. Data providers and data buyers can exchange data securely and anonymously using the MDT, which is a blockchain-based data economy.",Martin
+VelasPad,VLXPAD,"Launched on VELAS Blockchain, the fastest AVM Blockchain in the world, VelasPad is the very first launchpad in the ecosystem. VLXPAD is a fund and development platform that has been designed with a single aim in mind: to fund and support blockchain projects of the future. Platform users have access to exclusive IDOs and Staking Rewards by using the deflationary launchpad token.",Martin
+Polkadex,PDEX,The Polkadex Orderbook is a non-custodial peer-to-peer trading platform that combines both decentralized and centralized features for trading in one system. Thanks to the unique tech architecture users get the best of both worlds trading on Polkadex.,Martin
+Refinable,FINE,"Refinable is the first major NFT marketplace on BSC, invested by Binance and Mr. Beast, providing individual creators and brands with an easy and affordable way to produce, discover, trade, and leverage NFTs. It is Refinable's mission to empower the next generation of digital transactions by supporting all communities in engaging with NFTs.",Martin
+DexTools,DEXT,"DEXTools provides information about all of the decentralized markets in conjunction with an app and ecosystem that is meant for traders. DEXTools lets you view all blockchain data in one UI, so that you have a clear overview of your trades, investments, and the cryptocurrency market at any given moment.",Martin
+Metronome,MET,"Metronome is the world's first autonomous cryptocurrency and an open-source crypto project that aims to optimize for self-governance, reliability, and portability. It was designed to be used in scenarios where reliability is the determining factor, such as a decentralized exchange of value across blockchains and advanced payment settlements. However, many communities and institutions will be able to adapt its functionality to fit their needs.",Martin
+DarkCrypto Share,SKY,"DarkCrypto Share (SKY) is a part of the multi-crypto protocol DarkCrypto, based on the algorithmic coin DARK, pegged to CRO on the Cronos chain. SKY is one of the ways to measure the value of the entire protocol's trust in its ability to maintain DARK's peg to CRO. This is because during network expansion, the protocol mints DARK and distributes it proportionally to all holders of SKY tokens who have staked them in the boardroom.",Martin
+PKT,PKT,"Through PKT, the world's physical bandwidth infrastructure can be scaled at a cost-effective rate. A high-speed, low-latency PKT network provides access to the internet through mesh networking while reducing costs and improving transmission speeds. Every 60 seconds, network users mint and receive PKT cryptocurrency as a reward. The goal of the network is to become the world's largest peer-to-peer ISP (Internet Service Provider).",Martin
+BoringDAO,BORING,"BoradDAO is an institution that provides cross-chain services for every crypto asset. Users will receive a seamless, safe, and cost-effective transaction process when wrapping or transferring tokens. Using the BoringDAO oPortal Bridge, users will be able to send ERC-20 tokens to and from different blockchains in a safe and fast manner. USDT, USDC, and even ETH, which were originally issued on one chain, can easily be utilized in a multi-chain environment by using their underlying protocols.",Martin
+Freeway Token,FWT,AuBit Freeway is a groundbreaking new asset management platform that will maximize the returns on the world's top investment products while minimizing risks. The platform offers unique platform benefits to the holders of their native utility Freeway Tokens (FWT) such as reduced fees and progressive rewards.,Martin
+Unifi Protocol DAO,UNFI,"Unifi Protocol DAO offers users the opportunity to create DeFi solutions for their enterprises using the inherent security and decentralization characteristics of blockchain technology, as well as the automation of smart contracts. In this project, the Ethereum DApp and DeFi development framework is used to combine the power of several blockchains. Users will have access to multiple blockchains and an extraordinarily versatile token, allowing users to integrate the DeFi world with interoperability.",Martin
+Stader,SD,"Stader gives you the greatest return on your stakes in the most convenient and safest way. As part of Stader's governance structure, the Stader token (SD) is its native token that accrues value every time it is used. In addition to building extremely modular smart contracts, Stater offers its components as a service so third parties are able to create custom solutions with our components.",Martin
+Step Finance,STEP,STEP is a move-to-earn cryptocurrency that rewards users with their native tokens when they work out and stay fit. Making money and staying active has never been easier with Step! You can track your steps through their mobile app (available on both iOS and Android) and earn rewards in BNB based on how far you walk on the daily. It moreover syncs with other health apps such as Apple Health or Google Fit.,Martin
+SUKU,SUKU,"SUKU is a blockchain-based ecosystem that helps creative brands and creators engage with audiences in a completely new way, both in the physical and virtual worlds. Brands and creators are able to thrive in the physical and virtual world thanks to the SUKU Ecosystem, which comprises a suite of engagement solutions.",Martin
+Epik Prime,EPIK,"Epik is the leading global NFT licensing technology company with more than 300 video gaming clients. With the largest digital ecosystem featuring hundreds of the world's most popular entertainment brands, this project enables brands to integrate into video games to deliver premium digital products and experiences to over one billion players worldwide. Epik is widely regarded in the blockchain industry as the leader in offering collaborative blockchain solutions for the development of premium licensed digital collectables, cryptocurrencies and NFTs.",Martin
+Aragon Court,ANJ,"Aragon Court is a platform for resolving subjective disputes that require the judgment of human guardians within the blockchain. It is built on top of the Aragon OpenStack software, and it is a plug-in arbitration platform accessible via API to decentralized applications (dApps).",Martin
+HOPR,HOPR,"HOPR is a blockchain-based protocol that is aimed at solving global data and privacy concerns. HOPR aims to decentralize private data exchanges with an official initial coin offering (ICO) in 2021. In the next generation of privacy solutions, HOPR allows enterprises and private users to decide who has access to their personal and online information.",Martin
+V.SYSTEMS,VSYS,"v.systems focuses on cloud and database services while providing blockchain infrastructure. Supernodes are elected in a distributed network based on Proof-of-Stake (PoS) principles, using the Supernode Proof-of-Stake (SPoS) consensus algorithm. The application provides transaction processing, smart contract creation, and mining capabilities.",Martin
+YIELD App,YLD,"Users can earn high returns from DeFi products with Yield's intuitive mobile app and web platform without having to go through a lengthy, complex and, often, costly learning process. As a bank-licensed investment fund, YIELD offers a team with FinTech and cybersecurity experience. The YLD token serves as the foundation for its strategy, rewarding community members and boosting their APY.",Martin
+Atari,ATRI,"The Atari Token is a decentralized cryptocurrency developed to become a standard for the interactive entertainment industry. It was developed specifically for the needs of the interactive entertainment industry by Atari Chain Ltd., a subsidiary of Atari Interactive, which is a video game and consumer electronics company.",Martin
+Sentinel,DVPN,"As the first scalable framework for dVPNs, Sentinel (DVPN) reduces the carbon footprint of the network by using shared resources. Rather than launch and maintain a single consumer-facing application, Sentinel dVPN will work as a network of decentralized VPNs. With the Sentinel ecosystem, the VPN industry is set to become decentralized and 'dVPN' will be introduced to consumers.",Martin
+Index Cooperative,INDEX,"$INDEX tokens, issued by Index Coop, are a decentralized, autonomous asset manager. By voting on Snapshot, your $INDEX can be used to govern the Index Coop network. In addition to earning $INDEX rewards, you can also provide liquidity on decentralized exchanges for Index Coop products.",Martin
+Trias Token,TRIAS,"TRIAS stands for Trustworthy and Reliable Intelligent Autonomous Systems, a native-application-compatible execution platform, development framework, and collaborative ecosystem that supports all platforms. The project aims to define a new generation of public chain systems that are platform agnostic.",Martin
+Router Protocol,ROUTE,Router Protocol is a crosschain liquidity aggregator that aims to facilitate infrastructure to seamlessly bridge between Layer 1 and Layer 2 blockchain solutions. It is designed to allow users to swap assets between different networks in a fast and cost-efficient way.,Huy
+Nimiq,NIM,"Nimiq is a blockchain where users always participate automatically, instead of using a third-party node to connect to the network, such as Ethereum or Bitcoin. The goal here is to make cryptocurrencies easier to use without sacrificing decentralization.",Huy
+Lazio Fan Token,LAZIO,"Lazio Fan Token, or LAZIO, is a token created by Binance with the purpose of providing ownership of the club’s governance to its holders, as well as letting them access exclusive promotions, unlock VIP rewards and gain special recognition.",Huy
+PAID Network,PAID,"PAID Network is a business toolkit with an emphasis on simplifying business contracts. The traditional legal contract system forces people to rely on business counsel and to use unnecessarily complex contracts. Thus, PAID Network aims to make business contracts easy to understand and have them signed on-chain.",Huy
+TerraKRW,KRT,"Terra is a network containing many stablecoins pegged to the major fiat currencies in the world. Terra KRT, for instance, is a stable asset with its value pegged to the Korean Won using algorithms to automatically expand or contract the money supply in order to maintain stability.",Huy
+Reimagined Finance,REFI,"Reimagined Finance is a Farming-as-a-Service (FaaS) platform running on both Ethereum and BNB, designed to yield farms on behalf of investors. Investors simply own REFI tokens to receive yields in ETH or BNB. The share of distributions will be directly proportional to how much REFI you own (1% of total REFI supply will lead to 1% of future distributions).",Huy
+Spectrum Token,SPEC,"Spectrum Protocol is a yield optimizer on the Terra blockchain ecosystem, which automatically compounds and stakes users’ rewards according to their ratio settings. Spectrum Token (SPEC) is the reward token to investors that is also automatically staked into Spectrum governance.",Huy
+Inverse Finance,INV,"Inverse Finance describes itself as a ‘positive sum DeFi protocol’ that helps users maximize their earnings through revenue sharing, accumulate sustainable, high yields, and enjoy low-cost stablecoin borrowing. Inverse Finance aims to become a major financial ecosystem in DeFi, creating meaningful opportunities for everyone using innovative, DAO-owned protocols.",Huy
+DarkCrypto,DARK,"DarkCrypto is the first algorithmic stablecoin pegged to CRO, using an algorithm that adjusts the stablecoin’s supply to maintain the price as close to the target price as possible.",Huy
+UXD Stablecoin,UXD,UXD is an algorithmic stablecoin that is 100% backed by data neutral positions. Some of the perks of UXD are: anyone can instantly mint 1 UXD for 1 USD; UXD is censorship-resistant; the funding rate of the delta-neutral position will be distributed to stakeholders of UXD Protocol.,Huy
+Aventus,AVT,"The Aventus Network enables businesses to build a second-layer protocol on top of the Ethereum network to improve scalability, cost, and speed of Ethereum transactions. The network also allows applications to work with other blockchain technologies cross-chain.",Huy
+WaykiChain,WICC,WaykiChain is a public blockchain providing decentralized finance infrastructure via implementations of decentralized exchanges (DEX) and crypt-asset backed stablecoin technologies. It claims to achieve an average transaction-per-second of over 3300 with a peak of 7800.,Huy
+Saber,SBR,Saber describes itself as the leading exchange on Solana for cross-chain stablecoins and wrapped assets. It allows for low-slippage trading at large volumes and maintains high capital efficiency for investors at the same time.,Huy
+Hacken Token,HAI,"Hacken Token (HAI) is a cybersecurity coin from Hacken Foundation, an organization with a vision to unite all cybersecurity products Web 3.0 infrastructure.",Huy
+GoChain,GO,"GoChain aims to be a network for developers to run decentralized applications with better energy efficiency than Bitcoin or Ethereum, while still being compatible with existing Ethereum wallets, smart contracts, and other tools. It does this by using a Proof of Reputation model which may consider the reputation of all network participants.",Huy
+SX Network,SX,"SX Network, or SportX, is a community-owned sports betting exchange and a political prediction market. All bets are created, processed and settled on-chain, which anyone with a Web3 wallet can do. SX Network offers a level of privacy and transparency unprecedented in traditional centralized betting platforms.",Huy
+pNetwork,PNT,"pNetwork (PNT) is a decentralized platform that enables the transfer of assets, NFTs as well as smart contract interactions cross-chain by using pTokens to represent assets from one blockchain on another. PNT can be staked for voting rights in pNetwork’s DAO.",Huy
+Stratos,STOS,"Stratos describes itself as a ‘decentralized Data Mesh’ that provides scalable and reliable storage, database, as well as computation network, best used for scaling blockchain process capacity while maintaining decentralization.",Huy
+Adappter Token,ADP,The Adappter platform aims to use the decentralization of blockchain to reward users for their contribution to the digital advertising industry and to protect their privacy by consenting to selective personal data to be used.,Huy
+Apollo DAO,APOLLO,Apollo DAO is a Decentralized Autonomous Organization with a vision to build a “Warchest” that is bootstrapped by fees from their DeFi protocols and is a decentralized fund managed by veApollo stakers. The Warchest will accumulate crypto assets that benefit the growth of Apollo and stakers that provide revenue to grow the Warchest.,Huy
+Atletico Madrid Fan Token,ATM,"Atletico Madrid Fan Token (ATM) is a utility token on the Socios.com platform, operating on the Ethereum blockchain. ATM can be used to give its holders a share of influence on the Atletico Madrid club decisions, as well as to get exclusive rewards and perks.",Huy
+Comdex,CMDX,Comdex is a decentralized asset built on the Cosmos ecosystem with a vision to bridge the gap between CeFi and DeFi via providing access to financial products and services in the commodities space. Comdex enables the tokenization of these real-world assets with more ease than ever before.,Huy
+Friends With Benefits Pro,FWB,"Friends With Benefits, FWB, describes itself as a place where “crypto meets communities”, where “technology acts as a communal connective tissue”. Members of FWB are artists, creators, rebels, thinkers and doers that work together to create a better future.",Huy
+OccamFi,OCC,"OccamFi is a decentralized launchpad for the Cardano ecosystem. Some attractive features of OccamFi are: fixed price mechanics, auction mechanics for projects with non-standard value propositions, private and public pools for seed funding, community rating projects using governance features, community engagement mechanics (bounty hunting, referral system, and missions)…",Huy
+AirSwap,AST,"AirSwap is a decentralized token trading network using a peer-to-peer (P2P) system, aiming to make trading tokens secure, convenient and free. AirSwap operates on the Ethereum blockchain and it offers 3 products named Instant, Spaces, and DexIndex.",Huy
+vEmpire DDAO,VEMP,vEmpire DDAO claims to be the biggest decentralized investment platform for Metaverse tokens. Users can stake Metaverse tokens to earn yields both in VEMP and the original token staked. Their mission is to make sure that web3 technologies like the Metaverse can be invested in by everyone and not just the wealthy.,Huy
+Lattice Token,LTX,"Lattice is an AMM-based (Automated Market Maker) decentralized exchange supporting seamless cross-chain swaps. It also supports a number of DeFi applications by using the Constellation’s Hypergraph, a near-zero fee and scalable decentralized network. Lattice offers access to a variety of features like lending, yield farming, launchpad, analytics…",Huy
+ScPrime,SCP,"ScPrime uses blockchain technology to create a cloud service by paying individuals to store data around the globe, utilizing smart contracts and cryptographic proofs to maintain accuracy and security.",Huy
+Taboo Token,TABOO,Taboo is an adult NFT and Streaming media project that offers exclusive contents featuring supermodels and pornstars. Taboo emphasizes on a NSFW media curation of the highest quality by being extremely selective with their adult performer hiring process.,Huy
+Sandclock,QUARTZ,"Sandclock is a multichain DeFi platform that aims to make capital ultra programmable by splitting principal from yield and allowing users to create their own strategies. The range of programmability spans from investment into DCA (Dollar-Cost Averaging) vaults, zero-loss donations/subscription services, to setting up DAO to facilitate exit liquidity.",Huy
+Yuan Chain Coin,YCC,"The Yuan Chain Coin takes inspiration from established crypto assets such as BTC, ETH, and integrates new innovative technologies to create a new blockchain network architecture. The YCC public chain claims to be able to process tens of thousands of transactions per second, and to both ensure the decentralization of the public chain and the property plus privacy of permitted chains.",Huy
+Sora,XOR,"Sora’s mission is to create a new economic system that decentralizes the concept of a central bank. It is a network that can be used to build a parachain blockchain that connects to the Polkadot relay chain and ecosystem with built-in tools for DeFi features. The Sora network focuses on atomic token swaps, bridging tokens to other blockchains, and creating programmable rules for digital assets.",Huy
+GenesysGo Shadow,SHDW,"GenesysGo offers multiple services with an emphasis on building, configuring, and maintaining RPC servers and validator nodes.",Huy
+Ardana,DANA,"Ardana describes itself as a stablecoin hub, offering an on-chain asset-backed stablecoin and a stable asset decentralized exchange. The Ardana token, or DANA, is both the utility and governance token of the Ardana ecosystem.",Huy
+Mute,MUTE,,Đức
+ADAPad,ADAPAD,,Đức
+Ternoa,CAPS,,Đức
+Permission Coin,ASK,,Đức
+DogeBonk,DOBO,,Đức
+Tokenlon,LON,,Đức
+SpiritSwap,SPIRIT,"Spiritswap Token is an exchange token that operates on the Spiritswap DEX. Spiritswap allows users to trade, farm, and stake, with more functionalities being developed.
+",Đức
+SwapXI Token,SWAPXI,"Built on the Avalanche blockchain, SwapXI is a new unique social token that is responsible for implementation, value creation, and financial settlement of the SwapXI ecosystem. By creating a payment platform in synchronisation with streamers, viewers, and advertising companies, SwapXI provides a unique added value for the entertainment community.",Đức
+0chain,ZCN,"0Chain is a platform for decentralized storage that provides data privacy, security, and private sharing. 0Chain assists businesses to become compliant with GDRP (General Data Protection Regulation) and CCPA (California Consumer Privacy Act) and gaining transparency with zero liability.",Đức
+dotmoovs,MOOV,"Sports performance will be revolutionized with Dotmoovs, a remote peer-to-peer sport competitive platform. With a simple video taken with a smartphone, Dotmoovs is able to score sports tricks and movements with an AI algorithm. Dotmoovs wants to change the world of sports competition by displaying NFTs of popular athletes and allowing players to monetize their skills. ",Đức
+pTokens BTC,PBTC,"Bitcoin is represented by the ERC-20 token pBTC. pBTC is the first instance of pTokens, making Bitcoin compatible with the Ethereum network. The value of BTC is intrinsically linked to that of Bitcoin since it is pegged 1:1 with real BTC.",Đức
+Hiblocks,HIBS,"Hiblocks is a blockchain-based social media curation platform that offers tokenized rewards to users for engaging with the community. With Hiblocks, anyone can curate content and generate revenue using existing social media accounts.",Đức
+GamerCoin,GHX,"GamerCoin is the first licensed token for gamers and the native utility token of GamerHash, a mining platform with more than 600,000 users that mines cryptocurrency with gaming PCs. GamingHash's mission is to provide gamers with a simple and free tool for mining blockchains and putting idle computing power to use without them having to do much.",Đức
+LGCY Network,LGCY,"LGCY Network is an open-source, DPoS (Delegated Proof of Stake) blockchain protocol with industry-leading transaction speeds and flexible utility. Powered by the Libertas Protocol, the network aims to be the world's most decentralized dApp blockchain.",Đức
+Instadapp,INST,"Instadapp is a smart wallet that manages assets through a simple interface that is built on top of popular DeFi projects like MakerDAO, Compound, and Uniswap. It can be used by users with or without advanced technical or financial expertise. Using Instadapp, all of the users' DeFi positions can be viewed on the dashboard.",Đức
+Spartacus,SPA,Spartacus is the Olympus fork on Fantom. Spartacus aims to build a decentralized currency protocol that is owned by the community.,Đức
+FC Barcelona Fan Token,BAR,"FC Barcelona Fan Token (BAR) is a utility token that was created in collaboration with Chiliz, a leading provider of blockchain-based financial technology solutions for sports and entertainment. Through the token, the football team will be able to engage with a global audience and bring the community closer together.",Đức
+Paribus,PBX,"Based on the Cardano blockchain platform, Paribus (PBX) is a cryptocurrency and a cross-chain protocol for lending, borrowing, and staking NFT. To enable its users to unlock liquidity and interact with markets without having to liquidate assets, Paribus supports both conventional and unconventional cryptographic assets.",Đức
+BTU Protocol,BTU,"BTU Protocol is a peer-to-peer booking protocol. By using BTU Protocol, consumers can conduct direct business (without commissions) with many types of service providers.
+",Đức
+ForTube,FOR,"Previously known as the Force Protocol, ForTube is a suite of distributed crypto-finance protocols that operate on an open-source blockchain. ForTube's main goal is to offer crypto-finance solutions to developers through its software development kit (SDK) and application programming interfaces (APIs) for the development of decentralized applications (DApps).",Đức
+Block Ape Scissors,BAS,"The Block Ape Scissors (BAS) ecosystem allows its users to play thrilling games with their altcoins, shitcoins, and memecoins and earn NFTs or other shitcoins as rewards. The goal of Block Ape Scissors is to create the most advanced and innovative player-owned economy on web3. Block Ape Scissor aims to become a key player in the blockchain gaming industry by combining its in-house developers with talented smart contract developers.",Đức
+THORSwap,THOR,"Developed on THORChain’s cross-chain liquidity protocol, THORSwap is a multi-chain DEX aggregator and an ideal interface for all THORChain services such as THORNames and synthetic assets.",Đức
+Civilization,CIV,"The first Decentralized Investment Fund globally, Civilization is owned and managed directly by its investors. CIV aims to transform how staking and investing are done, with the use of 100% auditable code and, ultimately, automated multi-strategy selection for maximum yield at minimum risk.",Đức
+BoringDAO BTC,OBTC,"OBTC is Osprey Bitcoin Trust, BoringDAO is BORING",Đức
+BUX Token,BUX,"BUX Token is the native utility token of BUX, a cryptocurrency exchange based in the Netherlands. The BUX Token allows investors to purchase cryptocurrencies such as Bitcoin, Ethereum, and Litecoin commission-free. ",Đức
+veCRV-DAO yVault,YVE-CRVDAO,veCRV-DAO yVault is a token developed on the Ethereum blockchain.,Đức
+Mithril,MITH,"The Mithril (MITH) token is an ERC-20 social media token on the Ethereum platform. With Mithril, users and operators will get rewarded for their contributions to social media networks both new and old.
+",Đức
+Wing Finance,WING,"Wing Finance (WING) is a DeFi platform that allows cross-chain collaboration between various DeFi products built specifically and with a dedication to the digital asset lending market. The decentralized governance model and risk control mechanism of WING are designed to promote a relationship that is equally beneficial for borrowers, creditors, and guarantors.",Đức
+Meter Governance,MTRG,"Meter Governance (MTRG) is DeFi infrastructure with a metastable currency built into it. Meter Governance is a highly decentralized, high-performance side chain that can be used alongside Ethereum and connect to other blockchains.",Đức
+Metaverse Index,MVI,"The Metaverse Index aims to capture the trend of entertainment, sports, and business shifting to a virtual environment, where economic activity is carried out through blockchain technology.",Đức
+LiquidDriver,LQDR,,Đức
+Chain Games,CHAIN,,Đức
+ZKSpace,ZKS,,Đức
+UniLend Finance,UFT,,Đức
+governance ZIL,GZIL,,Đức
+HBTC Captain Token,HBC,,Đức
+Counterparty,XCP,,Đức
+OneLedger,OLT,,Đức
+Vivid Labs,VID,,Đức
+Crypto Raiders,RAIDER,,Đức
+Era Swap Token,ES,,Đức
+Symbiosis Finance,SIS,,Đức
+STAKE,STAKE,,Đức
+Glitch Protocol,GLCH,,Đức
+Lyra Finance,LYRA,,Đức
+Ekta,EKTA,,Đức
+PearDAO,PEX,,Đức
+Solend,SLND,,Đức
+Conscious Value Network,CVNT,,Đức
+InsurAce,INSUR,,Đức
+Ariva,ARV,,Đức
+StackOS,STACK,,Đức
+Popsicle Finance,ICE,,Đức
+Geist Finance,GEIST,,Đức
+Shyft Network,SHFT,,Đức
+VIDT Datalink,VIDT,,Đức
+MarketMove,MOVE,,Đức
+NFTY Token,NFTY,,Đức
+Chain Guardians,CGG,,Đức
+Universe.XYZ,XYZ,,Đức
+Unisocks,SOCKS,,Đức
+88mph,MPH,,Đức
+DeXe,DEXE,,Đức
+ELYSIA,EL,,Đức
+Zombie Inu,ZINU,,Đức
+ERC20,ERC20,,Đức
+Terra World Token,TWD,,Đức
+TRONPAD,TRONPAD,,Đức
+BYTZ,BYTZ,,Đức
+Lunar,LNR,,Đức
+PowerPool Concentrated Voting Power,CVP,,Đức
+Bread,BRD,,Đức
+Tranquil Finance,TRANQ,,Đức
+Quantum Resistant Ledger,QRL,,Đức
+Cake Monster,MONSTA,,Đức
+REVV,REVV,,Đức
+Hot Cross,HOTCROSS,,Đức
+Alkimi,$ADS,,Đức
+ParagonsDAO,PDT,,Đức
+FOAM,FOAM,,Đức
+LBRY Credits,LBC,,Đức
+Hoge Finance,HOGE,,Đức
+RSS3,RSS3,,Đức
+Lunr Token,LUNR,,Đức
+Offshift,XFT,,Đức
+Jade Protocol,JADE,,Đức
+Inter Milan Fan Token,INTER,,Đức
+Altair,AIR,,Đức
+VEED,VEED,,Đức
+Ultiledger,ULT,,Đức
+Pibble,PIB,,Đức
+Everest,ID,,Đức
+Delta Exchange Token,DETO,,Đức
+Jones DAO,JONES,,Đức
+Apollo,APL,,Đức
+Goldfinch,GFI,,Đức
+DeFi Land,DFL,,Đức
+Oraichain Token,ORAI,,Đức
+Stronghold Token,SHX,,Đức
+Hegic,HEGIC,,Đức
+Reddcoin,RDD,,Đức
+Cryptex Finance,CTX,,Đức
+Kylin Network,KYL,"Kylin Network is a data blockchain that serves as the connection between the ‘real world’ and the Polkadot blockchain, helping to verify truth and providing insights. The token of the Kylin Network Mainnet, KYL, is used to secure and power the network.",Huy
+Santos FC Fan Token,SANTOS,"Santos FC Fan Token (SANTOS) is a fan token of Santos FC, a Brazilian sports club in the state of Sao Paulo, launched on the Binance Launchpool. Fan tokens can be used to gain access to exclusive content or club recognition.",Huy
+Tulip Protocol,TULIP,"Tulip Protocol is the first decentralized yield aggregator on the Solana blockchain that comes with auto-compounding vault strategies. It takes advantage of Solana’s low-cost and efficient blockchain to provide higher APYs to stakers without them having to actively manage their funds. By providing liquidity on the protocol, stakers earn interests as well as TULIP, the native governance token of Tulip Protocol.",Huy
+Guild of Guardians,GOG,"Built on the layer-2 blockchain Immutable X, Guild of Guardians is a fantasy action RPG game that features play-to-earn mechanics. Players assemble a team of heroes, train them to collect resources and engage in challenges. The in-game currency, Gems, can be redeemed for real money, used to mint new assets and to vote on game decisions.",Huy
+Dora Factory,DORA,"Dora Factory is a programmable open infrastructure on Substrate, used for building DAOs. The infrastructure enables the creation of quadratic voting, bonding curve fundraising, and other on-chain governance features.",Huy
+PUTinCoin,PUT,"PUTinCoin is a cryptocurrency created to pay tribute to the people of Russia, aiming to support the Russian economy. It uses both the PoW and PoS consensus.",Huy
+Trisolaris,TRI,"Trisolaris claims to be the best decentralized exchange on the Aurora engine, a blockchain operating in the Near ecosystem. Trisolaris offers a user-friendly UI, fast transaction speed and low costs, the ability to swap any ERC-20 coins, and liquidity mining incentives.",Huy
+WeGro,WEGRO,"WeGro is a platform for people to participate in the hemp and cannabis industry. Holders of WeGro Coin directly influence the long term future of the cannabis supply chain, while their data is monetized in a democratic way, and its benefits go back to the community.",Huy
+Pangolin,PNG,"Pangolin is a DEX that runs on the Avalanche blockchain. It uses the same AMM model as Uniswap and its native governance token PNG can be traded with all tokens issued on Ethereum and Avalanche. Pangolin focuses on fast and cheap trades, community-driven development, and fair, transparent",Huy
+AXEL,AXEL,"AXEL offers software solutions that incorporate blockchain technology. One of its products is AXEL Go, a cloud storage and file-sharing application that uses a decentralized infrastructure. The AXEL token is a PoS utility token that powers data transfer across the AXEL Go platform and the AXEL network.",Huy
+Vertcoin,VTC,"Vertcoin is a fork of Litecoin that uses the proof-of-work consensus mechanism. Vertcoin’s priority is to be ‘The People’s Coin’, that is to keep its mining decentralized and enable everyone with a computer to participate in the Vertcoin network. As a result, Vertcoin offers a 1-click miner to make mining more mainstream.",Huy
+Sentivate,SNTVT,"Sentivate is a hybrid web taking elements from both centralized and decentralized webs with a goal to create a network better than them. Sentivate aims to solve the bandwidth crisis, outdated protocols, lack of accountability and identity, broken DNS servers, and more.",Huy
+Orion Money,ORION,"Orion Money has a mission to become a cross-chain stablecoin bank and DeFi hub where users can maximize the profits from their stablecoins by accumulating and lending. Orion Money claims to offer a higher fixed income from staked stablecoins than anywhere on the market. ORION, the native token of Orion Money, can be used to boost stablecoin APY and to contribute to the governance of the system.",Huy
+Premia,PREMIA,"Premia aims to be a next generation options AMM by providing the best prices to users and also offering P2P derivatives trading and capital efficiency. Moreover, Permia has a heavy emphasis on research, with the vision to facilitate open access to the top DeFi research and innovation.",Huy
+Opacity,OPCT,"The Opacity token, OPCT, can be used to purchase data storage plans on Opacity, which will be 100% private and can only be accessed with the private key given to the purchaser. Files stored on Opacity can be music, videos, images, documents…",Huy
+FloorDAO,FLOOR,"FloorDAO claims to be a decentralized NFT market-making protocol that creates deep liquidity for all NFT collections in its treasury. It achieves this goal by utilizing the ‘bond and rebase mechanisms’, pioneered by OlympusDAO, and strategies like NFTX vaults.",Huy
+PolkaFoundry,PKF,"PolkaFoundry offers a blockchain built on Substrate that is EVM-compatible and works as a Polkadot Parachain or parathread, as well as a variety of DeFi-friendly services for building dApps.",Huy
+Media Licensing Token,MLT,"The Media Industry Licensing Content (MILC) project aims to use blockchain and AI technologies to allow media viewers to participate in global media value chain through the MILC platform and the Media Licensing Token (MLT). The MILC project is designed to facilitate global availability of all video content, complex licensing for the entire industry, to make the discovery process easier for buyers, and to get early feedback from the audience.",Huy
+Dego Finance,DEGO,"Dego Finance is an open, indeendent NFT ecosystem with DeFi tools. Users of DeGo Finance can launch their own NFT, start the mining, auctions and trading.",Huy
+Alchemist,MIST,The Alchemist project was started with a tweet; it’s not a company and contains no developer team. It simply claims to be a community of alchemists figuring out what to build without a roadmap.,Huy
+Polkamarkets,POLK,"Polkamarkets is a DeFi Prediction Market where users can monetize their forecasts of future real world events within a decentralized infrastructure. In addition, Polkamarkets also have entertainment features like NFT-based games, live streaming for in-play positions on Esports and Sports, as well as daily crypto price market.",Huy
+PAC Protocol,PAC,"PAC Protocol is a PoS decentralized network, aiming to provide blockchain network solutions to solve real-world problems. It claims to be one of the largest masternode networks with over 22,000 active nodes around the globe.",Huy
+Stake DAO,SDT,Stake DAO is a DeFi platform that offers users the most effective investment strategies by taking advantage of the DeFi ecosystem. The Stake DAO token (SDT) is a governance token but it can also be staked to earn fees generated by the DAO’s product.,Huy
+XELS,XELS,"XELS uses blockchain and other technologies to strive for a better environment on the planet, allowing people to mint carbon credits as NFTs. The platform also uses satellite imagery and AI to quantify the amount of carbon being neutralized by restoration efforts in Japan and Australia.",Huy
+Dragonchain,DRGN,"Dragonchain describes itself as a hybrid blockchain targeted towards small businesses, enterprises, and developers. The hybrid nature of the blockchain enables easy integration with external blockchains, legacy systems, third party oracles and other data.",Huy
+Strong,STRONG,"Strong, also known as StrongBlock, is a blockchain protocol offering a node-as-a-service tool which allows normal people without prior coding knowledge to contribute to securing blockchains by rewarding nodes for supporting the blockchain infrastructure.",Huy
+PIVX,PIVX,"Protected Instant Verified Transaction (PIVT) is a decentralized, open-source project focusing on providing users with financial data protection. PIVT uses a PoS consensus mechanism with PIV being its native cryptocurrency.",Huy
+DOSE,DOSE,"DOSE’s vision is to use game design techniques and play-to-earn mechanics to help people improve their physical shape and earn revenue through gaming activities. DOSE is also the name of the ecosystem’s native currency, earned by completing workout-based games.",Huy
+Cardstack,CARD,"Cardstack aims to build a software that will simplify the developing process for NFTs, DeFi, crypto, and blockchain, so that people without much experience can still build apps, create content and get paid in these spaces.",Huy
+Umbrella Network,UMB,"Umbrealla Network is a community-owned, decentralized oracle service, which facilitates secure and scalable data solutions for decentralized apps. The utility token of the platform is UMB, used for staking and voting.",Huy
+MultiVAC,MTV,"MultiVAC describes themselves as a pioneer in providing flexible computing frameworks with an emphasis on sharding, a technique of splitting a blockchain into different pieces to place less burden on the required computational power of each node. MultiVAC offers an all-dimensional sharding technology to achieve high scalability and an increased number of shards for better performance.",Huy
+MCDEX,MCB,"MCDEX is a decentralized exchange for futures trading, built on both Arbitrum and Binance Smart Chain. The exchange prioritizes censorship resistance and security, while featuring an AMM to enable everyone to provide liquidity for traders.",Huy
+Trabzonspor Fan Token,TRA,"Trabzonspor Fan Token is a fan token for one of the most decorated football clubs in Turkish, running on the Socios.com and chiliZ platform. These tokens can represent ownership or share of the club, and they can be used to vote for future club decisions or to claim exclusive rewards.",Huy
+Kuma Inu,KUMA,Kuma Breeder is a protocol used for farming Kuma Inu tokens (KUMA). It has a fair distribution system to make sure everyone in the community can benefit from Kuma Breeder’s farming pools. KUMA holders can vote in the DAO to control future marketing and development decisions.,Huy
+Safe Haven,SHA,"Safe Haven provides a variety of asset management solutions focused on B2B2C clients, such as digital inheritance, distributed back up, wallet, ID management, marketplaces, and smart payment solutions. Its main service is digital inheritance, which basically means facilitating secure, decentralized data storage using blockchain technology.",Huy
+ANGLE,ANGLE,"ANGLE is the governance token of AngleDAO, whose services cover parameters tuning, protocol upgrades, deploying new stablecoins and collateral types, and handling yield strategies on collateral.",Huy
+LOOP Finance,LOOP,"LOOP Finance claims to be the first DEX on the Terra blockchain that has incentivized liquidity pools. LOOP is the utility token of the platform with 2 main usages: to earn accumulative benefits from performing swaps on the exchange, and to vote in LOOP Finance’s DAO.",Huy
+Neos Credits,NCR,"Neos Credits, or NCR, is the native token of Neos VR, which is a metaverse engineered for a wide range of activities that can be useful to everyone. Some features in Neos VR include games, multimedia, sandbox for creator, builder and developer, and professional work tools.",Huy
+Pendle,PENDLE,"Pendle is a protocol that is built on Ethereum and Avalanche blockchains and used for yield trading. Users can earn fixed yield or yield exposure on their yield-bearing assets. Pendle helps to create tokenized ownership of users’ yield-bearing assets, which increases the versatility and potential of the assets.",Huy
+LikeCoin,LIKE,"LikeCoin is a protocol and framework for decentralized publishing, which is to bridge media to web3 while guaranteeing ownership to the content’s metadata. LikeCoin’s publication framework can easily integrate with existing media platform as well as connecting with other blockchains, with built-in tools allowing creators to produce and manage their own web3 content.",Huy
+Ref Finance,REF,"Ref Finance uses an Automated Market Maker DEX to offer swapping assets between Ethereum and NEAR, also giving users faster transaction speed and lower fees. It aims to become a gateway for people to get into the NEAR ecosystem.",Huy
+Validity,VAL,"Validity is a PoS blockchain with an emphasis on data and identity verification, custom assets, and decentralized voting. It contains the Validity SmartChain and the SmartChain ZeroClient, along with a VAL coin supply that is capped at 9 million.",Huy
+Coinweb,CWEB,"Coinweb aims to offer blockchain interoperability for real-world usage, so it's actively collaborating with large traditional businesses. Coinweb’s architecture dApps built on it to have maximum interoperability to dramatically increase their efficiency and usefulness.",Huy
+Gemma Extending Tech,GXT,"Gem Exchange and Trading is a blockchain-based diamond and jewelry platform, where users can purchase over 10,000 products for low price. GXT is the native currency of this platform, used as exchange values.",Huy
+VFOX,VFOX,"The RedFOX Labs offers many services such as RFOX Games, RFOX Marketplace, RFOX Media and RFOX Streaming Platform, which will all be combined into the RFOX VALT virtual world.",Huy
+Vidya,VIDYA,"Vidya’s mission is to gamify DeFi by producing games that use in-game assets with real value to create an emotion-driven, high-stake gaming experience.",Huy
+Internxt,INXT,"Internxt has a mission to create a better future where humans’ privacy rights are more respected, and they are releasing a variety of services all with that common goal as their focus.",Huy
+apM Coin,APM,"apM Coin aims to facilitate a well-organized and integrated customer reward management system, which manages customer data and promotes sustainable customer relations, particularly targeted towards the Korean fashion market.",Huy
+UniCrypt,UNCX,"UniCrypt offers a range of decentralized services with a goal to deliver disruptive, flexible and audited technology to the DeFi space.",Huy
+GAMEE,GMEE,"GMEE is a utility token that can also act as a currency of purchase in play-to-earn games provided by the GAMEE platform. Players can earn GMEE by playing these games, and they can in turn use them to pay for entry fees to special tournaments or to vote on GAMEE’s roadmaps and distribution of reward pools.",Huy
+Concave,CNV,"Concave is a community-driven investment organization that develops innovative DeFi products and uses active treasury management to bring value to their stakers, with the best interest reserved for long-term stakers.",Huy
+Pandacoin,PND,"The Pandacoin network claims to have a very low bar to entry for potential users and to allow stakers of Pandacoin to earn up to 2.5% APY. Using both PoW and PoS consensus mechanisms, Pandacoin can be used as day-today digital currency for any kind of services.",Huy
+Populous,PPT,"Populous claims to facilitate invoice liquidity for small and medium-sized enterprises for up to 90 days. It allows businesses to share liquidity pools, which enables P2P lending between enterprises.",Huy
 Realm,REALM,,
 BigShortBets,BIGSB,,
 Dexlab,DXL,,
