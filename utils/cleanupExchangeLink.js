@@ -7,6 +7,9 @@ const cleanupExchangeLink = (link, baseSymbol) => {
       cleanLink = `${url.origin}${url.pathname}`
     } else if (url.host.includes('tokocrypto')) {
       cleanLink = link.replace(baseSymbol, `${baseSymbol}_`)
+    } else if (url.host.includes('bitrue')) {
+      const symbol = url.searchParams.get('symbol').replace('usdt', '')
+      cleanLink = `https://www.bitrue.com/trade/${symbol}_usdt`
     }
   } catch(e) {}
 
