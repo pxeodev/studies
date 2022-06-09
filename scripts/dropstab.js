@@ -24,6 +24,10 @@ const fetchCoinData = async (url, coin, page) => {
   let price = await page.$eval('[aria-label="Price Statistics"] div:nth-child(2) dd', (element) => element.innerText);
   price = price.replace('$', '').replace(',', '').trim();
 
+  if (isNaN(price)) {
+    price = null;
+  }
+
   const launchDates = await page.$eval('[aria-label="Price Statistics"] div:nth-child(3) dd', (element) => element.innerText);
   let [launchDateStart, launchDateEnd] = launchDates.split(' - ');
   launchDateStart = new Date(Date.parse(launchDateStart));
