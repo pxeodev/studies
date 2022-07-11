@@ -26,6 +26,7 @@ const bot = async () => {
     op: "Bot",
     name: "Bot Transaction",
   });
+  const excludedSymbols = ['usdd', 'ustc']
   try {
     const yesterday = endOfYesterday();
     const thirtyDaysAgo = subDays(new Date(), 30)
@@ -58,6 +59,7 @@ const bot = async () => {
         }
       }
     })
+    coinsData = coinsData.filter(coin => !excludedSymbols.includes(coin.symbol))
     coinsData = coinsData.map((coinData) => {
       const ohlcs = convertToDailySignals(coinData.ohlcs)
       let yesterdaysOhcls = coinData.ohlcs.filter(ohlc => !isSameDay(ohlc.closeTime, yesterday))
