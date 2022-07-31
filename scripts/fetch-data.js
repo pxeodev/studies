@@ -128,7 +128,7 @@ const script = async () => {
       images: coinData.image,
       description: coinData.description.en,
       homepage: coinData.links.homepage[0],
-      twitter: coinData.links.twitter_screen_name,
+      twitter: coinData.links.twitter_screen_name || '',
       twitterFollowers: coinData.community_data.twitter_followers,
       ath: coinData.market_data.ath.usd,
       atl: coinData.market_data.atl.usd,
