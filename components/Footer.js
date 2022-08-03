@@ -13,7 +13,7 @@ const Footer = ({ topCoins, topCategories }) => {
   const logo = <>
     <Logo className={footerStyles.logo}/>
     <Paragraph type="secondary" className={footerStyles.paragraph}>
-      This website is for informational purposes only. Users should not consider anything here as investment or financial advice. NFA.
+      This crypto coin screener is for informational purposes only. Users should not consider anything here as investment or financial advice. NFA.
     </Paragraph>
   </>
 
