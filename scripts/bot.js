@@ -1,19 +1,13 @@
-import endOfYesterday from 'date-fns/endOfYesterday';
-import isSameDay from 'date-fns/isSameDay';
-import subDays from 'date-fns/subDays';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import format from 'date-fns/format'
 import groupBy from 'lodash/groupBy';
 import { Readable } from 'stream';
 
-import prisma from '../lib/prisma'
 import { tweet } from '../lib/twitter'
 import { channelCreateMessage } from '../lib/discord'
 import { postMessage, sendDocument } from '../lib/telegram'
-import convertToDailySignals from '../utils/convertToDailySignals';
-import getTrends from '../utils/getTrends';
-import { defaultAtrPeriods, defaultMultiplier } from '../utils/variables'
+import getFreshSignals from '../utils/getFreshSignals';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -29,56 +23,8 @@ const bot = async () => {
     op: "Bot",
     name: "Bot Transaction",
   });
-  const excludedSymbols = ['usdd', 'ustc']
   try {
-    const yesterday = endOfYesterday();
-    const thirtyDaysAgo = subDays(new Date(), 30)
-
-    let coinsData = await prisma.coin.findMany({
-      orderBy: { marketCapRank: 'asc' },
-      take: 1000,
-      select: {
-        id: true,
-        symbol: true,
-        name: true,
-        marketCap: true,
-        twitter: true,
-        ohlcs: {
-          select: {
-            closeTime: true,
-            open: true,
-            high: true,
-            low: true,
-            close: true,
-            quoteSymbol: true
-          },
-          where: {
-            closeTime: {
-              gte: thirtyDaysAgo,
-              lte: yesterday,
-            }
-          },
-          orderBy: { closeTime: 'asc' }
-        }
-      }
-    })
-    coinsData = coinsData.filter(coin => !excludedSymbols.includes(coin.symbol))
-    coinsData = coinsData.map((coinData) => {
-      const ohlcs = convertToDailySignals(coinData.ohlcs)
-      let yesterdaysOhcls = coinData.ohlcs.filter(ohlc => !isSameDay(ohlc.closeTime, yesterday))
-      yesterdaysOhcls = convertToDailySignals(yesterdaysOhcls)
-
-      const [_trends, superSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier)
-      const [_yesterdayTrends, yesterdaySuperSuperTrend] = getTrends(yesterdaysOhcls, defaultAtrPeriods, defaultMultiplier)
-
-      return {
-        ...coinData,
-        yesterdaySuperSuperTrend,
-        superSuperTrend,
-      }
-    })
-    coinsData = coinsData.filter((coinData) => coinData.superSuperTrend !== coinData.yesterdaySuperSuperTrend);
-    coinsData = coinsData.sort((a, b) => Number(b.marketCap - a.marketCap))
+    const coinsData = await getFreshSignals();
     const trimmedCoinsData = coinsData.slice(0, 20)
     for (const coin of trimmedCoinsData) {
       const symbol = coin.symbol.toUpperCase()
@@ -91,7 +37,7 @@ const bot = async () => {
       await new Promise((res) => setTimeout(res, 1000))
     }
     await new Promise((res) => setTimeout(res, 50000))
-    const groupedTrends = groupBy(trimmedCoinsData, 'superSuperTrend')
+    const groupedTrends = groupBy(coinsData, 'superSuperTrend')
     for (const [superSuperTrend, trendData] of Object.entries(groupedTrends)) {
       const fileName = `${format(new Date(), 'MM-dd-yyyy')} ${superSuperTrend} Trends.txt`
       const documentText = trendData
