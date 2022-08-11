@@ -31,12 +31,16 @@ export default function DebugSignals(props) {
 }
 
 export async function getStaticProps() {
+  console.log('debug signals 0')
   const appData = await globalData();
+  console.log('debug signals')
   let coinsData = await getFreshSignals();
+  console.log('debug signals 2')
   coinsData = coinsData.map((coinData) => {
     delete coinData.ohlcs
     return coinData
   })
+  console.log('debug signals 3')
 
   return { props: {
     appData,
