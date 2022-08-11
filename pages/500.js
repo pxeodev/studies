@@ -15,6 +15,7 @@ export default function Custom404() {
 
 export async function getStaticProps() {
   const appData = await globalData();
+  console.log('500')
 
   return { props: { appData } };
 }

@@ -465,6 +465,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  console.log(params.id, ' start')
   const appData = await globalData();
   let coinData = await prisma.coin.findUnique({
     where: {
@@ -540,6 +541,7 @@ export async function getStaticProps({ params }) {
     'launch_roi_eth',
     'launch_roi_btc',
   ])
+  console.log(params.id, ' end')
   return {
     props: {
       ...coinData,
