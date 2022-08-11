@@ -53,7 +53,7 @@ export async function getStaticProps() {
         where: {
           closeTime: {
             lte: endOfYesterday(),
-            gte: subWeeks(endOfYesterday(), 16)
+            gte: subWeeks(endOfYesterday(), 12)
           }
         },
         orderBy: { closeTime: 'asc' }
@@ -64,12 +64,7 @@ export async function getStaticProps() {
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
   } else {
-    console.log('index fetch coins data')
-    const coinsData1 = await prisma.coin.findMany({...coinQuery, take: 500})
-    console.log('index fetch coins data 1')
-    const coinsData2 = await prisma.coin.findMany({...coinQuery, skip: 500, take: 500})
-    console.log('index fetch coins data 2')
-    coinsData = [...coinsData1, ...coinsData2]
+    coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = coinsData.map((coinData) => {
     const ohlcs = convertToDailySignals(coinData.ohlcs)
