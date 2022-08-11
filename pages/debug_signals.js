@@ -37,7 +37,6 @@ export async function getStaticProps() {
     delete coinData.ohlcs
     return coinData
   })
-  console.log('debug signals 3')
 
   return { props: {
     appData,

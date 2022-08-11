@@ -2,7 +2,9 @@ import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider,
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
-import prisma from '../lib/prisma'
+// import prisma from '../lib/prisma'
+
+import { PrismaClient } from "@prisma/client";
 
 import debounce from 'lodash/debounce'
 import isFinite from 'lodash/isFinite'
@@ -28,9 +30,7 @@ const { Option, OptGroup } = Select;
 const { Content } = Layout;
 
 export async function getStaticProps() {
-  console.log('index', 'start')
   const appData = await globalData();
-  console.log('index', '1')
   const coinQuery = {
     orderBy: { marketCapRank: 'asc' },
     take: 1000,
@@ -66,9 +66,10 @@ export async function getStaticProps() {
   if (process.env.NODE_ENV === 'development') {
     coinQuery.take = 20;
   }
-  console.log('index', '2')
+  const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
   let coinsData = await prisma.coin.findMany(coinQuery)
-  console.log('index', '3')
   coinsData = coinsData.map((coinData) => {
     const ohlcs = convertToDailySignals(coinData.ohlcs)
 
@@ -84,9 +85,7 @@ export async function getStaticProps() {
       ohlcs
     }
   })
-  console.log('index', '4')
   let categories = await getCategories()
-  console.log('index', '5')
   return {
     props: {
       coinsData,
