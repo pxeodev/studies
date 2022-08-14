@@ -31,9 +31,21 @@ const bot = async () => {
       const tweetPost = `${coin.name} (${symbol}) changed from ${coin.yesterdaySuperSuperTrend} to ${coin.superSuperTrend} today! Find out more at coinrotator.app/coin/${coin.id} #CoinRotator $${symbol} @${coin.twitter}`
       const channelPost = `${coin.name} (${symbol}) changed from ${coin.yesterdaySuperSuperTrend} to ${coin.superSuperTrend} today! Find out more at https://coinrotator.app/coin/${coin.id}`
       console.log(tweetPost, channelPost)
-      await tweet(tweetPost)
-      await channelCreateMessage(channelPost)
-      await postMessage(channelPost)
+      try {
+        await tweet(tweetPost)
+      } catch {
+        console.log('Tweet failed')
+      }
+      try {
+        await channelCreateMessage(channelPost)
+      } catch {
+        console.log('Discord failed')
+      }
+      try {
+        await postMessage(channelPost)
+      } catch {
+        console.log('Telegram failed')
+      }
       await new Promise((res) => setTimeout(res, 1000))
     }
     await new Promise((res) => setTimeout(res, 50000))
