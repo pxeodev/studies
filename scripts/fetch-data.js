@@ -102,6 +102,9 @@ const script = async () => {
         })
         continue
       } else {
+        console.log(e.response.status);
+        console.log(e.response.headers);
+        console.log(e.response.data);
         throw(e)
       }
     }
