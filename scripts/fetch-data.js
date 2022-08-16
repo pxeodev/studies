@@ -25,7 +25,7 @@ const noRankError = 'no-rank-error'
 const script = async () => {
   const coinGeckoAPI = axios.create({
     baseURL: 'https://api.coingecko.com/api/v3',
-    timeout: 30000
+    timeout: 60000
   })
   coinGeckoAPI.defaults.raxConfig = {
     instance: coinGeckoAPI,
@@ -102,9 +102,9 @@ const script = async () => {
         })
         continue
       } else {
-        console.log(e.response.status);
-        console.log(e.response.headers);
-        console.log(e.response.data);
+        console.log(e.response?.status);
+        console.log(e.response?.headers);
+        console.log(e.response?.data);
         throw(e)
       }
     }
@@ -217,9 +217,9 @@ const script = async () => {
           try {
             response = await coinGeckoAPI.get(route)
           } catch(e) {
-            console.log(e.response.status);
-            console.log(e.response.headers);
-            console.log(e.response.data);
+            console.log(e.response?.status);
+            console.log(e.response?.headers);
+            console.log(e.response?.data);
             throw(e);
           }
           ohlcData = response.data.map((frame) => {
