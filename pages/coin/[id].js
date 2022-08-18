@@ -193,7 +193,7 @@ export default function Coin(coin) {
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
                   overlayClassName={coinStyles.tooltip}
                   trigger={isHoverable ? 'hover' : 'click'}
-                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily Update 9-10am CET"
+                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 7 AM UTC"
                 >
                   <InfoCircleFilled className={coinStyles.signalExplainer} />
                 </Tooltip>
