@@ -158,7 +158,7 @@ const HomePageTable = ({
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily. NFA."
+            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 7AM UTC. NFA."
         >
           <QuestionCircleFilled className={indexTableStyles.columnTooltip} />
         </Tooltip>

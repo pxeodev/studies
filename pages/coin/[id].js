@@ -149,7 +149,7 @@ export default function Coin(coin) {
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
-  const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. Always be on the right side of the cryptomarket.`
+  const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. A coin screener that captures strong momentum in both directions!`
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
@@ -195,7 +195,7 @@ export default function Coin(coin) {
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
                   overlayClassName={coinStyles.tooltip}
                   trigger={isHoverable ? 'hover' : 'click'}
-                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD."
+                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 7 AM UTC"
                 >
                   <InfoCircleFilled className={coinStyles.signalExplainer} />
                 </Tooltip>
