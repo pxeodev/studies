@@ -1,4 +1,4 @@
-import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout } from 'antd'
+import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout, Alert } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
@@ -397,6 +397,7 @@ export default function Home({ coinsData, categories }) {
 
   return (
     <Content className={indexStyles.container}>
+      <Alert message={<span>Win 100 USDT. Please answer our CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank'>survey</a>.</span>} type="info" banner closable className={indexStyles.message}/>
       <Title className={indexStyles.title}>Search For The Most Profitable Coins</Title>
       <Paragraph className={indexStyles.subtitle} type="secondary"><span>CoinRotator</span> tracks price trends for the top 1,000 cryptocurrencies, all updated daily on a single dashboard. Instantly check the coin screener for each market using our proprietary algorithm.</Paragraph>
       <Card className={indexStyles.filters}>
