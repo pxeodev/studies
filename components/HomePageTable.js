@@ -269,24 +269,6 @@ const HomePageTable = ({
         </>
       )
     }
-  },
-  {
-    title: '24h Change',
-    dataIndex: 'dailyChange',
-    width: 130,
-    sorter: (a, b) => a.dailyChange - b.dailyChange,
-    render: (dailyChange) => {
-      return (<span className={classNames(indexTableStyles.negativeValue, { [indexTableStyles.positiveValue]: dailyChange >= 0 })}>{numberFormatter.format(dailyChange)}%</span>)
-    }
-  },
-  {
-    title: '7d Change',
-    dataIndex: 'weeklyChange',
-    width: 130,
-    sorter: (a, b) => a.weeklyChange - b.weeklyChange,
-    render: (weeklyChange) => {
-      return (<span className={classNames(indexTableStyles.negativeValue, { [indexTableStyles.positiveValue]: weeklyChange >= 0 })}>{numberFormatter.format(weeklyChange)}%</span>)
-    }
   })
 
   // The table rows are 56px high.
