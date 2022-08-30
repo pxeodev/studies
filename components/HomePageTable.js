@@ -1,4 +1,4 @@
-import { Table, Tooltip } from 'antd'
+import { Table, Tooltip, Tag } from 'antd'
 import { QuestionCircleFilled } from '@ant-design/icons';
 import { VList } from 'virtuallist-antd'
 import { useRouter } from 'next/router'
@@ -30,6 +30,7 @@ const HomePageTable = ({
     atrPeriods,
     multiplier,
     showWeeklySignals,
+    showExchanges,
   }) => {
 
   const router = useRouter()
@@ -116,8 +117,7 @@ const HomePageTable = ({
         images: coinData.images,
         name: coinData.name
       },
-      dailyChange: coinData.dailyChange,
-      weeklyChange: coinData.weeklyChange,
+      exchanges: coinData.exchanges,
       marketCap: coinData.marketCap,
       dailySuperSuperTrend: coinData.dailySuperSuperTrend,
       weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
@@ -270,6 +270,20 @@ const HomePageTable = ({
       )
     }
   })
+
+  if (showExchanges) {
+    columns.push({
+      title: 'Exchanges',
+      dataIndex: 'exchanges',
+      render: (exchanges) => {
+        return <>
+          {exchanges.map((exchange) => {
+            return <Tag key={exchange[0]}>{exchange[0]}</Tag>
+          })}
+        </>;
+      }
+    })
+  }
 
   // The table rows are 56px high.
   const tableHeight = 9 * 56;

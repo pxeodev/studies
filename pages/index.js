@@ -101,6 +101,7 @@ export default function Home({ coinsData, categories }) {
       portfolio: '',
       trendType: signals.all,
       weeklySignals: false,
+      showExchanges: false,
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -141,6 +142,11 @@ export default function Home({ coinsData, categories }) {
         return {
           ...state,
           weeklySignals: action.payload
+        }
+      case 'SET_SHOW_EXCHANGES':
+        return {
+          ...state,
+          showExchanges: action.payload
         }
       case 'SET_MARKET_CAP_MIN':
         let newMarketCapMin
@@ -265,6 +271,7 @@ export default function Home({ coinsData, categories }) {
         portfolio: router.query.portfolio,
         trendType: router.query.trendType,
         weeklySignals: router.query.weeklySignals,
+        showExchanges: router.query.showExchanges,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
         trendLengthMin: router.query.trendLengthMin,
@@ -352,12 +359,14 @@ export default function Home({ coinsData, categories }) {
     const atrPeriodsFilterApplied = formState.atrPeriods !== defaultAtrPeriods
     const multiplierFilterApplied = formState.multiplier !== defaultMultiplier
     const showWeeklySignalsFilterApplied = formState.weeklySignals !== defaultFormState.weeklySignals
+    const showExchangesFilterApplied = formState.showExchanges !== defaultFormState.showExchanges
     const advancedFiltersApplied =
       marketCapFilterApplied ||
       trendLengthFilterApplied ||
       atrPeriodsFilterApplied ||
       multiplierFilterApplied ||
-      showWeeklySignalsFilterApplied
+      showWeeklySignalsFilterApplied ||
+      showExchangesFilterApplied
 
     if (!advancedFiltersApplied || !screens.sm) {
       return null
@@ -391,6 +400,9 @@ export default function Home({ coinsData, categories }) {
           )}
           {formState.weeklySignals && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly trends</Tag>
+          )}
+          {formState.showExchanges && (
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SHOW_EXCHANGES', payload: defaultFormState.showExchanges })}>Exchanges</Tag>
           )}
         </Col>
       </Row>
@@ -610,6 +622,15 @@ export default function Home({ coinsData, categories }) {
                 <Text type="secondary">Weekly trends update each Monday at 00:00 UTC.</Text>
               </Col>
             </Row>
+            <Divider />
+            <Row className={indexStyles.row} justify="space-between">
+              <Col>
+                <span>Show exchanges</span>
+              </Col>
+              <Col>
+                <Switch checked={formState.showExchanges} onChange={(checked) => formDispatch({ type: 'SET_SHOW_EXCHANGES', payload: checked })} />
+              </Col>
+            </Row>
           </TabPane>
         </Tabs>
       </Modal>
@@ -628,6 +649,7 @@ export default function Home({ coinsData, categories }) {
           atrPeriods={formState.atrPeriods}
           multiplier={formState.multiplier}
           showWeeklySignals={formState.weeklySignals}
+          showExchanges={formState.showExchanges}
         />
       </Row>
     </Content>
