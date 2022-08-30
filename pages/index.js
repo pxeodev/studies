@@ -429,7 +429,7 @@ export default function Home({ coinsData, categories }) {
           {formState.showExchanges && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SHOW_EXCHANGES', payload: defaultFormState.showExchanges })}>Show Exchanges</Tag>
           )}
-          {formState.exchanges && (
+          {!isEmpty(formState.exchanges) && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_EXCHANGES', payload: defaultFormState.exchanges })}>Exchanges: {formState.exchanges.join(", ")}</Tag>
           )}
         </Col>
