@@ -284,7 +284,15 @@ const script = async () => {
   const derivativesByCoin = groupBy(perpetualDerivatives, 'index_id')
 
   for (const [coinId, derivatives] of Object.entries(derivativesByCoin)) {
-    const derivativeSymbols = derivatives.map(derivate => derivate.symbol)
+    const derivativesCoinData = derivatives.map(derivative => {
+      const derivateMarket = derivative.market
+        .replace(/\(?Futures\)?/, '')
+        .trim()
+      return {
+        symbol: derivative.symbol,
+        market: derivateMarket
+      }
+    })
 
     const coinToUpdate = await prisma.coin.findFirst({
       where : {
@@ -295,7 +303,7 @@ const script = async () => {
       await prisma.coin.update({
         where: { id: coinToUpdate.id },
         data: {
-          derivatives: derivativeSymbols
+          derivatives: derivativesCoinData
         },
       })
     }

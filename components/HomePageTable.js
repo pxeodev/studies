@@ -295,7 +295,7 @@ const HomePageTable = ({
     render: (derivatives) => {
       return <>
         {derivatives.map((derivative) => {
-          return <Tag key={derivative}>{derivative}</Tag>
+          return <Tag key={derivative.symbol}>{derivative.symbol}</Tag>
         })}
       </>;
     }

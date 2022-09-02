@@ -41,7 +41,7 @@ model Coin {
   launch_roi_usd Decimal?
   launch_roi_eth Decimal?
   launch_roi_btc Decimal?
-  derivatives String[]
+  derivatives Json?
 
   @@index([marketCapRank])
 }
