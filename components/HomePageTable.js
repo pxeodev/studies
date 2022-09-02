@@ -264,7 +264,8 @@ const HomePageTable = ({
     })
   }
 
-  columns.push({
+  columns.push(
+  {
     title: 'Market Cap',
     dataIndex: 'marketCap',
     width: 150,
@@ -276,35 +277,30 @@ const HomePageTable = ({
         </>
       )
     }
-  })
-
-  if (showExchanges) {
-    columns.push({
-      title: 'Exchanges',
-      dataIndex: 'exchanges',
-      render: (exchanges) => {
-        return <>
-          {exchanges.map((exchange) => {
-            return <Tag key={exchange[0]}>{exchange[0]}</Tag>
-          })}
-        </>;
-      }
-    })
+  },
+  {
+    title: 'Exchanges',
+    dataIndex: 'exchanges',
+    render: (exchanges) => {
+      return <>
+        {exchanges.map((exchange) => {
+          return <Tag key={exchange[0]}>{exchange[0]}</Tag>
+        })}
+      </>;
+    }
+  },
+  {
+    title: 'Derivatives',
+    dataIndex: 'derivatives',
+    render: (derivatives) => {
+      return <>
+        {derivatives.map((derivative) => {
+          return <Tag key={derivative}>{derivative}</Tag>
+        })}
+      </>;
+    }
   }
-
-  if (showDerivatives) {
-    columns.push({
-      title: 'Derivatives',
-      dataIndex: 'derivatives',
-      render: (derivatives) => {
-        return <>
-          {derivatives.map((derivative) => {
-            return <Tag key={derivative}>{derivative}</Tag>
-          })}
-        </>;
-      }
-    })
-  }
+  )
 
   // The table rows are 56px high.
   const tableHeight = 9 * 56;

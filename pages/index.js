@@ -104,9 +104,7 @@ export default function Home({ coinsData, categories }) {
       portfolio: '',
       trendType: signals.all,
       weeklySignals: false,
-      showExchanges: false,
       exchanges: [],
-      showDerivatives: false,
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -147,16 +145,6 @@ export default function Home({ coinsData, categories }) {
         return {
           ...state,
           weeklySignals: action.payload
-        }
-      case 'SET_SHOW_EXCHANGES':
-        return {
-          ...state,
-          showExchanges: action.payload
-        }
-      case 'SET_SHOW_DERIVATIVES':
-        return {
-          ...state,
-          showDerivatives: action.payload
         }
       case 'SET_EXCHANGES':
         return {
@@ -295,8 +283,6 @@ export default function Home({ coinsData, categories }) {
         portfolio: router.query.portfolio,
         trendType: router.query.trendType,
         weeklySignals: router.query.weeklySignals,
-        showExchanges: router.query.showExchanges,
-        showDerivatives: router.query.showDerivatives,
         exchanges,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
@@ -391,18 +377,14 @@ export default function Home({ coinsData, categories }) {
     const atrPeriodsFilterApplied = formState.atrPeriods !== defaultAtrPeriods
     const multiplierFilterApplied = formState.multiplier !== defaultMultiplier
     const showWeeklySignalsFilterApplied = formState.weeklySignals !== defaultFormState.weeklySignals
-    const showExchangesFilterApplied = formState.showExchanges !== defaultFormState.showExchanges
     const exchangesFilterApplied = !isEqual(formState.exchanges, defaultFormState.exchanges)
-    const showDerivativesFilterApplied = formState.showDerivatives !== defaultFormState.showDerivatives
     const advancedFiltersApplied =
       marketCapFilterApplied ||
       trendLengthFilterApplied ||
       atrPeriodsFilterApplied ||
       multiplierFilterApplied ||
       showWeeklySignalsFilterApplied ||
-      showExchangesFilterApplied ||
-      exchangesFilterApplied ||
-      showDerivativesFilterApplied
+      exchangesFilterApplied
 
     if (!advancedFiltersApplied || !screens.sm) {
       return null
@@ -437,14 +419,8 @@ export default function Home({ coinsData, categories }) {
           {formState.weeklySignals && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly trends</Tag>
           )}
-          {formState.showExchanges && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SHOW_EXCHANGES', payload: defaultFormState.showExchanges })}>Show Exchanges</Tag>
-          )}
           {!isEmpty(formState.exchanges) && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_EXCHANGES', payload: defaultFormState.exchanges })}>Exchanges: {formState.exchanges.join(", ")}</Tag>
-          )}
-          {formState.showDerivatives && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SHOW_DERIVATIVES', payload: defaultFormState.showDerivatives })}>Show Derivatives</Tag>
           )}
         </Col>
       </Row>
@@ -685,24 +661,6 @@ export default function Home({ coinsData, categories }) {
                 <Text type="secondary">Weekly trends update each Monday at 00:00 UTC.</Text>
               </Col>
             </Row>
-            <Divider />
-            <Row className={indexStyles.row} justify="space-between">
-              <Col>
-                <span>Show exchanges</span>
-              </Col>
-              <Col>
-                <Switch checked={formState.showExchanges} onChange={(checked) => formDispatch({ type: 'SET_SHOW_EXCHANGES', payload: checked })} />
-              </Col>
-            </Row>
-            <Divider />
-            <Row className={indexStyles.row} justify="space-between">
-              <Col>
-                <span>Show derivatives</span>
-              </Col>
-              <Col>
-                <Switch checked={formState.showDerivatives} onChange={(checked) => formDispatch({ type: 'SET_SHOW_DERIVATIVES', payload: checked })} />
-              </Col>
-            </Row>
           </TabPane>
         </Tabs>
       </Modal>
@@ -721,8 +679,6 @@ export default function Home({ coinsData, categories }) {
           atrPeriods={formState.atrPeriods}
           multiplier={formState.multiplier}
           showWeeklySignals={formState.weeklySignals}
-          showExchanges={formState.showExchanges}
-          showDerivatives={formState.showDerivatives}
           exchanges={formState.exchanges}
         />
       </Row>
