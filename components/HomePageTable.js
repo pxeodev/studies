@@ -31,9 +31,8 @@ const HomePageTable = ({
     atrPeriods,
     multiplier,
     showWeeklySignals,
-    showExchanges,
     exchanges,
-    showDerivatives
+    derivatives,
   }) => {
 
   const router = useRouter()
@@ -63,11 +62,14 @@ const HomePageTable = ({
     const matchesCategory = category === defaultCategory || coinData.categories.includes(category)
     const exchangeNames = coinData.exchanges.map(exchangeData => exchangeData[0])
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
+    const derivativeNames = coinData.derivatives.map(derivative => derivative.market)
+    const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
            matchesPortfolio &&
            matchesCategory &&
-           matchesExchanges
+           matchesExchanges &&
+           matchesDerivatives
   })
   displayedCoinData = displayedCoinData.map((coinData) => {
     if (showWeeklySignals) {

@@ -105,6 +105,7 @@ export default function Home({ coinsData, categories }) {
       trendType: signals.all,
       weeklySignals: false,
       exchanges: [],
+      derivatives: [],
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -150,6 +151,11 @@ export default function Home({ coinsData, categories }) {
         return {
           ...state,
           exchanges: action.payload
+        }
+      case 'SET_DERIVATIVES':
+        return {
+          ...state,
+          derivatives: action.payload
         }
       case 'SET_MARKET_CAP_MIN':
         let newMarketCapMin
@@ -240,9 +246,9 @@ export default function Home({ coinsData, categories }) {
   useEffect(() => {
     if (router.isReady) {
       const changedParams = pickBy(formState, (value, key) => {
-        if (key === 'exchanges') {
-          const oldExchanges = Array.isArray(router.query[key]) ? router.query[key] : [router.query[key]]
-          return !isEqual(value, oldExchanges)
+        if (key === 'exchanges' || key === 'derivatives') {
+          const oldArray = Array.isArray(router.query[key]) ? router.query[key] : [router.query[key]]
+          return !isEqual(value, oldArray)
         } else {
           return value !== router.query[key]
         }
@@ -272,9 +278,12 @@ export default function Home({ coinsData, categories }) {
     if (!router.isReady) { return; }
 
     setPortfolioInputValue(router.query.portfolio)
-    let exchanges
+    let exchanges, derivatives
     if (router.query.exchanges) {
       exchanges = Array.isArray(router.query.exchanges) ? router.query.exchanges : [router.query.exchanges]
+    }
+    if (router.query.derivatives) {
+      derivatives = Array.isArray(router.query.derivatives) ? router.query.derivatives : [router.query.derivatives]
     }
     formDispatch({
       type: 'SET_FROM_ROUTE_PARAMS',
@@ -284,6 +293,7 @@ export default function Home({ coinsData, categories }) {
         trendType: router.query.trendType,
         weeklySignals: router.query.weeklySignals,
         exchanges,
+        derivatives,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
         trendLengthMin: router.query.trendLengthMin,
@@ -368,6 +378,12 @@ export default function Home({ coinsData, categories }) {
 
     return exchangeNames.sort()
   }, [coinsData])
+  const allDerivativeExchanges = useMemo(() => {
+    const derivativesData = coinsData.flatMap((coin) => coin.derivatives)
+    const derivativeExchangeNames = uniq(derivativesData.map(derivative => derivative.market))
+
+    return derivativeExchangeNames.sort()
+  }, [coinsData])
 
   const renderAppliedFilters = () => {
     const marketCapFilterApplied = Number(formState.marketCapMin) !== Number(defaultFormState.marketCapMin) ||
@@ -378,13 +394,15 @@ export default function Home({ coinsData, categories }) {
     const multiplierFilterApplied = formState.multiplier !== defaultMultiplier
     const showWeeklySignalsFilterApplied = formState.weeklySignals !== defaultFormState.weeklySignals
     const exchangesFilterApplied = !isEqual(formState.exchanges, defaultFormState.exchanges)
+    const derivativesFilterApplied = !isEqual(formState.derivatives, defaultFormState.derivatives)
     const advancedFiltersApplied =
       marketCapFilterApplied ||
       trendLengthFilterApplied ||
       atrPeriodsFilterApplied ||
       multiplierFilterApplied ||
       showWeeklySignalsFilterApplied ||
-      exchangesFilterApplied
+      exchangesFilterApplied ||
+      derivativesFilterApplied
 
     if (!advancedFiltersApplied || !screens.sm) {
       return null
@@ -421,6 +439,9 @@ export default function Home({ coinsData, categories }) {
           )}
           {!isEmpty(formState.exchanges) && (
             <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_EXCHANGES', payload: defaultFormState.exchanges })}>Exchanges: {formState.exchanges.join(", ")}</Tag>
+          )}
+          {!isEmpty(formState.derivatives) && (
+            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_DERIVATIVES', payload: defaultFormState.derivatives })}>Derivative exchanges: {formState.derivatives.join(", ")}</Tag>
           )}
         </Col>
       </Row>
@@ -646,6 +667,27 @@ export default function Home({ coinsData, categories }) {
                 </Select>
               </Col>
             </Row>
+            <Divider />
+            <Row>
+              <Col>
+                <div>Derivative exchanges</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Select
+                  mode="multiple"
+                  allowClear
+                  placeholder="Select derivative exchanges"
+                  className={indexStyles.modalSelect}
+                  size="large"
+                  value={formState.derivatives}
+                  onChange={(exchanges) => { formDispatch({ type: 'SET_DERIVATIVES', payload: exchanges }) }}
+                >
+                  {allDerivativeExchanges.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
+                </Select>
+              </Col>
+            </Row>
           </TabPane>
           <TabPane tab="Columns" key="columns">
             <Row className={indexStyles.row} justify="space-between">
@@ -680,6 +722,7 @@ export default function Home({ coinsData, categories }) {
           multiplier={formState.multiplier}
           showWeeklySignals={formState.weeklySignals}
           exchanges={formState.exchanges}
+          derivatives={formState.derivatives}
         />
       </Row>
     </Content>
