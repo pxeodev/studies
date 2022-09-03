@@ -291,6 +291,7 @@ const HomePageTable = ({
   {
     title: 'Exchanges',
     dataIndex: 'exchanges',
+    width: 250,
     className: indexTableStyles.unclickableCell,
     onCell: () => ({ onClick: (e) => {
       e.stopPropagation();
@@ -320,6 +321,7 @@ const HomePageTable = ({
   {
     title: 'Derivatives',
     dataIndex: 'derivatives',
+    width: 250,
     className: indexTableStyles.unclickableCell,
     onCell: () => ({ onClick: (e) => {
       e.stopPropagation();
