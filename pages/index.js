@@ -406,7 +406,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
       exchangesFilterApplied ||
       derivativesFilterApplied
 
-    if (!advancedFiltersApplied || !screens.sm) {
+    if (!advancedFiltersApplied) {
       return null
     }
 
@@ -419,31 +419,31 @@ export default function Home({ coinsData, categories, exchangeData }) {
       <Row key="applied-filters">
         <Col span={24}>
           {marketCapFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => {
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => {
               formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: defaultFormState.marketCapMin })
               formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: defaultFormState.marketCapMax })
             }}>Market Cap: {formatter.format(formState.marketCapMin)} - {formatter.format(formState.marketCapMax)}</Tag>
           )}
           {trendLengthFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => {
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => {
               formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: defaultFormState.trendLengthMin })
               formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: defaultFormState.trendLengthMax })
             }}>Trend Streak: {formState.trendLengthMin} - {formState.trendLengthMax}</Tag>
           )}
           {atrPeriodsFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_ATR_PERIODS', payload: defaultFormState.atrPeriods })}>ATR periods: {formState.atrPeriods}</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_ATR_PERIODS', payload: defaultFormState.atrPeriods })}>ATR periods: {formState.atrPeriods}</Tag>
           )}
           {multiplierFilterApplied && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_MULTIPLIER', payload: defaultFormState.multiplier })}>Multiplier: {formState.multiplier}</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_MULTIPLIER', payload: defaultFormState.multiplier })}>Multiplier: {formState.multiplier}</Tag>
           )}
           {formState.weeklySignals && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly trends</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_WEEKLY_SIGNALS', payload: defaultFormState.weeklySignals })}>Weekly trends</Tag>
           )}
           {!isEmpty(formState.exchanges) && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_EXCHANGES', payload: defaultFormState.exchanges })}>Exchanges: {formState.exchanges.join(", ")}</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_EXCHANGES', payload: defaultFormState.exchanges })}>Exchanges: {formState.exchanges.join(", ")}</Tag>
           )}
           {!isEmpty(formState.derivatives) && (
-            <Tag color="geekblue" closable onClose={() => formDispatch({ type: 'SET_DERIVATIVES', payload: defaultFormState.derivatives })}>Derivative markets: {formState.derivatives.join(", ")}</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_DERIVATIVES', payload: defaultFormState.derivatives })}>Derivative markets: {formState.derivatives.join(", ")}</Tag>
           )}
         </Col>
       </Row>
