@@ -13,6 +13,7 @@ import pickBy from 'lodash/pickBy'
 import uniq from 'lodash/uniq'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
+import classnames from 'classnames';
 
 import HomePageTable from '../components/HomePageTable';
 import useBreakPoint from '../hooks/useBreakPoint';
@@ -22,7 +23,6 @@ import convertToDailySignals from '../utils/convertToDailySignals';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import { getCategories } from '../utils/categories';
 import globalData from '../lib/globalData';
-import classnames from 'classnames';
 
 import indexStyles from '../styles/index.module.less'
 
@@ -86,17 +86,19 @@ export async function getStaticProps() {
       exchanges
     }
   })
+  const exchangeData = await prisma.exchange.findMany()
   let categories = await getCategories()
   return {
     props: {
       coinsData,
       categories,
+      exchangeData,
       appData
     }
   }
 }
 
-export default function Home({ coinsData, categories }) {
+export default function Home({ coinsData, categories, exchangeData }) {
   const router = useRouter()
   const defaultFormState = useMemo(() =>
   ({
@@ -709,6 +711,7 @@ export default function Home({ coinsData, categories }) {
       <Row className={indexStyles.tableRow}>
         <HomePageTable
           coinsData={coinsData}
+          exchangeData={exchangeData}
           marketCapMax={formState.marketCapMax}
           marketCapMin={formState.marketCapMin}
           trendLengthMin={formState.trendLengthMin}

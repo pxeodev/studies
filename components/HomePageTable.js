@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
+import classnames from 'classnames'
 
 import UpTag from './UpTag'
 import DownTag from './DownTag'
@@ -19,6 +20,7 @@ import indexTableStyles from '../styles/indexTable.module.less';
 
 const HomePageTable = ({
     coinsData,
+    exchangeData,
     marketCapMin,
     marketCapMax,
     trendLengthMin,
@@ -296,15 +298,21 @@ const HomePageTable = ({
     render: (exchanges, data) => {
       return <>
         {exchanges.map((exchange) => {
+          const matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
           const onTagClick = (e) => {
             e.stopPropagation()
             router.push(`/coin/${data.coinData.id}#markets`)
           }
-          return <Tag
+          // eslint-disable-next-line @next/next/no-img-element
+          return <img
+            src={matchingExchange.image}
+            alt={exchange[0]}
+            title={exchange[0]}
+            loading="lazy"
             key={exchange[0]}
             onClick={onTagClick}
-            className={indexTableStyles.clickableTag}
-          >{exchange[0]}</Tag>
+            className={classnames(indexTableStyles.clickableTag, indexTableStyles.image)}
+          />
         })}
       </>;
     }
