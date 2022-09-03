@@ -139,6 +139,8 @@ export default function Coin(coin) {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
+  const percentageFromAth = (coinData.currentPrice / coinData.ath) * 100
+  const percentageFromAtl = (coinData.currentPrice / coinData.atl) * 100
   const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
@@ -156,6 +158,10 @@ export default function Coin(coin) {
     .replaceAll('{{fdv}}', currencyFormatter.format(coin.fullyDilutedValuation))
     .replaceAll('{{launchprice}}', currencyFormatter.format(coin.launch_price))
     .replaceAll('{{currentprice}}', currencyFormatter.format(coin.currentPrice))
+    .replaceAll('{{percentagefromath}}', numberFormatter.format(percentageFromAth))
+    .replaceAll('{{percentagefromatl}}', numberFormatter.format(percentageFromAtl))
+    .replaceAll('{{circulatingsupply}}', currencyFormatter.format(coin.circulatingSupply))
+    .replaceAll('{{percentagecirculatingsupply}}', numberFormatter.format(coin.circulatingSupplyPercentage))
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
