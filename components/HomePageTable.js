@@ -284,6 +284,10 @@ const HomePageTable = ({
   {
     title: 'Exchanges',
     dataIndex: 'exchanges',
+    className: indexTableStyles.unclickableCell,
+    onCell: () => ({ onClick: (e) => {
+      e.stopPropagation();
+    }}),
     render: (exchanges, data) => {
       return <>
         {exchanges.map((exchange) => {
@@ -291,7 +295,11 @@ const HomePageTable = ({
             e.stopPropagation()
             router.push(`/coin/${data.coinData.id}#markets`)
           }
-          return <Tag key={exchange[0]} onClick={onTagClick}>{exchange[0]}</Tag>
+          return <Tag
+            key={exchange[0]}
+            onClick={onTagClick}
+            className={indexTableStyles.clickableTag}
+          >{exchange[0]}</Tag>
         })}
       </>;
     }
@@ -299,14 +307,22 @@ const HomePageTable = ({
   {
     title: 'Derivatives',
     dataIndex: 'derivatives',
+    className: indexTableStyles.unclickableCell,
+    onCell: () => ({ onClick: (e) => {
+      e.stopPropagation();
+    }}),
     render: (derivatives, data) => {
       return <>
         {derivatives.map((derivative) => {
           const onTagClick = (e) => {
-            e.stopPropagation()
+            // e.stopPropagation()
             router.push(`/coin/${data.coinData.id}#markets`)
           }
-          return <Tag key={derivative.symbol} onClick={onTagClick}>{derivative.symbol}</Tag>
+          return <Tag
+            key={derivative.symbol}
+            onClick={onTagClick}
+            className={indexTableStyles.clickableTag}
+          >{derivative.symbol}</Tag>
         })}
       </>;
     }
@@ -326,7 +342,6 @@ const HomePageTable = ({
       columns={columns}
       dataSource={tableData}
       onRow={(coin) => ({ onClick: () => {
-        console.log('row click')
         router.push(`/coin/${coin.coinData.id}`);
       }}) }
       rowClassName={indexTableStyles.row}
