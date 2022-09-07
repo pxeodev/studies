@@ -141,6 +141,7 @@ export default function Coin(coin) {
   }
   const percentageFromAth = (coinData.currentPrice / coinData.ath) * 100
   const percentageFromAtl = (coinData.currentPrice / coinData.atl) * 100
+  const priceAppreciationToAthPercentage = (coinData.ath / coinData.currentPrice) * 100
   const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
@@ -162,6 +163,8 @@ export default function Coin(coin) {
     .replaceAll('{{percentagefromatl}}', numberFormatter.format(percentageFromAtl))
     .replaceAll('{{circulatingsupply}}', currencyFormatter.format(coin.circulatingSupply))
     .replaceAll('{{percentagecirculatingsupply}}', numberFormatter.format(coin.circulatingSupplyPercentage))
+    .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
+    .replaceAll('{{percentageappreciationtoath}}', numberFormatter.format(priceAppreciationToAthPercentage))
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
