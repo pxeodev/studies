@@ -165,6 +165,7 @@ export default function Coin(coin) {
     .replaceAll('{{percentagecirculatingsupply}}', numberFormatter.format(coin.circulatingSupplyPercentage))
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
     .replaceAll('{{percentageappreciationtoath}}', numberFormatter.format(priceAppreciationToAthPercentage))
+    .replaceAll('{{ranking}}', coinData.marketCapRank)
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
