@@ -642,7 +642,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
               <Tooltip
                 placement={'right'}
                 trigger={isHoverable ? 'hover' : 'click'}
-                title="Filter by exchange coins are traded on"
+                title="Select your exchanges to see a complete list of coins for each trend condition."
               >
                 <QuestionCircleFilled className={baseStyles.tooltipIcon} />
               </Tooltip>
@@ -667,7 +667,16 @@ export default function Home({ coinsData, categories, exchangeData }) {
         <Divider />
         <Row>
           <Col>
-            <div>Derivative markets</div>
+            <span>
+              <span>Derivative markets</span>
+              <Tooltip
+                placement={'right'}
+                trigger={isHoverable ? 'hover' : 'click'}
+                title="Select your derivatives markets to see their trend condition."
+              >
+                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+              </Tooltip>
+            </span>
           </Col>
         </Row>
         <Row>

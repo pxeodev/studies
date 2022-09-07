@@ -309,7 +309,7 @@ const HomePageTable = ({
       e.stopPropagation();
     }}),
     render: (exchanges, data) => {
-      return <span title="Click for more exchanges">
+      return <span title="Top 5 exchanges. Click to see more.">
         {exchanges.map((exchange) => {
           const matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
           const onTagClick = (e) => {
@@ -339,7 +339,7 @@ const HomePageTable = ({
       e.stopPropagation();
     }}),
     render: (derivatives, data) => {
-      return <span title="Click for more derivatives">
+      return <span title="Top derivatives. Click to see more.">
         {derivatives.map((derivative) => {
           const onTagClick = (e) => {
             // e.stopPropagation()
