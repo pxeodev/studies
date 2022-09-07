@@ -52,7 +52,7 @@
   @media (max-width: @screen-md) {
     margin-bottom: 16px !important;
   }
-} 
+}
 
 // Icons and Imagery
 .icon {
@@ -65,4 +65,21 @@
       fill: @cr-icon-fill-hover !important;
     }
   }
-} 
+}
+
+.tooltipIcon {
+  margin-left: 10px;
+  margin-right: 5px;
+
+  svg {
+    width: 10px;
+  }
+
+  path {
+    fill: @cr-icon-fill;
+
+    &:hover {
+        fill: @cr-icon-fill-hover;
+    }
+  }
+}

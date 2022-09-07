@@ -17,6 +17,7 @@ import getTrends from '../utils/getTrends'
 import { signals, preferredExchanges } from '../utils/variables'
 
 import indexTableStyles from '../styles/indexTable.module.less';
+import baseStyles from '../styles/base.module.less'
 
 const HomePageTable = ({
     coinsData,
@@ -173,7 +174,7 @@ const HomePageTable = ({
             trigger={isHoverable ? 'hover' : 'click'}
             title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 7AM UTC. NFA."
         >
-          <QuestionCircleFilled className={indexTableStyles.columnTooltip} />
+          <QuestionCircleFilled className={baseStyles.tooltipIcon} />
         </Tooltip>
       </span>,
       dataIndex: 'dailySuperSuperTrend',
@@ -231,7 +232,7 @@ const HomePageTable = ({
             trigger={isHoverable ? 'hover' : 'click'}
             title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 7AM UTC. NFA."
         >
-          <QuestionCircleFilled className={indexTableStyles.columnTooltip} />
+          <QuestionCircleFilled className={baseStyles.tooltipIcon} />
         </Tooltip>
       </span>,
       dataIndex: 'weeklySuperSuperTrend',
@@ -291,7 +292,16 @@ const HomePageTable = ({
     }
   },
   {
-    title: 'Exchanges',
+    title: <span className={indexTableStyles.columnTitle}>
+      <span>Exchanges</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="All the exchanges this coin is traded on"
+      >
+        <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+      </Tooltip>
+    </span>,
     dataIndex: 'exchanges',
     width: 120,
     className: indexTableStyles.unclickableCell,

@@ -1,5 +1,5 @@
-import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Switch, Layout, Alert, Tabs } from 'antd'
-import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined } from '@ant-design/icons'
+import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Layout, Alert, Tooltip } from 'antd'
+import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
 import prisma from '../lib/prisma'
@@ -25,11 +25,11 @@ import { getCategories } from '../utils/categories';
 import globalData from '../lib/globalData';
 
 import indexStyles from '../styles/index.module.less'
+import baseStyles from '../styles/base.module.less'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option, OptGroup } = Select;
 const { Content } = Layout;
-const { TabPane } = Tabs;
 
 export async function getStaticProps() {
   const appData = await globalData();
@@ -637,7 +637,16 @@ export default function Home({ coinsData, categories, exchangeData }) {
         <Divider />
         <Row>
           <Col>
-            <div>Exchanges</div>
+            <span>
+              <span>Exchanges</span>
+              <Tooltip
+                placement={'right'}
+                trigger={isHoverable ? 'hover' : 'click'}
+                title="Filter by exchange coins are traded on"
+              >
+                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+              </Tooltip>
+            </span>
           </Col>
         </Row>
         <Row>
