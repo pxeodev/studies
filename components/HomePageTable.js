@@ -118,7 +118,8 @@ const HomePageTable = ({
       shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative.market))
     }
     shownDerivatives = shownDerivatives.sort((derivative) => preferredExchanges.includes(derivative.market) ? -1 : 1)
-    const shownExchanges = coinData.exchanges.sort((exchange) => preferredExchanges.includes(exchange[0]) ? -1 : 1)
+    let shownExchanges = coinData.exchanges.sort((exchange) => preferredExchanges.includes(exchange[0]) ? -1 : 1)
+    shownExchanges = shownExchanges.slice(0, 5)
     return {
       key: `${coinData.id}-${coinData.name}`,
       coinData: {
@@ -138,7 +139,7 @@ const HomePageTable = ({
   const screens = useBreakPoint();
   const numberFormatter = new Intl.NumberFormat([], {
     notation: 'compact',
-    compactDisplay: 'long',
+    compactDisplay: 'short',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })
@@ -164,7 +165,7 @@ const HomePageTable = ({
       }
     },
     {
-      width: 150,
+      width: 100,
       title: <span className={indexTableStyles.columnTitle}>
         <span>Trend (24h)</span>
         <Tooltip
@@ -222,7 +223,7 @@ const HomePageTable = ({
       }
     },
     {
-      width: 150,
+      width: 100,
       title: <span className={indexTableStyles.columnTitle}>
         <span>Trend (7d)</span>
         <Tooltip
@@ -279,7 +280,7 @@ const HomePageTable = ({
   {
     title: 'Market Cap',
     dataIndex: 'marketCap',
-    width: 150,
+    width: 90,
     sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
     render: (marketCap) => {
       return (
@@ -292,7 +293,7 @@ const HomePageTable = ({
   {
     title: 'Exchanges',
     dataIndex: 'exchanges',
-    width: 250,
+    width: 120,
     className: indexTableStyles.unclickableCell,
     onCell: () => ({ onClick: (e) => {
       e.stopPropagation();
