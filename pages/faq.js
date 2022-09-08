@@ -32,6 +32,8 @@ export default function Faq() {
             <li>Check for new trends daily in order to buy into coins which are outperforming BTC ETH and USDT. After checking the news, general health of the market (BTCUSD), you can take a position and check its performance daily. The CoinRotator screener currently updates once per day at 07:00 UTC.</li>
             <li>Search your favorite altcoin in the top 1000 (based on market cap) and see if it is a <UpTag /> <DownTag /> and <HodlTag /> trend. Consider your time horizon and profit expectations. If you are in profit, consider taking some profits based on what the CoinRotator trend reports.</li>
             <li>Seek out undervalued low marketcap coins by applying advanced settings in the filter. Choose &lt;100m and trend streak 1-5 and select UP only. Here will be a screen result of the best performing small marketcap coins in the top 1000. Be warned, these coins are more volatile than the top ranked coins but if BTC behaves you will see much larger gains in our experience.</li>
+            <li>Check out our explainer video for more details</li>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/OcyZcip24pM" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </ol>
         </Panel>
         <Panel header="Does CoinRotator work in bear markets?" key="2">
@@ -61,6 +63,9 @@ export default function Faq() {
         </Panel>
         <Panel header="Why does my coin say 'Up', but it's down a lot today?" key="8">
           Coinrotator issues trends once a day after the daily bar closes at 07:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage blindly following the trend alerts based on the coin screener.
+        </Panel>
+ <Panel header="Why do you use the word HODL in your signals?" key="9">
+          HODL is a mispelling of a very enthusiastic early investor in Bitcoin. The term stuck and has been used ever since. In the spirit of early adoption and the culture surrounding the revolutionary nature of crypto, we have adopted it to describe an uncertain near term situation in that coin.
         </Panel>
       </Collapse>
     </Content>);
