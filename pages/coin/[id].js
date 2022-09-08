@@ -381,7 +381,11 @@ export default function Coin(coin) {
                         )
                       }
                     </div>
-                  ) : <></>
+                  ) : (
+                    <div className={coinStyles.data}>
+                      <Title level={3} className={coinStyles.label}>Performance since ICO</Title>
+                    </div>
+                  )
                 }
                 {
                   coin.launch_roi_usd ? (
