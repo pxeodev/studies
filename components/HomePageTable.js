@@ -64,7 +64,7 @@ const HomePageTable = ({
     const matchesCategory = category === defaultCategory || coinData.categories.includes(category)
     const exchangeNames = coinData.exchanges.map(exchangeData => exchangeData[0])
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
-    const derivativeNames = coinData.derivatives.map(derivative => derivative.market)
+    const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
     const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
@@ -114,7 +114,7 @@ const HomePageTable = ({
   })
 
   const tableData = displayedCoinData.map((coinData) => {
-    let shownDerivatives = coinData.derivatives
+    let shownDerivatives = coinData.derivatives || []
     if (!isEmpty(derivatives)) {
       shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative.market))
     }
