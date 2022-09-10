@@ -31,7 +31,8 @@ const script = async () => {
   })
   coinGeckoAPI.defaults.raxConfig = {
     instance: coinGeckoAPI,
-    onRetryAttempt: (err) => console.log(err)
+    onRetryAttempt: (err) => console.log(err),
+    retry: 7
   }
   coinGeckoAPI.interceptors.request.use(AxiosLogger.requestLogger);
   rax.attach(coinGeckoAPI)
