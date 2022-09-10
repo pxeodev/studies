@@ -375,7 +375,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
   }, [coinsData])
   const allDerivativeExchanges = useMemo(() => {
     const derivativesData = coinsData.flatMap((coin) => coin.derivatives)
-    const derivativeExchangeNames = uniq(derivativesData.map(derivative => derivative.market))
+    const derivativeExchangeNames = uniq(derivativesData.filter(Boolean).map(derivative => derivative.market))
 
     return derivativeExchangeNames.sort()
   }, [coinsData])
