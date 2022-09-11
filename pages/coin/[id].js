@@ -139,6 +139,9 @@ export default function Coin(coin) {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
+  const percentageFromAth = (coin.currentPrice / coin.ath) * 100
+  const percentageFromAtl = (coin.currentPrice / coin.atl) * 100
+  const priceAppreciationToAthPercentage = (coin.ath / coin.currentPrice) * 100
   const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
@@ -149,6 +152,20 @@ export default function Coin(coin) {
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. A coin screener that captures strong momentum in both directions!`
+  const interpolatedCoinDescription = coin.description
+    .replaceAll('{{ath}}', preciseCurrencyFormatter.format(coin.ath))
+    .replaceAll('{{atl}}', preciseCurrencyFormatter.format(coin.atl))
+    .replaceAll('{{marketcap}}', currencyFormatter.format(coin.marketCap))
+    .replaceAll('{{fdv}}', currencyFormatter.format(coin.fullyDilutedValuation))
+    .replaceAll('{{launchprice}}', currencyFormatter.format(coin.launch_price))
+    .replaceAll('{{currentprice}}', currencyFormatter.format(coin.currentPrice))
+    .replaceAll('{{percentagefromath}}', numberFormatter.format(percentageFromAth))
+    .replaceAll('{{percentagefromatl}}', numberFormatter.format(percentageFromAtl))
+    .replaceAll('{{circulatingsupply}}', currencyFormatter.format(coin.circulatingSupply))
+    .replaceAll('{{percentagecirculatingsupply}}', numberFormatter.format(coin.circulatingSupplyPercentage))
+    .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
+    .replaceAll('{{percentageappreciationtoath}}', numberFormatter.format(priceAppreciationToAthPercentage))
+    .replaceAll('{{ranking}}', coin.marketCapRank)
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
@@ -244,7 +261,7 @@ export default function Coin(coin) {
           </Card.Grid>
           {coin.description ? (
             <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
-                <ReactMarkdown>{coin.description}</ReactMarkdown>
+                <ReactMarkdown>{interpolatedCoinDescription}</ReactMarkdown>
             </Card.Grid>
           ) : <></>}
           {coin.platforms.length ? (
