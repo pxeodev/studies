@@ -160,12 +160,12 @@ export default function Coin(coin) {
     .replaceAll('{{fdv}}', currencyFormatter.format(coin.fullyDilutedValuation))
     .replaceAll('{{launchprice}}', currencyFormatter.format(coin.launch_price))
     .replaceAll('{{currentprice}}', currencyFormatter.format(coin.currentPrice))
-    .replaceAll('{{percentagefromath}}', numberFormatter.format(percentageFromAth))
-    .replaceAll('{{percentagefromatl}}', numberFormatter.format(percentageFromAtl))
+    .replaceAll('{{percentagefromath}}', `${numberFormatter.format(percentageFromAth)}%`)
+    .replaceAll('{{percentagefromatl}}', `${numberFormatter.format(percentageFromAtl)}%`)
     .replaceAll('{{circulatingsupply}}', currencyFormatter.format(coin.circulatingSupply))
-    .replaceAll('{{percentagecirculatingsupply}}', numberFormatter.format(coin.circulatingSupplyPercentage))
+    .replaceAll('{{percentagecirculatingsupply}}', `${numberFormatter.format(circulatingSupplyPercentage)}%`)
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
-    .replaceAll('{{percentageappreciationtoath}}', numberFormatter.format(priceAppreciationToAthPercentage))
+    .replaceAll('{{percentageappreciationtoath}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
     .replaceAll('{{ranking}}', coin.marketCapRank)
     .replaceAll('{{day}}', today.getDate())
     .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
@@ -590,6 +590,7 @@ export async function getStaticProps({ params }) {
     'launch_roi_usd',
     'launch_roi_eth',
     'launch_roi_btc',
+    'currentPrice'
   ])
   return {
     props: {
@@ -603,6 +604,7 @@ export async function getStaticProps({ params }) {
       launch_roi_usd: Number(coinData.launch_roi_usd),
       launch_roi_eth: Number(coinData.launch_roi_eth),
       launch_roi_btc: Number(coinData.launch_roi_btc),
+      currentPrice: Number(coinData.currentPrice),
       platforms,
       chainsData,
       dailyTrends,
