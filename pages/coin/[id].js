@@ -10,7 +10,7 @@ import ReactMarkdown from 'react-markdown'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import UpTag from '../../components/UpTag'
 import PlatformSelect from '../../components/PlatformSelect';
@@ -177,6 +177,31 @@ export default function Coin(coin) {
     const roi = round((multiple - 1) * 100, 2);
     return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{numberFormatter.format(roi)}%</span>
   }, [numberFormatter])
+  const preventCopy = (event) => {
+    let selection = window.getSelection().toString();
+    selection = selection.split(' ').map((piece) => {
+      if (Math.random() * 100 < 8) {
+        let interference = window.location.href
+        if (Math.random() * 100 < 30) {
+          interference = Math.random().toString(36).slice(2)
+        }
+        piece = `${piece} ${interference} `
+      }
+      return piece;
+    }).join(' ')
+
+    selection = `${selection}\nCopyright ${new Date().getFullYear()} CoinRotator. All rights reserved`
+    selection = `${selection}\nThe source of this text is ${window.location.href}`
+
+    event.clipboardData.setData('text/plain', selection);
+    event.preventDefault();
+  }
+  useEffect(() => {
+    document.addEventListener('copy', preventCopy)
+    return () => {
+      document.removeEventListener('copy', preventCopy)
+    }
+  }, [])
 
   return (
     <>
