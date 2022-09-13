@@ -579,6 +579,7 @@ export async function getStaticProps({ params }) {
       launch_roi_usd: Number(coinData.launch_roi_usd),
       launch_roi_eth: Number(coinData.launch_roi_eth),
       launch_roi_btc: Number(coinData.launch_roi_btc),
+      currentPrice: Number(coinData.currentPrice),
       platforms,
       chainsData,
       dailyTrends,
