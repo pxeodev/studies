@@ -18,8 +18,8 @@ model Coin {
   categories     String[]
   images Json
   description String?
-  homepage String
-  twitter String
+  homepage String?
+  twitter String?
   twitterFollowers Int?
   ath Decimal
   atl Decimal
