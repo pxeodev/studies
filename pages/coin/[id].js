@@ -148,6 +148,7 @@ export default function Coin(coin) {
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
   const numberFormatter = new Intl.NumberFormat([], { notation })
   const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
+  const today = new Date()
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
@@ -166,6 +167,9 @@ export default function Coin(coin) {
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
     .replaceAll('{{percentageappreciationtoath}}', numberFormatter.format(priceAppreciationToAthPercentage))
     .replaceAll('{{ranking}}', coin.marketCapRank)
+    .replaceAll('{{day}}', today.getDate())
+    .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
+    .replaceAll('{{year}}', today.getFullYear())
 
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
