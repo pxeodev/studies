@@ -140,8 +140,8 @@ export default function Coin(coin) {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
-  const percentageFromAth = (coin.currentPrice / coin.ath) * 100
-  const percentageFromAtl = (coin.currentPrice / coin.atl) * 100
+  const percentageFromAth = (coin.ath - coin.currentPrice) / coin.ath * 100
+  const percentageFromAtl = (coin.atl - coin.currentPrice) / coin.atl * 100
   const priceAppreciationToAthPercentage = (coin.ath / coin.currentPrice) * 100
   const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
