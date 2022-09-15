@@ -146,6 +146,7 @@ const script = async () => {
       currentPrice: coinData.market_data.current_price?.usd,
       circulatingSupply: coinData.market_data.circulating_supply,
       totalSupply: coinData.market_data.total_supply,
+      maxSupply: coinData.market_data.max_supply,
       tickers: coinData.tickers,
       categories: categories[`${symbol}-${coinData.name}`],
       dailyChange: dailyChange,
