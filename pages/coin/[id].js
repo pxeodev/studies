@@ -166,6 +166,7 @@ export default function Coin(coin) {
     .replaceAll('{{circulatingsupply}}', numberFormatter.format(coin.circulatingSupply))
     .replaceAll('{{percentagecirculatingsupply}}', `${numberFormatter.format(circulatingSupplyPercentage)}%`)
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
+    .replaceAll('{{maxsupply}}', numberFormatter.format(coin.maxSupply))
     .replaceAll('{{percentageappreciationtoath}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
     .replaceAll('{{ranking}}', coin.marketCapRank)
     .replaceAll('{{day}}', today.getDate())
@@ -363,6 +364,12 @@ export default function Coin(coin) {
               <div className={coinStyles.data}>
                 <Title level={3} className={coinStyles.label}>Total Supply</Title>
                 <div className={coinStyles.value}>{numberFormatter.format(coin.totalSupply)}</div>
+              </div>
+            ) : <></>}
+            { coin.maxSupply && coin.maxSupply !== coin.totalSupply ? (
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Max Supply</Title>
+                <div className={coinStyles.value}>{numberFormatter.format(coin.maxSupply)}</div>
               </div>
             ) : <></>}
           </Card.Grid>
@@ -584,6 +591,7 @@ export async function getStaticProps({ params }) {
     'fullyDilutedValuation',
     'circulatingSupply',
     'totalSupply',
+    'maxSupply',
     'tickers',
     'twitter',
     'twitterFollowers',
@@ -604,6 +612,7 @@ export async function getStaticProps({ params }) {
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),
       circulatingSupply: Number(coinData.circulatingSupply),
       totalSupply: Number(coinData.totalSupply),
+      maxSupply: Number(coinData.maxSupply),
       launch_price: Number(coinData.launch_price),
       launch_roi_usd: Number(coinData.launch_roi_usd),
       launch_roi_eth: Number(coinData.launch_roi_eth),
