@@ -17,7 +17,14 @@
 }
 
 .message {
-  margin-bottom: 16px;
+  position:fixed;
+  top: 76px;
+  z-index: 999;
+
+    @media (max-width: @screen-md) {
+      position: inherit;
+      margin-bottom: 16px;
+  }
 }
 
 .title {
