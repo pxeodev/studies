@@ -44,6 +44,25 @@ model Coin {
   derivatives Json?
   currentPrice Decimal?
   maxSupply Decimal?
+  lunrInternalId Int?
+  lunrSymbol String?
+  lunrName String?
+  lunrCurrentPrice Decimal?
+  lunrVolume Decimal?
+  lunrPercentageChange24h Decimal?
+  lunrPercentageChange1h Decimal?
+  lunrMarketCap Decimal?
+  lunrGalaxyScore Decimal?
+  lunrGalaxyScorePrevious Decimal?
+  lunrSocialScore Decimal?
+  lunrAverageSentiment Decimal?
+  lunrSocialVolume Decimal?
+  lunrSocialContributors Int?
+  lunrSocialDominance Decimal?
+  lunrMarketDominance Decimal?
+  lunrAltRank Decimal?
+  lunrAltRankPrevious Decimal?
+  lunrCategories String[]
 
   @@index([marketCapRank])
 }

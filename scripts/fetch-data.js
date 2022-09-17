@@ -14,6 +14,7 @@ import * as Tracing from '@sentry/tracing';
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'
 import prisma from '../lib/prisma'
+import { getAllCoins } from '../lib/lunr'
 import { Prisma } from '@prisma/client'
 import { hasPlatforms } from '../utils/coingecko';
 
@@ -307,6 +308,41 @@ const script = async () => {
         where: { id: coinToUpdate.id },
         data: {
           derivatives: derivativesCoinData
+        },
+      })
+    }
+  }
+
+  const lunrCoins = (await getAllCoins()).data?.data || []
+  for (const lunrCoin of lunrCoins) {
+    const matchingDbCoin = await prisma.coin.findFirst({
+      where : {
+        symbol: lunrCoin.s.toLowerCase()
+      }
+    })
+    if (matchingDbCoin) {
+      await prisma.coin.update({
+        where: { id: matchingDbCoin.id },
+        data: {
+          lunrInternalId: lunrCoin.id,
+          lunrSymbol: lunrCoin.s,
+          lunrName: lunrCoin.n,
+          lunrCurrentPrice: lunrCoin.p,
+          lunrVolume: lunrCoin.v,
+          lunrPercentageChange24h: lunrCoin.pc,
+          lunrPercentageChange1h: lunrCoin.pch,
+          lunrMarketCap: lunrCoin.mc,
+          lunrGalaxyScore: lunrCoin.gs,
+          lunrGalaxyScorePrevious: lunrCoin.gs_p,
+          lunrSocialScore: lunrCoin.ss,
+          lunrAverageSentiment: lunrCoin.as,
+          lunrSocialVolume: lunrCoin.sv,
+          lunrSocialContributors: lunrCoin.c,
+          lunrSocialDominance: lunrCoin.sd,
+          lunrMarketDominance: lunrCoin.d,
+          lunrAltRank: lunrCoin.acr,
+          lunrAltRankPrevious: lunrCoin.acr_p,
+          lunrCategories: lunrCoin.categories?.split(',')
         },
       })
     }
