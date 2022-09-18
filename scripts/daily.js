@@ -164,7 +164,7 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
     })
 
     endPoints.push({
-      coinGecko: true,
+      isCoinGecko: true,
       route: `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=${quoteSymbol}&days=${fetchOhlcDays}`,
       quoteSymbol
     })
@@ -177,9 +177,9 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
     if (!ohlcEndPoints.length) {
       continue
     }
-    for (let { route, inverse, coinGecko, quoteSymbol } of ohlcEndPoints) {
+    for (let { route, inverse, isCoinGecko, quoteSymbol } of ohlcEndPoints) {
       let ohlcData = {}
-      if (coinGecko) {
+      if (isCoinGecko) {
         await new Promise((res) => setTimeout(res, 6000))
         let response
         try {
@@ -260,9 +260,9 @@ const fetchCoinDataAndOhlcs = async () => {
   })
   databaseCoinIds = databaseCoinIds.map(({ id }) => id)
   coinIds = union(coinIds, databaseCoinIds)
-  if (process.env.NODE_ENV == "development") {
-    coinIds = coinIds.slice(0, 3)
-  }
+  // if (process.env.NODE_ENV == "development") {
+  //   coinIds = coinIds.slice(0, 3)
+  // }
 
   const cryptowatchMarketsResponse = await cryptowatch.get('/markets')
   let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
