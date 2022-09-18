@@ -71,8 +71,6 @@ const fetchCoinpaprikaData = async () => {
     const matchingCoin = await getMatchingDbCoin(coinPaprikaCoin.symbol, coinPaprikaCoin.name)
     if (matchingCoin) {
       const coinPaprikaCoinData = (await getCoin(coinPaprikaCoin.id)).data
-      // TODO: Add CP data to the coin schema
-      // TODO: Update data here
       await prisma.coin.update({
         where: {
           id: matchingCoin.id
@@ -82,7 +80,7 @@ const fetchCoinpaprikaData = async () => {
           coinpaprikaName: coinPaprikaCoinData.name,
           coinpaprikaRank: coinPaprikaCoinData.rank,
           coinpaprikaActive: coinPaprikaCoinData.is_active,
-          coinpaprikaTags: coinPaprikaCoinData.tags,
+          coinpaprikaTags: coinPaprikaCoinData.tags || undefined,
           coinpaprikaTeam: coinPaprikaCoinData.team,
           coinpaprikaDescription: coinPaprikaCoinData.description,
           coinpaprikaMessage: coinPaprikaCoinData.message,
