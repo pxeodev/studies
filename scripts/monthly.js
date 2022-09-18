@@ -1,6 +1,3 @@
-import axios from 'axios'
-import * as rax from 'retry-axios'
-import * as AxiosLogger from 'axios-logger'
 import dotenv from 'dotenv';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
@@ -9,6 +6,7 @@ import minBy from 'lodash/minBy';
 import levenshtein from 'js-levenshtein';
 
 import prisma from '../lib/prisma'
+import coinGecko from '../lib/coinGecko';
 import { getCoin, getCoins } from '../lib/coinpaprika'
 
 dotenv.config();
@@ -22,23 +20,11 @@ Sentry.init({
 });
 
 const fetchExchanges = async () => {
-  const coinGeckoAPI = axios.create({
-    baseURL: 'https://api.coingecko.com/api/v3',
-    timeout: 60000
-  })
-  coinGeckoAPI.defaults.raxConfig = {
-    instance: coinGeckoAPI,
-    onRetryAttempt: (err) => console.log(err),
-    retry: 7
-  }
-  coinGeckoAPI.interceptors.request.use(AxiosLogger.requestLogger);
-  rax.attach(coinGeckoAPI)
-
-  const exchangesData = (await coinGeckoAPI.get('/exchanges/list')).data
+  const exchangesData = (await coinGecko.get('/exchanges/list')).data
 
   for (const exchange of exchangesData) {
     await new Promise((res) => setTimeout(res, 6000))
-    let exchangeData = (await coinGeckoAPI.get(`/exchanges/${exchange.id}`)).data
+    let exchangeData = (await coinGecko.get(`/exchanges/${exchange.id}`)).data
     exchangeData = pick(exchangeData, ['name', 'image', 'url'])
 
     await prisma.exchange.upsert({

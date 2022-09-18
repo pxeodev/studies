@@ -1,6 +1,4 @@
 import axios from 'axios'
-import * as rax from 'retry-axios'
-import * as AxiosLogger from 'axios-logger'
 import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
 import groupBy from 'lodash/groupBy'
@@ -14,6 +12,8 @@ import * as Tracing from '@sentry/tracing';
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'
 import prisma from '../lib/prisma'
+import coinGecko from '../lib/coinGecko'
+import cryptowatch from '../lib/cryptowatch'
 import { getAllCoins } from '../lib/lunr'
 import { Prisma } from '@prisma/client'
 import { hasPlatforms } from '../utils/coingecko';
@@ -26,36 +26,12 @@ const excludedTokens = ['thorchain-erc20']
 const noRankError = 'no-rank-error'
 
 const script = async () => {
-  const coinGeckoAPI = axios.create({
-    baseURL: 'https://api.coingecko.com/api/v3',
-    timeout: 60000
-  })
-  coinGeckoAPI.defaults.raxConfig = {
-    instance: coinGeckoAPI,
-    onRetryAttempt: (err) => console.log(err),
-    retry: 7
-  }
-  coinGeckoAPI.interceptors.request.use(AxiosLogger.requestLogger);
-  rax.attach(coinGeckoAPI)
-
-  const cryptowatchAPI = axios.create({
-    baseURL: 'https://api.cryptowat.ch',
-    timeout: 30000,
-    headers: { 'X-CW-API-Key': process.env.CRYPTOWATCH_API_KEY }
-  })
-  cryptowatchAPI.defaults.raxConfig = {
-    instance: cryptowatchAPI,
-    onRetryAttempt: (err) => console.log(err)
-  }
-  cryptowatchAPI.interceptors.request.use(AxiosLogger.requestLogger);
-  rax.attach(cryptowatchAPI)
-
   const categories = await getCategoriesByCoin();
 
-  const coinMarketsPage1 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250')
-  const coinMarketsPage2 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
-  const coinMarketsPage3 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=3')
-  const coinMarketsPage4 = await coinGeckoAPI.get('/coins/markets?vs_currency=usd&per_page=250&page=4')
+  const coinMarketsPage1 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250')
+  const coinMarketsPage2 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
+  const coinMarketsPage3 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=3')
+  const coinMarketsPage4 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=4')
   let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data, ...coinMarketsPage3.data, ...coinMarketsPage4.data]
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
@@ -71,7 +47,7 @@ const script = async () => {
     coinIds = coinIds.slice(0, 3)
   }
 
-  const cryptowatchMarketsResponse = await cryptowatchAPI.get('/markets')
+  const cryptowatchMarketsResponse = await cryptowatch.get('/markets')
   let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
   cryptowatchMarkets = cryptowatchMarkets.filter(market => market.active)
 
@@ -82,7 +58,7 @@ const script = async () => {
   for (let coinId of coinIds) {
     let coinData
     try {
-      coinData = (await coinGeckoAPI.get(`/coins/${coinId}`)).data
+      coinData = (await coinGecko.get(`/coins/${coinId}`)).data
       if (isNil(coinData.market_data.market_cap_rank)) {
         throw(noRankError)
       }
@@ -221,7 +197,7 @@ const script = async () => {
           await new Promise((res) => setTimeout(res, 6000))
           let response
           try {
-            response = await coinGeckoAPI.get(route)
+            response = await coinGecko.get(route)
           } catch(e) {
             console.log(e.response?.status);
             console.log(e.response?.headers);
@@ -243,7 +219,7 @@ const script = async () => {
           ohlcData = ohlcData.filter((ohlc) => ohlc.closeTime < now)
           ohlcs = [...ohlcs, ...ohlcData]
         } else {
-          const response = await cryptowatchAPI.get(route)
+          const response = await cryptowatch.get(route)
           ohlcData = response.data.result['14400']
           // Sometimes cryptowatch can't give us all the OHLC data, because a coin just recently got listed on an exchange
           if (ohlcData.length < fetchOhlcDays * 6) {
@@ -282,7 +258,7 @@ const script = async () => {
     await prisma.ohlc.createMany({ data: ohlcs, skipDuplicates: true })
   }
 
-  const derivativesData = (await coinGeckoAPI.get('derivatives')).data
+  const derivativesData = (await coinGecko.get('derivatives')).data
   let perpetualDerivatives = derivativesData.filter(derivate => derivate.contract_type === 'perpetual')
   perpetualDerivatives = uniqBy(perpetualDerivatives, 'symbol')
   const derivativesByCoin = groupBy(perpetualDerivatives, 'index_id')
