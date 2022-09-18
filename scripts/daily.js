@@ -1,8 +1,10 @@
 import axios from 'axios'
 import dotenv from 'dotenv';
 import subDays from 'date-fns/subDays'
+import levenshtein from 'js-levenshtein';
 import groupBy from 'lodash/groupBy'
 import pickBy from 'lodash/pickBy'
+import minBy from 'lodash/minBy';
 import isNil from 'lodash/isNil'
 import union from 'lodash/union'
 import uniqBy from 'lodash/uniqBy'
@@ -312,14 +314,31 @@ const fetchDerivativesData = async() => {
 const fetchLunrData = async() => {
   const lunrCoins = (await getAllCoins()).data?.data || []
   for (const lunrCoin of lunrCoins) {
-    const matchingDbCoin = await prisma.coin.findFirst({
+    let matchingCoin
+    const matchingCoins = await prisma.coin.findMany({
       where : {
         symbol: lunrCoin.s.toLowerCase()
       }
     })
-    if (matchingDbCoin) {
+    if (matchingCoins.length === 1) {
+      matchingCoin = matchingCoins[0]
+    } else if (matchingCoins.length > 1) {
+      const closestCoin = minBy(matchingCoins, (coin) => levenshtein(coin.name, lunrCoin.n));
+
+      Sentry.withScope(scope => {
+        scope.setLevel('warning');
+        scope.setExtra('symbol', lunrCoin.s);
+        Sentry.captureMessage(`Lunr: Detected the right coin via levenshtein distance: ${closestCoin.name} (${lunrCoin.s})`);
+      });
+      console.log('Found multiple coins', matchingCoins)
+      console.log('Picked', closestCoin, ' for ', lunrCoin.s, lunrCoin.n)
+      matchingCoin = closestCoin;
+    } else {
+      console.log('No matching db coin found for ', lunrCoin.s, lunrCoin.n)
+    }
+    if (matchingCoin) {
       await prisma.coin.update({
-        where: { id: matchingDbCoin.id },
+        where: { id: matchingCoin.id },
         data: {
           lunrInternalId: lunrCoin.id,
           lunrSymbol: lunrCoin.s,
@@ -352,8 +371,8 @@ setTimeout(async () => {
     name: `Datafetch ${new Date()}`,
   });
   try {
-    await fetchCoinDataAndOhlcs();
-    await fetchDerivativesData();
+    // await fetchCoinDataAndOhlcs();
+    // await fetchDerivativesData();
     await fetchLunrData();
     if (process.env.NODE_ENV === 'production') {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/ZzMCeSY4lD')
