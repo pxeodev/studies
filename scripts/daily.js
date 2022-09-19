@@ -71,7 +71,6 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
     }
   }
   const symbol = coinData.symbol.toLowerCase()
-  await new Promise((res) => setTimeout(res, 6000))
 
   let platforms;
   if (hasPlatforms(coinData.platforms)) {
@@ -180,7 +179,6 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
     for (let { route, inverse, isCoinGecko, quoteSymbol } of ohlcEndPoints) {
       let ohlcData = {}
       if (isCoinGecko) {
-        await new Promise((res) => setTimeout(res, 6000))
         let response
         try {
           response = await coinGecko.get(route)
