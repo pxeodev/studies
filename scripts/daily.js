@@ -14,7 +14,7 @@ import * as Tracing from '@sentry/tracing';
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'
 import prisma from '../lib/prisma'
-import coinGecko from '../lib/coinGecko'
+import coinGecko, { getOhlc, getCoin } from '../lib/coinGecko'
 import cryptowatch from '../lib/cryptowatch'
 import { getAllCoins } from '../lib/lunr'
 import { Prisma } from '@prisma/client'
@@ -40,7 +40,7 @@ const marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx'].reverse()
 const fetchCoinDataCoingecko = async (coinId, categories) => {
   let coinData
   try {
-    coinData = (await coinGecko.get(`/coins/${coinId}`)).data
+    coinData = (await getCoin(coinId)).data
     if (isNil(coinData.market_data.market_cap_rank)) {
       throw(noRankError)
     }
@@ -164,7 +164,6 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
 
     endPoints.push({
       isCoinGecko: true,
-      route: `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=${quoteSymbol}&days=${fetchOhlcDays}`,
       quoteSymbol
     })
 
@@ -181,7 +180,7 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
       if (isCoinGecko) {
         let response
         try {
-          response = await coinGecko.get(route)
+          response = await getOhlc(coinId, quoteSymbol, fetchOhlcDays)
         } catch(e) {
           console.log(e.response?.status);
           console.log(e.response?.headers);
