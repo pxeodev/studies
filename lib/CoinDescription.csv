@@ -18,53 +18,56 @@ Chainlink,LINK,"Chainlink acting as a price oracle provides real-world data to s
 Near Protocol,NEAR,"NEAR protocol is a proof-of-stake (PoS) layer 1 blockchain that utilizes a sharding solution called ‘Nightshade’. This solution only lets each node to store a small subset of the platform’s data, which reduces potential points of failure security-wise. NEAR protocol also includes ‘Rainbow Bridge’, an application that lets users easily transfer Ethereum tokens to NEAR and vice versa.",Huy
 Tron,TRX,The Tron blockchain has 3 layers to its architecture: the Core layer sends coded instructions to the Tron Virtual Machine; the Application layer lets developers create wallets and applications powered by TRX; and the Storage layer stores records of the blockchain’s history and status of smart contracts.,Huy
 FTX Token,FTT,"FTT Token is the native token of the FTX exchange, which is a centralized cryptocurrency exchange focused on derivatives, volatility products and leveraged products. FTX can be used as collateral, to get discounts on trading fees and more.",Huy
-Algorand,ALGO,"
-# Algorand Market Analysis
+Algorand,ALGO,"# Algorand Market Analysis
 
 ![Algorand went live in 2019](https://images.surferseo.art/70c51dee-3f6b-420c-ae15-1c69225458b6.jpeg)
 
-## What is Algorand (ALGO)?
+## What is Algorand?
 
-Going live in 2019, Algorand is a layer 1 decentralized blockchain technology that uses the Pure Proof of Stake (Pure PoS/ PPoS) consensus protocol and ALGO is its native currency. Algorand claims to be the best solution for solving the blockchain trilemma: achieving decentralization, scalability and security.
+Going live in 2019, Algorand is a layer 1 decentralized blockchain technology that uses the Pure Proof of Stake (Pure PoS/ PPoS) consensus protocol and ALGO is its native currency. Algorand claims to be the best solution for solving the blockchain trilemma: achieving decentralization, scalability, and security.
 
-The name comes from Algo (algorithm) and Rand (random): an algorithm that uses randomness to enhance the consensus mechanism. Algorand is primarily targeting the smart contract niche, with an emphasis on the financial services, decentralized finance (DeFi), financial securities markets and all sectors related to the future of finance.
+The name comes from Algo (algorithm) and Rand (random): an algorithm that uses randomness to enhance the consensus mechanism. Algorand is primarily targeting the smart contract niche, with an emphasis on financial services, decentralized finance (DeFi), financial securities markets, and all sectors related to the future of finance.
 
 ## What is the Pure Proof of Stake Consensus Protocol?
 
-Pure Proof of Stake (PPoS) is the conception of Algorand founder MIT professor Silvio Micali and is argued to lead to a more decentralized network compared to the existing Proof of Stake (PoS) protocol and be more resource efficient then Proof of Work.
+Pure Proof of Stake (PPoS) is the conception of Algorand founder MIT professor Silvio Micali and is argued to lead to a more decentralized network compared to the existing Proof of Stake (PoS) protocol and be more resource efficient than Proof of Work.
 
-In PPoS, validators are chosen to participate based on both the number of coins they own, but also through random selection, regardless of the size of their position. This automatic selection is carried out by Micali's own co-creation the Verifiable Random Function. Think of the VRF feature as a weighted lottery, with each ALGO held acting as the lottery ticket. This consensus mechanism allows for faster transfer speeds, similar to those of large payment networks. Selecting from all users of the blockchain, instead of according to the number of staked tokens, is intended to lead to greater decentralization and security.
+In PPoS, validators are chosen to participate based on both the number of coins they own, but also through random selection, regardless of the size of their position.
+
+This random selection of a 'committee' (participants that can add blocks to the network) is carried out by what Miclai describes as the 'secret sauce' of Algorand; Cryptographic Sortition. We can visualize Cryptographic Sortition as a weighted lottery, with each ALGO held acting as the lottery ticket. Due to the selection of the committee member being unpredictable, it is not possible to control them in advance, leading to a more secure network. And having a wider pool of participants to choose from also leads to greater decentralization. Cryptographic Sortition has been adopted by other next-generation blockchains like [Cardano](https://coinrotator.app/coin/cardano), will full credit given to Silvio Micali's protocol.
 
 ![Algorand claims to solve the Blockchain Trilema](https://images.surferseo.art/479465d1-7f29-4712-a1bc-276c6d2d8dc5.jpeg)
 
 ##   
 What Problem Does Algorand Solve?
 
-Thanks to the PPoS protocol which allows for high transaction throughput, the Algorand blockchain is hoping to be the preferred chain for Defi, as well as the exchange of digital property or NFTs. Algorand also bills itself as the ‘greenest’ blockchain. Since 2021, Algorand has been ‘carbon neutral’; a portion of the transaction fees goes towards the purchase of Carbon Credit, which more than offsets its carbon emissions.
+Thanks to the PPoS protocol which allows for high transaction throughput, the Algorand blockchain is hoping to be the preferred chain for Defi, as well as the exchange of digital property or NFTs. Algorand also bills itself as the ‘greenest’ blockchain. Since 2021, Algorand has been ‘carbon neutral’; a portion of the transaction fees goes towards the purchase of Carbon Credit, which offsets its carbon emissions.
 
-## Who is the Team Behind ALGO?
+### Algorand State Proofs
+
+Algorands recent protocol upgrade saw the introduction of Algorand State Proofs (ASP); Algorands new interoperability standard that allows interoperability with all Proof-of-Stake blockchains. Previous solutions to the interoperability problem relied on trusted intermediaries like centralized bridges or validator networks. These create single points of failure or attack vectors that allow malicious parties to compromise the system. ASPs allow the creation of a low-powered, lightweight 'snapshot' of the 'state' of the blockchain (current balances, transactions, or application data) to be read by the interoperated blockchain. Due to their low-powered nature, they can be used in environments such as a phone, smartwatch, or inside a smart contract. All Proof-of-Stake blockchains will be able to use State Proofs. State Proofs will be generated with advanced **Falcon Keys**, which ensures security even when faced with an attack from advanced Quantum Computers.
 
 ![MIT professor Silvio Micali founded Algorand](https://images.surferseo.art/c0a481b0-23fd-4150-b6c2-fc81256d3e52.jpeg)
 
-The powerhouse behind the creation of the Algorand network is MIT professor Silvio Micali, who has a very high standing in the cryptocurrency and blockchain space. He has over 40 years of expertise behind him and has contributed to some of the most well known cryptocurrency advancements including public-key cryptosystems, pseudorandom functions, digital signatures and oblivious transfer, and is one of the co-inventors of Zero-Knowledge Proofs and Verifiable Random Functions, which have been adopted by many third generation blockchains such as [Ethereum](https://coinrotator.app/coin/ethereum), [Cardono](https://coinrotator.app/coin/cardano) and [Polkadot](https://coinrotator.app/coin/polkadot).
+## Who is the Team Behind ALGO?
 
-He has gone on to receive many rewards such as the Gödel Prize, RSA Award for Excellence in Mathematics (2004), and the Turing Award (2012) for his work in the field of cryptocurrency. He is a member of the National Academy of Sciences, the National Academy of Engineering, the American Academy of Arts and Sciences, and a fellow of the International Association for Cryptologic Research.
+The powerhouse behind the creation of the Algorand network is MIT professor Silvio Micali, who has a very high standing in the cryptocurrency and blockchain space. He has over 40 years of expertise behind him and has contributed to some of the most well-known cryptocurrency advancements including public-key cryptosystems, pseudorandom functions, digital signatures, and oblivious transfer, and is one of the co-inventors of Zero-Knowledge Proofs and Verifiable Random Functions, which have been adopted by many third generation blockchains such as [Ethereum](https://coinrotator.app/coin/ethereum), [Cardano](https://coinrotator.app/coin/cardano), and [Polkadot](https://coinrotator.app/coin/polkadot).
 
-In the senior leadership team Micali is joined by COO W.Sean Ford, the previous CMO for LogMeIn. He brings expertise in brand leadership, product marketing, global marketing strategy, and ecommerce. Paul Riegle joined Algorand from Carbon Black where he led product management for initiatives that produced over $200million in recurring revenue.
+He has gone on to receive many rewards such as the Gödel Prize, the RSA Award for Excellence in Mathematics (2004), and the Turing Award (2012) for his work in the field of cryptography. He is a member of the National Academy of Sciences, the National Academy of Engineering, the American Academy of Arts and Sciences, and a fellow of the International Association for Cryptologic Research.
 
-  
+In the senior leadership team, Micali is joined by interim CEO W.Sean Ford, the previous CMO for LogMeIn. He brings expertise in brand leadership, product marketing, global marketing strategy, and e-commerce. Paul Riegle joined Algorand from Carbon Black where he led product management for initiatives that produced over $200million in recurring revenue.
 
 ## Road Map and Future Plans for Algorand (ALGO).
 
-Algorand doesn’t technically have a roadmap but upcoming milestones can be ascertained from interviews, presentations and publications from the Algorand team.
+Algorand doesn’t technically have a roadmap but upcoming milestones can be ascertained from interviews, presentations, and publications from the Algorand team.
 
 In July 2022 the Algorand research team published their report titled “Issuing Central Bank Digital Currency Using Algorand”. The reports suggest a hybrid CBDC model using a private instance of a public blockchain such as Algorand. In an interview last year COO Sean Ford confirmed they are in talks with Central Banks around the world to build their CBDC infrastructure but didn't specify which ones.
 
-Algorands main priority is to establish itself in the competitive smart contract market niche with an eye to attracting market share away from competitors such as Ethereum, whose users often complain of high gas fees. With Next-Generation scaling technologies Algorand can scale to 10,000 transactions per second, which even dwarfs traditional finance networks such as Visa. With this high scalability and smart contract functionality, Algorand Defi has recently launched products including decentralized exchanges, predictions markets, lending protocols, automated market makers, and more.
+Algorands main priority is to establish itself in the competitive smart contract market niche to attract market share away from competitors such as Ethereum, whose users often complain of high gas fees. With Next-Generation scaling technologies, Algorand can scale to 10,000 transactions per second, which even dwarfs traditional finance networks such as Visa. With this high scalability and smart contract functionality, Algorand Defi has recently launched products including decentralized exchanges, predictions markets, lending protocols, automated market makers, and more.
 
 ## Current Partnerships in the Algorand (ALGO) Ecosystem.
 
-Algorand has over 500 active partnerships with global organisations, governments, and [defi applications](https://coinrotator.app/?category=DeFi). They are active in the finance, education, gaming, sports and music, and arts fields.
+Algorand has over 500 active partnerships with global organizations, governments, and d[efi applications](https://coinrotator.app/?category=DeFi). They are active in finance, education, gaming, sports and music, and arts fields.
 
 ### Algorand FIFA
 
@@ -72,33 +75,36 @@ In the sports sector, they recently partnered to form Algorand FIFA, to become a
 
 ### Algorand Foundation's Global University Program
 
-Thanks to Dr Micali’s connection to MIT, Algorand has been able to form strong partnerships with top-ranking universities around the world. The Algorand Foundation's Global University Program was formed to allow students and faculty from these prestigious institutions the opportunity to help grow the network and contribute to the new borderless knowledge economy.
+Thanks to Dr. Micali’s connection to MIT, Algorand has been able to form strong partnerships with top-ranking universities around the world. The Algorand Foundation's Global University Program was formed to allow students and faculty from these prestigious institutions the opportunity to help grow the network and contribute to the new borderless knowledge economy.
 
 ![Algorand Global University Program](https://images.surferseo.art/31454902-8ada-4146-8626-365d9bfd8abb.jpeg)
 
 ## Algorand Defi
 
-In the financial securities arena, Algorand has formed working collaborations with Republic; the private investment and technology platform, Archax; the FCA authorised digital securities exchange, Stoneize; the Italian fintech, Securitize; the compliance platform and Delchain; the asset management firm.
+In the financial securities arena, Algorand has formed working collaborations with Republic; the private investment and technology platform, Archax; the FCA authorized digital securities exchange, Stoneize; the Italian fintech, Securitize; the compliance platform and Delchain; the asset management firm.
+
+## Algorand Governance
+
+An important distinction between Algorand and other blockchains is that Algorand rewards Governance, not Consensus. Validators are incentivized to run nodes to support their investment in the ecosystem. In fact, due to the minimal computational costs, and the voluntary nature of the action, consensus participation is seen as ""a very light form of civic service"", according to Micali. Governance, on the other hand, will require personal attention and time, in addition to a locking up period of the Algorand token, and as such will be compensated. Governance is defined as the power of deciding any non-consensus task, for example, the funding of grant proposals. This decentralized governance model will give Algorand coin holders and the Algorand community the opportunity to participate in the ecosystem’s decision-making process on the Algorand Platform.
+
+![Algorand rewards Governance not Consensus ](https://images.surferseo.art/54d27f9e-77a2-411b-b8ff-7b71586a1606.jpeg)
 
 ## The Tokenomics of ALGO
 
-Algorand cryptocurrency has a fixed maximum supply of 10 billion. The circulating supply currently sits at {{circulatingsupply}} ({{percentagecirculatingsupply}}) according to Coinmarketcap. The remaining ALGOs are held by the Algorand Foundation in secure wallets and earmarked for Community & Governance Rewards, Ecosystem Support, and the Foundation Endowment. As of {{month}} {{day}} {{year}} ALGO is trading at {{currentprice}} with a marketcap of {{marketcap}}.
-
-## Algorand Governance Rewards
-
-The Algorand platform has adopted a decentralised governance model that will give Algorand coin holders the opportunity to participate in the ecosystem’s decision-making process, as well as earn governance rewards.
-
-Algorand staking rewards can be accumulated simply by holding the Algo token in a wallet or on a cryptocurrency exchange.
+Algorand cryptocurrency has a total supply of 10 billion. The circulating supply currently sits at {{circulatingsupply}} ({{percentagecirculatingsupply}}). The remaining ALGOs are held by the Algorand Foundation in secure wallets and earmarked for Community & Governance Rewards, Ecosystem Support, and the Foundation Endowment. As of {{month}} {{day}} {{year}} ALGO is trading at {{currentprice}} with a marketcap of {{marketcap}}.
 
 ### Algorand Price Predictions
 
-To get a general possible Algorand price forecast we can look at past token price history. As stated the ALGO price currently sits at {{currentprice}}. A rise back to all-time highs of {{ath}} would see a near 700% appreciation in the ALGO price, and some chartists see this as a minimum price target if the overall crypto market cap re-vists the 2021 highs at $3Trillion. Although forming an Algorand price prediction with the current level of market uncertainty is difficult.
+To get a general possible Algorand price forecast we can look at past token price history. As stated the ALGO price currently sits at {{currentprice}}. A rise back to all-time highs of {{ath}} would see a near 700% appreciation in the ALGO price, and some chartists see this as a minimum price target if the overall crypto market cap re-visits the 2021 highs at $3Trillion. Although forming an Algorand price prediction with the current level of market uncertainty is difficult.
 
 This price level may be seen as a good investment for investors with a long-term horizon. Please note that this isn't investment advice and traders and investors should do their own research.
 
 ## Where to Buy Algorand
 
-ALGO tokens can be bought on all major cryptocurrency exchanges including Coinbase, Binance, Bitrue, Kucoin and Huobi.",Huy
+Algorand coins can be bought on all major cryptocurrency exchanges including Coinbase, Binance, Bitrue, Kucoin, and Huobi.
+
+![Algorand - a carbon neutral blockchain](https://images.surferseo.art/8c97c596-600a-4a14-a39a-16918f61d608.jpeg)
+",Huy
 Fantom,FTM,"FTM is a layer 1 decentralized smart contract platform aimed at greatly reducing transaction speed and scalability of blockchain technology while also maintaining high security. Utilizing DAG technology, FTM reduces the time needed for transaction, ensures exchanges occur instantly, and handles thousands of transactions every second.",Đức
 Stellar,XLM,"Stellar is an open-source, decentralized platform for fiat money that allows easy transactions between any pair of currencies. Stellar is designed to be able to work with all of the world's financial systems. It also aims to vastly improve transaction speed and reduce the cost of transactions while maintaining high security. XLM is a decentralized fork of the XRP blockchain.",Đức
 Uniswap,UNI,"Uniswap is one of the first and largest decentralized exchanges that is hosted on the Ethereum blockchain. Uniswap pioneered the Automated Market Maker system, which uses a liquidity pool instead of cryptocurrency exchanges run by other centralized companies. Using the liquidity pool, Uniswap enables peer-to-peer exchanges to happen effortlessly, allowing anyone, from anywhere, to trade.",Đức
@@ -195,7 +201,7 @@ Enterprise access to the Quant Network is priced and paid for in fiat but execut
 
 ## **The Quant Token**
 
-The Quant erc-20 token has quite appealing tokenomics. Out of a total supply of {{totalsupply}} , {{circulatingsupply}} are currently circulating which represents {{percentagecirculatingsupply}} of the max supply. Demand for the token will come in several forms.
+The Quant erc-20 token has quite appealing tokenomics. Out of a total supply of {totalsupply}} }, {{circulatingsupply}} are currently circulating which represents ({{percentagecirculatingsupply}}) of the max supply. Demand for the token will come in several forms.
 
 ### **License Payment**
 
