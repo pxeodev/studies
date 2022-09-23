@@ -124,3 +124,8 @@ export const proxyList = [
   "http://user-sp31527169:3BFfXQrusvyAVfuu3z3h@eu.dc.smartproxy.com:20099",
   "http://user-sp31527169:3BFfXQrusvyAVfuu3z3h@eu.dc.smartproxy.com:20100"
 ]
+
+export const SUPERTREND_FLAVOR = {
+  'coinrotator': 'CoinRotator',
+  'classic': 'Classic',
+}

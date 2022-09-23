@@ -13,8 +13,7 @@ import DownTag from './DownTag'
 import HodlTag from './HodlTag'
 import useBreakPoint from '../hooks/useBreakPoint'
 import useIsHoverable from '../hooks/useIsHoverable';
-import getTrends from '../utils/getTrends'
-import { signals, preferredExchanges } from '../utils/variables'
+import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variables'
 
 import indexTableStyles from '../styles/indexTable.module.less';
 import baseStyles from '../styles/base.module.less'
@@ -31,30 +30,24 @@ const HomePageTable = ({
     portfolioFilter,
     category,
     defaultCategory,
-    atrPeriods,
-    multiplier,
     exchanges,
     derivatives,
+    superTrendFlavor
   }) => {
 
   const router = useRouter()
   const isHoverable = useIsHoverable()
-  const superTrends = useMemo(() => {
-    const cache = {}
-    coinsData.forEach(coin => {
-      cache[coin.id] = getTrends(coin.ohlcs, atrPeriods, multiplier, false)
+
+  if (superTrendFlavor === SUPERTREND_FLAVOR.classic) {
+    coinsData = coinsData.map((coinData) => {
+      coinData.dailyTrends = coinData.dailyClassicTrends
+      coinData.dailySuperSuperTrend = coinData.dailyClassicSuperSuperTrend
+      coinData.weeklyTrends = coinData.weeklyClassicTrends
+      coinData.weeklySuperSuperTrend = coinData.weeklyClassicSuperSuperTrend
+
+      return coinData
     })
-    return cache
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [atrPeriods, multiplier])
-  const weeklySuperTrends = useMemo(() => {
-    const cache = {}
-    coinsData.forEach(coin => {
-      cache[coin.id] = getTrends(coin.ohlcs, atrPeriods, multiplier, true)
-    })
-    return cache
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [atrPeriods, multiplier])
+  }
   let displayedCoinData = coinsData.filter((coinData) => {
     const max = marketCapMax || Number.POSITIVE_INFINITY
     const min = marketCapMin || Number.NEGATIVE_INFINITY
@@ -73,34 +66,22 @@ const HomePageTable = ({
            matchesExchanges &&
            matchesDerivatives
   })
-  displayedCoinData = displayedCoinData.map((coinData) => {
-    const [weeklyTrends, weeklySuperSuperTrend] = weeklySuperTrends[coinData.id]
-    const [dailyTrends, dailySuperSuperTrend] = superTrends[coinData.id]
+  displayedCoinData = displayedCoinData.filter((coinData) => {
+    let min = parseInt(trendLengthMin)
+    min = isFinite(min) ? min : 0
+    let max = parseInt(trendLengthMax)
+    max = isFinite(max) ? max : Number.POSITIVE_INFINITY
 
-    return {
-      ...coinData,
-      dailyTrends,
-      dailySuperSuperTrend,
-      weeklyTrends,
-      weeklySuperSuperTrend,
+    const trendValues = Object.values(coinData.dailyTrends)
+    const trends = trendValues.filter(trend => trend[0].length)
+    if (trends.length === 0) {
+      return false;
     }
+
+    return trends
+      .map(trend => trend[1])
+      .every(trendLength => trendLength >= min && trendLength <= max)
   })
-  // displayedCoinData = displayedCoinData.filter((coinData) => {
-  //   let min = parseInt(trendLengthMin)
-  //   min = isFinite(min) ? min : 0
-  //   let max = parseInt(trendLengthMax)
-  //   max = isFinite(max) ? max : Number.POSITIVE_INFINITY
-
-  //   const trendValues = Object.values(coinData.dailyTrends)
-  //   const trends = trendValues.filter(trend => trend[0].length)
-  //   if (trends.length === 0) {
-  //     return false;
-  //   }
-
-  //   return trends
-  //     .map(trend => trend[1])
-  //     .every(trendLength => trendLength >= min && trendLength <= max)
-  // })
   displayedCoinData = displayedCoinData.filter((coinData) => {
     if (trendType === signals.all) {
       return true
