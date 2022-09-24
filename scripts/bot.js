@@ -1,4 +1,5 @@
 import { init, startTransaction, captureException } from '@sentry/node';
+import * as Tracing from '@sentry/tracing'
 import format from 'date-fns/format'
 import groupBy from 'lodash/groupBy';
 import { Readable } from 'stream';

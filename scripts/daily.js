@@ -10,6 +10,7 @@ import isNil from 'lodash/isNil'
 import union from 'lodash/union'
 import uniqBy from 'lodash/uniqBy'
 import { init, withScope, captureMessage, startTransaction, captureException } from '@sentry/node';
+import * as Tracing from '@sentry/tracing'
 
 import { quoteSymbols } from '../utils/variables'
 import { getCategoriesByCoin } from '../utils/categories'

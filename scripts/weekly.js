@@ -1,4 +1,5 @@
 import { init, startTransaction, captureException } from '@sentry/node';
+import * as Tracing from '@sentry/tracing'
 import puppeteer from 'puppeteer';
 
 import prisma from '../lib/prisma'

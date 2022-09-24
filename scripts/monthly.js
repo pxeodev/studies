@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { init, withScope, captureMessage, startTransaction, captureException } from '@sentry/node';
+import * as Tracing from '@sentry/tracing'
 import pick from 'lodash/pick'
 import minBy from 'lodash/minBy';
 import levenshtein from 'js-levenshtein';
