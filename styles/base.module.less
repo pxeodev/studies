@@ -92,7 +92,21 @@
   color: var(--cr-primary-text);
 }
 
-.collapse > * > * {
+.collapse {
+  border: 1px solid var(--cr-primary-border) !important;
+}
+
+.collapse > * > div:nth-child(1) {
   background-color: var(--cr-primary-bg);
   color: var(--cr-primary-text) !important;
+}
+
+.collapse > * > div:nth-child(2) {
+  background-color: var(--cr-tertiary-bg);
+  color: var(--cr-primary-text) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
+}
+
+.collapse > * {
+  border-bottom: 1px solid var(--cr-primary-border) !important;
 }
