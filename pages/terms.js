@@ -12,7 +12,7 @@ export default function Terms() {
   return (
     <Content className={baseStyles.container}>
       <Breadcrumb className={baseStyles.breadcrumbs}>
-        <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb}>Home</a></Link></Breadcrumb.Item>
         <Breadcrumb.Item>Terms</Breadcrumb.Item>
       </Breadcrumb>
       <Title className={tcStyles.title}><span className={tcStyles.bold}>CoinRotator&nbsp;</span>Terms of Use</Title>

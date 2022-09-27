@@ -229,7 +229,7 @@ export default function Coin(coin) {
       </Head>
       <Content className={baseStyles.container}>
         <Breadcrumb className={baseStyles.breadcrumbs}>
-          <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb} >Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
         <Card className={baseStyles.card}>

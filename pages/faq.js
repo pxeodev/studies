@@ -17,7 +17,7 @@ export default function Faq() {
   return (
     <Content className={baseStyles.container}>
       <Breadcrumb className={baseStyles.breadcrumbs}>
-        <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb}>Home</a></Link></Breadcrumb.Item>
         <Breadcrumb.Item>FAQ</Breadcrumb.Item>
       </Breadcrumb>
       <Title className={baseStyles.title}>FAQ</Title>
