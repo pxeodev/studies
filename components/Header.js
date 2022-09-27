@@ -4,11 +4,12 @@ import Logo from './Logo'
 
 import headerStyles from '../styles/header.module.less'
 import DarkModeSwitch from './DarkModeSwitch';
-import useDarkMode from '../hooks/usedarkmode';
+import { DarkModeContext } from '../pages/_app';
+import { useContext } from 'react';
 
 const Header = () => {
   const { Header: AntHeader } = Layout;
-  const [darkMode, setDarkMode] = useDarkMode();
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
 
   return (
     <AntHeader className={headerStyles.header}>
