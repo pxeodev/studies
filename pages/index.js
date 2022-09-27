@@ -690,6 +690,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
               size="large"
               value={formState.derivatives}
               onChange={(exchanges) => { formDispatch({ type: 'SET_DERIVATIVES', payload: exchanges }) }}
+              dropdownClassName={indexStyles.modalSelectDropdown}
             >
               {allDerivativeExchanges.map(exchangeName => <Option className={indexStyles.selectOption} key={exchangeName}>{exchangeName}</Option>)}
             </Select>
