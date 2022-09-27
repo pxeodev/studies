@@ -11,7 +11,7 @@
 
   thead tr th {
     font-weight: bold;
-    background-color: var(--cr-tertiary-bg) !important;
+    background-color: var(--cr-secondary-bg) !important;
     color: var(--cr-primary-text);
     user-select: none;
     border-right: 1px solid var(--cr-primary-border) !important;
@@ -21,7 +21,6 @@
   tbody tr td {
     border-right: 1px solid var(--cr-primary-border) !important;
     border-bottom: 1px solid var(--cr-primary-border) !important;
-    background-color: var(--cr-secondary-bg);
   }
 
   colgroup col:first-child {
@@ -31,31 +30,44 @@
   }
 }
 
+.row {
+  cursor: pointer;
+  color: var(--cr-primary-text);
+  background-color: var(--cr-primary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  .row {
+    background-color: var(--cr-tertiary-bg);
+    td {
+      background-color: var(--cr-tertiary-bg) !important;
+    }
+  }
+  .row:hover {
+    color: var(--cr-primary-text);
+    background-color: var(--cr-primary-bg) !important;
+
+    td {
+      background-color: var(--cr-primary-bg) !important;
+    }
+
+    .coin {
+      color: var(--cr-primary-color);
+    }
+
+    .value {
+      color: var(--cr-primary-text) !important;
+    }
+  }
+}
+
 .table > div > div > div > div {
   border-left: 1px solid var(--cr-primary-border) !important;
-  background-color: var(--cr-secondary-bg);
+  background-color: var(--cr-secondary-text);
 }
 
 .ant-table-container {
   border-left: 1px solid var(--cr-primary-border) !important;
-}
-
-.row {
-  cursor: pointer;
-  color: var(--cr-primary-text);
-}
-
-.row:hover {
-  cursor: pointer;
-  color: var(--cr-primary-bg);
-
-  .coin {
-    color: var(--cr-primary-bg);
-  }
-
-  .value {
-    color: var(--cr-primary-bg) !important;
-  }
 }
 
 .image {
@@ -75,6 +87,10 @@
         text-transform: uppercase;
         margin-left: 6px;
     }
+}
+
+.coin:hover {
+  color: @cr-primary-color !important;
 }
 
 .columnTitle {
