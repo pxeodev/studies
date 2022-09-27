@@ -148,6 +148,11 @@
   .button {
     line-height: 26px;
   }
+
+  .buttonSite {
+    color: var(--cr-primary-bg) !important;
+    background-color: var(--cr-primary-text) !important;
+  }
 }
 
 .sectionContract, .sectionOnline {
@@ -287,7 +292,7 @@
 
   thead tr th {
     font-weight: bold;
-    background-color: var(--cr-tertiary-bg) !important;
+    background-color: var(--cr-secondary-bg) !important;
     color: var(--cr-primary-text);
     user-select: none;
     border-right: 1px solid var(--cr-primary-border) !important;
@@ -297,7 +302,7 @@
   tbody tr td {
     border-right: 1px solid var(--cr-primary-border) !important;
     border-bottom: 1px solid var(--cr-primary-border) !important;
-    background-color: var(--cr-secondary-bg);
+    background-color: var(--cr-primary-bg);
   }
 }
 
@@ -308,7 +313,19 @@
 }
 
 .marketTableRow:hover {
-  color: var(--cr-primary-bg);
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg);
+
+  > td {
+    color: var(--cr-primary-text);
+    background-color: var(--cr-secondary-bg) !important;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .marketTable table tbody tr td {
+    background-color: var(--cr-tertiary-bg);
+  }
 }
 
 .marketSpace {

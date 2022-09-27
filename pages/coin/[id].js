@@ -323,7 +323,7 @@ export default function Coin(coin) {
               ) : <></> }
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={coinStyles.button}>
+                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={classnames(coinStyles.button, coinStyles.buttonSite)}>
                     {url}
                   </Tag>
                 </a>
