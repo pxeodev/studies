@@ -99,6 +99,17 @@
   width: 100%;
 }
 
+.modalInputButton {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg) !important;
+  border: 1px solid var(--cr-primary-border);
+}
+
+.modalInputButton:hover {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg) !important;
+}
+
 .modalExplainer {
   color: @text-color-secondary;
 }
@@ -116,7 +127,63 @@
   width: 100%;
 }
 
+.modalSelect > div {
+  border: 1px solid var(--cr-primary-border) !important;
+}
+
+.modalSelectDropdown {
+  background-color: var(--cr-primary-bg);
+}
+
+.selectOption {
+  background-color: var(--cr-primary-bg) !important;
+  color: var(--cr-primary-text);
+}
+
+.selectOption:hover {
+  background-color: var(--cr-secondary-bg) !important;
+  color: var(--cr-primary-text);
+}
+
 .tableRow {
   width: 100%;
   flex-grow: 1;
+}
+
+.input, .select > div, .allFiltersButton {
+  border: 1px solid var(--cr-primary-border) !important;
+}
+
+.input, .input > input, .select > *, .allFiltersButton {
+  background-color: var(--cr-tertiary-bg) !important;
+  color: var(--cr-primary-text);
+}
+
+.configModal div, .configModal input, .configModal .ant-btn-default {
+  background-color: var(--cr-secondary-bg) !important;
+  color: var(--cr-secondary-text) !important;
+}
+
+.configModal input {
+  border: 1px solid var(--cr-primary-border);
+}
+
+.configModal > div > div {
+  border: 1px solid var(--cr-primary-border) !important;
+}
+
+.flavorRadio {
+  color: var(--cr-secondary-text);
+}
+
+.configModal > div > button {
+  svg path  {
+    fill: var(--cr-primary-text);
+  }
+}
+
+.configModal > div > button:hover {
+  svg path  {
+    fill: var(--cr-secondary-text);
+  }
 }
