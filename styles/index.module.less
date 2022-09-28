@@ -150,13 +150,15 @@
   flex-grow: 1;
 }
 
-.input, .select > div, .allFiltersButton {
-  border: 1px solid var(--cr-primary-border) !important;
-}
+:root[data-theme="theme-dark"] {
+  .input, .select > div, .allFiltersButton {
+    border: 1px solid var(--cr-primary-border) !important;
+  }
 
-.input, .input > input, .select > *, .allFiltersButton {
-  background-color: var(--cr-tertiary-bg) !important;
-  color: var(--cr-primary-text);
+  .input, .input > input, .select > *, .allFiltersButton {
+    background-color: var(--cr-tertiary-bg) !important;
+    color: var(--cr-primary-text);
+  }
 }
 
 .configModal div, .configModal input, .configModal .ant-btn-default {
