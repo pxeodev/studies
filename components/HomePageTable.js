@@ -153,7 +153,7 @@ const HomePageTable = ({
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 7AM UTC. NFA."
+            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
         >
           <QuestionCircleFilled className={baseStyles.tooltipIcon} />
         </Tooltip>
@@ -211,7 +211,7 @@ const HomePageTable = ({
         <Tooltip
             placement={'right'}
             trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 7AM UTC. NFA."
+            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
         >
           <QuestionCircleFilled className={baseStyles.tooltipIcon} />
         </Tooltip>

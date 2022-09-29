@@ -62,7 +62,7 @@ export default function Faq() {
           Q4 2022
         </Panel>
         <Panel header="Why does my coin say 'Up', but it's down a lot today?" key="8">
-          Coinrotator issues trends once a day after the daily bar closes at 07:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage blindly following the trend alerts based on the coin screener.
+          Coinrotator issues trends once a day after the daily bar closes at 01:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage blindly following the trend alerts based on the coin screener.
         </Panel>
  <Panel header="Why do you use the word HODL in your signals?" key="9">
           HODL is a mispelling of a very enthusiastic early investor in Bitcoin. The term stuck and has been used ever since. In the spirit of early adoption and the culture surrounding the revolutionary nature of crypto, we have adopted it to describe an uncertain near term situation in that coin.

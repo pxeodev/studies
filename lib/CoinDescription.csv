@@ -177,7 +177,7 @@ HBAR is needed to protect the network from attack via Proof-of-Stake (PoS). HBAR
 
 ### Hedera HBAR Tokenomics
 
-The current market cap is {{marketcap}}**.** There is a maximum supply of 50 billion HBAR, no more can be created or minted. At the time of writing the circulating supply is {{circulatingsupply}}, which represents {{percentagecirculatingsupply}} of the total supply.
+The current market cap is {{marketcap}}. There is a maximum supply of 50 billion HBAR, no more can be created or minted. At the time of writing the circulating supply is {{circulatingsupply}}, which represents {{percentagecirculatingsupply}} of the total supply.
 
 The remaining tokens are held at the treasury of the Hedera Hashgraph, LLC, which is overseen by the Governing Council.
 
@@ -207,7 +207,7 @@ In healthcare, Hedera Hashgraph has forged a partnership with the UK's medical t
 
 ### What is a Possible Hedera Hashgraph Price Prediction?
 
-Hedera Hashgraph price forecast; as for HBAR price analysis and possible HBAR price prediction, at the time of writing the current price is {{currentprice}}. This marks a roughly {{percentagefromath}}retrace from its all-time high price of {{ath}}, a drawdown that has been seen throughout the overall cryptocurrency market. HBAR is still above its ICO price {{launchprice}} which is unlikely to be seen even in this current bear environment. If HBAR was able to succeed in becoming a top 10 coin a minimum price of $3 could be reached, if the overall cryptocurrency market resumes its bullish sentiment, which would be comparable to other coins of a similar ranking and supply.
+Hedera Hashgraph price forecast; as for HBAR price analysis and possible HBAR price prediction, at the time of writing the current price is {{currentprice}}. This marks a roughly {{percentagefromath}}retrace from its all-time high price of {{ath}}, a drawdown that has been seen throughout the overall cryptocurrency market. HBAR is below its ICO price {{launchprice}} which is unlikely to remain once bear market conditions clear up. If HBAR was able to succeed in becoming a top 10 coin a minimum price of $3 could be reached, if the overall cryptocurrency market resumes its bullish sentiment, which would be comparable to other coins of a similar ranking and supply.
 
 Therefore some traders see this current Hedera price as an opportunity for a good investment permitting them to have a long-term time horizon. Please make note, Hedera Hashgraph price predictions are often uncertain. Traders and investors should do their own research and this is not intended as financial advice.
 
@@ -421,7 +421,7 @@ The hybrid XDPoS has several advantages over existing public or private blockcha
 
 ## What is the XDC Coin?
 
-The XDC token is the underlying utility coin that powers the XDC hybrid blockchain. XDC coins are needed to pay transaction fees as well as act as settlement mechanisms for Decentralised Applications (DApps) running on the XDC Network. For users running a KYC masternode, XDC can be staked for XDC’s block production rewards. The current price of the XDC token is {{currentprice}} and it has a circulating supply of {{circulatingsupply}} out of a max supply of {{}}. The current market cap sits at {{marketcap}}.
+The XDC token is the underlying utility coin that powers the XDC hybrid blockchain. XDC coins are needed to pay transaction fees as well as act as settlement mechanisms for Decentralised Applications (DApps) running on the XDC Network. For users running a KYC masternode, XDC can be staked for XDC’s block production rewards. The current price of the XDC token is {{currentprice}} and it has a circulating supply of {{circulatingsupply}} out of a max supply of 37,782,047,825. The current market cap sits at {{marketcap}}.
 
 ## Who is the Team Behind the XDC Network?
 
