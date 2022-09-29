@@ -34,6 +34,7 @@ init({
 const fetchOhlcDays = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'cvxcrv', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'rsr', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'musd', 'qc', 'dgd', 'eurs', 'susd', 'sai', 'cusd', 'alusd', 'seur', 'ethbull', 'eeur', 'eth2x-fli', 'instadapp-wbtc']
 const excludedTokens = ['thorchain-erc20']
+const unrankedCoins = ['aleph-zero']
 const noRankError = 'no-rank-error'
 // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
 const marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx'].reverse()
@@ -42,7 +43,7 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
   let coinData
   try {
     coinData = (await getCoin(coinId)).data
-    if (isNil(coinData.market_data.market_cap_rank)) {
+    if (isNil(coinData.market_data.market_cap_rank) && !unrankedCoins.includes(coinId)) {
       throw(noRankError)
     }
   } catch (e) {
@@ -258,6 +259,11 @@ const fetchCoinDataAndOhlcs = async () => {
   })
   databaseCoinIds = databaseCoinIds.map(({ id }) => id)
   coinIds = union(coinIds, databaseCoinIds)
+  unrankedCoins.forEach((unrankedCoin) => {
+    if (!coinIds.includes(unrankedCoin)) {
+      coinIds.push(unrankedCoin)
+    }
+  })
   if (process.env.NODE_ENV == "development") {
     coinIds = coinIds.slice(0, 10)
   }

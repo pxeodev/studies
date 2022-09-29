@@ -24,7 +24,7 @@ model Coin {
   ath Decimal
   atl Decimal
   marketCap BigInt
-  marketCapRank Int
+  marketCapRank Int?
   fullyDilutedValuation Decimal?
   circulatingSupply Decimal
   totalSupply Decimal?

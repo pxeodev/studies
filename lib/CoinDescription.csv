@@ -1625,3 +1625,95 @@ CRYPTO20,C20,"CRYPTO20, launched in December 2017, is the world's first crypto i
 Luna Rush,LUS,"The Luna Rush (LUS) is a blockchain-based idle role-playing game (RPG) that leverages the Binance Smart Chain (BSC). Luna Rush integrates anime and strategy elements to feature warriors and heroes fighting with flamboyant effects to level up and become stronger. Depending on their preferences, players can either fight other players, cooperate with friends, or participate in tournaments. The game offers players 11 different warriors to choose from, each with their own unique skills. Warriors can be bought from the game store or summoned through the marketplace.",Martin
 SquidDao,SQUID,"Based on the SQUID token, SQUID DAO offers a decentralized reserve currency protocol. Its design was inspired by OlympusDAO. Every SQUID has a treasury backed with a basket of assets (e.g. ETH), which ensures the token is valued intrinsically and shouldn't fall below that level. In the same way as OlympusDAO, SQUID DAO will leverage bonding and staking dynamics.",Martin
 Depo,DEPO,"Depo is a decentralized multimarket aggregator for institutional investors engaged in crypto-token investment. Unlike other aggregators, DePo focuses on the entire crypto ecosystem, not just one aspect. It offers trading, storing, and managing your entire portfolio of crypto assets. ",Martin
+Aleph Zero,AZERO,"# A Complete Aleph Zero Analysis
+
+![Aleph Zero Privacy Enhancing Blockchain Technology for Mass Adoption](https://images.surferseo.art/25d7ee85-349a-4e16-8ba9-345a824bc820.png)
+
+## How The Aleph Zero Network Started
+
+Aleph Zero is a layer 1 public blockchain that uses novel privacy-enhancing technology, and a Directed Acyclic Graph ([DAG](https://coinrotator.app/coin/constellation-labs))-based consensus protocol to solve some of the shortcomings inherent in existing alternatives. The open nature of public blockchains, whereby balances and transactions are visible as a public record, is seen as undesirable by many participants who wish to maintain anonymity in their dealings; for example, governments, institutions, or corporations. In addition, while many Small Medium size Businesses (SMBs) see the benefits of the security and decentralization offered by blockchain solutions, the scalability, and the ability to process information at scale, make existing solutions somewhat impractical. Aleph Zero uses a DAG-based solution to this, promising high processing speeds while maintaining decentralization and security, in other words solving the Blockchain trilemma. The project was conceived in 2018, with the mainnet going live in 2021.
+
+## The AlephBFT Consensus protocol
+
+The code that underwrites Aleph Zeros is the peer-reviewed consensus protocol AlephBFT. AlephBFT combines a modified variation of Proof-of-Stake with Directed Acyclic Graphs (DAGs). To help break down what this all means let us start with the basics.
+
+The consensus protocol is the engine that powers every blockchain. It allows the ledgers to agree (form consensus) on a single version of ‘truth’ (the state of the network, a balance, or a transaction). The two most dominant protocols are Proof-of-Work (as used by [Bitcoin](https://coinrotator.app/coin/bitcoin)) and Proof-of-Stake (as currently used by [Ethereum](https://coinrotator.app/coin/ethereum) 2.0). PoS is recognized as being more secure, less resource intensive, and more scalable than PoW.
+
+The AlephBFT uses a modified version of PoS that uses a rotating, as opposed to a fixed, committee of validators. Fixed committees are a pool of validators that decide on things like block production and the direction of the network. In the AlephBFT protocol a new committee of validators is chosen every 15mins, so 96 unique committees in each 24hr period. Having a rotating committee enables a higher degree of security and decentralization.
+
+### Merging PoS with DAG
+
+The aforementioned modified PoS is merged with distributed ledger technology DAG to increase throughput (the amount of information that can be processed), transaction speed, and low transaction cost. DAGs are mathematically complex, but in a very simplified form, they allow for data or transactions to be processed in parallel, as opposed to a linear fashion, one by one, as in a [conventional blockchain](https://coinrotator.app/?category=Blockchain). Of note here is that while AlephBFT uses DAG it remains a blockchain. This is because the DAG acts as an auxiliary structure to collect information on the order of transactions. The blockchain is constructed secondarily from these data.
+
+### Byzantine Fault Tolerance
+
+Finally, Byzantine Fault Tolerance architecture is applied to the protocol. This ensures that even if up to ⅓ of the network becomes compromised by bad faith actors, the blockchain can still operate security and produce an immutable and proven transaction history.
+
+### Aleph Zero Framework Built with Substrate Stack
+
+The privacy framework will be enabled by technology known as ZK-SNARKS, and secure Multi-Party Computation (sMPC). ZK-SNARKS allow network users to prove they possess certain data without revealing the exact content of that data. For example, making a purchase without revealing their wallet balance. SMPC’s can keep sensitive data off-chain for certain nodes, only to be communicated when relevant nodes perform a secure ‘handshake’. This framework is built using the open source Substrate, allowing it to interoperate with chains such as Polkadot while being flexible, modular, and adaptable to a wide range of modifications.
+
+### Use Cases for the Aleph Zero Platform
+
+With the privacy and anonymity that comes with ZK SNARKS and SMPC, coupled with the vast throughput, speed and low transaction cost enabled by DAG technology, Aleph Zero claims to have identified many key areas that they argue would benefit from the decentralized architecture offered by their protocol.
+
+-   [Internet of things](https://coinrotator.app/?category=IOT)
+    
+-   Private smart Contracts
+    
+-   Supply Chain Management
+    
+-   Asset Digitalisation
+    
+-   [Virtual Game Assets](https://coinrotator.app/?category=Gaming)
+    
+-   Decentralized Domain Name System
+    
+-   [Universal Wallet](https://coinrotator.app/?category=Web+3.0) and Decentralised Exchange
+    
+-   Notary Signatory
+    
+-   Transparent Public Document Access
+    
+-   Automatic Tax Payments
+    
+-   Databases
+    
+-   Automatic Payments and Shared Revenue Agreements
+    
+
+## The Aleph Zero Team
+
+The world-class team is comprised of over 30 members from a diverse set of disciplines with impressive scientific and business backgrounds, and achievements under their belts such as ACM ICPC World Finals, first prize in the International Mathematics Competition, and a Simons-Berkeley Research Fellowship. The Co-founders are listed as Matthew Niemerg, Ph.D. Adam Gagol, Ph.D., Antoni Zolciak, Michal Swietek, Ph.d. Project Research and Development for the project is carried out by Poland-based Cardinal Cryptography.
+
+## The Aleph Zero Ecosystem
+
+The Aleph Zero ecosystem boasts over 40 working collaborations on its website. 17 of these are from investment funds including names such as Genblock Capital, Bellweather Rocks, and AW3 Labs. The remaining participants come from a diverse array of sectors including legal advisory, identity management, lending and borrowing, [NFT](https://coinrotator.app/?category=NFT)s, and the metaverse.
+
+![Aleph Zero Ecocsystem; credit Twitter user AlephZeroNews](https://images.surferseo.art/e2872bad-9d24-4395-9cce-1406b6824638.jpeg)
+
+## The $AZERO Token
+
+The $AZERO is the native token on the Aleph Zero blockchain. It has several utility functions, including reduced swap fees on the Decentralised Exchange, discounts on fees for wrapping assets, and the use of the coming Liminal [privacy layer](https://coinrotator.app/?category=Privacy+Coin). $AZERO will also be used for staking.
+
+## Earning Potential via Staking
+
+### Validators
+
+Earning potential is made available in the form of staking as a validator. To become a validator, the minimum stake is 25,000 AZERO tokens, while the APY is currently 13%. Validators are responsible for ensuring the security and veracity of transactions on the network. All validators need to undergo a know-your-customer (KYC)verification process and there is a minimum hardware requirement.
+
+### Nominators
+
+Nominators can vouch for validators by delegating their staked tokens. The minimum stake requirement is 100 also with an APY of 13%. There is no hardware requirement.
+
+## Aleph Zero Price Prediction
+
+Looking at the price chart for $AZERO we can see it reached an all-time high of {{ath}}, with a current price at {{currentprice}} which marks a {{percentagefromath}} drawdown, which has been seen throughout the larger crypto market. The marketcap is {{marketcap}} with a circulating supply of {{circulatingsupply}} which represents {{percentagecirculatingsupply}}. For comparison, a smart contract layer 1 such as [Solana](https://coinrotator.app/?portfolio=sol), with 1.5x the supply reached an all-time high of $259, which gives an indication of what price action is possible if the chain was to gain traction. Although this is strictly not investment advice and is more to highlight a potential outcome.
+
+## Future Releases from The Aleph Zero Foundation
+
+The next big thing from Aleph is the launch of their interoperable hybrid privacy infrastructure layer Liminal. This multichain layer will provide confidentiality of transactions, including smart contract functionality, and a portal to other chains from Aleph to, initially, Ethereum, Near, Kusama, Cosmos, and [Binance Smart Chain](https://coinrotator.app/coin/binancecoin).
+
+Additional events that can be expected include community validators going live on the mainnet, and a Dark Metaverse to be launched in collaboration with metaverse project DRKVRS.
+
+![Liminal Multichain Privacy layer for Web3.0, credit: alephzero.org](https://images.surferseo.art/63927327-c260-4c8f-9447-dbd8759591cb.jpeg)",

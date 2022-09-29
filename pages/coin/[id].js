@@ -332,13 +332,15 @@ export default function Coin(coin) {
             <Title level={2}>{coin.name} Tokenomics</Title>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC1)}>
-            <div className={coinStyles.data}>
-              <Title level={3} className={coinStyles.label}>Market Cap</Title>
-              <Space wrap>
-                <span className={coinStyles.value}>{currencyFormatter.format(coin.marketCap)}</span>
-                <Tag>#{coin.marketCapRank}</Tag>
-              </Space>
-            </div>
+            { coin.marketCap ? (
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Market Cap</Title>
+                <Space wrap>
+                  <span className={coinStyles.value}>{currencyFormatter.format(coin.marketCap)}</span>
+                  {coin.marketCapRank ? <Tag>#{coin.marketCapRank}</Tag> : <></>}
+                </Space>
+              </div>
+            ) : <></>}
             <div className={coinStyles.data}>
               <Title level={3} className={coinStyles.label}>All-Time High</Title>
               <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.ath)}</div>
@@ -348,33 +350,37 @@ export default function Coin(coin) {
               <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.atl)}</div>
             </div>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
-            { coin.fullyDilutedValuation ? (
-              <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
-                <div className={coinStyles.value}>{currencyFormatter.format(coin.fullyDilutedValuation)}</div>
-              </div>
-            ) : <></>}
-            <div className={coinStyles.data}>
-              <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
-              <div className={coinStyles.value}>
-                {numberFormatter.format(coin.circulatingSupply)}
-                { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
-              </div>
-            </div>
-            { coin.totalSupply ? (
-              <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Total Supply</Title>
-                <div className={coinStyles.value}>{numberFormatter.format(coin.totalSupply)}</div>
-              </div>
-            ) : <></>}
-            { coin.maxSupply && coin.maxSupply !== coin.totalSupply ? (
-              <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Max Supply</Title>
-                <div className={coinStyles.value}>{numberFormatter.format(coin.maxSupply)}</div>
-              </div>
-            ) : <></>}
-          </Card.Grid>
+          { (coin.fullyDilutedValuation || coin.circulatingSupply || coin.totalSupply || coin.maxSupply ) ? (
+            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
+              { coin.fullyDilutedValuation ? (
+                <div className={coinStyles.data}>
+                  <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
+                  <div className={coinStyles.value}>{currencyFormatter.format(coin.fullyDilutedValuation)}</div>
+                </div>
+              ) : <></>}
+              { coin.circulatingSupply ? (
+                <div className={coinStyles.data}>
+                  <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
+                  <div className={coinStyles.value}>
+                    {numberFormatter.format(coin.circulatingSupply)}
+                    { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
+                  </div>
+                </div>
+              ) : <></>}
+              { coin.totalSupply ? (
+                <div className={coinStyles.data}>
+                  <Title level={3} className={coinStyles.label}>Total Supply</Title>
+                  <div className={coinStyles.value}>{numberFormatter.format(coin.totalSupply)}</div>
+                </div>
+              ) : <></>}
+              { coin.maxSupply && coin.maxSupply !== coin.totalSupply ? (
+                <div className={coinStyles.data}>
+                  <Title level={3} className={coinStyles.label}>Max Supply</Title>
+                  <div className={coinStyles.value}>{numberFormatter.format(coin.maxSupply)}</div>
+                </div>
+              ) : <></>}
+            </Card.Grid>
+          ) : <></>}
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
             <Title level={3} className={coinStyles.label}>Tags</Title>
             {

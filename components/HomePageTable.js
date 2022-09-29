@@ -265,6 +265,7 @@ const HomePageTable = ({
     width: 90,
     sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
     render: (marketCap) => {
+      if (!marketCap) { return null }
       return (
         <>
           {numberFormatter.format(Number(marketCap))}
