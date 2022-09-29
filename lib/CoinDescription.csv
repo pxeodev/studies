@@ -34,7 +34,7 @@ Pure Proof of Stake (PPoS) is the conception of Algorand founder MIT professor S
 
 In PPoS, validators are chosen to participate based on both the number of coins they own, but also through random selection, regardless of the size of their position.
 
-This random selection of a 'committee' (participants that can add blocks to the network) is carried out by what Miclai describes as the 'secret sauce' of Algorand; Cryptographic Sortition. We can visualize Cryptographic Sortition as a weighted lottery, with each ALGO held acting as the lottery ticket. Due to the selection of the committee member being unpredictable, it is not possible to control them in advance, leading to a more secure network. And having a wider pool of participants to choose from also leads to greater decentralization. Cryptographic Sortition has been adopted by other next-generation blockchains like [Filecoin](https://coinrotator.app/coin/filecoin), will full credit given to Silvio Micali's protocol.
+This random selection of a 'committee' (participants that can add blocks to the network) is carried out by what Miclai describes as the 'secret sauce' of Algorand; Cryptographic Sortition. We can visualize Cryptographic Sortition as a weighted lottery, with each ALGO held acting as the lottery ticket. Due to the selection of the committee member being unpredictable, it is not possible to control them in advance, leading to a more secure network. And having a wider pool of participants to choose from also leads to greater decentralization. Cryptographic Sortition has been adopted by other next-generation blockchains like [Cardano](https://coinrotator.app/coin/cardano), will full credit given to Silvio Micali's protocol.
 
 ![Algorand claims to solve the Blockchain Trilema](https://images.surferseo.art/479465d1-7f29-4712-a1bc-276c6d2d8dc5.jpeg)
 
@@ -108,7 +108,112 @@ Algorand coins can be bought on all major cryptocurrency exchanges including Coi
 Fantom,FTM,"FTM is a layer 1 decentralized smart contract platform aimed at greatly reducing transaction speed and scalability of blockchain technology while also maintaining high security. Utilizing DAG technology, FTM reduces the time needed for transaction, ensures exchanges occur instantly, and handles thousands of transactions every second.",Đức
 Stellar,XLM,"Stellar is an open-source, decentralized platform for fiat money that allows easy transactions between any pair of currencies. Stellar is designed to be able to work with all of the world's financial systems. It also aims to vastly improve transaction speed and reduce the cost of transactions while maintaining high security. XLM is a decentralized fork of the XRP blockchain.",Đức
 Uniswap,UNI,"Uniswap is one of the first and largest decentralized exchanges that is hosted on the Ethereum blockchain. Uniswap pioneered the Automated Market Maker system, which uses a liquidity pool instead of cryptocurrency exchanges run by other centralized companies. Using the liquidity pool, Uniswap enables peer-to-peer exchanges to happen effortlessly, allowing anyone, from anywhere, to trade.",Đức
-Hedera,HBAR,"Hedera is a decentralized public network where enterprises, developers, or consumers can build their applications with speed, fairness, and security. Hedera uses a ""gossip about gossip"" protocol where the individual nodes on the network ""gossip"" about transactions to create directed acyclic graphs that time-sequence transactions, which avoids bundling data into blocks or using miners to validate transactions.",Đức
+Hedera,HBAR,"
+# Hedera Hashgraph Analysis
+
+![Hedera Hashgraph was created in 2016](https://images.surferseo.art/11eda7a6-6785-4c37-af03-890362026ed7.jpeg)
+
+## How did Hedera Hashgraph Start Out?
+
+The Hashgraph was created and patented in 2016 by Swirlds CEO, Dr. Leemon Baird as a faster and more scalable alternative to existing distributed ledger technology (DLT) protocols.
+
+The Hedera Hashgraph cryptocurrency describes itself as ""the most used, sustainable, enterprise-grade public network for the decentralised economy"".
+
+It was first aimed at the financial and corporate sector, allowing greater transaction and security using the application of the directed acyclic graph (DAG).
+
+The Hashgraph was initially chosen as the DLT of choice for a consortium of 6000 banks looking to create an interoperable network.
+
+This first interest led to the creation of the Hedera Hashgraph Platform, which can be seen as analogues to the [Ethereum](https://coinrotator.app/coin/ethereum) network, albeit without traditional blockchain technology and a differing management model.  
+
+## Blockchain Vs. Hashgraph Technology
+
+![Dr. Leemon Baird Co-Creator of Hashgraph](https://images.surferseo.art/267527fd-2f4e-43d6-a79f-d97bd78a8e59.png)
+
+### Blockchain Technology
+
+A first-generation Proof-of-Work (PoW) Blockchain such as [Bitcoin](https://coinrotator.app/coin/bitcoin) operates in a linear fashion, meaning all the nodes, the participants of the network, collect all the transactions that are flowing into the network and arrange them into ‘blocks’.
+
+Each ‘block’ contains the transaction information, a timestamp and a cryptographic ‘hash’ of the previous block (the hash converts the data into a fixed string of random digits). All this data is generated into a further hash which is linked to the next block forming a ‘chain’.
+
+The ‘nodes’ then have to compete with one another, and consensus (agreement) has to be reached as to which block will be the next in the chain.
+
+This process can take a lot of energy to process, and it can be slow, as all of the nodes have to reach consensus, so some see it as inefficient.
+
+![Blockchain Vs. Hashgraph](https://images.surferseo.art/84d86d4a-3e73-450b-9a7d-88060ccf1f1e.jpeg)
+
+### Hedera Hashgraph Network Technology
+
+![Hedera Hashgraph DAGs allow for near instantaneous and exponential sharing of information](https://images.surferseo.art/18a425e0-7100-4df8-bbb7-0c224e72d65b.png)
+
+Compare this to the Hashgraph: in very simple terms, as the transactions flow into the network, the nodes arrange them into directed acyclic graphs (DAGs) (think of an ancestry tree compared to a linear chain of block) which are then quickly time segmented and shared with other nodes using the Hashgraph consensus algorithm; the Gossip About Gossip Protocol.
+
+This allows for near-instantaneous and exponential sharing of information; nodes communicate at random all the information they hold to other nodes, similar to how a virus or pathogen might spread in a target population.
+
+Each time two nodes successfully share information, including a time stamp, transaction detail, previous hashes, and a cryptographic signature, an 'event' is created, as opposed to a 'block' on a blockchain.
+
+The history of events, and corresponding hashes, takes the form of a graph, or a graph of hashes; a Hashgraph. Thanks to this protocol, nodes can determine in seconds where a transaction should be placed in the history of the ledger. Auitable, decentralised logs of 'events' are created by the Hedera Consensus Service, and made available for Web2 and Web3 applications.
+
+![Hedera Consensus Service create decentralised logs of 'events' for Web3 applications](https://images.surferseo.art/b3c6c813-23a5-4aa9-8da6-85f1fa31f312.webp)
+
+## Hedera Hashgraph Platform Governance structure.
+
+At the top of the governance, hierarchy is the Hedera Governing Council, comprised of 39 members made up of private and legal entities, distributed among various industries and geographical regions.
+
+These entities will decide the development and direction of the project. Current council members include Google, IBM, BOEING, DBS, LG, UBISOFT, among others.
+
+![Hedera Hashgraph Governing Council](https://images.surferseo.art/1c699a1a-8e33-4f6c-acab-06e3b364e426.png)
+
+## The Hedera HBAR Token
+
+HBAR is the native token of the public Hedera Network. It has two core uses; Network Fuel and Network Protection.
+
+### Network Fuel
+
+HBAR tokens are needed by developers for services such as minting NFTs and tokens, calling smart contracts, logging data and transferring HBAR on the network.
+
+### Network Protection
+
+HBAR is needed to protect the network from attack via Proof-of-Stake (PoS). HBAR stakes on the network have a weighted influence for transaction validation consensus. Weighted voting makes it unlikely a malicious actor could affect consensus.
+
+### Hedera HBAR Tokenomics
+
+The current market cap is {{marketcap}}**.** There is a maximum supply of 50 billion HBAR, no more can be created or minted. At the time of writing the circulating supply is {{circulatingsupply}}, which represents {{percentagecirculatingsupply}} of the total supply.
+
+The remaining tokens are held at the treasury of the Hedera Hashgraph, LLC, which is overseen by the Governing Council.
+
+These coins are used for staking and are on a slow release schedule. Hedera explains the large concentration of coins held as being necessary to secure the network. An attacker could disrupt the network by owning or controlling a ⅓ share of the coins.
+
+Hedera anticipates that “the released supply of HBARs will remain below 10% of the total HBAR supply for the first year and below 33% of the total HBAR supply for four-to-five years”, according to their website.
+
+![Hedera Hashgraph partners ](https://images.surferseo.art/ac19648f-e49d-4411-b4b9-f62593dbeb52.png)
+
+## Partners and Future Direction of Hedera Hashgraph HBAR
+
+### Hedera Hashgraph's Banking and Finance Partnerships
+
+Hedera has been active in cementing inroads in the banking and finance sector. In addition to the existing banks on the Governance Council, Africa's largest bank by assets; Standard Bank Group, recently partnered with Hedera Hashgraph, with the aim of reducing settlement periods and bottlenecks on their network, in addition to helping to increase transaction transparency.
+
+### Hedera Hashgraph CBDC
+
+Rumors are circulating in the crypto space about a possible working collaboration between Hedera and an upcoming Federal Reserve-backed Central Bank Digital Currency (CBDC).
+
+Hedera was first earmarked as a possible candidate for hosting a CBDC back in 2019 after India's National Institute for Smart Government (NISG) published a draft of its National Strategy on Blockchain, specifically referencing Hedera.
+
+### Hedera Hashgraph Healthcare
+
+In healthcare, Hedera Hashgraph has forged a partnership with the UK's medical tech firm Everyware. The arrangement would see Hedera Hashgraph keep a tamper-proof digital record of temperature-sensitive COVID vaccines and pick up on any storage anomalies.
+
+![Hedera Hashgraph partners with UK tech firm Everyware ](https://images.surferseo.art/ffccd47b-6b43-4615-a7ce-4ae02691df12.jpeg)![ HBAR Hedera token service](https://images.surferseo.art/27c66034-6435-41fb-9d86-5d3350936214.jpeg)
+
+### What is a Possible Hedera Hashgraph Price Prediction?
+
+Hedera Hashgraph price forecast; as for HBAR price analysis and possible HBAR price prediction, at the time of writing the current price is {{currentprice}}. This marks a roughly {{percentagefromath}}retrace from its all-time high price of {{ath}}, a drawdown that has been seen throughout the overall cryptocurrency market. HBAR is still above its ICO price {{launchprice}} which is unlikely to be seen even in this current bear environment. If HBAR was able to succeed in becoming a top 10 coin a minimum price of $3 could be reached, if the overall cryptocurrency market resumes its bullish sentiment, which would be comparable to other coins of a similar ranking and supply.
+
+Therefore some traders see this current Hedera price as an opportunity for a good investment permitting them to have a long-term time horizon. Please make note, Hedera Hashgraph price predictions are often uncertain. Traders and investors should do their own research and this is not intended as financial advice.
+
+### Where can we Buy Hedera Hashgraph's HBAR coins?
+
+Those looking to buy Hedera Hashgraph can find the digital asset listed on most of the main exchanges including Binance, Kucoin, Upbit and Bitrue.",Đức
 Ethereum Classic,ETC,"Ethereum is a decentralized, open-sourced platform that utilizes smart contracts which ensures speed, transparency, and security. After the DAO incident in 2016, Ethereum split into Ethereum and Ethereum Classic. The Classic version maintains unchanged history and is secured from external attacks on transactions.",Đức
 Internet Computer,ICP,"Internet Computer is a public blockchain network that utilizes smart contracts. Initially released in 2019 by Dfinity, Internet Computer is a  “general-purpose” blockchain that provides a public platform for hosting tokens and decentralized applications.Their ultimate goal is to create a decentralized internet to power the worlds decentralized apps (dApps).",Đức
 Decentraland,MANA,"Decentraland is a virtual-based platform where players can create and monetize virtual plots of land as NFT through the use of the MANA cryptocurrency. Decentraland aims at creating an immersive virtual world in the metaverse where users can socialize, interact, learn and play. Decentraland is a decentralized world where users can explore land owned by other users or trade virtual assets such as NFTs.",Đức
@@ -1520,3 +1625,95 @@ CRYPTO20,C20,"CRYPTO20, launched in December 2017, is the world's first crypto i
 Luna Rush,LUS,"The Luna Rush (LUS) is a blockchain-based idle role-playing game (RPG) that leverages the Binance Smart Chain (BSC). Luna Rush integrates anime and strategy elements to feature warriors and heroes fighting with flamboyant effects to level up and become stronger. Depending on their preferences, players can either fight other players, cooperate with friends, or participate in tournaments. The game offers players 11 different warriors to choose from, each with their own unique skills. Warriors can be bought from the game store or summoned through the marketplace.",Martin
 SquidDao,SQUID,"Based on the SQUID token, SQUID DAO offers a decentralized reserve currency protocol. Its design was inspired by OlympusDAO. Every SQUID has a treasury backed with a basket of assets (e.g. ETH), which ensures the token is valued intrinsically and shouldn't fall below that level. In the same way as OlympusDAO, SQUID DAO will leverage bonding and staking dynamics.",Martin
 Depo,DEPO,"Depo is a decentralized multimarket aggregator for institutional investors engaged in crypto-token investment. Unlike other aggregators, DePo focuses on the entire crypto ecosystem, not just one aspect. It offers trading, storing, and managing your entire portfolio of crypto assets. ",Martin
+Aleph Zero,AZERO,"# A Complete Aleph Zero Analysis
+
+![Aleph Zero Privacy Enhancing Blockchain Technology for Mass Adoption](https://images.surferseo.art/25d7ee85-349a-4e16-8ba9-345a824bc820.png)
+
+## How The Aleph Zero Network Started
+
+Aleph Zero is a layer 1 public blockchain that uses novel privacy-enhancing technology, and a Directed Acyclic Graph ([DAG](https://coinrotator.app/coin/constellation-labs))-based consensus protocol to solve some of the shortcomings inherent in existing alternatives. The open nature of public blockchains, whereby balances and transactions are visible as a public record, is seen as undesirable by many participants who wish to maintain anonymity in their dealings; for example, governments, institutions, or corporations. In addition, while many Small Medium size Businesses (SMBs) see the benefits of the security and decentralization offered by blockchain solutions, the scalability, and the ability to process information at scale, make existing solutions somewhat impractical. Aleph Zero uses a DAG-based solution to this, promising high processing speeds while maintaining decentralization and security, in other words solving the Blockchain trilemma. The project was conceived in 2018, with the mainnet going live in 2021.
+
+## The AlephBFT Consensus protocol
+
+The code that underwrites Aleph Zeros is the peer-reviewed consensus protocol AlephBFT. AlephBFT combines a modified variation of Proof-of-Stake with Directed Acyclic Graphs (DAGs). To help break down what this all means let us start with the basics.
+
+The consensus protocol is the engine that powers every blockchain. It allows the ledgers to agree (form consensus) on a single version of ‘truth’ (the state of the network, a balance, or a transaction). The two most dominant protocols are Proof-of-Work (as used by [Bitcoin](https://coinrotator.app/coin/bitcoin)) and Proof-of-Stake (as currently used by [Ethereum](https://coinrotator.app/coin/ethereum) 2.0). PoS is recognized as being more secure, less resource intensive, and more scalable than PoW.
+
+The AlephBFT uses a modified version of PoS that uses a rotating, as opposed to a fixed, committee of validators. Fixed committees are a pool of validators that decide on things like block production and the direction of the network. In the AlephBFT protocol a new committee of validators is chosen every 15mins, so 96 unique committees in each 24hr period. Having a rotating committee enables a higher degree of security and decentralization.
+
+### Merging PoS with DAG
+
+The aforementioned modified PoS is merged with distributed ledger technology DAG to increase throughput (the amount of information that can be processed), transaction speed, and low transaction cost. DAGs are mathematically complex, but in a very simplified form, they allow for data or transactions to be processed in parallel, as opposed to a linear fashion, one by one, as in a [conventional blockchain](https://coinrotator.app/?category=Blockchain). Of note here is that while AlephBFT uses DAG it remains a blockchain. This is because the DAG acts as an auxiliary structure to collect information on the order of transactions. The blockchain is constructed secondarily from these data.
+
+### Byzantine Fault Tolerance
+
+Finally, Byzantine Fault Tolerance architecture is applied to the protocol. This ensures that even if up to ⅓ of the network becomes compromised by bad faith actors, the blockchain can still operate security and produce an immutable and proven transaction history.
+
+### Aleph Zero Framework Built with Substrate Stack
+
+The privacy framework will be enabled by technology known as ZK-SNARKS, and secure Multi-Party Computation (sMPC). ZK-SNARKS allow network users to prove they possess certain data without revealing the exact content of that data. For example, making a purchase without revealing their wallet balance. SMPC’s can keep sensitive data off-chain for certain nodes, only to be communicated when relevant nodes perform a secure ‘handshake’. This framework is built using the open source Substrate, allowing it to interoperate with chains such as Polkadot while being flexible, modular, and adaptable to a wide range of modifications.
+
+### Use Cases for the Aleph Zero Platform
+
+With the privacy and anonymity that comes with ZK SNARKS and SMPC, coupled with the vast throughput, speed and low transaction cost enabled by DAG technology, Aleph Zero claims to have identified many key areas that they argue would benefit from the decentralized architecture offered by their protocol.
+
+-   [Internet of things](https://coinrotator.app/?category=IOT)
+    
+-   Private smart Contracts
+    
+-   Supply Chain Management
+    
+-   Asset Digitalisation
+    
+-   [Virtual Game Assets](https://coinrotator.app/?category=Gaming)
+    
+-   Decentralized Domain Name System
+    
+-   [Universal Wallet](https://coinrotator.app/?category=Web+3.0) and Decentralised Exchange
+    
+-   Notary Signatory
+    
+-   Transparent Public Document Access
+    
+-   Automatic Tax Payments
+    
+-   Databases
+    
+-   Automatic Payments and Shared Revenue Agreements
+    
+
+## The Aleph Zero Team
+
+The world-class team is comprised of over 30 members from a diverse set of disciplines with impressive scientific and business backgrounds, and achievements under their belts such as ACM ICPC World Finals, first prize in the International Mathematics Competition, and a Simons-Berkeley Research Fellowship. The Co-founders are listed as Matthew Niemerg, Ph.D. Adam Gagol, Ph.D., Antoni Zolciak, Michal Swietek, Ph.d. Project Research and Development for the project is carried out by Poland-based Cardinal Cryptography.
+
+## The Aleph Zero Ecosystem
+
+The Aleph Zero ecosystem boasts over 40 working collaborations on its website. 17 of these are from investment funds including names such as Genblock Capital, Bellweather Rocks, and AW3 Labs. The remaining participants come from a diverse array of sectors including legal advisory, identity management, lending and borrowing, [NFT](https://coinrotator.app/?category=NFT)s, and the metaverse.
+
+![Aleph Zero Ecocsystem; credit Twitter user AlephZeroNews](https://images.surferseo.art/e2872bad-9d24-4395-9cce-1406b6824638.jpeg)
+
+## The $AZERO Token
+
+The $AZERO is the native token on the Aleph Zero blockchain. It has several utility functions, including reduced swap fees on the Decentralised Exchange, discounts on fees for wrapping assets, and the use of the coming Liminal [privacy layer](https://coinrotator.app/?category=Privacy+Coin). $AZERO will also be used for staking.
+
+## Earning Potential via Staking
+
+### Validators
+
+Earning potential is made available in the form of staking as a validator. To become a validator, the minimum stake is 25,000 AZERO tokens, while the APY is currently 13%. Validators are responsible for ensuring the security and veracity of transactions on the network. All validators need to undergo a know-your-customer (KYC)verification process and there is a minimum hardware requirement.
+
+### Nominators
+
+Nominators can vouch for validators by delegating their staked tokens. The minimum stake requirement is 100 also with an APY of 13%. There is no hardware requirement.
+
+## Aleph Zero Price Prediction
+
+Looking at the price chart for $AZERO we can see it reached an all-time high of {{ath}}, with a current price at {{currentprice}} which marks a {{percentagefromath}} drawdown, which has been seen throughout the larger crypto market. The marketcap is {{marketcap}} with a circulating supply of {{circulatingsupply}} which represents {{percentagecirculatingsupply}}. For comparison, a smart contract layer 1 such as [Solana](https://coinrotator.app/?portfolio=sol), with 1.5x the supply reached an all-time high of $259, which gives an indication of what price action is possible if the chain was to gain traction. Although this is strictly not investment advice and is more to highlight a potential outcome.
+
+## Future Releases from The Aleph Zero Foundation
+
+The next big thing from Aleph is the launch of their interoperable hybrid privacy infrastructure layer Liminal. This multichain layer will provide confidentiality of transactions, including smart contract functionality, and a portal to other chains from Aleph to, initially, Ethereum, Near, Kusama, Cosmos, and [Binance Smart Chain](https://coinrotator.app/coin/binancecoin).
+
+Additional events that can be expected include community validators going live on the mainnet, and a Dark Metaverse to be launched in collaboration with metaverse project DRKVRS.
+
+![Liminal Multichain Privacy layer for Web3.0, credit: alephzero.org](https://images.surferseo.art/63927327-c260-4c8f-9447-dbd8759591cb.jpeg)",
