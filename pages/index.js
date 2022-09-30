@@ -424,7 +424,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
             <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_DERIVATIVES', payload: defaultFormState.derivatives })}>Derivative markets: {formState.derivatives.join(", ")}</Tag>
           )}
           {superTrendFlavorFilterApplied && (
-            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SUPERTREND_FLAVOR', payload: defaultFormState.superTrendFlavor })}>Supertrend flavor: {formState.superTrendFlavor}</Tag>
+            <Tag className={indexStyles.appliedFilterTag} color="geekblue" closable onClose={() => formDispatch({ type: 'SET_SUPERTREND_FLAVOR', payload: defaultFormState.superTrendFlavor })}>SuperTrend Flavor: {formState.superTrendFlavor}</Tag>
           )}
         </Col>
       </Row>
@@ -529,16 +529,25 @@ export default function Home({ coinsData, categories, exchangeData }) {
       >
         <Row>
           <Col>
-            <div>SuperTrend Flavor:</div>
-            <span className={indexStyles.modalExplainer}>CoinRotator: ATR=5 Multiplier=1.5<br/>Classic: ATR=10 Multiplier=3</span>
+            <span>
+              <span>SuperTrend Flavor</span>
+              <Tooltip
+                placement={'right'}
+                trigger={isHoverable ? 'hover' : 'click'}
+                title="CoinRotator: ATR=5 Multiplier=1.5. Classic: ATR=10 Multiplier=3."
+              >
+                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+              </Tooltip>
+            </span>
           </Col>
           <Col className={indexStyles.modalInput}>
             <Radio.Group
+              optionType="button"
               onChange={(e) => formDispatch({ type: 'SET_SUPERTREND_FLAVOR', payload: e.target.value })}
               value={formState.superTrendFlavor}
             >
-              <Radio value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio>
-              <Radio value={SUPERTREND_FLAVOR.classic}>Classic</Radio>
+              <Radio.Button value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio.Button>
+              <Radio.Button value={SUPERTREND_FLAVOR.classic}>Classic</Radio.Button>
             </Radio.Group>
           </Col>
         </Row>

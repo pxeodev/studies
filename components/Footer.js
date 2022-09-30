@@ -60,7 +60,7 @@ const Footer = ({ topCoins, topCategories }) => {
         <a>Terms &amp; Conditions</a>
       </Link>
       <Link href="https://youtu.be/OcyZcip24pM">
-        <a>CoinRotator Basic Tutorial</a>
+        <a target="_blank">CoinRotator Basic Tutorial</a>
       </Link>
     </Space>
   </>
