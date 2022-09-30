@@ -14,8 +14,6 @@
 @cr-primary-text: @white;
 
 @cr-primary-color: @geekblue-6;
-@cr-success-color: @green-6;
-@cr-error-color: @red-6;
 
 @cr-link-hover-color: @primary-color-hover;
 @cr-icon-fill: @disabled-color;
@@ -43,7 +41,7 @@
 :export {
   white: @white;
   black: @black;
-  primaryColor: @cr-primary-color;
-  successColor: @cr-success-color;
-  errorColor: @cr-error-color;
+  primaryColor: var(--cr-primary-color);
+  successColor: var(--cr-success-color);
+  errorColor: var(--cr-error-color);
 }

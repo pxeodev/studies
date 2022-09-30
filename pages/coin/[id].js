@@ -99,7 +99,7 @@ export default function Coin(coin) {
           <b>{name}</b>
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
-              <Button type="primary">Trade</Button>
+              <Button type="primary" style={{ backgroundColor: variableStyles.primaryColor }} >Trade</Button>
             </a>) : <></>
           }
 

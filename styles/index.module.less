@@ -127,27 +127,39 @@
   width: 100%;
 }
 
+:root[data-theme="theme-dark"] {
+  .modalSelect span {
+    background-color: var(--cr-tertiary-border) !important;
+    color: var(--cr-secondary-text) !important;
+    border-color: var(--cr-primary-border) !important;
+  }
+}
+
 .modalSelect > div {
   border: 1px solid var(--cr-primary-border) !important;
 }
 
-.modalSelectDropdown {
-  background-color: var(--cr-primary-bg);
+.dropdown {
+  background-color: var(--cr-tertiary-bg);
 }
 
-.selectOption {
+.dropdownOption {
+  color: var(--cr-secondary-text) !important;
+  background-color: var(--cr-tertiary-bg) !important;
+}
+
+.dropdownOption > div {
+  color: var(--cr-secondary-text) !important;
+}
+
+.dropdownOption:hover {
   background-color: var(--cr-primary-bg) !important;
-  color: var(--cr-primary-text);
-}
-
-.selectOption:hover {
-  background-color: var(--cr-secondary-bg) !important;
-  color: var(--cr-primary-text);
 }
 
 .tableRow {
   width: 100%;
   flex-grow: 1;
+  background-color: var(--cr-primary-bg);
 }
 
 :root[data-theme="theme-dark"] {
@@ -161,7 +173,7 @@
   }
 }
 
-.configModal div, .configModal input, .configModal .ant-btn-default {
+.configModal div, .configModal input {
   background-color: var(--cr-secondary-bg) !important;
   color: var(--cr-secondary-text) !important;
 }
@@ -188,4 +200,8 @@
   svg path  {
     fill: var(--cr-secondary-text);
   }
+}
+
+.divider {
+  border-color: var(--cr-quartery-bg) !important;
 }
