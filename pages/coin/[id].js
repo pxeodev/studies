@@ -145,62 +145,64 @@ export default function Coin(coin) {
               <Tag>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
-            <Space direction="vertical">
-              <Space>
-                <b>Daily Trend</b>
-                <Tooltip
-                  placement={screens.sm ? 'bottom' : 'bottomRight'}
-                  overlayClassName={coinStyles.tooltip}
-                  trigger={isHoverable ? 'hover' : 'click'}
-                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 1 AM UTC"
-                >
-                  <InfoCircleFilled className={coinStyles.signalExplainer} />
-                </Tooltip>
+          <div className={coinStyles.sectionsDailyAndWeekly}>
+            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
+              <Space direction="vertical">
+                <Space>
+                  <b>Daily Trend</b>
+                  <Tooltip
+                    placement={screens.sm ? 'bottom' : 'bottomRight'}
+                    overlayClassName={coinStyles.tooltip}
+                    trigger={isHoverable ? 'hover' : 'click'}
+                    title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 1 AM UTC"
+                  >
+                    <InfoCircleFilled className={coinStyles.signalExplainer} />
+                  </Tooltip>
+                </Space>
+                <Space size={12} className={coinStyles.trendTag} wrap>
+                  {dailySignalTag}
+                  {Object.keys(coin.dailyTrends).map((trendKey) => {
+                    const trend = coin.dailyTrends[trendKey]
+                    const trendText = `${trend[0]} (${trend[1]})`
+                    return (
+                      <Tag key={trendKey}>
+                        <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                        {trendText}
+                      </Tag>
+                    )
+                  })}
+                </Space>
               </Space>
-              <Space size={12} className={coinStyles.trendTag} wrap>
-                {dailySignalTag}
-                {Object.keys(coin.dailyTrends).map((trendKey) => {
-                  const trend = coin.dailyTrends[trendKey]
-                  const trendText = `${trend[0]} (${trend[1]})`
-                  return (
-                    <Tag key={trendKey}>
-                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                      {trendText}
-                    </Tag>
-                  )
-                })}
+            </Card.Grid>
+            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
+              <Space direction="vertical">
+                <Space>
+                  <b>Weekly Trend</b>
+                  <Tooltip
+                    placement={screens.sm ? 'bottom' : 'bottomRight'}
+                    overlayClassName={coinStyles.tooltip}
+                    trigger={isHoverable ? 'hover' : 'click'}
+                    title="The numbers in parenthesis indicate the trend streak - how many weeks a coin has been a UP or DOWN trend against ETH, BTC or USD."
+                  >
+                    <InfoCircleFilled className={coinStyles.signalExplainer} />
+                  </Tooltip>
+                </Space>
+                <Space size={12} className={coinStyles.trendTag} wrap>
+                  {weeklySignalTag}
+                  {Object.keys(coin.weeklyTrends).map((trendKey) => {
+                    const trend = coin.weeklyTrends[trendKey]
+                    const trendText = `${trend[0]} (${trend[1]})`
+                    return (
+                      <Tag key={trendKey}>
+                        <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                        {trendText}
+                      </Tag>
+                    )
+                  })}
+                </Space>
               </Space>
-            </Space>
-          </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
-            <Space direction="vertical">
-              <Space>
-                <b>Weekly Trend</b>
-                <Tooltip
-                  placement={screens.sm ? 'bottom' : 'bottomRight'}
-                  overlayClassName={coinStyles.tooltip}
-                  trigger={isHoverable ? 'hover' : 'click'}
-                  title="The numbers in parenthesis indicate the trend streak - how many weeks a coin has been a UP or DOWN trend against ETH, BTC or USD."
-                >
-                  <InfoCircleFilled className={coinStyles.signalExplainer} />
-                </Tooltip>
-              </Space>
-              <Space size={12} className={coinStyles.trendTag} wrap>
-                {weeklySignalTag}
-                {Object.keys(coin.weeklyTrends).map((trendKey) => {
-                  const trend = coin.weeklyTrends[trendKey]
-                  const trendText = `${trend[0]} (${trend[1]})`
-                  return (
-                    <Tag key={trendKey}>
-                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                      {trendText}
-                    </Tag>
-                  )
-                })}
-              </Space>
-            </Space>
-          </Card.Grid>
+            </Card.Grid>
+          </div>
           {Object.values(TABS).map((tab) => {
             return (
               <Card.Grid
