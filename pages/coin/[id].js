@@ -1,40 +1,42 @@
-import { TwitterOutlined, GlobalOutlined, InfoCircleFilled } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Layout, notification, Select, Space, Table, Tag, Tooltip, Typography } from 'antd';
+import { InfoCircleFilled } from '@ant-design/icons';
+import { Breadcrumb, Card, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
-import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { Prisma } from '@prisma/client'
 import prisma from '../../lib/prisma'
-import ReactMarkdown from 'react-markdown'
 
 import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
-import round from 'lodash/round';
 import take from 'lodash/take';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import UpTag from '../../components/UpTag'
-import PlatformSelect from '../../components/PlatformSelect';
-import DownTag from '../../components/DownTag'
-import HodlTag from '../../components/HodlTag'
-import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables'
-import getTrends from '../../utils/getTrends'
-import getChainsData from '../../utils/getChainsData'
-import getPlatformData from '../../utils/getPlatformData'
-import convertToDailySignals from '../../utils/convertToDailySignals'
-import cleanupExchangeLink from '../../utils/cleanupExchangeLink';
+import UpTag from '../../components/UpTag';
+import DownTag from '../../components/DownTag';
+import HodlTag from '../../components/HodlTag';
+import TokenomicsTab from '../../components/TokenomicsTab';
+import AnalyticsTab from '../../components/AnalyticsTab';
+import TradeTab from '../../components/TradeTab';
+import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables';
+import getTrends from '../../utils/getTrends';
+import getChainsData from '../../utils/getChainsData';
+import getPlatformData from '../../utils/getPlatformData';
+import convertToDailySignals from '../../utils/convertToDailySignals';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
-import useBreakPoint from '../../hooks/useBreakPoint'
+import useBreakPoint from '../../hooks/useBreakPoint';
 import useIsHoverable from '../../hooks/useIsHoverable';
 import globalData from '../../lib/globalData';
 import classnames from 'classnames';
 
 import baseStyles from '../../styles/base.module.less'
 import coinStyles from '../../styles/coin.module.less'
-import variableStyles from '../../styles/variables.module.less'
 
 const { Content } = Layout;
 const { Title } = Typography;
+const TABS = {
+  'tokenomics': 'Tokenomics',
+  'analysis': 'Analysis',
+  'trade': 'Trade'
+}
 
 export default function Coin(coin) {
   let dailySignal
@@ -63,123 +65,16 @@ export default function Coin(coin) {
     default:
       weeklySignalTag = <a href="#markets"><HodlTag /></a>
   }
-  let url
-  try {
-    url = new URL(coin.homepage).host
-  } catch(e) {}
-
-  const tableData = coin.tickers.map((ticker, index) => {
-    const baseSymbol = ticker.base.toUpperCase()
-    const quoteSymbol = ticker.target.toUpperCase()
-    return {
-      index: index + 1,
-      name: ticker.market.name,
-      tradeLink: ticker.trade_url,
-      volume: ticker.volume,
-      baseSymbol: baseSymbol,
-      pair: `${baseSymbol}/${quoteSymbol}`,
-      trustScore: ticker.trust_score,
-    }
-  })
 
   const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
-  const isServer = typeof window === 'undefined';
-
-  const columns = []
-  const exchangeColumn = {
-    title: 'Exchange',
-    dataIndex: 'name',
-    render: (name, data) => {
-      const tradeLink = cleanupExchangeLink(data.tradeLink, data.baseSymbol)
-      return (
-        <Space className={coinStyles.marketSpace}>
-          <b>{name}</b>
-          {tradeLink ? (
-            <a href={tradeLink} target="_blank" rel="noopener noreferrer">
-              <Button type="primary">Trade</Button>
-            </a>) : <></>
-          }
-
-        </Space>
-      )
-    }
-  }
-  if (!screens.sm) {
-    exchangeColumn.width = 200
-  }
-  columns.push(exchangeColumn)
-  columns.push({
-    title: 'Pair',
-    dataIndex: 'pair',
-  })
-  if (screens.md || isServer) {
-    columns.push({
-      title: '24h volume',
-      dataIndex: 'volume',
-      sorter: (a, b) => a.volume - b.volume,
-      sortOrder: 'descend',
-      render: (volume) => currencyFormatter.format(volume)
-    })
-    columns.push({
-      title: 'Trust score',
-      dataIndex: 'trustScore',
-      render: (trustScore) => {
-        const good = trustScore === 'green'
-        const classNames = {
-          [coinStyles.marketTrustScore]: true,
-          [coinStyles.marketTrustScorePositive]: good,
-          [coinStyles.marketTrustScoreNegative]: !good,
-        }
-        return <div className={classnames(classNames)} />
-      }
-    })
-  }
-
-  let circulatingSupplyPercentage
-  if (coin.circulatingSupply && coin.totalSupply) {
-    circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
-  }
-  const percentageFromAth = (coin.ath - coin.currentPrice) / coin.ath * 100
-  const percentageFromAtl = (coin.atl - coin.currentPrice) / coin.atl * 100
-  const priceAppreciationToAthPercentage = (coin.ath / coin.currentPrice) * 100
-  const notation = screens.sm ? 'standard' : 'compact'
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
-  const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
-  const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
-  const numberFormatter = new Intl.NumberFormat([], { notation })
-  const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
-  const today = new Date()
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. A coin screener that captures strong momentum in both directions!`
-  const interpolatedCoinDescription = (coin.description || '')
-    .replaceAll('{{ath}}', preciseCurrencyFormatter.format(coin.ath))
-    .replaceAll('{{atl}}', preciseCurrencyFormatter.format(coin.atl))
-    .replaceAll('{{marketcap}}', currencyFormatter.format(coin.marketCap))
-    .replaceAll('{{fdv}}', currencyFormatter.format(coin.fullyDilutedValuation))
-    .replaceAll('{{launchprice}}', currencyFormatter.format(coin.launch_price))
-    .replaceAll('{{currentprice}}', currencyFormatter.format(coin.currentPrice))
-    .replaceAll('{{percentagefromath}}', `${numberFormatter.format(percentageFromAth)}%`)
-    .replaceAll('{{percentagefromatl}}', `${numberFormatter.format(percentageFromAtl)}%`)
-    .replaceAll('{{circulatingsupply}}', numberFormatter.format(coin.circulatingSupply))
-    .replaceAll('{{percentagecirculatingsupply}}', `${numberFormatter.format(circulatingSupplyPercentage)}%`)
-    .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
-    .replaceAll('{{maxsupply}}', numberFormatter.format(coin.maxSupply))
-    .replaceAll('{{percentageappreciationtoath}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
-    .replaceAll('{{ranking}}', coin.marketCapRank)
-    .replaceAll('{{day}}', today.getDate())
-    .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
-    .replaceAll('{{year}}', today.getFullYear())
 
-  const renderRoi = useCallback((multiple) => {
-    if (multiple === null || multiple === 1 ) { return null }
-
-    const roi = round((multiple - 1) * 100, 2);
-    return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{numberFormatter.format(roi)}%</span>
-  }, [numberFormatter])
-  const [showChart, setShowChart] = useState(false)
+  const [activeTab, setActiveTab] = useState(TABS.tokenomics)
   const preventCopy = (event) => {
     let selection = window.getSelection().toString();
     selection = selection.split(' ').map((piece) => {
@@ -203,7 +98,6 @@ export default function Coin(coin) {
     event.preventDefault();
   }
   useEffect(() => {
-    setShowChart(true)
     document.addEventListener('copy', preventCopy)
     return () => {
       document.removeEventListener('copy', preventCopy)
@@ -295,231 +189,22 @@ export default function Coin(coin) {
               </Space>
             </Space>
           </Card.Grid>
-          {coin.description ? (
-            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
-                <ReactMarkdown>{interpolatedCoinDescription}</ReactMarkdown>
-            </Card.Grid>
-          ) : <></>}
-          {coin.platforms.length ? (
-            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
-              <PlatformSelect
-                images={coin.images}
-                platforms={coin.platforms}
-                symbol={coin.symbol}
-                chainsData={coin.chainsData}
-              />
-            </Card.Grid>
-          ) : <></>}
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionOnline, coinStyles.sectionFlex, { [coinStyles.sectionOnlineFW]: !coin.platforms.length })}>
-            <Space wrap>
-              { coin.twitter ? (
-                <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
-                  <Tag icon={<TwitterOutlined />} color="#55ACEE" className={coinStyles.button}>
-                  @{coin.twitter}&nbsp;({compactNumberFormatter.format(coin.twitterFollowers)})
-                  </Tag>
-                </a>
-              ) : <></> }
-              { url ? (
-                <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={coinStyles.button}>
-                    {url}
-                  </Tag>
-                </a>
-              ) : <></>}
-            </Space>
-          </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionTokenomicsHeader)}>
-            <Title level={2}>{coin.name} Tokenomics</Title>
-          </Card.Grid>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC1)}>
-            { coin.marketCap ? (
-              <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Market Cap</Title>
-                <Space wrap>
-                  <span className={coinStyles.value}>{currencyFormatter.format(coin.marketCap)}</span>
-                  {coin.marketCapRank ? <Tag>#{coin.marketCapRank}</Tag> : <></>}
-                </Space>
-              </div>
-            ) : <></>}
-            <div className={coinStyles.data}>
-              <Title level={3} className={coinStyles.label}>All-Time High</Title>
-              <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.ath)}</div>
-            </div>
-            <div className={coinStyles.data}>
-              <Title level={3} className={coinStyles.label}>All-Time Low</Title>
-              <div className={coinStyles.value}>{preciseCurrencyFormatter.format(coin.atl)}</div>
-            </div>
-          </Card.Grid>
-          { (coin.fullyDilutedValuation || coin.circulatingSupply || coin.totalSupply || coin.maxSupply ) ? (
-            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
-              { coin.fullyDilutedValuation ? (
-                <div className={coinStyles.data}>
-                  <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
-                  <div className={coinStyles.value}>{currencyFormatter.format(coin.fullyDilutedValuation)}</div>
-                </div>
-              ) : <></>}
-              { coin.circulatingSupply ? (
-                <div className={coinStyles.data}>
-                  <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
-                  <div className={coinStyles.value}>
-                    {numberFormatter.format(coin.circulatingSupply)}
-                    { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
-                  </div>
-                </div>
-              ) : <></>}
-              { coin.totalSupply ? (
-                <div className={coinStyles.data}>
-                  <Title level={3} className={coinStyles.label}>Total Supply</Title>
-                  <div className={coinStyles.value}>{numberFormatter.format(coin.totalSupply)}</div>
-                </div>
-              ) : <></>}
-              { coin.maxSupply && coin.maxSupply !== coin.totalSupply ? (
-                <div className={coinStyles.data}>
-                  <Title level={3} className={coinStyles.label}>Max Supply</Title>
-                  <div className={coinStyles.value}>{numberFormatter.format(coin.maxSupply)}</div>
-                </div>
-              ) : <></>}
-            </Card.Grid>
-          ) : <></>}
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
-            <Title level={3} className={coinStyles.label}>Tags</Title>
-            {
-              coin.categories.map((tag) => {
-                return (
-                  <Link href={`/?category=${tag}`} key={tag}>
-                    <a><Tag>{tag}</Tag></a>
-                  </Link>
-                );
-              })
-            }
-          </Card.Grid>
-          {
-            coin.similarCoins.length ? (
-              <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionSimilarCoins)}>
-                <Title level={3} className={coinStyles.label}>Similar Coins</Title>
-                {
-                  // eslint-disable-next-line @next/next/no-img-element
-                  coin.similarCoins.map(coin =>
-                    (
-                      <Link href={`/coin/${coin.id}`} key={coin.id}>
-                        <a>
-                          <Tag
-                            className={coinStyles.similarCoin}
-                            // eslint-disable-next-line @next/next/no-img-element
-                            icon={<img className={coinStyles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
-                            key={coin.name}
-                          >
-                            {coin.name}
-                          </Tag>
-                        </a>
-                      </Link>
-                    )
-                  )
-                }
+          {Object.values(TABS).map((tab) => {
+            return (
+              <Card.Grid
+                hoverable={false}
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={classnames(coinStyles.tab, { [coinStyles.active]: tab === activeTab })}
+              >
+                {tab}
               </Card.Grid>
-            ) : <></>
-          }
-          {
-            (coin.launch_price || coin.launch_date_start || coin.launch_roi_usd) ? (
-              <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionIco)}>
-                {
-                  coin.launch_price ? (
-                    <div className={coinStyles.data}>
-                      <Title level={3} className={coinStyles.label}>ICO Price</Title>
-                      <span className={coinStyles.value}>{currencyFormatter.format(coin.launch_price)}</span>
-                    </div>
-                  ) : <></>
-                }
-                {
-                  coin.launch_date_start ? (
-                    <div className={coinStyles.data}>
-                      <Title level={3} className={coinStyles.label}>ICO Date</Title>
-                      {
-                        coin.launch_date_start?.getTime() == coin.launch_date_end?.getTime() ? (
-                          <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
-                        ) : (
-                          <>
-                            <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_start)}</span>
-                            {` - `}
-                            <span className={coinStyles.value}>{dateFormatter.format(coin.launch_date_end)}</span>
-                          </>
-                        )
-                      }
-                    </div>
-                  ) : (
-                    <div className={coinStyles.data}>
-                      <Title level={3} className={coinStyles.label}>Performance since ICO</Title>
-                    </div>
-                  )
-                }
-                {
-                  coin.launch_roi_usd ? (
-                    <Table
-                      className={coinStyles.valueTable}
-                      bordered
-                      dataSource={[
-                        {
-                          key: 'values',
-                          usd: coin.launch_roi_usd,
-                          eth: coin.launch_roi_eth,
-                          btc: coin.launch_roi_btc
-                        },
-                      ]}
-                      columns={[
-                        {
-                          title: 'Currency',
-                          render: () => 'ROI'
-                        },
-                        {
-                          title: 'USD',
-                          dataIndex: 'usd',
-                          render: renderRoi
-                        },
-                        {
-                          title: 'BTC',
-                          dataIndex: 'btc',
-                          render: renderRoi
-                        },
-                        {
-                          title: 'ETH',
-                          dataIndex: 'eth',
-                          render: renderRoi
-                        },
-                      ]}
-                      pagination={{ position: ['none', 'none'] }}
-                    />
-                  ) : <></>
-                }
-              </Card.Grid>
-            ) : <></>
-          }
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)}>
-            { showChart ?
-              <AdvancedRealTimeChart
-                autosize
-                interval="D"
-                symbol={`${coin.symbol.toUpperCase()}USDT`}
-                hide_side_toolbar={!screens.sm}
-                container_id={coinStyles.chart}
-              /> :
-              <></>
-            }
-          </Card.Grid>
+            );
+          })}
+          <AnalyticsTab coin={coin} screens={screens} />
+          <TokenomicsTab coin={coin} screens={screens}/>
+          <TradeTab coin={coin} screens={screens}/>
         </Card>
-        <Title
-          level={2}
-          id="markets"
-          className={classnames(coinStyles.title, coinStyles.marketTitle)}
-        >
-          {coin.symbol.toUpperCase()} Markets
-        </Title>
-        <Table
-          columns={columns}
-          dataSource={tableData}
-          pagination={{ position: ['none', 'none'], pageSize: 1000 }}
-          bordered
-          className={coinStyles.marketTable}
-        />
       </Content>
     </>
   );

@@ -62,6 +62,22 @@
   }
 }
 
+.tab {
+  width: calc(100% / 3);
+  color: @text-color-secondary;
+  text-align: center;
+  cursor: pointer;
+
+  &.active {
+    color: @cr-primary-color;
+    cursor: auto;
+
+    &:hover {
+      color: @cr-link-hover-color;
+    }
+  }
+}
+
 .sectionDescription {
   width: 100%;
   padding-right: 32px;
