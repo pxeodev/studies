@@ -297,7 +297,7 @@ const HomePageTable = ({
           const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
           const onTagClick = (e) => {
             e.stopPropagation()
-            router.push(`/coin/${data.coinData.id}#markets`)
+            router.push(`/coin/${data.coinData.id}?tab=Trade`)
           }
           // eslint-disable-next-line @next/next/no-img-element
           return <img
@@ -326,7 +326,7 @@ const HomePageTable = ({
         {derivatives.map((derivative) => {
           const onTagClick = (e) => {
             // e.stopPropagation()
-            router.push(`/coin/${data.coinData.id}#markets`)
+            router.push(`/coin/${data.coinData.id}?tab=Trade&filter=Derivatives`)
           }
           return <Tag
             key={derivative.symbol}

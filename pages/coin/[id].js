@@ -81,7 +81,7 @@ export default function Coin(coin) {
   useEffect(() => {
     if (router.isReady) {
       let routerTab = router.query.tab
-      if (!Object.values(TABS).indexOf(routerTab)) {
+      if (Object.values(TABS).indexOf(routerTab) === -1) {
         routerTab = TABS.tokenomics
       }
       setActiveTab(routerTab)

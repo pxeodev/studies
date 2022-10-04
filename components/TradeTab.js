@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import { Card, Table, Space, Button, Radio, Typography } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router'
 
 import coinStyles from '../styles/coin.module.less';
 import cleanupExchangeLink from '../utils/cleanupExchangeLink';
@@ -14,7 +15,27 @@ const EXCHANGE_FILTER = {
 }
 
 const TradeTab = ({ coin, screens }) => {
+  const router = useRouter();
   const [exchangeFilter, setExchangeFilter] = useState(EXCHANGE_FILTER.all)
+  useEffect(() => {
+    if (router.isReady) {
+      let routerFilter = router.query.filter
+      if (Object.values(EXCHANGE_FILTER).indexOf(routerFilter) === -1) {
+        routerFilter = EXCHANGE_FILTER.all
+      }
+      setExchangeFilter(routerFilter)
+    }
+  }, [router])
+  const clickFilter = useCallback((activeFilter) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        filter: activeFilter
+      }
+    }, null, { shallow: true })
+  }, [router])
+
   const notation = screens.sm ? 'standard' : 'compact'
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
 
@@ -97,7 +118,7 @@ const TradeTab = ({ coin, screens }) => {
       </Title>
       <Radio.Group
         optionType="button"
-        onChange={(e) => setExchangeFilter(e.target.value) }
+        onChange={(e) => clickFilter(e.target.value) }
         value={exchangeFilter}
         className={coinStyles.marketFilter}
       >
