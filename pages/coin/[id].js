@@ -305,7 +305,7 @@ export async function getStaticProps({ params }) {
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
   const chainsData = await getChainsData();
   const exchanges = await prisma.exchange.findMany()
-  coinData.tickers = coinData.tickers.map((ticker) => {
+  coinData.tickers = (coinData.tickers || []).map((ticker) => {
     const baseSymbol = ticker.base.toUpperCase()
     const quoteSymbol = ticker.target.toUpperCase()
     const exchangeName = ticker.market.name
