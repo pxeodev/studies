@@ -211,7 +211,7 @@ export default function Coin(coin) {
                 onClick={() => setActiveTab(tab)}
                 className={classnames(coinStyles.tab, { [coinStyles.active]: tab === activeTab })}
               >
-                {tab}
+                <Title level={2} className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}>{tab}</Title>
               </Card.Grid>
             );
           })}

@@ -74,15 +74,24 @@
 
 .tab {
   width: calc(100% / 3);
-  color: @text-color-secondary;
-  font-weight: bold;
   text-align: center;
   cursor: pointer;
 
   &.active {
     background-color: @cr-gray;
-    color: @cr-primary-color;
     cursor: auto;
+  }
+}
+
+.tabTitle {
+  font-size: 14px !important;
+  font-weight: bold;
+  color: @text-color-secondary;
+  margin-bottom: 0 !important;
+  user-select: none;
+
+  &.activeTitle {
+    color: @cr-primary-color;
 
     &:hover {
       color: @cr-link-hover-color;
