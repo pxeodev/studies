@@ -324,7 +324,7 @@ export async function getStaticProps({ params }) {
       centralized: matchingExchange?.centralized
     }
   })
-  coinData.derivatives.forEach((derivative) => {
+  (coinData.derivatives || []).forEach((derivative) => {
     const marketName = derivative['market']
     let matchingMarket = exchanges.find((exchange) => exchange.name === marketName)
     if (!matchingMarket) {
