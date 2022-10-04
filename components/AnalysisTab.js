@@ -5,7 +5,7 @@ import round from 'lodash/round';
 
 import coinStyles from '../styles/coin.module.less'
 
-const AnalyticsTab = ({ coin, screens }) => {
+const AnalysisTab = ({ coin, screens }) => {
   const notation = screens.sm ? 'standard' : 'compact'
   const percentageFromAth = (coin.ath - coin.currentPrice) / coin.ath * 100
   const percentageFromAtl = (coin.atl - coin.currentPrice) / coin.atl * 100
@@ -47,4 +47,4 @@ const AnalyticsTab = ({ coin, screens }) => {
   )
 }
 
-export default AnalyticsTab;
+export default AnalysisTab;

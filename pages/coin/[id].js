@@ -1,5 +1,5 @@
 import { InfoCircleFilled } from '@ant-design/icons';
-import { Breadcrumb, Card, Layout, Space, Table, Tag, Tooltip, Typography } from 'antd';
+import { Breadcrumb, Card, Layout, Space, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link'
 import Head from 'next/head'
 import { Prisma } from '@prisma/client'
@@ -14,7 +14,7 @@ import UpTag from '../../components/UpTag';
 import DownTag from '../../components/DownTag';
 import HodlTag from '../../components/HodlTag';
 import TokenomicsTab from '../../components/TokenomicsTab';
-import AnalyticsTab from '../../components/AnalyticsTab';
+import AnalyticsTab from '../../components/AnalysisTab';
 import TradeTab from '../../components/TradeTab';
 import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables';
 import getTrends from '../../utils/getTrends';
@@ -75,6 +75,18 @@ export default function Coin(coin) {
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. A coin screener that captures strong momentum in both directions!`
 
   const [activeTab, setActiveTab] = useState(TABS.tokenomics)
+  let ActiveTabComponent;
+  switch (activeTab) {
+    case TABS.tokenomics:
+      ActiveTabComponent = TokenomicsTab;
+      break;
+    case TABS.analysis:
+      ActiveTabComponent = AnalyticsTab;
+      break;
+    case TABS.trade:
+      ActiveTabComponent = TradeTab;
+      break;
+  }
   const preventCopy = (event) => {
     let selection = window.getSelection().toString();
     selection = selection.split(' ').map((piece) => {
@@ -201,9 +213,7 @@ export default function Coin(coin) {
               </Card.Grid>
             );
           })}
-          <AnalyticsTab coin={coin} screens={screens} />
-          <TokenomicsTab coin={coin} screens={screens}/>
-          <TradeTab coin={coin} screens={screens}/>
+          <ActiveTabComponent coin={coin} screens={screens} />
         </Card>
       </Content>
     </>
