@@ -279,7 +279,7 @@ export async function getStaticProps({ params }) {
   ohlcs = convertToDailySignals(ohlcs)
   const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
   const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
-  const description = await getDescriptionByCoin(coinData.symbol)
+  const description = await getDescriptionByCoin(coinData)
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
   const chainsData = await getChainsData();
