@@ -305,7 +305,8 @@ export async function getStaticProps({ params }) {
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
   const chainsData = await getChainsData();
   const exchanges = await prisma.exchange.findMany()
-  coinData.tickers = (coinData.tickers || []).map((ticker) => {
+  const tickers = coinData.tickers || []
+  coinData.tickers = tickers.map((ticker) => {
     const baseSymbol = ticker.base.toUpperCase()
     const quoteSymbol = ticker.target.toUpperCase()
     const exchangeName = ticker.market.name
@@ -324,7 +325,8 @@ export async function getStaticProps({ params }) {
       centralized: matchingExchange?.centralized
     }
   })
-  (coinData.derivatives || []).forEach((derivative) => {
+  const derivatives = coinData.derivatives || []
+  derivatives.forEach((derivative) => {
     const marketName = derivative['market']
     let matchingMarket = exchanges.find((exchange) => exchange.name === marketName)
     if (!matchingMarket) {
@@ -341,7 +343,6 @@ export async function getStaticProps({ params }) {
       derivative: true
     })
   })
-
   coinData = pick(coinData, [
     'id',
     'symbol',
