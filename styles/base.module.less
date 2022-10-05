@@ -60,12 +60,12 @@
 // Icons and Imagery
 .icon {
   path {
-    fill: @cr-icon-fill;
+    fill: @disabled-color;
   }
 
   &:hover {
     path {
-      fill: @cr-icon-fill-hover !important;
+      fill: @text-color !important;
     }
   }
 }
@@ -82,7 +82,7 @@
     fill: @text-color-secondary;
 
     &:hover {
-        fill: @cr-icon-fill-hover;
+        fill: @text-color;
     }
   }
 }
@@ -114,12 +114,12 @@
 
 :root[data-theme="theme-dark"] {
   .homeBreadCrumb {
-    color: @cr-gray-7 !important;
+    color: var(--cr-fifth-bg) !important;
   }
 }
 
 :root[data-theme="theme-light"] {
   .homeBreadCrumb {
-    color: @cr-gray-7 !important;
+    color: var(--cr-fifth-bg) !important;
   }
 }

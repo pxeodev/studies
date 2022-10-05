@@ -62,6 +62,7 @@ body {
   --cr-secondary-text: @cr-gray-9;
   --cr-mode-bg: @cr-gold-1;
   --cr-primary-border: @cr-gray-4;
+  --cr-secondary-border: @cr-gray-5;
   --cr-success-color: #8FD460;
   --cr-error-color: #E84749;
   --cr-primary-color: #5273E0;
@@ -85,3 +86,15 @@ body {
   color: @white;
 }
 
+.ant-empty-description {
+  color: var(--cr-secondary-text);
+}
+
+.ant-table-placeholder > * {
+  background-color: var(--cr-secondary-bg) !important;
+}
+
+.ant-table, .ant-table-header, .ant-table-container  {
+  background-color: var(--cr-secondary-bg);
+  border-color: var(--cr-primary-border);
+}
