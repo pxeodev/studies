@@ -515,6 +515,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
             onClick={() => setFilterModalVisible(false)}
             size="large"
             type="primary"
+            className={indexStyles.applyFilters}
             icon={<CheckCircleOutlined />}
           >
             Apply Settings
@@ -525,6 +526,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
             size="large"
             danger
             type="primary"
+            className={indexStyles.resetFilters}
             icon={<CloseCircleOutlined />}
           >
             Reset Settings

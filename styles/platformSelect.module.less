@@ -8,7 +8,7 @@
   cursor: pointer;
 
   &:hover {
-    border: 1px solid @cr-primary-color;
+    border: 1px solid @geekblue-6;
   }
 
   .text > :first-child {
@@ -47,5 +47,18 @@
   .space {
     width: 100%;
     justify-content: space-between;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .selectPlatform > div {
+    background: var(--cr-tertiary-bg) !important;
+    border-color: var(--cr-secondary-border);
+    color: var(--cr-primary-text) !important;
+  }
+
+  .selectPlatform > div > span, .selectPlatform path {
+    color: var(--cr-primary-text) !important;
+    fill: var(--cr-primary-text) !important;
   }
 }
