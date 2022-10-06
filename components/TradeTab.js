@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router'
 
 import coinStyles from '../styles/coin.module.less';
+import variableStyles from '../styles/variables.module.less'
 import cleanupExchangeLink from '../utils/cleanupExchangeLink';
 
 const { Title } = Typography;
@@ -67,7 +68,7 @@ const TradeTab = ({ coin, screens }) => {
           <b>{name}</b>
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
-              <Button type="primary">Trade</Button>
+              <Button type="primary" style={{ backgroundColor: variableStyles.primaryColor }} >Trade</Button>
             </a>) : <></>
           }
 

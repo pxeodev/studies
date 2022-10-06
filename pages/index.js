@@ -433,7 +433,8 @@ export default function Home({ coinsData, categories, exchangeData }) {
 
   return (
     <Content className={indexStyles.container}>
-      <Alert message={<span>Win 100 USDT. Please answer our <b>super brief</b> CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank' rel='noreferrer'>survey</a>.</span>} type="info" closable className={indexStyles.message}/>
+      {/* For quick alerts: */}
+      {/* <Alert message={<span>Win 100 USDT. Please answer our <b>super brief</b> CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank' rel='noreferrer'>survey</a>.</span>} type="info" closable className={indexStyles.message}/> */}
       <Title className={indexStyles.title}>Search For The Most Profitable Coins</Title>
       <Paragraph className={indexStyles.subtitle} type="secondary"><span>CoinRotator</span> tracks price trends for the top 1,000 cryptocurrencies, all updated daily on a single dashboard. Instantly check the coin screener for each market using our proprietary version of the Supertrend.</Paragraph>
       <Card className={indexStyles.filters}>
@@ -448,6 +449,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
               value={portfolioInputValue}
               onChange={(e) => setPortfolioInputValue(e.target.value)}
               size="large"
+              className={indexStyles.input}
             />
           </Col>
           <Col xs={24} md={6} className={indexStyles.col}>
@@ -458,11 +460,12 @@ export default function Home({ coinsData, categories, exchangeData }) {
               onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
               id="signal"
               className={indexStyles.select}
+              dropdownClassName={indexStyles.dropdown}
             >
-              <Option value={signals.all}>All</Option>
-              <Option value={signals.buy}>UP</Option>
-              <Option value={signals.hodl}>HODL</Option>
-              <Option value={signals.sell}>DOWN</Option>
+              <Option className={indexStyles.dropdownOption} value={signals.all}>All</Option>
+              <Option className={indexStyles.dropdownOption}  value={signals.buy}>UP</Option>
+              <Option className={indexStyles.dropdownOption}  value={signals.hodl}>HODL</Option>
+              <Option className={indexStyles.dropdownOption}  value={signals.sell}>DOWN</Option>
             </Select>
           </Col>
           <Col xs={24} md={6} className={indexStyles.col}>
@@ -474,16 +477,17 @@ export default function Home({ coinsData, categories, exchangeData }) {
               onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
               id="category"
               className={indexStyles.select}
+              dropdownClassName={indexStyles.dropdown}
             >
-              <Option value={defaultFormState.category} key="all">All</Option>
+              <Option className={indexStyles.dropdownOption} value={defaultFormState.category} key="all">All</Option>
               <OptGroup label="Popular categories">
                 {
-                  priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                  priorityCategories.map((category) => <Option className={indexStyles.dropdownOption} value={category} key={category}>{category}</Option>)
                 }
               </OptGroup>
               <OptGroup label="Other categories">
                 {
-                  restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                  restCategories.map((category) => <Option className={indexStyles.dropdownOption} value={category} key={category}>{category}</Option>)
                 }
               </OptGroup>
             </Select>
@@ -505,12 +509,14 @@ export default function Home({ coinsData, categories, exchangeData }) {
         visible={filterModalVisible}
         title="Configure search"
         onCancel={() => setFilterModalVisible(false)}
+        className={indexStyles.configModal}
         footer={[
           <Button
             key="apply"
             onClick={() => setFilterModalVisible(false)}
             size="large"
             type="primary"
+            className={indexStyles.applyFilters}
             icon={<CheckCircleOutlined />}
           >
             Apply Settings
@@ -521,6 +527,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
             size="large"
             danger
             type="primary"
+            className={indexStyles.resetFilters}
             icon={<CloseCircleOutlined />}
           >
             Reset Settings
@@ -546,12 +553,12 @@ export default function Home({ coinsData, categories, exchangeData }) {
               onChange={(e) => formDispatch({ type: 'SET_SUPERTREND_FLAVOR', payload: e.target.value })}
               value={formState.superTrendFlavor}
             >
-              <Radio.Button value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio.Button>
-              <Radio.Button value={SUPERTREND_FLAVOR.classic}>Classic</Radio.Button>
+              <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio>
+              <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.classic}>Classic</Radio>
             </Radio.Group>
           </Col>
         </Row>
-        <Divider />
+        <Divider className={indexStyles.divider} />
         <Row>
           <Col>
             <div>Market Cap</div>
@@ -584,19 +591,19 @@ export default function Home({ coinsData, categories, exchangeData }) {
         </Row>
         <Row justify="space-between">
           <Col>
-            <Button size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
+            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
           </Col>
           <Col>
-            <Button size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
+            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
           </Col>
           <Col>
-            <Button size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
+            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
           </Col>
           <Col>
-            <Button size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
+            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
           </Col>
         </Row>
-        <Divider />
+        <Divider className={indexStyles.divider} />
         <Row>
           <Col>
             <div>Trend Streak</div>
@@ -629,19 +636,19 @@ export default function Home({ coinsData, categories, exchangeData }) {
         </Row>
         <Row justify="space-between">
           <Col>
-            <Button size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
+            <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
           </Col>
           <Col>
-            <Button size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
+            <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
           </Col>
           <Col>
-            <Button size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
+            <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
           </Col>
           <Col>
-            <Button size="large" onClick={setPredefinedTrendLength4}>20+</Button>
+            <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength4}>20+</Button>
           </Col>
         </Row>
-        <Divider />
+        <Divider className={indexStyles.divider} />
         <Row>
           <Col>
             <span>
@@ -666,12 +673,13 @@ export default function Home({ coinsData, categories, exchangeData }) {
               size="large"
               value={formState.exchanges}
               onChange={(exchanges) => { formDispatch({ type: 'SET_EXCHANGES', payload: exchanges }) }}
+              dropdownClassName={indexStyles.dropdown}
             >
-              {allExchangeNames.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
+              {allExchangeNames.map(exchangeName => <Option className={indexStyles.dropdownOption} key={exchangeName}>{exchangeName}</Option>)}
             </Select>
           </Col>
         </Row>
-        <Divider />
+        <Divider className={indexStyles.divider} />
         <Row>
           <Col>
             <span>
@@ -696,8 +704,9 @@ export default function Home({ coinsData, categories, exchangeData }) {
               size="large"
               value={formState.derivatives}
               onChange={(exchanges) => { formDispatch({ type: 'SET_DERIVATIVES', payload: exchanges }) }}
+              dropdownClassName={indexStyles.dropdown}
             >
-              {allDerivativeExchanges.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
+              {allDerivativeExchanges.map(exchangeName => <Option className={indexStyles.dropdownOption} key={exchangeName}>{exchangeName}</Option>)}
             </Select>
           </Col>
         </Row>

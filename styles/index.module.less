@@ -31,6 +31,7 @@
   &:extend(.title);
 
   text-align: center;
+  color: var(--cr-primary-text) !important;
 }
 
 .subtitle {
@@ -46,7 +47,7 @@
 
   span {
     font-weight: 600;
-    color: @cr-black !important;
+    color: var(--cr-primary-text) !important;
   }
 }
 
@@ -54,6 +55,8 @@
 .filters {
   width: 100%;
   margin-bottom: 32px;
+  background-color: var(--cr-primary-bg);
+  border: 1px solid var(--cr-seondary-border);
 
   .row {
     width: 100%;
@@ -63,6 +66,11 @@
     @media screen and (max-width: @screen-md) {
       margin-bottom: 12px;
     }
+
+    label {
+      color: var(--cr-primary-text);
+    }
+
   }
 
   .select {
@@ -91,6 +99,17 @@
   width: 100%;
 }
 
+.modalInputButton {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg) !important;
+  border: 1px solid var(--cr-secondary-border);
+}
+
+.modalInputButton:hover {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg) !important;
+}
+
 .modalExplainer {
   color: @text-color-secondary;
 }
@@ -108,7 +127,89 @@
   width: 100%;
 }
 
+:root[data-theme="theme-dark"] {
+  .modalSelect span {
+    background-color: var(--cr-tertiary-border) !important;
+    color: var(--cr-secondary-text) !important;
+    border-color: var(--cr-secondary-border) !important;
+  }
+
+  .resetFilters {
+    background-color: #E84749;
+  }
+}
+
+.applyFilters {
+  background-color: var(--cr-primary-color);
+}
+
+.modalSelect > div {
+  border: 1px solid var(--cr-secondary-border) !important;
+}
+
+.dropdown {
+  background-color: var(--cr-tertiary-bg);
+}
+
+.dropdownOption {
+  color: var(--cr-secondary-text) !important;
+  background-color: var(--cr-tertiary-bg) !important;
+}
+
+.dropdownOption > div {
+  color: var(--cr-secondary-text) !important;
+}
+
+.dropdownOption:hover {
+  background-color: var(--cr-primary-bg) !important;
+}
+
 .tableRow {
   width: 100%;
   flex-grow: 1;
+  background-color: var(--cr-primary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  .input, .select > div, .allFiltersButton {
+    border: 1px solid var(--cr-secondary-border) !important;
+  }
+
+  .input, .input > input, .select > *, .allFiltersButton {
+    background-color: var(--cr-tertiary-bg) !important;
+    color: var(--cr-primary-text);
+  }
+}
+
+.configModal div, .configModal input {
+  background-color: var(--cr-secondary-bg) !important;
+  color: var(--cr-secondary-text) !important;
+}
+
+.configModal input {
+  border: 1px solid var(--cr-secondary-border);
+}
+
+.configModal > div > div {
+  border: 1px solid var(--cr-secondary-border) !important;
+}
+
+.flavorRadio {
+  color: var(--cr-secondary-text);
+}
+
+.configModal > div > button {
+  svg path  {
+    fill: var(--cr-primary-text);
+  }
+}
+
+.configModal > div > button:hover {
+  svg path  {
+    fill: var(--cr-secondary-text);
+  }
+}
+
+.divider {
+  border-color: var(--cr-quartery-bg) !important;
 }

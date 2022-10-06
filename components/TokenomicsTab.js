@@ -1,6 +1,6 @@
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { TwitterOutlined, GlobalOutlined } from '@ant-design/icons';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Card, Space, Table, Tag, Typography } from 'antd';
 import Link from 'next/link'
 import classnames from 'classnames';
@@ -9,10 +9,12 @@ import round from 'lodash/round';
 import PlatformSelect from './PlatformSelect';
 import coinStyles from '../styles/coin.module.less'
 import variableStyles from '../styles/variables.module.less'
+import { DarkModeContext } from '../pages/_app';
 
 const { Title } = Typography;
 
 const TokenomicsTab = ({ coin, screens }) => {
+  const [darkMode] = useContext(DarkModeContext);
   const [showChart, setShowChart] = useState(false)
   useEffect(() => {
     setShowChart(true)
@@ -61,7 +63,7 @@ const TokenomicsTab = ({ coin, screens }) => {
         ) : <></> }
         { url ? (
           <a href={coin.homepage} target="_blank" rel="noreferrer">
-            <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={coinStyles.button}>
+            <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={classnames(coinStyles.button, coinStyles.buttonSite)}>
               {url}
             </Tag>
           </a>
@@ -238,6 +240,7 @@ const TokenomicsTab = ({ coin, screens }) => {
           symbol={`${coin.symbol.toUpperCase()}USDT`}
           hide_side_toolbar={!screens.sm}
           container_id={coinStyles.chart}
+          theme={darkMode ? "dark" : "light"}
         /> :
         <></>
       }

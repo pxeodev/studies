@@ -17,6 +17,7 @@ import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variabl
 
 import indexTableStyles from '../styles/indexTable.module.less';
 import baseStyles from '../styles/base.module.less'
+import classNames from 'classnames';
 
 const HomePageTable = ({
     coinsData,
@@ -155,7 +156,7 @@ const HomePageTable = ({
             trigger={isHoverable ? 'hover' : 'click'}
             title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
         >
-          <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+          <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)}  />
         </Tooltip>
       </span>,
       dataIndex: 'dailySuperSuperTrend',
@@ -213,7 +214,7 @@ const HomePageTable = ({
             trigger={isHoverable ? 'hover' : 'click'}
             title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
         >
-          <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+          <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)} />
         </Tooltip>
       </span>,
       dataIndex: 'weeklySuperSuperTrend',
@@ -267,9 +268,9 @@ const HomePageTable = ({
     render: (marketCap) => {
       if (!marketCap) { return null }
       return (
-        <>
+        <div className={indexTableStyles.value}>
           {numberFormatter.format(Number(marketCap))}
-        </>
+        </div>
       )
     }
   },
@@ -281,7 +282,7 @@ const HomePageTable = ({
           trigger={isHoverable ? 'hover' : 'click'}
           title="All the exchanges this coin is traded on"
       >
-        <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+        <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)}  />
       </Tooltip>
     </span>,
     dataIndex: 'exchanges',

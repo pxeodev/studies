@@ -1,7 +1,7 @@
 @import './variables.module.less';
 
 .header {
-  background: @white;
+  background: var(--cr-primary-bg);
   padding: 0;
   position: static;
   width: 100%;
@@ -9,6 +9,9 @@
   height: 60px;
 
   ul {
+    background: var(--cr-primary-bg);
+    color: var(--cr-primary-text);
+    border-bottom: 1px solid var(--cr-primary-border) !important;
     li {
       flex-grow: unset !important;
       padding: 0 24px !important;
@@ -32,3 +35,40 @@
     border-bottom: 0 !important;
   }
 }
+
+.darkModeSwitchItem {
+  display: flex !important;
+  align-items: center !important;
+  margin-left: auto;
+  user-select: none;
+}
+
+.darkModeSwitchItem::after {
+  display: none;
+}
+
+.darkModeSwitch {
+  box-sizing: border-box;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  width: 77px;
+  height: 34px;
+  background: var(--cr-primary-bg);
+  border-radius: 2px;
+  border: 1px solid var(--cr-primary-border);
+  color: var(--cr-primary-text);
+
+  > span {
+    width: 100%;
+    gap: 8px;
+    display: flex;
+  }
+
+  img[alt="sun"] {
+    border-radius: 2px;
+    padding: 2px;
+  }
+ }

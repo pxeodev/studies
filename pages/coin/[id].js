@@ -8,7 +8,7 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import minBy from 'lodash/minBy';
 import pick from 'lodash/pick';
 import take from 'lodash/take';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import levenshtein from 'js-levenshtein';
 
 import prisma from '../../lib/prisma'
@@ -154,16 +154,16 @@ export default function Coin(coin) {
       </Head>
       <Content className={baseStyles.container}>
         <Breadcrumb className={baseStyles.breadcrumbs}>
-          <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb} >Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
-        <Card>
+        <Card className={baseStyles.card}>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
               <Title className={coinStyles.title}>{coin.name}</Title>
-              <Tag>{coin.symbol.toUpperCase()}</Tag>
+              <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
           <div className={coinStyles.sectionsDailyAndWeekly}>

@@ -34,10 +34,12 @@
   font-size: 30px !important;
   line-height: 38px !important;
   margin-bottom: 12px !important;
+  color: var(--cr-primary-text) !important;
 }
 
 .subtitle {
   margin-bottom: 48px !important;
+  color: var(--cr-primary-text) !important;
 
   @media (max-width: @screen-md) {
       margin-bottom: 32px !important;
@@ -48,6 +50,7 @@
   font-size: 16px !important;
   line-height: 24px !important;
   margin-bottom: 24px !important;
+  color: var(--cr-primary-text) !important;
 
   @media (max-width: @screen-md) {
     margin-bottom: 16px !important;
@@ -57,12 +60,12 @@
 // Icons and Imagery
 .icon {
   path {
-    fill: @cr-icon-fill;
+    fill: @disabled-color;
   }
 
   &:hover {
     path {
-      fill: @cr-icon-fill-hover !important;
+      fill: @text-color !important;
     }
   }
 }
@@ -76,10 +79,66 @@
   }
 
   path {
-    fill: @cr-icon-fill;
+    fill: @text-color-secondary;
 
     &:hover {
-        fill: @cr-icon-fill-hover;
+        fill: @text-color;
     }
+  }
+}
+
+.card {
+  background-color: var(--cr-primary-bg);
+  color: var(--cr-primary-text);
+  border: var(--cr-primary-border);
+}
+
+.collapse {
+  border: 1px solid var(--cr-primary-border) !important;
+}
+
+:root[data-theme="theme-dark"] {
+  .collapse {
+    background-color: var(--cr-primary-bg);
+  }
+
+  .icon {
+    path {
+      fill: #5A5A5A;
+    }
+
+    &:hover {
+      path {
+        fill: var(--cr-primary-text) !important;
+      }
+    }
+  }
+
+}
+
+.collapse > * > div:nth-child(1) {
+  background-color: var(--cr-primary-bg);
+  color: var(--cr-primary-text) !important;
+}
+
+.collapse > * > div:nth-child(2) {
+  background-color: var(--cr-tertiary-bg);
+  color: var(--cr-primary-text) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
+}
+
+.collapse > * {
+  border-bottom: 1px solid var(--cr-primary-border) !important;
+}
+
+:root[data-theme="theme-dark"] {
+  .homeBreadCrumb {
+    color: var(--cr-fifth-bg) !important;
+  }
+}
+
+:root[data-theme="theme-light"] {
+  .homeBreadCrumb {
+    color: var(--cr-fifth-bg) !important;
   }
 }

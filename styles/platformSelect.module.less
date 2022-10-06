@@ -8,7 +8,7 @@
   cursor: pointer;
 
   &:hover {
-    border: 1px solid @cr-primary-color;
+    border: 1px solid @geekblue-6;
   }
 
   .text > :first-child {
@@ -25,15 +25,25 @@
 .selectPlatform {
   line-height: 32px;
 
-  span {
-    color: @text-color;
+  & > div {
+    background: var(--cr-tertiary-bg) !important;
+    border-color: var(--cr-secondary-border);
+    color: var(--cr-primary-text) !important;
+  }
+
+  path {
+    color: var(--cr-primary-text) !important;
+    fill: var(--cr-primary-text) !important;
   }
 }
 
 .selectDropdown {
+  background-color: var(--cr-tertiary-bg) !important;
+  fill: var(--cr-primary-text);
+
   .option {
     cursor: default;
-    color: @text-color;
+    color: var(--cr-primary-text);
 
     &:hover {
       background: @geekblue-1;
@@ -47,5 +57,11 @@
   .space {
     width: 100%;
     justify-content: space-between;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .selectDropdown .option:hover {
+    color: @cr-gray-2;
   }
 }
