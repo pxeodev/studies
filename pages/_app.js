@@ -5,9 +5,14 @@ import Script from 'next/script'
 
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import React from "react"
+import useDarkMode from "../hooks/usedarkmode"
+
+export const DarkModeContext = React.createContext(null);
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const darkMode = useDarkMode();
 
   const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`
   pageProps.currentUrl = currentUrl
@@ -39,9 +44,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="canonical" href={currentUrl} />
       </Head>
-      <Header />
-      <Component {...pageProps} />
-      <Footer topCoins={topCoins} topCategories={topCategories} />
+      <DarkModeContext.Provider value={darkMode}>
+        <Header />
+        <Component {...pageProps} />
+        <Footer topCoins={topCoins} topCategories={topCategories} />
+      </DarkModeContext.Provider>
     </>
   )
 }

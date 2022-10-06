@@ -11,7 +11,7 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import pick from 'lodash/pick';
 import round from 'lodash/round';
 import take from 'lodash/take';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 import UpTag from '../../components/UpTag'
 import PlatformSelect from '../../components/PlatformSelect';
@@ -32,6 +32,7 @@ import classnames from 'classnames';
 import baseStyles from '../../styles/base.module.less'
 import coinStyles from '../../styles/coin.module.less'
 import variableStyles from '../../styles/variables.module.less'
+import { DarkModeContext } from '../_app';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -84,6 +85,7 @@ export default function Coin(coin) {
 
   const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
+  const [darkMode] = useContext(DarkModeContext);
   const isServer = typeof window === 'undefined';
 
   const columns = []
@@ -97,7 +99,7 @@ export default function Coin(coin) {
           <b>{name}</b>
           {tradeLink ? (
             <a href={tradeLink} target="_blank" rel="noopener noreferrer">
-              <Button type="primary">Trade</Button>
+              <Button type="primary" style={{ backgroundColor: variableStyles.primaryColor }} >Trade</Button>
             </a>) : <></>
           }
 
@@ -227,16 +229,16 @@ export default function Coin(coin) {
       </Head>
       <Content className={baseStyles.container}>
         <Breadcrumb className={baseStyles.breadcrumbs}>
-          <Breadcrumb.Item><Link href="/"><a>Home</a></Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb} >Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
-        <Card>
+        <Card className={baseStyles.card}>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
               <Title className={coinStyles.title}>{coin.name}</Title>
-              <Tag>{coin.symbol.toUpperCase()}</Tag>
+              <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
             </Space>
           </Card.Grid>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
@@ -260,7 +262,7 @@ export default function Coin(coin) {
                   return (
                     <Tag key={trendKey}>
                       <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                      {trendText}
+                      <span className={coinStyles.trendText}>{trendText}</span>
                     </Tag>
                   )
                 })}
@@ -288,7 +290,7 @@ export default function Coin(coin) {
                   return (
                     <Tag key={trendKey}>
                       <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                      {trendText}
+                      <span className={coinStyles.trendText}>{trendText}</span>
                     </Tag>
                   )
                 })}
@@ -321,7 +323,7 @@ export default function Coin(coin) {
               ) : <></> }
               { url ? (
                 <a href={coin.homepage} target="_blank" rel="noreferrer">
-                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={coinStyles.button}>
+                  <Tag icon={<GlobalOutlined />} color={variableStyles.black} className={classnames(coinStyles.button, coinStyles.buttonSite)}>
                     {url}
                   </Tag>
                 </a>
@@ -501,6 +503,7 @@ export default function Coin(coin) {
                 symbol={`${coin.symbol.toUpperCase()}USDT`}
                 hide_side_toolbar={!screens.sm}
                 container_id={coinStyles.chart}
+                theme={darkMode ? "dark" : "light"}
               /> :
               <></>
             }
@@ -519,6 +522,7 @@ export default function Coin(coin) {
           pagination={{ position: ['none', 'none'], pageSize: 1000 }}
           bordered
           className={coinStyles.marketTable}
+          rowClassName={coinStyles.marketTableRow}
         />
       </Content>
     </>

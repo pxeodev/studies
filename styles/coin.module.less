@@ -13,6 +13,9 @@
   margin-right: 0 !important;
   line-height: 20px !important;
   padding: 2px 4px !important;
+  background-color: var(--cr-tertiary-bg);
+  border: 1px solid var(--cr-primary-border);
+  border-radius: 2px;
 
   @media screen and (max-width: @screen-md) {
     font-size: 10px;
@@ -23,17 +26,22 @@
   color: @text-color-secondary;
 }
 
+.trendText {
+  color: var(--cr-primary-text);
+}
+
 .signalExplainer path {
-  fill: @cr-icon-fill;
+  fill: @text-color-secondary;
 
   &:hover {
-    fill: @cr-icon-fill-hover;
+    fill: var(--cr-primary-text);
   }
 }
 
 .section {
   padding: 16px;
   min-height: 64px;
+  box-shadow: 1px 0 0 0 var(--cr-primary-border), 0 1px 0 0 var(--cr-primary-border), 1px 1px 0 0 var(--cr-primary-border), 1px 0 0 0 var(--cr-primary-border) inset, 0 1px 0 0 var(--cr-primary-border) inset !important;
 }
 
 .sectionFlex {
@@ -42,6 +50,10 @@
 
 .sectionHeader {
   width: 100%;
+
+  h1 {
+    color: var(--cr-secondary-text) !important;
+  }
 }
 
 .sectionDailyTrend {
@@ -71,6 +83,7 @@
   }
 
   h1, h2, h3 {
+    color: var(--cr-primary-text);
     font-weight: bold;
     margin-bottom: 16px;
   }
@@ -91,8 +104,8 @@
   }
 
   blockquote {
-    border-left: 4px solid rgba(@cr-black, .08);
-    background: rgba(@cr-black, .02);
+    border-left: 4px solid rgba(var(--cr-primary-text), .08);
+    background: rgba(var(--cr-primary-text), .02);
     padding: 12px;
     margin-bottom: 16px;
 
@@ -113,6 +126,7 @@
     font-size: 20px;
     line-height: 28px;
     margin-bottom: 0;
+    color: var(--cr-secondary-text) !important;
   }
 }
 
@@ -134,6 +148,11 @@
 
   .button {
     line-height: 26px;
+  }
+
+  .buttonSite {
+    color: var(--cr-primary-bg) !important;
+    background-color: var(--cr-primary-text) !important;
   }
 }
 
@@ -169,7 +188,7 @@
 }
 
 .value {
-  color: @cr-black;
+  color: var(--cr-primary-text);
   line-height: 24px;
   font-weight: bold;
 }
@@ -195,11 +214,11 @@
 }
 
 .greenRoi {
-  color: @cr-success-color;
+  color: var(--cr-success-color);
 }
 
 .redRoi {
-  color: @cr-error-color;
+  color: var(--cr-error-color);
 }
 
 .similarCoin {
@@ -261,10 +280,53 @@
   margin: 1em 0 0.5em !important;
   text-align: center;
   text-align: left;
+  color: var(--cr-secondary-text) !important;
 }
 
 .marketTable table {
   table-layout: fixed !important;
+
+  background-color: var(--cr-secondary-bg);
+  border-left: 1px solid var(--cr-primary-border) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
+  border-radius: 2px;
+
+  thead tr th {
+    font-weight: bold;
+    background-color: var(--cr-secondary-bg) !important;
+    color: var(--cr-primary-text);
+    user-select: none;
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 0px solid var(--cr-primary-border) !important;
+  }
+
+  tbody tr td {
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 1px solid var(--cr-primary-border) !important;
+    background-color: var(--cr-primary-bg);
+  }
+}
+
+.marketTable > div > div > div > div {
+  border-left: 1px solid var(--cr-primary-border) !important;
+  background-color: var(--cr-secondary-bg);
+  color: var(--cr-primary-text);
+}
+
+.marketTableRow:hover {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg);
+
+  > td {
+    color: var(--cr-primary-text);
+    background-color: var(--cr-secondary-bg) !important;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .marketTable table tbody tr td {
+    background-color: var(--cr-tertiary-bg);
+  }
 }
 
 .marketSpace {
@@ -279,9 +341,20 @@
 }
 
 .marketTrustScorePositive {
-  background: @cr-success-color;
+  background: var(--cr-success-color);
 }
 
 .marketTrustScoreNegative {
-  background: @cr-error-color;
+  background: var(--cr-error-color);
+}
+
+.coinTag {
+  color: var(--cr-primary-text);
+  background: var(--cr-secondary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  #chart + div > a > span {
+    color: var(--cr-primary-color) !important;
+  }
 }
