@@ -107,3 +107,29 @@ body {
   background-color: var(--cr-secondary-bg);
   border-color: var(--cr-primary-border);
 }
+
+table {
+  background-color: var(--cr-secondary-bg);
+  border-left: 1px solid var(--cr-primary-border) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
+  border-radius: 2px;
+
+  thead tr th {
+    font-weight: bold;
+    background-color: var(--cr-secondary-bg) !important;
+    color: var(--cr-primary-text) !important;
+    user-select: none;
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 0px solid var(--cr-primary-border) !important;
+  }
+
+  tbody tr {
+    background-color: var(--cr-primary-bg) !important;
+  }
+
+  tbody tr td {
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 1px solid var(--cr-primary-border) !important;
+    color: var(--cr-primary-text) !important;
+  }
+}
