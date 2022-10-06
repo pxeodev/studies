@@ -3,8 +3,9 @@
 // Main Platform
 
 .mainPlatform {
-  line-height: 30px !important;
   margin-right: 0 !important;
+  line-height: 30px !important;
+  border-color: var(--cr-secondary-border) !important;
   cursor: pointer;
 
   &:hover {
@@ -25,10 +26,13 @@
 .selectPlatform {
   line-height: 32px;
 
-  & > div {
+  div {
     background: var(--cr-tertiary-bg) !important;
-    border-color: var(--cr-secondary-border);
-    color: var(--cr-primary-text) !important;
+    border-color: var(--cr-secondary-border) !important;
+
+    :global(.ant-select-selection-placeholder) {
+      color: var(--cr-primary-text) !important;
+    }
   }
 
   path {
@@ -46,7 +50,7 @@
     color: var(--cr-primary-text);
 
     &:hover {
-      background: @geekblue-1;
+      background: var(--cr-quintiary-bg);
     }
   }
 
@@ -57,11 +61,5 @@
   .space {
     width: 100%;
     justify-content: space-between;
-  }
-}
-
-:root[data-theme="theme-dark"] {
-  .selectDropdown .option:hover {
-    color: @cr-gray-2;
   }
 }

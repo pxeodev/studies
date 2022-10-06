@@ -45,11 +45,13 @@ body {
   --cr-secondary-bg: rgb(250, 250, 250);
   --cr-tertiary-bg: rgb(250, 250, 250);
   --cr-quartery-bg: @white;
+  --cr-quintiary-bg: @geekblue-1;
   --cr-primary-text: @black;
   --cr-secondary-text: @black;
   --cr-tertiary-text: @black;
   --cr-mode-bg: transparent;
   --cr-primary-border: @border-color-split;
+  --cr-secondary-border: @border-color-base;
   --cr-success-color: @green-6;
   --cr-error-color: @red-6;
   --cr-primary-color: @geekblue-6;
@@ -59,6 +61,7 @@ body {
   --cr-secondary-bg: @cr-gray-2;
   --cr-tertiary-bg: @cr-gray-1;
   --cr-quartery-bg: @cr-gray-4;
+  --cr-quintiary-bg: @cr-gray-4;
   --cr-primary-text: @white;
   --cr-secondary-text: @cr-gray-9;
   --cr-tertiary-text: @cr-gray-7;
@@ -111,6 +114,38 @@ body {
 .ant-table, .ant-table-header, .ant-table-container  {
   background-color: var(--cr-secondary-bg);
   border-color: var(--cr-primary-border);
+}
+
+.ant-radio-button-wrapper {
+  color: var(--cr-primary-text);
+  border-color: var(--cr-secondary-border) !important;
+  background-color: var(--cr-primary-bg) !important;
+
+  &:hover {
+    color: var(--cr-primary-color);
+  }
+
+  &:not(.ant-radio-button-wrapper-disabled)::before {
+    background-color: transparent;
+  }
+
+  &.ant-radio-button-wrapper-checked {
+    border-color: var(--cr-primary-color) !important;
+    color: var(--cr-primary-color);
+
+    &:hover {
+      color: var(--cr-primary-color);
+    }
+
+    &:not(.ant-radio-button-wrapper-disabled) {
+      &:focus-within {
+        box-shadow: none;
+      }
+      &::before {
+        background-color: var(--cr-primary-color);
+      }
+    }
+  }
 }
 
 table {
