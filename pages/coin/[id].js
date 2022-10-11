@@ -157,7 +157,7 @@ export default function Coin(coin) {
           <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb} >Home</a></Link></Breadcrumb.Item>
           <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
         </Breadcrumb>
-        <Card className={baseStyles.card}>
+        <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
             <Space>
               {/* eslint-disable-next-line @next/next/no-img-element */}

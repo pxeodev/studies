@@ -48,6 +48,14 @@
   display: flex;
 }
 
+.sectionParent {
+  min-height: 35vh;
+
+  @media screen and (max-width: @screen-sm) {
+    min-height: unset;
+  }
+}
+
 .sectionHeader {
   width: 100%;
 
@@ -191,7 +199,6 @@
 .sectionData {
   min-height: 288px;
   width: 25%;
-
 
   @media screen and (max-width: @screen-sm) {
     width: 100% !important;
