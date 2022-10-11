@@ -98,7 +98,6 @@
   cursor: pointer;
   box-shadow: none;
   border: 1px solid var(--cr-primary-border);
-  border-bottom: 0;
 
   &.active {
     background-color: var(--cr-secondary-bg);
@@ -111,6 +110,10 @@
 
   &.noLeftBorder {
     border-left: 0;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    padding: 20px;
   }
 }
 
@@ -150,9 +153,9 @@
     margin-bottom: 16px;
 
     @media screen and (max-width: @screen-lg) {
-    width: 100%;
-    height: auto;
-  }
+      width: 100%;
+      height: auto;
+    }
   }
 
   blockquote {
@@ -172,12 +175,17 @@
 }
 
 .sectionContract {
+  border-top: 0 !important;
+  box-shadow: 1px 0 0 0 var(--cr-primary-border), 0 0px 0 0 var(--cr-primary-border), 1px 0px 0 0 var(--cr-primary-border), 1px 0 0 0 var(--cr-primary-border) inset, 0 0px 0 0 var(--cr-primary-border) inset !important;
+
   @media screen and (max-width: @screen-lg) {
     width: 100%;
   }
 }
 
 .sectionOnline {
+  box-shadow: 1px 0 0 0 var(--cr-primary-border), 0 0px 0 0 var(--cr-primary-border), 1px 0px 0 0 var(--cr-primary-border), 1px 0 0 0 var(--cr-primary-border) inset, 0 0px 0 0 var(--cr-primary-border) inset !important;
+
   @media screen and (max-width: @screen-md) {
     width: 100%;
   }
