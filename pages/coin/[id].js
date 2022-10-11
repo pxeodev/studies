@@ -230,9 +230,19 @@ export default function Coin(coin) {
                 hoverable={false}
                 key={tab}
                 onClick={() => clickTab(tab)}
-                className={classnames(coinStyles.tab, { [coinStyles.active]: tab === activeTab })}
+                className={classnames(coinStyles.tab, {
+                  [coinStyles.active]: tab === activeTab,
+                  [coinStyles.noRightBorder]: tab === TABS.tokenomics,
+                  [coinStyles.noLeftBorder]: tab === TABS.trade
+                })}
               >
-                <Title id={tab} level={2} className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}>{tab}</Title>
+                <Title
+                  id={tab}
+                  level={2}
+                  className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}
+                >
+                  {tab}
+                </Title>
               </Card.Grid>
             );
           })}

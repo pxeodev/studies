@@ -98,10 +98,19 @@
   cursor: pointer;
   box-shadow: none;
   border: 1px solid var(--cr-primary-border);
+  border-bottom: 0;
 
   &.active {
     background-color: var(--cr-secondary-bg);
     cursor: auto;
+  }
+
+  &.noRightBorder {
+    border-right: 0;
+  }
+
+  &.noLeftBorder {
+    border-left: 0;
   }
 }
 
