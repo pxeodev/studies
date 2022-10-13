@@ -15,6 +15,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/plots": "^1.2.2",
     "@metamask/detect-provider": "^1.2.0",
     "@next/bundle-analyzer": "^12.3.1",
     "@prisma/client": "^3.10.0",
