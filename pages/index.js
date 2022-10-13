@@ -1,9 +1,8 @@
 import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Layout, Alert, Tooltip, Radio } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
+import { Bar } from '@ant-design/plots';
 import { useRouter } from 'next/router'
-import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
-import prisma from '../lib/prisma'
-
+import { useMemo, useState, useCallback, useContext, useEffect, useReducer, useRef } from 'react'
 import debounce from 'lodash/debounce'
 import isFinite from 'lodash/isFinite'
 import isEmpty from 'lodash/isEmpty'
@@ -15,6 +14,7 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
 import classnames from 'classnames';
 
+import { DarkModeContext } from './_app';
 import HomePageTable from '../components/HomePageTable';
 import useBreakPoint from '../hooks/useBreakPoint';
 import useIsHoverable from '../hooks/useIsHoverable';
@@ -22,11 +22,13 @@ import { signals, defaultAtrPeriods, defaultMultiplier, SUPERTREND_FLAVOR } from
 import convertToDailySignals from '../utils/convertToDailySignals';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import { getCategories } from '../utils/categories';
+import prisma from '../lib/prisma'
 import globalData from '../lib/globalData';
 import getTrends from '../utils/getTrends'
 
 import indexStyles from '../styles/index.module.less'
 import baseStyles from '../styles/base.module.less'
+import variableStyles from '../styles/variables.module.less'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option, OptGroup } = Select;
@@ -114,6 +116,8 @@ export async function getStaticProps() {
 
 export default function Home({ coinsData, categories, exchangeData }) {
   const router = useRouter()
+  const [darkMode] = useContext(DarkModeContext);
+  const screens = useBreakPoint();
   const defaultFormState = useMemo(() =>
   ({
       category: 'all',
@@ -302,7 +306,6 @@ export default function Home({ coinsData, categories, exchangeData }) {
   }, 400), [])
   useEffect(() => setPortfolioDebounced(portfolioInputValue), [portfolioInputValue, setPortfolioDebounced])
 
-  const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
   const inputRef = useRef(null)
   useEffect(() => {
@@ -718,8 +721,89 @@ export default function Home({ coinsData, categories, exchangeData }) {
         title="Market Health"
         onCancel={() => setMarketHealthModalVisible(false)}
         footer={null}
+        width={screens.lg ? 783 : 400}
       >
-
+        <Bar
+          data={
+            [
+              {
+                trend: signals.buy,
+                amount: 18
+              },
+              {
+                trend: signals.hodl,
+                amount: 10
+              },
+              {
+                trend: signals.sell,
+                amount: 22
+              },
+            ]
+          }
+          autoFit={false}
+          height={200}
+          width={screens.lg ? 700 : 327}
+          xField="amount"
+          yField="trend"
+          label={(
+            {
+              position: "left",
+              style: {
+                fill: '#ffffff',
+                fontWeight: 'bold'
+              }
+            }
+          )}
+          xAxis={({
+            label: {
+              style: {
+                fill: darkMode ? 'white' : variableStyles.crGray4
+              }
+            },
+            line: {
+              style: {
+                stroke: darkMode ? variableStyles.crGray4 : '#fafafa',
+              }
+            },
+            grid: {
+              line: {
+                style: {
+                  stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
+                }
+              }
+            },
+            tickLine: {
+              length: 5,
+              style: {
+                stroke: variableStyles.crGray7,
+              }
+            }
+          })}
+          yAxis={({
+            label: {
+              style: {
+                fill:  darkMode ? 'white' : variableStyles.crGray4
+              }
+            },
+            line: {
+              style: {
+                stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
+              }
+            },
+            tickLine: null
+          })}
+          interactions={[{ type: 'tooltip', enable: false }]}
+          color={( {trend} ) => {
+            switch (trend) {
+              case signals.buy:
+                return darkMode ? variableStyles.darkSuccessColor : variableStyles.lightSuccessColor;
+              case signals.hodl:
+                return darkMode ? variableStyles.darkPrimaryColor : variableStyles.lightPrimaryColor;
+              case signals.sell:
+                return darkMode ? variableStyles.darkErrorColor : variableStyles.lightErrorColor;
+            }
+          }}
+        />
       </Modal>
       <Row className={indexStyles.tableRow}>
         <HomePageTable
