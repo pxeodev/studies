@@ -2,7 +2,7 @@ import mapValues from 'lodash/mapValues'
 
 import supertrend from './supertrend'
 import convertToWeeklySignals from './convertToWeeklySignals'
-import { signals } from './variables'
+import supersupertrend from './supersupertrend';
 
 export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySignals) {
   const trends = mapValues(ohlcs, (ohlcs) => {
@@ -21,17 +21,7 @@ export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySigna
     }
     return [lastTrend, trendLength]
   })
-  let superSupertrend
-  const superTrends = Object.values(trends).map(trend => trend[0]).filter(trend => trend.length)
-  if (superTrends.length === 2) {
-    superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : signals.hodl
-  } else if (superTrends.every(tr => tr === signals.buy)) {
-    superSupertrend = signals.buy
-  } else if (superTrends.every(tr => tr === signals.sell)) {
-    superSupertrend = signals.sell
-  } else {
-    superSupertrend = signals.hodl
-  }
+  const superSupertrend = supersupertrend(mapValues(trends, (trends) => trends[0]))
 
   return [trends, superSupertrend]
 }

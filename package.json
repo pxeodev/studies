@@ -11,6 +11,7 @@
     "weekly": "parcel build scripts/weekly.js --no-source-maps",
     "monthly": "parcel build scripts/monthly.js --no-source-maps",
     "bot": "parcel build scripts/bot.js --no-source-maps",
+    "trendHistory": "parcel build scripts/trendHistory.js --no-source-maps",
     "start": "next start",
     "lint": "next lint"
   },
