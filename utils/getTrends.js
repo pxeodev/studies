@@ -4,10 +4,13 @@ import supertrend from './supertrend'
 import convertToWeeklySignals from './convertToWeeklySignals'
 import { signals } from './variables'
 
-export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySignals) {
+export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySignals, skipLastWeek) {
   const trends = mapValues(ohlcs, (ohlcs) => {
     if (showWeeklySignals) {
       ohlcs = convertToWeeklySignals(ohlcs)
+    }
+    if (skipLastWeek) {
+      ohlcs.pop();
     }
     const trends = supertrend(ohlcs, { atrPeriods, multiplier })
     const lastTrend = trends[trends.length - 1] || ''
