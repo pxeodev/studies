@@ -63,7 +63,7 @@ const bot = async () => {
     }
     const weekGroupedTrends = groupBy(coinsData, 'weekSuperSuperTrend')
     for (const [weekSuperSuperTrend, weekTrendData] of Object.entries(weekGroupedTrends)) {
-      const fileName = `${format(new Date(), 'MM-dd-yyyy')} ${weekSuperSuperTrend} Trends.txt`
+      const fileName = `Weekly ${weekSuperSuperTrend} Trends.txt`
       const documentText = weekTrendData
         .map(coin => `${coin.symbol.toUpperCase()}USDT`)
         .join(`\n`)
