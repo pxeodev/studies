@@ -1,6 +1,6 @@
 import { Select } from 'antd'
 import { SearchOutlined, CloseOutlined } from "@ant-design/icons";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import classnames from 'classnames'
 
@@ -11,6 +11,7 @@ const { Option, OptGroup } = Select;
 const Search = ({ categories, coins }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter()
+  const selectRef = useRef(null)
 
   const coinOptions = (
     <OptGroup label="Coins">
@@ -43,11 +44,16 @@ const Search = ({ categories, coins }) => {
   return (
     <Select
       showSearch
+      value={null}
+      ref={selectRef}
       placeholder="Search"
       className={searchStyles.search}
       suffixIcon={isOpen ? <CloseOutlined /> : <SearchOutlined />}
       onDropdownVisibleChange={() => setIsOpen(!isOpen)}
-      onSelect={coinId => router.push(`/coin/${coinId}`)}
+      onSelect={(coinId) => {
+        router.push(`/coin/${coinId}`);
+        setTimeout(() => selectRef.current.blur(), 0);
+      }}
     >
       {coinOptions}
       {categoryOptions}
