@@ -17,7 +17,12 @@ const Search = ({ categories, coins }) => {
     <OptGroup label="Coins">
       {coins.map((coin) => {
         return (
-          <Option value={coin.id} key={coin.id} className={classnames(searchStyles.coinOption, searchStyles.option)}>
+          <Option
+            value={coin.id}
+            key={coin.id}
+            className={classnames(searchStyles.coinOption, searchStyles.option)}
+            data-type="coin"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={coin.image} alt={coin.name}/>
             <span className={searchStyles.coinName}>{coin.name}</span>
@@ -34,6 +39,7 @@ const Search = ({ categories, coins }) => {
           <Option
             value={category}
             key={category}
+            data-type="category"
             className={classnames(searchStyles.categoryOption, searchStyles.option)}
           >{category}</Option>
         )
@@ -51,8 +57,12 @@ const Search = ({ categories, coins }) => {
       className={searchStyles.search}
       suffixIcon={isOpen ? <CloseOutlined /> : <SearchOutlined />}
       onDropdownVisibleChange={() => setIsOpen(!isOpen)}
-      onSelect={(coinId) => {
-        router.push(`/coin/${coinId}`);
+      onSelect={(value, target) => {
+        if (target['data-type'] === 'coin') {
+          router.push(`/coin/${value}`);
+        } else {
+          router.push(`/?category=${value}`);
+        }
         setTimeout(() => selectRef.current?.blur(), 0);
       }}
     >
