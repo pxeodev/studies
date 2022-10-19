@@ -1,17 +1,45 @@
 import { Select } from 'antd'
 import { SearchOutlined, CloseOutlined } from "@ant-design/icons";
 import { useState } from 'react';
+import { useRouter } from 'next/router'
+import classnames from 'classnames'
 
 import searchStyles from '../styles/search.module.less'
 
 const { Option, OptGroup } = Select;
 
-const Search = () => {
+const Search = ({ categories, coins }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  // TODO: Get coins data with thumb, name, symbol with global data
-  // TODO: Get categories names with global data instead of the index page
-  // TODO: Show the appropriate options
+  const router = useRouter()
+
+  const coinOptions = (
+    <OptGroup label="Coins">
+      {coins.map((coin) => {
+        return (
+          <Option value={coin.id} key={coin.id} className={classnames(searchStyles.coinOption, searchStyles.option)}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={coin.image} alt={coin.name}/>
+            <span className={searchStyles.coinName}>{coin.name}</span>
+            <span className={searchStyles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
+          </Option>
+        )
+      })}
+    </OptGroup>
+  )
+  const categoryOptions = (
+    <OptGroup label="Categories">
+      {categories.map((category) => {
+        return (
+          <Option
+            value={category}
+            key={category}
+            className={classnames(searchStyles.categoryOption, searchStyles.option)}
+          >{category}</Option>
+        )
+      })}
+    </OptGroup>
+  )
+
   return (
     <Select
       showSearch
@@ -19,15 +47,10 @@ const Search = () => {
       className={searchStyles.search}
       suffixIcon={isOpen ? <CloseOutlined /> : <SearchOutlined />}
       onDropdownVisibleChange={() => setIsOpen(!isOpen)}
-      onSearch={(value) => setQuery(value)}
-      onClear={() => setQuery("")}
+      onSelect={coinId => router.push(`/coin/${coinId}`)}
     >
-      <OptGroup label="Coins">
-        <Option value="1">Not Identified</Option>
-      </OptGroup>
-      <OptGroup label="Categories">
-        <Option value="2">Cat</Option>
-      </OptGroup>
+      {coinOptions}
+      {categoryOptions}
     </Select>
   );
 }

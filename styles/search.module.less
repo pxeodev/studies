@@ -3,3 +3,39 @@
 .search {
   width: 200px;
 }
+
+.option:hover {
+  background: @geekblue-1;
+}
+
+:root[data-theme="theme-dark"] {
+  .option:hover {
+    background: @cr-gray-2;
+  }
+}
+
+.coinOption {
+  padding-left: 12px;
+
+  img {
+    height: 20px;
+    width: 20px;
+  }
+
+  &:hover {
+    font-weight: bold;
+  }
+}
+
+.coinName {
+  margin-left: 10px;
+}
+
+.coinSymbol {
+  margin-left: 5px;
+  color: var(--cr-tertiary-text);
+}
+
+.categoryOption {
+  padding-left: 12px;
+}

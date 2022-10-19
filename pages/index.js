@@ -1,4 +1,4 @@
-import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Layout, Alert, Tooltip, Radio } from 'antd'
+import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Layout, Tooltip, Radio } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import { useMemo, useState, useCallback, useEffect, useReducer, useRef } from 'react'
@@ -21,7 +21,6 @@ import useIsHoverable from '../hooks/useIsHoverable';
 import { signals, defaultAtrPeriods, defaultMultiplier, SUPERTREND_FLAVOR } from '../utils/variables'
 import convertToDailySignals from '../utils/convertToDailySignals';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
-import { getCategories } from '../utils/categories';
 import globalData from '../lib/globalData';
 import getTrends from '../utils/getTrends'
 
@@ -101,18 +100,16 @@ export async function getStaticProps() {
     }
   })
   const exchangeData = await prisma.exchange.findMany()
-  let categories = await getCategories()
   return {
     props: {
       coinsData,
-      categories,
       exchangeData,
       appData
     }
   }
 }
 
-export default function Home({ coinsData, categories, exchangeData }) {
+export default function Home({ coinsData, appData, exchangeData }) {
   const router = useRouter()
   const defaultFormState = useMemo(() =>
   ({
@@ -351,6 +348,7 @@ export default function Home({ coinsData, categories, exchangeData }) {
   }, [])
 
   const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
+  const categories = appData.categories
   const priorityCategories = categories.filter((category) => {
     return [
       'Avalanche Ecosystem',
