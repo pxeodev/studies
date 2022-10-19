@@ -22,6 +22,7 @@ const Search = ({ categories, coins }) => {
             key={coin.id}
             className={classnames(searchStyles.coinOption, searchStyles.option)}
             data-type="coin"
+            data-symbol={coin.symbol}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={coin.image} alt={coin.name}/>
@@ -50,6 +51,14 @@ const Search = ({ categories, coins }) => {
   return (
     <Select
       showSearch
+      filterOption={(input, option) => {
+        const matchesValue = option?.value?.toLowerCase()?.includes(input.toLowerCase());
+        if (option['data-type'] === 'coin') {
+          return matchesValue || option['data-symbol'].toLowerCase().includes(input.toLowerCase());
+        } else {
+          return matchesValue
+        }
+      }}
       value={null}
       ref={selectRef}
       placeholder="Search"
