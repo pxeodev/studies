@@ -457,12 +457,11 @@ export default function Home({ coinsData, appData, exchangeData }) {
               onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
               id="signal"
               className={indexStyles.select}
-              dropdownClassName={indexStyles.dropdown}
             >
-              <Option className={indexStyles.dropdownOption} value={signals.all}>All</Option>
-              <Option className={indexStyles.dropdownOption}  value={signals.buy}>UP</Option>
-              <Option className={indexStyles.dropdownOption}  value={signals.hodl}>HODL</Option>
-              <Option className={indexStyles.dropdownOption}  value={signals.sell}>DOWN</Option>
+              <Option value={signals.all}>All</Option>
+              <Option value={signals.buy}>UP</Option>
+              <Option value={signals.hodl}>HODL</Option>
+              <Option value={signals.sell}>DOWN</Option>
             </Select>
           </Col>
           <Col xs={24} md={6} className={indexStyles.col}>
@@ -474,17 +473,16 @@ export default function Home({ coinsData, appData, exchangeData }) {
               onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
               id="category"
               className={indexStyles.select}
-              dropdownClassName={indexStyles.dropdown}
             >
-              <Option className={indexStyles.dropdownOption} value={defaultFormState.category} key="all">All</Option>
+              <Option value={defaultFormState.category} key="all">All</Option>
               <OptGroup label="Popular categories">
                 {
-                  priorityCategories.map((category) => <Option className={indexStyles.dropdownOption} value={category} key={category}>{category}</Option>)
+                  priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
                 }
               </OptGroup>
               <OptGroup label="Other categories">
                 {
-                  restCategories.map((category) => <Option className={indexStyles.dropdownOption} value={category} key={category}>{category}</Option>)
+                  restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
                 }
               </OptGroup>
             </Select>
@@ -670,9 +668,8 @@ export default function Home({ coinsData, appData, exchangeData }) {
               size="large"
               value={formState.exchanges}
               onChange={(exchanges) => { formDispatch({ type: 'SET_EXCHANGES', payload: exchanges }) }}
-              dropdownClassName={indexStyles.dropdown}
             >
-              {allExchangeNames.map(exchangeName => <Option className={indexStyles.dropdownOption} key={exchangeName}>{exchangeName}</Option>)}
+              {allExchangeNames.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
             </Select>
           </Col>
         </Row>
@@ -701,9 +698,8 @@ export default function Home({ coinsData, appData, exchangeData }) {
               size="large"
               value={formState.derivatives}
               onChange={(exchanges) => { formDispatch({ type: 'SET_DERIVATIVES', payload: exchanges }) }}
-              dropdownClassName={indexStyles.dropdown}
             >
-              {allDerivativeExchanges.map(exchangeName => <Option className={indexStyles.dropdownOption} key={exchangeName}>{exchangeName}</Option>)}
+              {allDerivativeExchanges.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
             </Select>
           </Col>
         </Row>
