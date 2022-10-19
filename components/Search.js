@@ -44,6 +44,7 @@ const Search = ({ categories, coins }) => {
   return (
     <Select
       showSearch
+      open
       value={null}
       ref={selectRef}
       placeholder="Search"
@@ -52,7 +53,7 @@ const Search = ({ categories, coins }) => {
       onDropdownVisibleChange={() => setIsOpen(!isOpen)}
       onSelect={(coinId) => {
         router.push(`/coin/${coinId}`);
-        setTimeout(() => selectRef.current.blur(), 0);
+        setTimeout(() => selectRef.current?.blur(), 0);
       }}
     >
       {coinOptions}
