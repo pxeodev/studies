@@ -48,8 +48,11 @@
 }
 
 .darkModeSwitchItem {
-  margin-left: auto;
   padding: 0 16px !important;
+
+  @media (max-width: @screen-sm) {
+    margin-left: auto;
+  }
 }
 
 .darkModeSwitchItem::after, .search::after {

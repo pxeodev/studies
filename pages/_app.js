@@ -5,14 +5,17 @@ import Script from 'next/script'
 
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import SubHeader from '../components/SubHeader'
 import React from "react"
 import useDarkMode from "../hooks/usedarkmode"
+import useBreakPoint from "../hooks/useBreakPoint"
 
 export const DarkModeContext = React.createContext(null);
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const darkMode = useDarkMode();
+  const screens = useBreakPoint();
 
   const currentUrl = `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`
   pageProps.currentUrl = currentUrl
@@ -45,7 +48,8 @@ function MyApp({ Component, pageProps }) {
         <link rel="canonical" href={currentUrl} />
       </Head>
       <DarkModeContext.Provider value={darkMode}>
-        <Header categories={categories} coins={coins}/>
+        <Header categories={categories} coins={coins} renderSearch={screens.sm}/>
+        <SubHeader categories={categories} coins={coins} render={!screens.sm}/>
         <Component {...pageProps} />
         <Footer topCoins={topCoins} topCategories={topCategories} />
       </DarkModeContext.Provider>

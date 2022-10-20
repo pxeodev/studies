@@ -8,7 +8,7 @@ import DarkModeSwitch from './DarkModeSwitch';
 import { DarkModeContext } from '../pages/_app';
 import { useContext } from 'react';
 
-const Header = ({ categories, coins }) => {
+const Header = ({ categories, coins, renderSearch }) => {
   const { Header: AntHeader } = Layout;
   const [darkMode, setDarkMode] = useContext(DarkModeContext);
 
@@ -18,9 +18,11 @@ const Header = ({ categories, coins }) => {
         <Menu.Item key="logo" className={headerStyles.logo} data-id="logo">
           <Logo />
         </Menu.Item>
-        <Menu.Item key="search" className={headerStyles.search}>
-          <Search categories={categories} coins={coins} />
-        </Menu.Item>
+        { renderSearch ? (
+          <Menu.Item key="search" className={headerStyles.search}>
+            <Search categories={categories} coins={coins} />
+          </Menu.Item>
+        ) : <></>}
         <Menu.Item key="dark-mode" className={headerStyles.darkModeSwitchItem}><DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} /></Menu.Item>
       </Menu>
     </AntHeader>
