@@ -1,6 +1,5 @@
 import { Typography, Card, Row, Col, Input, Button, Select, Tag, Modal, Divider, Layout, Tooltip, Radio } from 'antd'
 import { CloseCircleOutlined, SlidersOutlined, CheckCircleOutlined, QuestionCircleFilled } from '@ant-design/icons'
-import { Bar } from '@ant-design/plots';
 import { useRouter } from 'next/router'
 import { useMemo, useState, useCallback, useContext, useEffect, useReducer, useRef } from 'react'
 import debounce from 'lodash/debounce'
@@ -16,6 +15,7 @@ import classnames from 'classnames';
 
 import { DarkModeContext } from './_app';
 import HomePageTable from '../components/HomePageTable';
+import MarketHealthChart from '../components/MarketHealthChart';
 import useBreakPoint from '../hooks/useBreakPoint';
 import useIsHoverable from '../hooks/useIsHoverable';
 import { signals, defaultAtrPeriods, defaultMultiplier, SUPERTREND_FLAVOR } from '../utils/variables'
@@ -27,7 +27,6 @@ import getTrends from '../utils/getTrends'
 
 import indexStyles from '../styles/index.module.less'
 import baseStyles from '../styles/base.module.less'
-import variableStyles from '../styles/variables.module.less'
 
 const { Title, Paragraph, Text } = Typography;
 const { Option, OptGroup } = Select;
@@ -716,86 +715,10 @@ export default function Home({ coinsData, appData, exchangeData }) {
         footer={null}
         width={screens.lg ? 783 : 400}
       >
-        <Bar
-          data={
-            [
-              {
-                trend: signals.buy,
-                amount: coinsData.filter(coin => coin.dailySuperSuperTrend === signals.buy).length
-              },
-              {
-                trend: signals.hodl,
-                amount: coinsData.filter(coin => coin.dailySuperSuperTrend === signals.hodl).length
-              },
-              {
-                trend: signals.sell,
-                amount: coinsData.filter(coin => coin.dailySuperSuperTrend === signals.sell).length
-              },
-            ]
-          }
-          autoFit={false}
-          height={200}
-          width={screens.lg ? 700 : 327}
-          xField="amount"
-          yField="trend"
-          label={(
-            {
-              position: "left",
-              style: {
-                fill: '#ffffff',
-                fontWeight: 'bold'
-              }
-            }
-          )}
-          xAxis={({
-            label: {
-              style: {
-                fill: darkMode ? 'white' : variableStyles.crGray4
-              }
-            },
-            line: {
-              style: {
-                stroke: darkMode ? variableStyles.crGray4 : '#fafafa',
-              }
-            },
-            grid: {
-              line: {
-                style: {
-                  stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
-                }
-              }
-            },
-            tickLine: {
-              length: 5,
-              style: {
-                stroke: variableStyles.crGray7,
-              }
-            }
-          })}
-          yAxis={({
-            label: {
-              style: {
-                fill:  darkMode ? 'white' : variableStyles.crGray4
-              }
-            },
-            line: {
-              style: {
-                stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
-              }
-            },
-            tickLine: null
-          })}
-          interactions={[{ type: 'tooltip', enable: false }]}
-          color={( {trend} ) => {
-            switch (trend) {
-              case signals.buy:
-                return darkMode ? variableStyles.darkSuccessColor : variableStyles.lightSuccessColor;
-              case signals.hodl:
-                return darkMode ? variableStyles.darkPrimaryColor : variableStyles.lightPrimaryColor;
-              case signals.sell:
-                return darkMode ? variableStyles.darkErrorColor : variableStyles.lightErrorColor;
-            }
-          }}
+        <MarketHealthChart
+          coinsData={coinsData}
+          screens={screens}
+          darkMode={darkMode}
         />
       </Modal>
       <Row className={indexStyles.tableRow}>
