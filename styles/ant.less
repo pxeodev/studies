@@ -191,9 +191,15 @@ body {
 
 .ant-tag {
   border-color: transparent;
-  background-color: var(--cr-tertiary-bg);
+  background-color: #f5f5f5;
   border-radius: 2px;
   color: var(--cr-primary-text);
+}
+
+:root[data-theme="theme-dark"] {
+  .ant-tag {
+    background-color: var(--cr-tertiary-bg);
+  }
 }
 
 .ant-tag-has-color {
