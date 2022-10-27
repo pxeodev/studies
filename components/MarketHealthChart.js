@@ -96,10 +96,10 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
       annotations={[
         {
           type: 'region',
-          start: ['min', bullExtremeMin],
-          end: ['max', totalUpAndDownTrends],
+          start: ['start', bullExtremeMin],
+          end: ['end', totalUpAndDownTrends],
           style: {
-            fill: '#ffeeec',
+            fill: darkMode ? '#2a1215' : '#fff1f0',
             fillOpacity: 1,
             opacity: 1
           }
