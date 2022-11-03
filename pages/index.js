@@ -542,7 +542,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
                 trigger={isHoverable ? 'hover' : 'click'}
                 title="CoinRotator: ATR=5 Multiplier=1.5. Classic: ATR=10 Multiplier=3."
               >
-                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
               </Tooltip>
             </span>
           </Col>
@@ -657,7 +657,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
                 trigger={isHoverable ? 'hover' : 'click'}
                 title="Select your exchanges to see a complete list of coins for each trend condition."
               >
-                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
               </Tooltip>
             </span>
           </Col>
@@ -687,7 +687,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
                 trigger={isHoverable ? 'hover' : 'click'}
                 title="Select your derivatives markets to see their trend condition."
               >
-                <QuestionCircleFilled className={baseStyles.tooltipIcon} />
+                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
               </Tooltip>
             </span>
           </Col>
