@@ -160,6 +160,7 @@ const HomePageTable = ({
         </Tooltip>
       </span>,
       dataIndex: 'dailySuperSuperTrend',
+      defaultSortOrder: 'ascend',
       sorter: {
         compare: (a, b, sortOrder) => {
           if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
