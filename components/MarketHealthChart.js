@@ -36,10 +36,9 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
       yField="trend"
       label={(
         {
-          position: "left",
+          position: "right",
           style: {
-            fill: '#ffffff',
-            fontWeight: 'bold',
+            fill: darkMode ? 'white' : variableStyles.crGray4,
             fontFamily: variableStyles.fontFamily
           }
         }
