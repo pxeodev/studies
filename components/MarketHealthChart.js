@@ -1,53 +1,24 @@
-import { Bar } from '@ant-design/plots';
+import { Line } from '@ant-design/plots';
 
 import variableStyles from '../styles/variables.module.less'
 import { signals } from '../utils/variables'
 
-const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
-  const amountUpTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.buy).length
-  const amountHodlTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.hodl).length
-  const amountDownTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.sell).length
+const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode }) => {
 
-  const totalUpAndDownTrends = amountUpTrends + amountHodlTrends + amountDownTrends
-  const bullExtremeMin = totalUpAndDownTrends * 0.8
-
-  const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
+  // TODO: Add extremes
 
   return (
-    <Bar
-      data={
-        [
-          {
-            trend: signals.buy,
-            amount: amountUpTrends
-          },
-          {
-            trend: signals.hodl,
-            amount: amountHodlTrends
-          },
-          {
-            trend: signals.sell,
-            amount: amountDownTrends
-          },
-        ]
-      }
+    <Line
+      data={historicDailySuperSuperTrends}
       autoFit={false}
       height={200}
       width={screens.lg ? 700 : 327}
-      xField="amount"
-      yField="trend"
-      label={(
-        {
-          position: "right",
-          style: {
-            fill: darkMode ? 'white' : variableStyles.crGray4,
-            fontFamily: variableStyles.fontFamily
-          }
-        }
-      )}
+      seriesField={'trend'}
+      xField="date"
+      yField="amount"
       xAxis={({
         title: {
-          text: dateFormatter.format(new Date())
+          text: 'Last 30 days'
         },
         label: {
           style: {
@@ -60,20 +31,12 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
             stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
           }
         },
-        grid: {
-          line: {
-            style: {
-              stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
-            }
-          }
-        },
         tickLine: {
           length: 5,
           style: {
             stroke: variableStyles.crGray7,
           }
-        },
-        max: totalUpAndDownTrends
+        }
       })}
       yAxis={({
         title: {
@@ -103,18 +66,18 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
             return darkMode ? variableStyles.darkErrorColor : variableStyles.lightErrorColor;
         }
       }}
-      annotations={[
-        {
-          type: 'region',
-          start: ['start', bullExtremeMin],
-          end: ['end', totalUpAndDownTrends],
-          style: {
-            fill: darkMode ? '#2a1215' : '#fff1f0',
-            fillOpacity: 1,
-            opacity: 1
-          }
-        }
-      ]}
+      // annotations={[
+      //   {
+      //     type: 'region',
+      //     start: ['start', bullExtremeMin],
+      //     end: ['end', totalUpAndDownTrends],
+      //     style: {
+      //       fill: darkMode ? '#2a1215' : '#fff1f0',
+      //       fillOpacity: 1,
+      //       opacity: 1
+      //     }
+      //   }
+      // ]}
     />
   )
 }
