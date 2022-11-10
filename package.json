@@ -46,7 +46,7 @@
     "react-markdown": "^8.0.3",
     "react-responsive": "^9.0.0-beta.6",
     "react-ts-tradingview-widgets": "^1.0.9",
-    "retry-axios": "^2.6.0",
+    "retry-axios": "3",
     "superjson": "^1.8.1",
     "telegraf": "^4.7.0",
     "twitter-lite": "^1.1.0",
