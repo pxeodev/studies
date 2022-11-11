@@ -55,7 +55,6 @@ const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode })
         },
         tickLine: null
       })}
-      interactions={[{ type: 'tooltip', enable: false }]}
       color={( {trend} ) => {
         switch (trend) {
           case signals.buy:
