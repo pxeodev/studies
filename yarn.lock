@@ -856,11 +856,6 @@
   resolved "https://registry.yarnpkg.com/@types/d3-timer/-/d3-timer-2.0.1.tgz#ffb6620d290624f3726aa362c0c8a4b44c8d7200"
   integrity sha512-TF8aoF5cHcLO7W7403blM7L1T+6NF3XMyN3fxyUolq2uOcFeicG/khQg/dGxiCJWoAcmYulYN7LYSRKO54IXaA==
 
-"@types/dateformat@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@types/dateformat/-/dateformat-3.0.1.tgz"
-  integrity sha512-KlPPdikagvL6ELjWsljbyDIPzNCeliYkqRpI+zea99vBBbCIA5JNshZAwQKTON139c87y9qvTFVgkFd14rtS4g==
-
 "@types/debug@^4.0.0":
   version "4.1.7"
   resolved "https://registry.npmjs.org/@types/debug/-/debug-4.1.7.tgz"
@@ -1225,12 +1220,11 @@ axe-core@^4.3.5:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.4.1.tgz"
   integrity sha512-gd1kmb21kwNuWr6BQz8fv6GNECPBnUasepcoLbekws23NVBLODdsClRZ+bQ8+9Uomf3Sm3+Vwn0oYG9NvwnJCw==
 
-axios-logger@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.npmjs.org/axios-logger/-/axios-logger-2.6.0.tgz"
-  integrity sha512-ogDepYNCul91KWf+BV8tweB3gm4n2apA69L9aY5fUO2Pvck/gIK4Q+zs7avduyxaOn88ZzSWv0PeMZaxBt+YOw==
+axios-logger@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/axios-logger/-/axios-logger-2.6.1.tgz#2d251bc9902810e5ce4b9f0375a0e663b822379a"
+  integrity sha512-eWyd9n9YtjwD+NWh1gVeuGIoR9AsNsNO2Cr7JLw/6CiM3wvRwaU0fr7Rub6+lD9OwBMNFlzkBGBmiQZOOp/rOA==
   dependencies:
-    "@types/dateformat" "^3.0.1"
     chalk "^4.1.0"
     dateformat "^3.0.3"
 
