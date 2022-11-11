@@ -505,7 +505,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
         {renderAppliedFilters()}
       </Card>
       <Modal
-        visible={filterModalVisible}
+        open={filterModalVisible}
         title="Configure search"
         onCancel={() => setFilterModalVisible(false)}
         className={indexStyles.configModal}
@@ -709,7 +709,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
         </Row>
       </Modal>
       <Modal
-        visible={marketHealthModalVisible}
+        open={marketHealthModalVisible}
         title={
           <>
             <span>Market Health Trend</span>
