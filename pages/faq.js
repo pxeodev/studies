@@ -17,7 +17,7 @@ export default function Faq() {
   return (
     <Content className={baseStyles.container}>
       <Breadcrumb className={baseStyles.breadcrumbs}>
-        <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb}>Home</a></Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link href="/" className={baseStyles.homeBreadCrumb}>Home</Link></Breadcrumb.Item>
         <Breadcrumb.Item>FAQ</Breadcrumb.Item>
       </Breadcrumb>
       <Title className={baseStyles.title}>FAQ</Title>
@@ -68,7 +68,8 @@ export default function Faq() {
           HODL is a mispelling of a very enthusiastic early investor in Bitcoin. The term stuck and has been used ever since. In the spirit of early adoption and the culture surrounding the revolutionary nature of crypto, we have adopted it to describe an uncertain near term situation in that coin.
         </Panel>
       </Collapse>
-    </Content>);
+    </Content>
+  );
 }
 
 export async function getStaticProps() {

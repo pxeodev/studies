@@ -12,11 +12,11 @@ export default function Terms() {
   return (
     <Content className={baseStyles.container}>
       <Breadcrumb className={baseStyles.breadcrumbs}>
-        <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb}>Home</a></Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link href="/" className={baseStyles.homeBreadCrumb}>Home</Link></Breadcrumb.Item>
         <Breadcrumb.Item>Terms</Breadcrumb.Item>
       </Breadcrumb>
       <Title className={tcStyles.title}><span className={tcStyles.bold}>CoinRotator&nbsp;</span>Terms of Use</Title>
-      <Paragraph className={tcStyles.paragraph}>These Terms of Use (the &quot;Terms&quot;) govern your access to and use of this website, CoinRotator (the &quot;Website&quot;), and associated content, software and applications (collectively, the &quot;Service&quot;). These Terms also include our Privacy Policy, which is located at <Link href="https://CoinRotator/terms"><a className={tcStyles.terms}>CoinRotator/terms</a></Link>.</Paragraph>
+      <Paragraph className={tcStyles.paragraph}>These Terms of Use (the &quot;Terms&quot;) govern your access to and use of this website, CoinRotator (the &quot;Website&quot;), and associated content, software and applications (collectively, the &quot;Service&quot;). These Terms also include our Privacy Policy, which is located at <Link href="https://CoinRotator/terms" className={tcStyles.terms}>CoinRotator/terms</Link>.</Paragraph>
       <Paragraph className={tcStyles.paragraph}>The Service is administered and maintained by CoinRotator. The terms &quot;we&quot;, &quot;us&quot; and &quot;our&quot; also refer to CoinRotator. The term &quot;you&quot; refers to the person visiting this Website.</Paragraph>
       <Paragraph className={tcStyles.paragraph}>Please read these Terms carefully. They contain important information regarding your legal rights, including limitations on CoinRotator&apos;s and certain third parties&apos; liability, disclaimers of warranties and a submission to jurisdiction. Each time you access the Service by any means (for example, through the Internet or on a mobile device), you irrevocably agree to comply with the version of the Terms posted on this Website at the time you access this Website. You may not use the Service if you do not agree to these Terms.</Paragraph>
       <Title level={2} className={tcStyles.subtitle}>Eligibility</Title>
@@ -80,7 +80,8 @@ export default function Terms() {
       <Paragraph className={tcStyles.paragraph}>You agree that no joint venture, agency, partnership, or employment relationship exists between you and CoinRotator and/or its affiliates as a result of these Terms or use of the Service.</Paragraph>
       <Paragraph className={tcStyles.paragraph}>In no event shall CoinRotator be responsible or liable for any failure or delay in the performance of its obligations hereunder arising out of or caused by, directly or indirectly, forces beyond its control, including, without limitation, strikes, work stoppages, accidents, acts of war or terrorism, civil or military disturbances, nuclear or natural catastrophes or acts of God, and interruptions, loss or malfunctions of utilities, communications or computer (software and hardware) services.</Paragraph>
       <Paragraph className={tcStyles.paragraph}>Any heading or section title contained herein is for convenience of reference only and shall not affect the meaning or interpretation of these Terms. The terms &quot;include&quot; and &quot;including&quot; are deemed to include the phrase &quot;without limitation&quot; immediately thereafter.</Paragraph>
-    </Content>);
+    </Content>
+  );
 }
 
 export async function getStaticProps() {

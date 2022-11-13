@@ -25,7 +25,7 @@ const Footer = ({ topCoins, topCategories }) => {
       <Text type="secondary" strong>Top Coins</Text>
       {topCoins.map(coin =>
       (
-        <Link href={`/coin/${coin.id}`} key={coin.id} passHref>
+        <Link href={`/coin/${coin.id}`} key={coin.id} passHref legacyBehavior>
           <LinkText>
             {coin.name}
           </LinkText>
@@ -40,7 +40,7 @@ const Footer = ({ topCoins, topCategories }) => {
       <Text type="secondary" strong>Top Categories</Text>
       {topCategories.map(category =>
       (
-        <Link href={`/?category=${category}`} key={category} passHref>
+        <Link href={`/?category=${category}`} key={category} passHref legacyBehavior>
           <LinkText>
             {category}
           </LinkText>
@@ -54,13 +54,13 @@ const Footer = ({ topCoins, topCategories }) => {
     <Space direction="vertical" size={12}>
       <Text type="secondary" strong>Quick Links</Text>
       <Link href="/faq">
-        <a>FAQ</a>
+        FAQ
       </Link>
       <Link href="/terms">
-        <a>Terms &amp; Conditions</a>
+        Terms &amp; Conditions
       </Link>
-      <Link href="https://youtu.be/OcyZcip24pM">
-        <a target="_blank">CoinRotator Basic Tutorial</a>
+      <Link href="https://youtu.be/OcyZcip24pM" target="_blank">
+        CoinRotator Basic Tutorial
       </Link>
     </Space>
   </>

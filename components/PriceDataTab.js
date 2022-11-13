@@ -126,7 +126,7 @@ const PriceDataTab = ({ coin, screens }) => {
         coin.categories.map((tag) => {
           return (
             <Link href={`/?category=${tag}`} key={tag}>
-              <a><Tag>{tag}</Tag></a>
+              <Tag>{tag}</Tag>
             </Link>
           );
         })
@@ -140,18 +140,18 @@ const PriceDataTab = ({ coin, screens }) => {
             // eslint-disable-next-line @next/next/no-img-element
             coin.similarCoins.map(coin =>
               (
-                <Link href={`/coin/${coin.id}`} key={coin.id}>
-                  <a>
-                    <Tag
-                      className={coinStyles.similarCoin}
-                      // eslint-disable-next-line @next/next/no-img-element
-                      icon={<img className={coinStyles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
-                      key={coin.name}
-                    >
-                      {coin.name}
-                    </Tag>
-                  </a>
-                </Link>
+                (<Link href={`/coin/${coin.id}`} key={coin.id}>
+
+                  <Tag
+                    className={coinStyles.similarCoin}
+                    // eslint-disable-next-line @next/next/no-img-element
+                    icon={<img className={coinStyles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
+                    key={coin.name}
+                  >
+                    {coin.name}
+                  </Tag>
+
+                </Link>)
               )
             )
           }
