@@ -47,7 +47,7 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
       throw(noRankError)
     }
   } catch (e) {
-    if (e === noRankError || e.response.status === 404) {
+    if (e === noRankError || e.response?.status === 404) {
       // CoinGecko doesn't know this coin, so we assume it got delisted
       await prisma.ohlc.deleteMany({
         where: {
