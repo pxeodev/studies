@@ -16,6 +16,17 @@ const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode })
       legend={{
         position: 'top'
       }}
+      tooltip={{
+        domStyles: {
+          'g2-tooltip': {
+            fontFamily: variableStyles.fontFamily,
+            color: darkMode ? 'white' : variableStyles.crGray4,
+            boxShadow: null,
+            opacity: 1,
+            border: `1px solid ${darkMode ? variableStyles.crGray4 : variableStyles.crGray9}`
+          }
+        }
+      }}
       xAxis={({
         title: {
           text: 'Last 30 days'
