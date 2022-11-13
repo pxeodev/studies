@@ -16,6 +16,9 @@ const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode })
       seriesField={'trend'}
       xField="date"
       yField="amount"
+      legend={{
+        position: 'top'
+      }}
       xAxis={({
         title: {
           text: 'Last 30 days'
