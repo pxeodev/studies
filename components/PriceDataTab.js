@@ -1,6 +1,6 @@
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { TwitterOutlined, GlobalOutlined } from '@ant-design/icons';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useMemo, useEffect, useState } from 'react';
 import { Card, Space, Table, Tag, Typography } from 'antd';
 import Link from 'next/link'
 import classnames from 'classnames';
@@ -23,7 +23,7 @@ const PriceDataTab = ({ coin, screens }) => {
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
-  const numberFormatter = new Intl.NumberFormat([], { notation })
+  const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation }), [notation])
   const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
   let circulatingSupplyPercentage
   if (coin.circulatingSupply && coin.totalSupply) {

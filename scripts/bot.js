@@ -1,7 +1,7 @@
 import { init, startTransaction, captureException } from '@sentry/node';
 import * as Tracing from '@sentry/tracing'
-import format from 'date-fns/format.js'
-import isMonday from 'date-fns/isMonday.js'
+import format from 'date-fns/format/index.js'
+import isMonday from 'date-fns/isMonday/index.js'
 import groupBy from 'lodash/groupBy.js';
 import { Readable } from 'stream';
 

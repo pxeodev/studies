@@ -9,6 +9,9 @@ let moduleExports = {
   lessLoaderOptions: {
     /* ... */
   },
+  sentry: {
+    hideSourceMaps: true
+  },
   reactStrictMode: true,
   staticPageGenerationTimeout: 60 * 60,
   images: {

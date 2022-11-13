@@ -47,7 +47,7 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
       throw(noRankError)
     }
   } catch (e) {
-    if (e === noRankError || e.response.status === 404) {
+    if (e === noRankError || e.response?.status === 404) {
       // CoinGecko doesn't know this coin, so we assume it got delisted
       await prisma.ohlc.deleteMany({
         where: {
@@ -274,13 +274,17 @@ const fetchCoinDataAndOhlcs = async () => {
   for (let chunk of chunkedCoinIds) {
     const responses = await Promise.all(chunk.map(coinId => fetchCoinDataCoingecko(coinId, categories)))
 
-    for (const [coinExists, symbol, coinId] of responses) {
-      if (coinExists) {
-        coinsToFetchOhlcsFor.push({
-          coinId,
-          symbol
-        })
+    try {
+      for (const [coinExists, symbol, coinId] of responses) {
+        if (coinExists) {
+          coinsToFetchOhlcsFor.push({
+            coinId,
+            symbol
+          })
+        }
       }
+    } catch(e) {
+      console.log(e, typeof responses, responses)
     }
   }
 
