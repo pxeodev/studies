@@ -83,18 +83,28 @@ const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode })
             return darkMode ? variableStyles.darkErrorColor : variableStyles.lightErrorColor;
         }
       }}
-      // annotations={[
-      //   {
-      //     type: 'region',
-      //     start: ['start', bullExtremeMin],
-      //     end: ['end', totalUpAndDownTrends],
-      //     style: {
-      //       fill: darkMode ? '#2a1215' : '#fff1f0',
-      //       fillOpacity: 1,
-      //       opacity: 1
-      //     }
-      //   }
-      // ]}
+      annotations={[
+        {
+          type: 'text',
+          position: ['min', 600],
+          content: 'Market Extreme 🚨',
+          offsetY: -4,
+          style: {
+            fill:  darkMode ? 'white' : variableStyles.crGray4,
+            textBaseline: 'bottom',
+            opacity: 0.8
+          },
+        },
+        {
+          type: 'line',
+          start: ['min', 600],
+          end: ['max', 600],
+          style: {
+            stroke: '#F4664A',
+            lineDash: [2, 2],
+          }
+        }
+      ]}
     />
   )
 }
