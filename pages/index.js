@@ -751,7 +751,7 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
               placement={screens.sm ? 'bottom' : 'bottomRight'}
               overlayClassName={baseStyles.tooltipIcon}
               trigger={isHoverable ? 'hover' : 'click'}
-              title="Market Health tracks daily trends of the 1000+ top coins by marketcap. If you see extreme levels the trend is at risk of reversing."
+              title="Market Health tracks daily trends of 1000+ coins by marketcap. If you see a Market Extreme the trend is at risk of reversing. Exercise caution."
             >
               <InfoCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
             </Tooltip>
