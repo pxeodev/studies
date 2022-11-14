@@ -9,7 +9,9 @@ import isEqual from 'lodash/isEqual'
 import isNil from 'lodash/isNil'
 import pickBy from 'lodash/pickBy'
 import uniq from 'lodash/uniq'
+import isEqualDate from 'date-fns/isEqual';
 import endOfYesterday from 'date-fns/endOfYesterday';
+import subDays from 'date-fns/subDays';
 import subWeeks from 'date-fns/subWeeks';
 import classnames from 'classnames';
 
@@ -34,6 +36,7 @@ const { Content } = Layout;
 
 export async function getStaticProps() {
   const appData = await globalData();
+  const yesterday = endOfYesterday();
   const coinQuery = {
     orderBy: { marketCapRank: 'asc' },
     select: {
@@ -57,8 +60,8 @@ export async function getStaticProps() {
         },
         where: {
           closeTime: {
-            lte: endOfYesterday(),
-            gte: subWeeks(endOfYesterday(), 12)
+            lte: yesterday,
+            gte: subWeeks(yesterday, 12)
           }
         },
         orderBy: { closeTime: 'asc' }
@@ -71,7 +74,31 @@ export async function getStaticProps() {
   } else {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
+  let historicDailySuperSuperTrends = []
+  const dateFormatter = new Intl.DateTimeFormat([], { month: 'short', day: 'numeric' })
+  for (let i = 0, date = yesterday; i < 30; i++) {
+    for (const trend of [signals.buy, signals.hodl, signals.sell]) {
+      historicDailySuperSuperTrends.push({
+        date,
+        amount: 0,
+        trend
+      })
+    }
+    date = subDays(date, 1)
+  }
+  historicDailySuperSuperTrends = historicDailySuperSuperTrends.reverse()
   coinsData = coinsData.map((coinData) => {
+    for (let i = 0, date = yesterday; i < 30; i++) {
+      const dateOhlcs = coinData.ohlcs.filter(ohlc => ohlc.closeTime.getTime() <= date.getTime())
+      const dateDailyOhlcs = convertToDailySignals(dateOhlcs)
+      const [_dailyTrends, dateSuperSuperTrend] = getTrends(dateDailyOhlcs, defaultAtrPeriods, defaultMultiplier, false)
+      const historicIndex = historicDailySuperSuperTrends.findIndex((historicDataPoint) => {
+        return isEqualDate(historicDataPoint.date, date) && historicDataPoint.trend === dateSuperSuperTrend
+      })
+      historicDailySuperSuperTrends[historicIndex].amount++
+
+      date = subDays(date, 1)
+    }
     const ohlcs = convertToDailySignals(coinData.ohlcs)
     const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
     const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
@@ -100,17 +127,23 @@ export async function getStaticProps() {
       exchanges
     }
   })
+  historicDailySuperSuperTrends = historicDailySuperSuperTrends.map((historicalDataPoint) => {
+    historicalDataPoint.date = dateFormatter.format(historicalDataPoint.date)
+
+    return historicalDataPoint
+  })
   const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
       coinsData,
+      historicDailySuperSuperTrends,
       exchangeData,
       appData
     }
   }
 }
 
-export default function Home({ coinsData, appData, exchangeData }) {
+export default function Home({ coinsData, historicDailySuperSuperTrends, appData, exchangeData }) {
   const router = useRouter()
   const [darkMode] = useContext(DarkModeContext);
   const screens = useBreakPoint();
@@ -710,6 +743,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
       </Modal>
       <Modal
         open={marketHealthModalVisible}
+        centered
         title={
           <>
             <span>Market Health Trend</span>
@@ -717,7 +751,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
               placement={screens.sm ? 'bottom' : 'bottomRight'}
               overlayClassName={baseStyles.tooltipIcon}
               trigger={isHoverable ? 'hover' : 'click'}
-              title="Market Health measures extremes of the 1000+ top coins by marketcap. If you see too many Uptrends or DownTrends, the market will likely soon reverse."
+              title="Market Health tracks daily trends of 1000+ coins by marketcap. If you see a Market Extreme the trend is at risk of reversing. Exercise caution."
             >
               <InfoCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
             </Tooltip>
@@ -728,7 +762,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
         width={screens.lg ? 783 : 400}
       >
         <MarketHealthChart
-          coinsData={coinsData}
+          historicDailySuperSuperTrends={historicDailySuperSuperTrends}
           screens={screens}
           darkMode={darkMode}
         />

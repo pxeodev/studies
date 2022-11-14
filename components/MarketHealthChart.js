@@ -1,53 +1,35 @@
-import { Bar } from '@ant-design/plots';
+import { Line } from '@ant-design/plots';
 
 import variableStyles from '../styles/variables.module.less'
 import { signals } from '../utils/variables'
 
-const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
-  const amountUpTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.buy).length
-  const amountHodlTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.hodl).length
-  const amountDownTrends = coinsData.filter(coin => coin.dailySuperSuperTrend === signals.sell).length
-
-  const totalUpAndDownTrends = amountUpTrends + amountHodlTrends + amountDownTrends
-  const bullExtremeMin = totalUpAndDownTrends * 0.8
-
-  const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
-
+const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode }) => {
   return (
-    <Bar
-      data={
-        [
-          {
-            trend: signals.buy,
-            amount: amountUpTrends
-          },
-          {
-            trend: signals.hodl,
-            amount: amountHodlTrends
-          },
-          {
-            trend: signals.sell,
-            amount: amountDownTrends
-          },
-        ]
-      }
+    <Line
+      data={historicDailySuperSuperTrends}
       autoFit={false}
       height={200}
       width={screens.lg ? 700 : 327}
-      xField="amount"
-      yField="trend"
-      label={(
-        {
-          position: "right",
-          style: {
-            fill: darkMode ? 'white' : variableStyles.crGray4,
-            fontFamily: variableStyles.fontFamily
+      seriesField={'trend'}
+      xField="date"
+      yField="amount"
+      legend={{
+        position: 'top'
+      }}
+      tooltip={{
+        domStyles: {
+          'g2-tooltip': {
+            fontFamily: variableStyles.fontFamily,
+            color: darkMode ? 'white' : variableStyles.crGray4,
+            boxShadow: null,
+            opacity: 1,
+            border: `1px solid ${darkMode ? variableStyles.crGray4 : variableStyles.crGray9}`
           }
         }
-      )}
+      }}
       xAxis={({
         title: {
-          text: dateFormatter.format(new Date())
+          text: 'Last 30 days'
         },
         label: {
           style: {
@@ -60,24 +42,23 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
             stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
           }
         },
+        tickLine: {
+          length: 5,
+          style: {
+            stroke: variableStyles.crGray7,
+          }
+        }
+      })}
+      yAxis={({
+        title: {
+          text: 'Trends'
+        },
         grid: {
           line: {
             style: {
               stroke: darkMode ? variableStyles.crGray4 : variableStyles.crGray9,
             }
           }
-        },
-        tickLine: {
-          length: 5,
-          style: {
-            stroke: variableStyles.crGray7,
-          }
-        },
-        max: totalUpAndDownTrends
-      })}
-      yAxis={({
-        title: {
-          text: 'Trends'
         },
         label: {
           style: {
@@ -92,7 +73,6 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
         },
         tickLine: null
       })}
-      interactions={[{ type: 'tooltip', enable: false }]}
       color={( {trend} ) => {
         switch (trend) {
           case signals.buy:
@@ -105,13 +85,23 @@ const MarketHealthChart = ({ coinsData, screens, darkMode }) => {
       }}
       annotations={[
         {
-          type: 'region',
-          start: ['start', bullExtremeMin],
-          end: ['end', totalUpAndDownTrends],
+          type: 'text',
+          position: ['min', 600],
+          content: 'Market Extreme 🚨',
+          offsetY: -4,
           style: {
-            fill: darkMode ? '#2a1215' : '#fff1f0',
-            fillOpacity: 1,
-            opacity: 1
+            fill:  darkMode ? 'white' : variableStyles.crGray4,
+            textBaseline: 'bottom',
+            opacity: 0.8
+          },
+        },
+        {
+          type: 'line',
+          start: ['min', 600],
+          end: ['max', 600],
+          style: {
+            stroke: '#F4664A',
+            lineDash: [2, 2],
           }
         }
       ]}
