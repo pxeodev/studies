@@ -18,11 +18,15 @@ init({
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
 });
+const excludedExchanges = ['ftx', 'ftx_us', 'ftx_spot', 'ftx_tr']
 
 const fetchExchanges = async () => {
   const exchangesData = (await coinGecko.get('/exchanges/list')).data
 
   for (const exchange of exchangesData) {
+    if (excludedExchanges.includes(exchange.id)) {
+      continue;
+    }
     const exchangeDetailData = (await getExchange(exchange.id)).data
 
     let dbExchangeData = pick(exchangeDetailData, ['name', 'image', 'url', 'centralized'])
