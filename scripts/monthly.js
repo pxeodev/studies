@@ -25,8 +25,6 @@ const fetchExchanges = async () => {
   for (const exchange of exchangesData) {
     const exchangeDetailData = (await getExchange(exchange.id)).data
 
-    console.log(pick(exchangeDetailData, ['name', 'alert_notice', 'trust_score', 'trust_score_rank']))
-
     let dbExchangeData = pick(exchangeDetailData, ['name', 'image', 'url', 'centralized'])
     dbExchangeData.centralized = Boolean(dbExchangeData.centralized)
 
@@ -110,7 +108,7 @@ setTimeout(async () => {
     name: "monthly",
   });
   try {
-    // await fetchCoinpaprikaData()
+    await fetchCoinpaprikaData()
     await fetchExchanges()
   } catch (e) {
     captureException(e);
