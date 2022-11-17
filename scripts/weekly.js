@@ -18,25 +18,30 @@ const fetchCoinData = async (url, coin, page) => {
   console.log('Fetch launch data for', coin.symbol);
   await page.goto(url, {waitUntil: 'domcontentloaded'});
 
-  let [launch_roi_usd, launch_roi_btc, launch_roi_eth, launch_price, launch_date_start, launch_date_end] = await page.evaluate(async () => {
+  let [launch_roi_usd, launch_roi_btc, launch_roi_eth, launch_price, launch_date_start, launch_date_end] = await page.evaluate(() => {
     const icoAndRoiSection = Array.from(document.querySelectorAll('h3'))?.find((h3 => h3.innerText.includes("ROI since ICO")))?.nextSibling
     const roiSection = icoAndRoiSection?.firstChild
     const icoSection = icoAndRoiSection?.lastChild
 
     if (roiSection || icoSection) {
       const currencySections = Array.from(roiSection.querySelectorAll('div'))
-      const [usdRoi, btcRoi, ethRoi] = currencySections.map((currencySection) => {
+      const rois = currencySections.map((currencySection) => {
         const roi = Number(currencySection.firstChild.innerText.replace('x', ''))
         return isNaN(roi) ? null : roi
       })
+      const usdRoi = rois[0]
+      const btcRoi = rois[1]
+      const ethRoi = rois[2]
 
-      const [, launchPriceSection, launchDateSection] = Array.from(icoSection.querySelectorAll('div'))
+      const sections = Array.from(icoSection.querySelectorAll('div'))
+      const launchPriceSection = sections[1]
+      const launchDateSection = sections[2]
       let launchPrice = launchPriceSection.lastChild.innerText.replace('$', '').replace(',', '').trim();
       if (isNaN(launchPrice)) { launchPrice = null }
 
-      const [launchDateStart, launchDateEnd] = launchDateSection.lastChild.innerText.split(' - ')
+      const launchDate = launchDateSection.lastChild.innerText.split(' - ')
 
-      return [usdRoi, btcRoi, ethRoi, launchPrice, launchDateStart, launchDateEnd]
+      return [usdRoi, btcRoi, ethRoi, launchPrice, launchDate[0], launchDate[1]]
     } else {
       return [null, null, null, null, null, null]
     }
