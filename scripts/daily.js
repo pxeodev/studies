@@ -301,8 +301,7 @@ const fetchCoinDataAndOhlcs = async () => {
 
 const fetchDerivativesData = async() => {
   const derivativesData = (await coinGecko.get('derivatives')).data
-  let perpetualDerivatives = derivativesData.filter(derivate => derivate.contract_type === 'perpetual')
-  perpetualDerivatives = uniqBy(perpetualDerivatives, 'symbol')
+  const perpetualDerivatives = derivativesData.filter(derivate => derivate.contract_type === 'perpetual')
   const derivativesByCoin = groupBy(perpetualDerivatives, 'index_id')
 
   for (const [coinId, derivatives] of Object.entries(derivativesByCoin)) {
