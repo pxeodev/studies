@@ -88,6 +88,7 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
   const weeklyChange = coinData.market_data.price_change_percentage_7d || undefined
   const marketCap = Math.ceil(coinData.market_data.market_cap.usd)
   const volume = Math.ceil(coinData.market_data.total_volume.usd)
+  const tickers = uniqBy(coinData.tickers, ticker => `${ticker.base}${ticker.target}${ticker.market.name}`)
   const dbCoinData = {
     symbol,
     name: coinData.name,
@@ -107,7 +108,7 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
     circulatingSupply: coinData.market_data.circulating_supply,
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
-    tickers: coinData.tickers,
+    tickers: tickers,
     categories: categories[`${symbol}-${coinData.name}`],
     dailyChange: dailyChange,
     weeklyChange: weeklyChange,
