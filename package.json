@@ -43,6 +43,7 @@
     "puppeteer": "^19.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hydration-provider": "^1.0.1",
     "react-markdown": "^8.0.3",
     "react-responsive": "^9.0.0",
     "react-ts-tradingview-widgets": "^1.0.12",

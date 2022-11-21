@@ -4519,6 +4519,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-hydration-provider@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-hydration-provider/-/react-hydration-provider-1.0.1.tgz#ea0793d97dc09a42fc1a8daec29d566b252e08df"
+  integrity sha512-pTxnKs6yVC0bSVQYPiROc2/06VfmJmeQyMseJrDmGt0ciQ5J/zRqIQ7VYjJZYAAevRDAORtqfbiHvWJb5F7qtg==
+
 react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
