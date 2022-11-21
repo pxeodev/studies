@@ -2,6 +2,7 @@ import "../styles/ant.less"
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
+import { HydrationProvider, Client } from "react-hydration-provider";
 
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -39,7 +40,7 @@ function MyApp({ Component, pageProps }) {
   ) : <></>
 
   return (
-    <>
+    <HydrationProvider>
       {googleAnalytics}
       <Head>
        <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
@@ -48,12 +49,16 @@ function MyApp({ Component, pageProps }) {
         <link rel="canonical" href={currentUrl} />
       </Head>
       <DarkModeContext.Provider value={darkMode}>
-        <Header categories={categories} coins={coins} renderSearch={screens.sm}/>
-        <SubHeader categories={categories} coins={coins} render={!screens.sm}/>
+        <Client>
+          <Header categories={categories} coins={coins} renderSearch={screens.sm}/>
+          <SubHeader categories={categories} coins={coins} render={!screens.sm}/>
+        </Client>
         <Component {...pageProps} />
-        <Footer topCoins={topCoins} topCategories={topCategories} />
+        <Client>
+          <Footer topCoins={topCoins} topCategories={topCategories} />
+        </Client>
       </DarkModeContext.Provider>
-    </>
+    </HydrationProvider>
   )
 }
 
