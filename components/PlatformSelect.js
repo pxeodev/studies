@@ -21,7 +21,7 @@ const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
       <Select
         placeholder="More"
         className={platformSelectStyles.selectPlatform}
-        dropdownClassName={platformSelectStyles.selectDropdown}
+        popupClassName={platformSelectStyles.selectDropdown}
         dropdownMatchSelectWidth={false}
       >
         {platforms.slice(1).map((platformData) => {
