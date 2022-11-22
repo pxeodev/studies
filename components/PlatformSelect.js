@@ -59,7 +59,7 @@ const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
         options={platformOptions}
         placeholder="More"
         className={platformSelectStyles.selectPlatform}
-        dropdownClassName={platformSelectStyles.selectDropdown}
+        popupClassName={platformSelectStyles.selectDropdown}
         dropdownMatchSelectWidth={false}
       />
     )
