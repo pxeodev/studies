@@ -282,7 +282,7 @@ const HomePageTable = ({
       if (!marketCap) { return null }
       return (
         <div className={indexTableStyles.value}>
-          {numberFormatter.format(Number(marketCap))}
+          {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
         </div>
       )
     }
