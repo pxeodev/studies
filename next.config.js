@@ -12,7 +12,6 @@ let moduleExports = {
   sentry: {
     hideSourceMaps: true
   },
-  reactStrictMode: true,
   staticPageGenerationTimeout: 60 * 60,
   images: {
     domains: ['assets.coingecko.com'],

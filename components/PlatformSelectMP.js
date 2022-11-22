@@ -1,8 +1,8 @@
 import { Space, Tag, notification } from 'antd'
 import capitalize from 'lodash/capitalize'
+import { Client } from "react-hydration-provider";
 
 import addToClipboard from '../utils/addToClipboard'
-
 import CopyButton from '../components/CopyButton'
 import MetaMaskButton from '../components/MetaMaskButton'
 
@@ -35,8 +35,8 @@ const PlatformSelectMP = ({ image, platform, symbol, address, decimals=18, chain
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {/* <img src={image} alt={symbol} className={platformSelectStyles.icon} /> */}
         <span className={platformSelectStyles.text}><span>{capitalize(platform)}:</span> {displayedAddress}</span>
-        {metamaskButton}
-        <CopyButton text={address} after={showSuccessNotification}/>
+        <Client>{metamaskButton}</Client>
+        <Client><CopyButton text={address} after={showSuccessNotification}/></Client>
       </Space>
     </Tag>
   );

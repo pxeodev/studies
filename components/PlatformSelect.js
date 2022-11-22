@@ -1,5 +1,6 @@
 import { Space, Select, notification } from 'antd'
 import startCase from 'lodash/startCase';
+import { Client } from "react-hydration-provider";
 
 import CopyButton from './CopyButton'
 import MetaMaskButton from './MetaMaskButton'
@@ -15,48 +16,52 @@ const getChainData = (chainsData, platform, platformName) => {
 
 const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
   const upperCaseSymbol = symbol.toUpperCase();
-  let otherPlatforms;
+  let platformSelect;
   if (platforms.length > 1) {
-    otherPlatforms = (
+    const platformOptions = platforms.slice(1).map((platformData) => {
+      const [platform, address] = platformData
+      const platformName = startCase(platform)
+      const chainData = getChainData(chainsData, platform, platformName)
+      const displayedAddress = `${address.substr(0, 6)}...${address.substr(-6)}`
+      const metamaskButton = <MetaMaskButton
+        className={platformSelectStyles.metamaskButton}
+        symbol={upperCaseSymbol}
+        image={images.large}
+        address={address}
+        chainId={chainData?.id}
+      />
+      const afterCopy = () => {
+        notification.open({
+          description: 'Smart contract address copied.'
+        })
+      }
+      return {
+        key: platform,
+        className: platformSelectStyles.option,
+        label: (
+          <Space className={platformSelectStyles.space}>
+            <Space direction="vertical" size={2}>
+              <b>{platformName}</b>
+              {displayedAddress}
+            </Space>
+            <Client>
+              <span>
+                {metamaskButton}
+                <CopyButton text={address} after={afterCopy}/>
+              </span>
+            </Client>
+          </Space>
+        )
+      }
+    })
+    platformSelect = (
       <Select
+        options={platformOptions}
         placeholder="More"
         className={platformSelectStyles.selectPlatform}
-        dropdownClassName={platformSelectStyles.selectDropdown}
+        popupClassName={platformSelectStyles.selectDropdown}
         dropdownMatchSelectWidth={false}
-      >
-        {platforms.slice(1).map((platformData) => {
-          const [platform, address] = platformData
-          const platformName = startCase(platform)
-          const chainData = getChainData(chainsData, platform, platformName)
-          const displayedAddress = `${address.substr(0, 6)}...${address.substr(-6)}`
-          const metamaskButton = <MetaMaskButton
-            className={platformSelectStyles.metamaskButton}
-            symbol={upperCaseSymbol}
-            image={images.large}
-            address={address}
-            chainId={chainData?.id}
-          />
-          const afterCopy = () => {
-            notification.open({
-              description: 'Smart contract address copied.'
-            })
-          }
-          return (
-            <Select.Option key={platform} disabled className={platformSelectStyles.option}>
-              <Space className={platformSelectStyles.space}>
-                <Space direction="vertical" size={2}>
-                  <b>{platformName}</b>
-                  {displayedAddress}
-                </Space>
-                <span>
-                  {metamaskButton}
-                  <CopyButton text={address} after={afterCopy}/>
-                </span>
-              </Space>
-            </Select.Option>
-          )
-        })}
-      </Select>
+      />
     )
   }
 
@@ -71,7 +76,7 @@ const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
         address={firstAddress}
         chainData={chainData}
       />
-      {otherPlatforms}
+      {platformSelect}
     </Space>
   );
 };

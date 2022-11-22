@@ -7,15 +7,13 @@ const Logo = ({ className = '' }) => {
   return (
     <span className={classnames(logoStyles.logo, className)}>
       <Link href="/" key="img">
-        <a>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/coin.svg" alt="Logo" height={24} width={24} className={logoStyles.svg}/>
-        </a>
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/coin.svg" alt="Logo" height={24} width={24} className={logoStyles.svg}/>
+
       </Link>
       <Link href="/" key="title">
-        <a>
-          <span className={logoStyles.text}><b>Coin</b>Rotator</span>
-        </a>
+        <span className={logoStyles.text}><b>Coin</b>Rotator</span>
       </Link>
     </span>
   );
