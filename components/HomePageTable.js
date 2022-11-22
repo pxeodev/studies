@@ -150,7 +150,7 @@ const HomePageTable = ({
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData) => {
         return (
-          (<Link href={`/coin/${coinData.id}`} className={indexTableStyles.coin}>
+          (<Link href={`/coin/${coinData.id}`} className={indexTableStyles.coin} passHref>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
             <span className={indexTableStyles.name}>{coinData.name}</span>
