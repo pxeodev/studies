@@ -244,163 +244,122 @@ Aave,AAVE,"Aave is a DeFi project working as a lending protocol that users can l
 Maker ,MKR,"Maker is a protocol which maintains DAI, a stablecoin designed to track the price of the US dollars, using other crypto assets. MKR is the governance token of the Maker protocol so MKR holders can vote in the MakerDAO to make changes to the protocol, such as which assets can be locked in the protocol and how much would they sell for in liquidation.",Huy,
 Theta Fuel ,TFUEL,"Theta Fuel (TFUEL) is one of the 2 native tokens running on the Theta blockchain, the other being THETA. While THETA is the governance token, TFUEL is used as a utility token and to execute transactions. TFUEL is the gas coin that powers all functions of the Theta blockchain.",Huy,
 Bitcoin SV,BSV,"BSV is the native cryptocurrency of the blockchain called Bitcoin Satoshi’s Vision, which is a hard fork version of the Bitcoin Cash blockchain. Bitcoin Cash itself is another hard fork of the original Bitcoin blockchain. Bitcoin SV aims to “restore the original Satoshi protocol, keep it stable and enable it to massively scale.”",Huy,
-Quant ,QNT,"A complete Quant QNT analysis:
+Quant ,QNT,"# Complete Quant (QNT) Analysis
 
+> ![Quant Network launched in 2018](https://images.surferseo.art/7857c3bd-60bc-40e9-ac3f-4e689e9cc91a.jpeg)
+> 
+> ""To unlock the power of blockchain for everyone, by delivering interoperable ecosystems and real-world solutions that simply work: lowering costs, enabling new business and mitigating risk."" - **Quant Network; Mission and Value**
 
+## What is QNT Network?
 
-
-""To unlock the power of blockchain for everyone, by delivering interoperable ecosystems and real-world solutions that simply work: lowering costs, enabling new business and mitigating risk."" - Quant Network; Mission and Value
-
-
-
-What is Quant (QNT) Network?
-
-
-Quant launched in 2018 and offers a unique solution to the interoperability problem. The company founders highlighted the inability of blockchains to interoperate with both different blockchains and existing legacy networks as the main hurdle to wider blockchain adoption. 
+Quant launched in 2018 and offers a unique solution to the interoperability problem. The company founders highlighted the inability of blockchains to interoperate with both different blockchains and existing legacy networks as the main hurdle to wider blockchain adoption.
 
 Billed as the first interoperable Distributed Ledger Technology (DLT) blockchain Operating System (OS), Quant’s Overledger created a plug-and-play solution to this problem which helps bridge the gap between blockchain and enterprise software, using a simple API interface that doesn't require any additional infrastructure or blockchain development expertise.
 
-The Overledger DLT Gateway allows enterprise and developers to link their preexisting infrastructure to other DLTs and build multi chain applications (mApps) which can access and execute on all underlying networks simultaneously. The Quant Overledger development tools are enterprise-grade built for connecting enterprises, regulatory bodies and public organsisations.
+The Overledger DLT Gateway allows enterprises and developers to link their preexisting infrastructure to other DLTs and build multi DLT applications (mDApps) which can access and execute on all underlying networks simultaneously. The Quant Overledger development tools are enterprise-grade built, for connecting enterprises, regulatory bodies and public organisations.
 
+## Network Ecosystem
 
+The complete Quant ecosystem is comprised of the following components;
 
+-   **Overledger OS**
+    
+-   **Multi-DLT applications (mDApps)**
+    
+-   **Overledger Network**
+    
+-   **Overledger Network Marketplace**
+    
+-   **The Treasury**
+    
+-   **The Quant token**
+    
 
+### **Overledger OS**
 
-What is the Quant Network ecosystem?
+Overledger Operating System (OS) is the core engine. What is now the world's first blockchain agnostic API gateway Operating System, allowing users to connect with multiple DLTs, other Blockchains, Directed Acyclic Graphs (DAGs) or other legacy networks simultaneously via a simple-to-use standardized REST API interface. The Overledger OS license will allow organisations interoperability between internal DLTs. Think of Overledger OS as Windows or Mac OS for the worlds DLTs.
 
-The complete Quant ecosystem is comprised of the following components:
+### **Multi DLT Applications (mDApps)**
 
+What can otherwise be described as “Multi-DLT smart contracts"", are essentially smart contracts which can be built and run on multiple blockchains and DLTs, allowing decentralised applications to leverage the data and features of the underlying DLTs in ways not previously possible.
 
+MDApps allow the user to leverage specific features of the underlying DLT, for example combining the speed of the Binance Smart Chain with the security of the Bitcoin blockchain to settle payments.
 
+![Multi Chain Applications (mApps)](https://images.surferseo.art/7057e949-e968-4995-81d3-0b86e2810aad.jpeg)
 
-Overledger OS
+### **Overledger Network**
 
-Multi-chain apps (mApps)
+The Overledger Network enables Overledger customers to host their own gateways to interoperate and unlock permissioned DLTs and private digital assets. Currently, Overledger Network supports the top enterprise blockchains including Ethereum, Bitcoin, Hyperledger Fabric, Corda, Quorum, [XRP](https://coinrotator.app/coin/ripple) Ledger and the [XDC](https://coinrotator.app/coin/xdce-crowd-sale) Network.
 
-Overledger Network
+![Quant Overledger Network](https://images.surferseo.art/e10c0a7d-8fa0-41ab-8a00-2e77b8a052c2.png)
 
-Overledger Network Marketplace
+### **Overledger Network Marketplace**
 
-The Treasury
+The Overledger Network Marketplace is envisioned to allow participants of the Overledger Network to buy and sell data or digital applications (mDApps) that are derived from or run on the Quant Network ecosystem.
 
-The Quant token
+### **The Quant Treasury**
 
+The Treasury handles fees paid by enterprise clients to access the network in addition to processing the transactions from the Overledger Network Marketplace.
 
-Overledger OS:
+Enterprise access to the Quant Network is priced and paid for in fiat but executed using QNT via smart contract. This QNT is held in the Treasury for the duration of the license.
 
-Overledger Operating System (OS) is the core engine. What is now the world's first blockchain agnostic API gateway Operating System, allowing users to connect with multiple DLTs, other Blockchains, Directed Acyclic Graphs (DAGs) or other legacy networks simultaneously via a simple-to-use standardized REST API interface. The Overlegder OS license will allow organisations interoperability between internal DLTs. Think of Overledger OS as Windows or MacOS for the worlds DLTs.
+## **The Quant Token**
 
+The Quant ERC-20 token has quite appealing tokenomics. Out of a total supply of 14,612.483, 12,072,738 are currently calculated which represents 83% of the max supply. Demand for the token will come in several forms.
 
+### **License Payment**
 
+To access the Quant Network, enterprises, blockchain developers and gateway operators have to purchase annual licenses. The fee is paid in fiat and the subsequent amount in QNT will be locked up in smart contracts for the duration of the license (12 months) thereby further reducing the circulating supply. On expiration, the user will have the option to renew, which would see a further lockup of QNT, or it would otherwise be returned to the Treasury. As the Quant Network grows so will the demand grow for the Quant token.
 
-Multi Chain Applications (mApps):
+### **Platform fees, Add-On-Services,Transaction fees**
 
-What can otherwise be described as “Multi-DLT smart contracts”, these are essentially smart contracts which can be built and run on multiple blockchains and DLTs, allowing decentralised applications to leverage the data and features on the underlying DLTs in ways not previously possible.
+Enterprise clients will need to pay platform fees, again paid in QNT and handled by the Treasury. Transaction fees from the mApps contracts will also be priced in QNT.
 
-'mApps' allow the user to leverage specific features of the underlying DLT, for example combining the speed of the Binance Smart Chain with the security of the Bitcoin blockchain to settle payments.
-
-
-
-
-Overledger Network:
-
-The Overledger Network enables Overledger customers to host their own gateways to interoperate and unlock permissioned DLTs and private digital assets. Currently, Overledger Network supports the top enterprise blockchains including Ethereum, Bitcoin, Hyperledger Fabric, Corda, Quorum, XRP Ledger and the XDC Network.
-
-
-
-
-
-Overledger Network Marketplace:
-
-The Overledger Network Marketplace is envisioned to allow participants of the Overledger Network to buy and sell data or digital applications (mApps) that are derived from or run on the Quant Network ecosystem. 
-
-
-The Quant Treasury:
-
-the Treasury handles fees paid by enterprise clients to access the network in addition to processing the transactions from the Overledger Network Marketplace .
-
-Enterprise access to the Quant Network is priced and paid for in fiat but executed using QNT via smart contract. This QNT is held in the Treasury for the duration of the license. 
-
-
-The Quant token:
-
-the Quant erc-20 token has quite appealing tokenomics. Out of a total supply of 14,612.483, 12,072,738 are currently calculating which represents 83% of the max supply. Demand for the token will come in the form of:
-
-
-License payment;
-
-to access the Quant Network enterprises, blockchain developers and gateway operators have to purchase annual licenses. The fee is paid in fiat and the subsequent amount in QNT will be locked up in smart contracts for the duration of license (12 months) thereby further reducing the circulating supply. On expiration, the user will have the option to renew, which would see a further lockup of QNT, or it would otherwise be returned to the Tresury. As the Quant Network grows so will the demand grow for the Quant token.
-
-
-
-
-Platform fees, Add-On-Services,Transaction fees: ;
-
-Enterprise clients will need to pay Platform fees, again paid in QNT and handled by the Tresury. Transaction fees from the mApps contracts will also be priced in QNT.
-
-
-
-
-Multi Chain Oracles:
+### **Multi Chain Oracles**
 
 Data providers can choose to sell their off-chain data to the Overledger Network community. This will be paid for in QNT.
 
+### **Quant Gateway Staking**
 
+QNT will have to be locked by Gateway Operators when they process requests within the Overledger Network.
 
+### **Signing of Transactions**
 
-Quant Gateway Staking:
+QNT will be needed to validate, sign and encrypt if necessary, all transactions within the Quant ecosystem.
 
-QNT will have to be locked by Gateway Operators when they process requests within the Overlegder Network. 
+## Who is the Team Behind QNT?
 
+The Quant Network was the brainchild of current CEO Gilbert Verdian who founded the company in 2015. Verdian has a long and distinguished history working with banks, regulators and cyber security.
 
+Previous positions were held at the UK's Ministry of Justice; the Bank of England’s CMORG Cyber Unit (2016) and on the Federal Reserve’s Secure Payment Task Force (2018). Verdian even established the ISO/TC 307 benchmark, which has the scope of the ‘Standardisation of blockchain technologies and distributed ledger technologies' according to the website.
 
+![Quant CEO Gilbert Verdian](https://images.surferseo.art/53bba0b1-3057-46fd-ae70-26370e960bbd.jpeg)
 
-Signing of transactions;
-
-QNT will be needed to validate, and sign and encrypt if necessary, all transactions within the Quant ecosystem. 
-
-
-
-
-
-
-
-Who is the Team behind Quant QNT?
-
-The Quant Network was the brainchild of current CEO Gilbert Verdian who founded the company in 2015. Verdian has a long and distinguished history working with banks, regulators, and cyber security.
-
-Previous positions include Ministry of Justice U.K; Security Lead (2012), Bank of England’s CMORG Cyber Unit (2016) and Federal Reserve’s Secure Payment Task Force (2018). Verdian even established the ISO/TC 307 benchmark, which has the scope of the ‘Standardisation of blockchain technologies and distributed ledger technologies' according to the website.
-
-
-
-What are the current and future partnerships of Quant (QNT) Network?
+## What are the Current and Future Partnerships of Quant Network?
 
 The Quant team are known for keeping their cards close to their chest when it comes to partnerships, but the ones we know about are impressive.
 
-Quant Network is currently partnered with Oracle, the worlds largest database management company. LACCHAIN, a global alliance led by IDB lab of the Inter-American Development Bank. SIA, now part of the Nexi Group, one of the worlds largest payment solutions groups.
+Quant Network is currently partnered with Oracle, the world's largest database management company. LACCHAIN, a global alliance led by IDB Lab of the Inter-American Development Bank. SIA, now part of the Nexi Group, one of the worlds largest payment solutions groups.
 
-In addition, Quant is in talks with Central Banks including the European Central Bank., Federal Reserve of the U.S., the Bank for International Settlements, and finance regulatory bodies such as the Financial Conduct Authority.
+In addition, Quant is in talks with Central Banks including the European Central Bank., the Federal Reserve, the Bank for International Settlements and finance regulatory bodies such as the UK's Financial Conduct Authority.
 
-Quant are also members of the Digital Pound Foundation in the UK, tasked with the implementation of a Digital Pound (Central Bank Digital Currency CBDC).
+Quant are also members of the Digital Pound Foundation in the UK, tasked with the implementation of the Digital Pound, a Central Bank Digital Currency.
 
+## QNT Main Competitors
 
+Other projects that are attempting to address the interoperability problem include [Cosmos](https://coinrotator.app/coin/cosmos), [Polkadot](https://coinrotator.app/coin/polkadot), [AION](https://coinrotator.app/coin/aion), [ICON](https://coinrotator.app/coin/icon) as well as Ripple Lab's Interledger. Gilbert Verdian suggests there are limitations in these projects solving interoperability without adding additional complexities, technical risk and overheads. Verdian argues Overledger is best positioned to solve interoperability at the enterprise level. In a recent paper he stated:
 
+_""Overledger is the_ **_only_** _platform to facilitate internet-scale development and deployment of decentralised, multi-chain applications (MApps) and Treaty Contracts (multi-chain smart contracts)_
 
-Conclusion
+_Overledger’s the only technology that allows for true N:N interoperability, meeting external security and regulatory requirements, and require minimal change to existing systems and networks to access the networks of blockchains through Overledger.""_
 
-In summary, Quant Network is a uniquely positioned blockchain project in the current crypto market. They had the foresight to envision that seamless interoperability was needed before mass adoption of blockchain technology and DLT was to occur. This included inter-blockchain communication, as well as integrating existing DLTs and enterprise systems. While still early in the game, the Quant Networks vision of full interoperability is fast becoming reality.
+## TLDR
 
-The Quant QNT coin is available on all major cryptocurrency exchanges. QNT currently has a market cap of only $1,476,884,131. The QNT Quant price currently sits at $129.30 which marks a roughly 70% retrace from its all time high price of $395.22.
+In summary, Quant Network is a uniquely positioned blockchain project in the current crypto market. They had the foresight to envision that seamless interoperability was needed before mass adoption of blockchain technology and DLT was to occur. This included inter-blockchain communication, as well as integrating existing DLTs and enterprise systems. While still early in the game, Quant Networks' vision of full interoperability is fast becoming reality.
 
-Those investing with a long term view could find the current price attractive, although as ever the reader should do their own research and this is not intended as investment advice.
-
-
-
-
-
-
-
-
+The Quant QNT coin is available on all major cryptocurrency exchanges including Binance, Coinbase and Kucoin. QNT currently has a market cap of only {{marketcap}}. The QNT Quant price currently sits at {{currentprice}} which marks a roughly {{percentagefromath}} retrace from it's all-time high price of {{ath}}.  
+  
+Those investing with a long-term view could find the current price attractive, although the reader should do their own research and this is not intended as investment advice.
 ",Tom,yes
 Huobi Token,HT,"A native token of the Huobi Global exchange, Huobi Token (hT) is a crypto asset built on the Ethereum blockchain and is ERC-20 compliant. HT can be used to reduce fees for trading operations on the exchange, as well as getting a monthly VIP status, receive crypto rewards for seasonal buybacks and vote on the exchange governance.",Huy,
 Arweave,AR,"Arweave specializes in storing data, working as a decentralized storage network and describing itself as “a collectively owned hard drive that never forgets”. Arweave hosts a permanent and decentralized website containing community-driven applications and platforms, using AR to pay miners to maintain the network.",Huy,
