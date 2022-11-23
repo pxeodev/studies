@@ -12,8 +12,10 @@ const AnalysisTab = ({ coin, screens }) => {
   const priceAppreciationToAthPercentage = (coin.ath / coin.currentPrice) * 100
   const today = new Date()
   let circulatingSupplyPercentage
+  let outstandingSuppplyPercentage
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
+    outstandingSuppplyPercentage = 100 - circulatingSupplyPercentage
   }
   const numberFormatter = new Intl.NumberFormat([], { notation })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
@@ -29,6 +31,7 @@ const AnalysisTab = ({ coin, screens }) => {
     .replaceAll('{{percentagefromatl}}', `${numberFormatter.format(percentageFromAtl)}%`)
     .replaceAll('{{circulatingsupply}}', numberFormatter.format(coin.circulatingSupply))
     .replaceAll('{{percentagecirculatingsupply}}', `${numberFormatter.format(circulatingSupplyPercentage)}%`)
+    .replaceAll('{{percentageoutstandingsupply}}', `${numberFormatter.format(outstandingSuppplyPercentage)}%`)
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
     .replaceAll('{{maxsupply}}', numberFormatter.format(coin.maxSupply))
     .replaceAll('{{percentageappreciationtoath}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
@@ -36,6 +39,7 @@ const AnalysisTab = ({ coin, screens }) => {
     .replaceAll('{{day}}', today.getDate())
     .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
     .replaceAll('{{year}}', today.getFullYear())
+    .replaceAll('{{name}}', coin.name)
 
   return (<>
       {coin.description ? (
