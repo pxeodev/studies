@@ -14,7 +14,7 @@ const DarkModeSwitch = ({ darkMode, setDarkMode }) => {
       <span>
         {
           // eslint-disable-next-line @next/next/no-img-element
-          darkMode ? <><img alt="sun" src="/light_mode.svg"/><span>Light</span></> : <><img alt="moon" src="/dark_mode.svg"/><span>Dark</span></>
+          darkMode ? <img alt="sun" src="/light_mode.svg"/> : <img alt="moon" src="/dark_mode.svg"/>
         }
       </span>
     </div>
