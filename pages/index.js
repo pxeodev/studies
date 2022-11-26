@@ -30,7 +30,7 @@ import getTrends from '../utils/getTrends.mjs'
 import indexStyles from '../styles/index.module.less'
 import baseStyles from '../styles/base.module.less'
 
-const { Title, Paragraph, Text } = Typography;
+const { Text } = Typography;
 const { Option, OptGroup } = Select;
 const { Content } = Layout;
 
@@ -469,8 +469,6 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
     <Content className={indexStyles.container}>
       {/* For quick alerts: */}
       {/* <Alert message={<span>Win 100 USDT. Please answer our <b>super brief</b> CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank' rel='noreferrer'>survey</a>.</span>} type="info" closable className={indexStyles.message}/> */}
-      <Title className={indexStyles.title}>Search For The Most Profitable Coins</Title>
-      <Paragraph className={indexStyles.subtitle} type="secondary"><span>CoinRotator</span> tracks price trends for the top 1,000 cryptocurrencies, all updated daily on a single dashboard. Instantly check the coin screener for each market using our proprietary version of the Supertrend.</Paragraph>
       <Button type="primary" className={indexStyles.marketHealthButton} onClick={() => setMarketHealthModalVisible(true)}>Market Health</Button>
       <Card className={indexStyles.filters}>
         <Row className={indexStyles.row} type="flex" gutter={16}>
