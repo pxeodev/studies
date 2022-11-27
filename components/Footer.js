@@ -6,7 +6,7 @@ import useBreakPoint from '../hooks/useBreakPoint'
 
 import footerStyles from '../styles/footer.module.less'
 
-const Footer = ({ topCategories }) => {
+const Footer = () => {
   const { Footer: AntFooter } = Layout;
   const { Text, Paragraph, Link: LinkText } = Typography;
 
@@ -19,21 +19,6 @@ const Footer = ({ topCategories }) => {
 
   const verticalDivider = <Divider type="vertical" className={footerStyles.verticalDivider} />
   const horizontalDivider = <Divider className={footerStyles.horizontalDivider} />
-
-  const topCategoriesBlock = <>
-    <Space direction="vertical" size={12}>
-      <Text type="secondary" strong>Top Categories</Text>
-      {topCategories.map(category =>
-      (
-        <Link href={`/?category=${category}`} key={category} passHref>
-          <LinkText>
-            {category}
-          </LinkText>
-        </Link>
-      )
-      )}
-    </Space>
-  </>
 
   const quickLinksBlock = <>
     <Space direction="vertical" size={12}>
@@ -92,9 +77,6 @@ const Footer = ({ topCategories }) => {
           {verticalDivider}
         </Col>
         <Col span={4}>
-          {topCategoriesBlock}
-        </Col>
-        <Col span={4}>
           {quickLinksBlock}
         </Col>
         <Col span={4}>
@@ -113,9 +95,6 @@ const Footer = ({ topCategories }) => {
         </Row>
         <Row gutter={16}>
           <Col span={6}>
-            {topCategoriesBlock}
-          </Col>
-          <Col span={6}>
             {quickLinksBlock}
           </Col>
           <Col span={6}>
@@ -132,11 +111,6 @@ const Footer = ({ topCategories }) => {
         </Row>
         <Row>
           <Col span={24}>{horizontalDivider}</Col>
-        </Row>
-        <Row gutter={10}>
-          <Col span={12}>
-            {topCategoriesBlock}
-          </Col>
         </Row>
         <Row gutter={10} className={footerStyles.lastRow}>
           <Col span={12}>
@@ -156,11 +130,6 @@ const Footer = ({ topCategories }) => {
         </Row>
         <Row>
           <Col span={24}>{horizontalDivider}</Col>
-        </Row>
-        <Row gutter={10}>
-          <Col span={12}>
-            {topCategoriesBlock}
-          </Col>
         </Row>
         <Row gutter={10}>
           <Col span={24} className={footerStyles.lastRow}>
