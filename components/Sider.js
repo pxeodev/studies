@@ -25,8 +25,8 @@ const Sider = ({ categories, coins }) => {
     >
       <Logo className={styles.logo}/>
       <Space size={12}>
-        <Search categories={categories} coins={coins} />
-        <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Search categories={categories} coins={coins} collapsed={collapsed} />
+        { collapsed ? <></> : <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Space>
     </Layout.Sider>
   );

@@ -1,5 +1,5 @@
 import { Select } from 'antd'
-import { SearchOutlined, CloseOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import classnames from 'classnames'
@@ -8,7 +8,7 @@ import searchStyles from '../styles/search.module.less'
 
 const { Option, OptGroup } = Select;
 
-const Search = ({ categories, coins }) => {
+const Search = ({ categories, coins, collapsed }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter()
   const selectRef = useRef(null)
@@ -63,9 +63,9 @@ const Search = ({ categories, coins }) => {
       ref={selectRef}
       placeholder={<>
         <SearchOutlined className={searchStyles.placeholderMagnifier} />
-        <span className={searchStyles.placeholderText}>Search</span>
+        {collapsed ? '' : <span className={searchStyles.placeholderText}>Search</span>}
       </>}
-      className={searchStyles.search}
+      className={classnames(searchStyles.search, {[searchStyles.collapsed]: collapsed})}
       suffixIcon={null}
       onDropdownVisibleChange={() => setIsOpen(!isOpen)}
       onSelect={(value, target) => {
