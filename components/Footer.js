@@ -208,9 +208,6 @@ const Footer = ({ topCoins, topCategories }) => {
       <div className={footerStyles.footerPrimary}>
         {grid}
       </div>
-      <Typography.Paragraph className={footerStyles.footerSecondary} type="secondary">
-        Proudly funded in part by <a href="https://gamblersarea.com/" target="_blank" rel="noreferrer">GamblersArea</a>
-      </Typography.Paragraph>
     </AntFooter>
   );
 }
