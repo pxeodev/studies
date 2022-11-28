@@ -1,7 +1,12 @@
 {
   "name": "coinrotator",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "private": true,
+  "author": {
+    "name": "Sascha Mayr",
+    "email": "mayr.sascha@gmail.com",
+    "url": "https://saschamayr.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,8 +17,7 @@
     "monthly": "swc scripts/monthly.js -o dist/monthly.mjs",
     "bot": "swc scripts/bot.js -o dist/bot.mjs",
     "trendHistory": "swc scripts/trendHistory.js -o dist/trendHistory.mjs",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@ant-design/plots": "^1.2.2",
