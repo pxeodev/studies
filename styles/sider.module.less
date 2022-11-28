@@ -127,4 +127,28 @@
   width: 100%;
   padding: 12px;
   text-align: center;
+
+  .socials {
+    a {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100px;
+      background-color: var(--cr-secondary-bg);
+
+      &:hover {
+        background-color: @divider-color;
+      }
+    }
+
+    img {
+      width: 24px;
+    }
+
+    .mediumIcon {
+      fill: var(--cr-primary-text);
+    }
+  }
 }

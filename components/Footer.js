@@ -35,34 +35,6 @@ const Footer = () => {
     </Space>
   </>
 
-  const socialMediaBlock = <>
-    <Space direction="vertical" size={12} className={footerStyles.socials}>
-      <Text type="secondary" strong>Social Media</Text>
-      <Space size={12}>
-        <a href="https://discord.gg/zfnxHyrhSK" target="_blank" rel="noreferrer">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/discord.svg" alt="Discord Logo" width={24} height={19} />
-        </a>
-        <a href="https://twitter.com/coinrotatorapp" target="_blank" rel="noreferrer">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/twitter.svg" alt="Twitter Logo" width={24} height={20} />
-        </a>
-        <a href="https://coinrotator.medium.com/" target="_blank" rel="noreferrer">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13.5374 11.8277C13.5374 15.5984 10.5069 18.6552 6.76884 18.6552C3.03073 18.6552 0 15.5977 0 11.8277C0 8.05767 3.0305 5 6.76884 5C10.5072 5 13.5374 8.05698 13.5374 11.8277Z" className={footerStyles.mediumIcon}/>
-            <path d="M20.9628 11.8277C20.9628 15.377 19.4476 18.2555 17.5784 18.2555C15.7092 18.2555 14.194 15.377 14.194 11.8277C14.194 8.2784 15.709 5.39996 17.5782 5.39996C19.4473 5.39996 20.9626 8.27748 20.9626 11.8277" className={footerStyles.mediumIcon}/>
-            <path d="M24 11.8277C24 15.007 23.4671 17.586 22.8096 17.586C22.1522 17.586 21.6196 15.0077 21.6196 11.8277C21.6196 8.6477 22.1524 6.06946 22.8096 6.06946C23.4669 6.06946 24 8.64747 24 11.8277Z" className={footerStyles.mediumIcon}/>
-          </svg>
-        </a>
-        <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank" rel="noreferrer">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/telegram.svg" alt="Telegram Logo" width={24} height={24} />
-        </a>
-      </Space>
-    </Space>
-  </>
-
   const screens = useBreakPoint();
 
   let grid;
@@ -79,9 +51,6 @@ const Footer = () => {
         <Col span={4}>
           {quickLinksBlock}
         </Col>
-        <Col span={4}>
-          {socialMediaBlock}
-        </Col>
       </Row>
     )
   } else if (screens.lg) {
@@ -96,9 +65,6 @@ const Footer = () => {
         <Row gutter={16}>
           <Col span={6}>
             {quickLinksBlock}
-          </Col>
-          <Col span={6}>
-            {socialMediaBlock}
           </Col>
         </Row>
       </>
@@ -116,9 +82,6 @@ const Footer = () => {
           <Col span={12}>
             {quickLinksBlock}
           </Col>
-          <Col span={12}>
-            {socialMediaBlock}
-          </Col>
         </Row>
       </span>
     )
@@ -134,11 +97,6 @@ const Footer = () => {
         <Row gutter={10}>
           <Col span={24} className={footerStyles.lastRow}>
             {quickLinksBlock}
-          </Col>
-        </Row>
-        <Row gutter={10} className={footerStyles.lastRow}>
-          <Col span={24}>
-            {socialMediaBlock}
           </Col>
         </Row>
       </span>
