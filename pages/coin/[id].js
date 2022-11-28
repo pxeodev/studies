@@ -137,120 +137,118 @@ export default function Coin(coin) {
     }
   }, [])
 
-  return (
-    <>
-      <Head>
-        <title key="title">{metaTitle}</title>
-        <meta name="description" key="description" content={metaDescription}/>
-        <meta property="og:title" content={ogTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:url" content={coin.currentUrl} />
-        <meta property="og:type" content="app" />
-        <meta property="og:locale" content="en_US" />
-        <meta property="og:image" content={coin.images.large} />
-        <meta property="og:image:width" content="250" />
-        <meta property="og:image:height" content="250" />
-        <meta property="og:image:type" content="image/png" />
-      </Head>
-      <Content className={baseStyles.container}>
-        <Breadcrumb className={baseStyles.breadcrumbs}>
-          <Breadcrumb.Item><Link href="/"><a className={baseStyles.homeBreadCrumb} >Home</a></Link></Breadcrumb.Item>
-          <Breadcrumb.Item><Link href={`/coin/${coin.id}`}><a>{coin.name}</a></Link></Breadcrumb.Item>
-        </Breadcrumb>
-        <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
-          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
-            <Space>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
-              <Title className={coinStyles.title}>{coin.name}</Title>
-              <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
+  return <>
+    <Head>
+      <title key="title">{metaTitle}</title>
+      <meta name="description" key="description" content={metaDescription}/>
+      <meta property="og:title" content={ogTitle} />
+      <meta property="og:description" content={metaDescription} />
+      <meta property="og:url" content={coin.currentUrl} />
+      <meta property="og:type" content="app" />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:image" content={coin.images.large} />
+      <meta property="og:image:width" content="250" />
+      <meta property="og:image:height" content="250" />
+      <meta property="og:image:type" content="image/png" />
+    </Head>
+    <Content className={baseStyles.container}>
+      <Breadcrumb className={baseStyles.breadcrumbs}>
+        <Breadcrumb.Item><Link href="/" className={baseStyles.homeBreadCrumb}>Home</Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link href={`/coin/${coin.id}`}>{coin.name}</Link></Breadcrumb.Item>
+      </Breadcrumb>
+      <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
+        <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
+          <Space>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
+            <Title className={coinStyles.title}>{coin.name}</Title>
+            <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
+          </Space>
+        </Card.Grid>
+        <div className={coinStyles.sectionsDailyAndWeekly}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
+            <Space direction="vertical">
+              <Space>
+                <b>Daily Trend</b>
+                <Tooltip
+                  placement={screens.sm ? 'bottom' : 'bottomRight'}
+                  overlayClassName={coinStyles.tooltip}
+                  trigger={isHoverable ? 'hover' : 'click'}
+                  title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 1 AM UTC"
+                >
+                  <InfoCircleFilled className={coinStyles.signalExplainer} />
+                </Tooltip>
+              </Space>
+              <Space size={12} className={coinStyles.trendTag} wrap>
+                {dailySignalTag}
+                {Object.keys(coin.dailyTrends).map((trendKey) => {
+                  const trend = coin.dailyTrends[trendKey]
+                  const trendText = `${trend[0]} (${trend[1]})`
+                  return (
+                    <Tag key={trendKey}>
+                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                      {trendText}
+                    </Tag>
+                  )
+                })}
+              </Space>
             </Space>
           </Card.Grid>
-          <div className={coinStyles.sectionsDailyAndWeekly}>
-            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
-              <Space direction="vertical">
-                <Space>
-                  <b>Daily Trend</b>
-                  <Tooltip
-                    placement={screens.sm ? 'bottom' : 'bottomRight'}
-                    overlayClassName={coinStyles.tooltip}
-                    trigger={isHoverable ? 'hover' : 'click'}
-                    title="The numbers in parenthesis indicate the trend streak - how many days a coin has been a UP or DOWN trend against ETH, BTC or USD. Daily updated at 1 AM UTC"
-                  >
-                    <InfoCircleFilled className={coinStyles.signalExplainer} />
-                  </Tooltip>
-                </Space>
-                <Space size={12} className={coinStyles.trendTag} wrap>
-                  {dailySignalTag}
-                  {Object.keys(coin.dailyTrends).map((trendKey) => {
-                    const trend = coin.dailyTrends[trendKey]
-                    const trendText = `${trend[0]} (${trend[1]})`
-                    return (
-                      <Tag key={trendKey}>
-                        <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                        {trendText}
-                      </Tag>
-                    )
-                  })}
-                </Space>
-              </Space>
-            </Card.Grid>
-            <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
-              <Space direction="vertical">
-                <Space>
-                  <b>Weekly Trend</b>
-                  <Tooltip
-                    placement={screens.sm ? 'bottom' : 'bottomRight'}
-                    overlayClassName={coinStyles.tooltip}
-                    trigger={isHoverable ? 'hover' : 'click'}
-                    title="The numbers in parenthesis indicate the trend streak - how many weeks a coin has been a UP or DOWN trend against ETH, BTC or USD."
-                  >
-                    <InfoCircleFilled className={coinStyles.signalExplainer} />
-                  </Tooltip>
-                </Space>
-                <Space size={12} className={coinStyles.trendTag} wrap>
-                  {weeklySignalTag}
-                  {Object.keys(coin.weeklyTrends).map((trendKey) => {
-                    const trend = coin.weeklyTrends[trendKey]
-                    const trendText = `${trend[0]} (${trend[1]})`
-                    return (
-                      <Tag key={trendKey}>
-                        <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
-                        {trendText}
-                      </Tag>
-                    )
-                  })}
-                </Space>
-              </Space>
-            </Card.Grid>
-          </div>
-          {Object.values(TABS).map((tab) => {
-            return (
-              <Card.Grid
-                hoverable={false}
-                key={tab}
-                onClick={() => clickTab(tab)}
-                className={classnames(coinStyles.tab, {
-                  [coinStyles.active]: tab === activeTab,
-                  [coinStyles.noRightBorder]: tab === TABS.pricedata,
-                  [coinStyles.noLeftBorder]: tab === TABS.trade
-                })}
-              >
-                <Title
-                  id={tab}
-                  level={2}
-                  className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
+            <Space direction="vertical">
+              <Space>
+                <b>Weekly Trend</b>
+                <Tooltip
+                  placement={screens.sm ? 'bottom' : 'bottomRight'}
+                  overlayClassName={coinStyles.tooltip}
+                  trigger={isHoverable ? 'hover' : 'click'}
+                  title="The numbers in parenthesis indicate the trend streak - how many weeks a coin has been a UP or DOWN trend against ETH, BTC or USD."
                 >
-                  {tab}
-                </Title>
-              </Card.Grid>
-            );
-          })}
-          <ActiveTabComponent coin={coin} screens={screens} />
-        </Card>
-      </Content>
-    </>
-  );
+                  <InfoCircleFilled className={coinStyles.signalExplainer} />
+                </Tooltip>
+              </Space>
+              <Space size={12} className={coinStyles.trendTag} wrap>
+                {weeklySignalTag}
+                {Object.keys(coin.weeklyTrends).map((trendKey) => {
+                  const trend = coin.weeklyTrends[trendKey]
+                  const trendText = `${trend[0]} (${trend[1]})`
+                  return (
+                    <Tag key={trendKey}>
+                      <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
+                      {trendText}
+                    </Tag>
+                  )
+                })}
+              </Space>
+            </Space>
+          </Card.Grid>
+        </div>
+        {Object.values(TABS).map((tab) => {
+          return (
+            <Card.Grid
+              hoverable={false}
+              key={tab}
+              onClick={() => clickTab(tab)}
+              className={classnames(coinStyles.tab, {
+                [coinStyles.active]: tab === activeTab,
+                [coinStyles.noRightBorder]: tab === TABS.pricedata,
+                [coinStyles.noLeftBorder]: tab === TABS.trade
+              })}
+            >
+              <Title
+                id={tab}
+                level={2}
+                className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}
+              >
+                {tab}
+              </Title>
+            </Card.Grid>
+          );
+        })}
+        <ActiveTabComponent coin={coin} screens={screens} />
+      </Card>
+    </Content>
+  </>;
 }
 
 export async function getStaticPaths() {

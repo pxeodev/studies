@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { Layout } from 'antd'
 import { createContext } from "react"
+import { HydrationProvider, Client } from "react-hydration-provider";
 
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -41,23 +42,29 @@ function MyApp({ Component, pageProps }) {
   ) : <></>
 
   return (
-    <DarkModeContext.Provider value={darkMode}>
-      <Layout>
-        {googleAnalytics}
-        <Head>
-          <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
-          <meta name="description" key="description" content="A crypto screener spotting high momentum trades using the popular Supertrend. Check CoinRotator each day to ensure you are trading with the trend."/>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          <link rel="canonical" href={currentUrl} />
-        </Head>
-        { screens.md && <Sider topCategories={topCategories} categories={categories} coins={coins} /> }
-        <Layout className={baseStyles.innerLayout}>
-          <Header categories={categories} coins={coins} screens={screens}/>
-          <Component {...pageProps} />
-          <Footer />
+    <HydrationProvider>
+      <DarkModeContext.Provider value={darkMode}>
+        <Layout>
+          {googleAnalytics}
+          <Head>
+            <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
+            <meta name="description" key="description" content="A crypto screener spotting high momentum trades using the popular Supertrend. Check CoinRotator each day to ensure you are trading with the trend."/>
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            <link rel="canonical" href={currentUrl} />
+          </Head>
+          <Client>
+            { screens.md && <Sider topCategories={topCategories} categories={categories} coins={coins} /> }
+          </Client>
+          <Layout className={baseStyles.innerLayout}>
+            <Client>
+              <Header categories={categories} coins={coins} screens={screens}/>
+            </Client>
+            <Component {...pageProps} />
+            <Footer />
+          </Layout>
         </Layout>
-      </Layout>
-    </DarkModeContext.Provider>
+      </DarkModeContext.Provider>
+    </HydrationProvider>
   )
 }
 

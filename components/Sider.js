@@ -40,32 +40,32 @@ const Sider = ({ topCategories, categories, coins }) => {
         key: 'data',
         children: [
           {
-            label: <Link href="watch-list"><a>Watchlist</a></Link>,
+            label: <Link href="watch-list">Watchlist</Link>,
             key: 'watch-list',
             icon: <StarFilled className={styles.sunsetOrange} />
           },
           {
-            label: <Link href="trends"><a>Trends</a></Link>,
+            label: <Link href="trends">Trends</Link>,
             key: 'trends',
             icon: <UpCircleFilled className={styles.polarGreen} />
           },
           {
-            label: <Link href="market-health"><a>Market Health</a></Link>,
+            label: <Link href="market-health">Market Health</Link>,
             key: 'market-health',
             icon: <HeartFilled className={styles.dustRed} />
           },
           {
-            label: <Link href="top-coins"><a>Top Coins</a></Link>,
+            label: <Link href="top-coins">Top Coins</Link>,
             key: 'top-coins',
             icon: <RiseOutlined className={styles.geekBlue} />
           },
           {
-            label: <Link href="gainers-and-losers"><a>Gainers & Losers</a></Link>,
+            label: <Link href="gainers-and-losers">Gainers & Losers</Link>,
             key: 'gainers-and-losers',
             icon: <LineChartOutlined className={styles.goldenPurple} />
           },
           {
-            label: <Link href="new-pairs"><a>New Pairs</a></Link>,
+            label: <Link href="new-pairs">New Pairs</Link>,
             key: 'new-pairs',
             icon: <AlertFilled className={styles.daybreakBlue} />
           },
@@ -76,7 +76,7 @@ const Sider = ({ topCategories, categories, coins }) => {
         key: 'topcategories',
         children: topCategories.map((category) => {
           return {
-            label: <Link href={`/?category=${category}`}><a>{category}</a></Link>,
+            label: <Link href={`/?category=${category}`}>{category}</Link>,
             key: category
           }
         })
@@ -94,12 +94,12 @@ const Sider = ({ topCategories, categories, coins }) => {
             icon: <TeamOutlined className={styles.geekBlue} />
           },
           {
-            label: <Link href="faq"><a>FAQ</a></Link>,
+            label: <Link href="faq">FAQ</Link>,
             key: 'faq',
             icon: <QuestionCircleFilled className={styles.sunsetOrange} />
           },
           {
-            label: <Link href="terms"><a>Terms & Conditions</a></Link>,
+            label: <Link href="terms">Terms & Conditions</Link>,
             key: 'terms',
             icon: <ContainerFilled className={styles.polarGreen} />
           }

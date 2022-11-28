@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import classnames from 'classnames'
+import { useHydrated } from "react-hydration-provider";
 
 import UpTag from './UpTag'
 import DownTag from './DownTag'
@@ -38,6 +39,7 @@ const HomePageTable = ({
 
   const router = useRouter()
   const isHoverable = useIsHoverable()
+  const hydrated = useHydrated()
 
   if (superTrendFlavor === SUPERTREND_FLAVOR.classic) {
     coinsData = coinsData.map((coinData) => {
@@ -101,7 +103,19 @@ const HomePageTable = ({
       shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative.market))
     }
     shownDerivatives = shownDerivatives.sort((derivative) => preferredExchanges.includes(derivative.market) ? -1 : 1)
-    let shownExchanges = coinData.exchanges.sort((exchange) => preferredExchanges.includes(exchange[0]) ? -1 : 1)
+    let shownExchanges = coinData.exchanges.sort((exchangeA, exchangeB) => {
+      if (preferredExchanges.includes(exchangeA[0])) {
+        if (preferredExchanges.includes(exchangeB[0])) {
+          return exchangeB[1] - exchangeA[1]
+        } else {
+          return -1
+        }
+      } else if (preferredExchanges.includes(exchangeB[0])) {
+        return 1;
+      } else {
+        return exchangeB[1] - exchangeA[1]
+      }
+    })
     shownExchanges = shownExchanges.slice(0, 5)
     return {
       key: `${coinData.id}-${coinData.name}`,
@@ -132,19 +146,17 @@ const HomePageTable = ({
       title: 'Coin',
       width: 200,
       dataIndex: 'coinData',
-      fixed: screens.lg ? null : 'left',
+      fixed: hydrated ? (screens.lg ? null : 'left') : null,
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData) => {
         return (
-          <Link href={`/coin/${coinData.id}`}>
-            <a className={indexTableStyles.coin}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
-              <span className={indexTableStyles.name}>{coinData.name}</span>
-              <span className={indexTableStyles.symbol}>{coinData.symbol}</span>
-            </a>
-          </Link>
-        )
+          (<Link href={`/coin/${coinData.id}`} className={indexTableStyles.coin} passHref>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
+            <span className={indexTableStyles.name}>{coinData.name}</span>
+            <span className={indexTableStyles.symbol}>{coinData.symbol}</span>
+          </Link>)
+        );
       }
     },
     {
@@ -270,7 +282,7 @@ const HomePageTable = ({
       if (!marketCap) { return null }
       return (
         <div className={indexTableStyles.value}>
-          {numberFormatter.format(Number(marketCap))}
+          {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
         </div>
       )
     }
@@ -297,10 +309,8 @@ const HomePageTable = ({
         {exchanges.map((exchange) => {
           let matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
           const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
-          const onTagClick = (e) => {
-            e.stopPropagation()
+          const onTagClick = () =>
             router.push(`/coin/${data.coinData.id}?tab=Trade`)
-          }
           // eslint-disable-next-line @next/next/no-img-element
           return <img
             src={matchingExchangeImage}
@@ -326,12 +336,11 @@ const HomePageTable = ({
     render: (derivatives, data) => {
       return <span title="Top derivatives. Click to see more.">
         {derivatives.map((derivative) => {
-          const onTagClick = (e) => {
-            // e.stopPropagation()
+          const onTagClick = () => {
             router.push(`/coin/${data.coinData.id}?tab=Trade&filter=Derivatives`)
           }
           return <Tag
-            key={derivative.symbol}
+            key={`${derivative.market}${derivative.symbol}`}
             onClick={onTagClick}
             className={indexTableStyles.clickableTag}
           >{derivative.symbol}</Tag>
