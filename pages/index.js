@@ -469,13 +469,10 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
     <Content className={indexStyles.container}>
       {/* For quick alerts: */}
       {/* <Alert message={<span>Win 100 USDT. Please answer our <b>super brief</b> CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank' rel='noreferrer'>survey</a>.</span>} type="info" closable className={indexStyles.message}/> */}
-      <Button type="primary" className={indexStyles.marketHealthButton} onClick={() => setMarketHealthModalVisible(true)}>Market Health</Button>
       <Card className={indexStyles.filters}>
         <Row className={indexStyles.row} type="flex" gutter={16}>
           <Col xs={24} md={6} className={indexStyles.col}>
-            <label htmlFor="coin-name">Coin</label>
             <Input
-              id="coin-name"
               ref={inputRef}
               placeholder="Bitcoin, ETH, Polygon..."
               allowClear
@@ -483,44 +480,6 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
               onChange={(e) => setPortfolioInputValue(e.target.value)}
               size="large"
             />
-          </Col>
-          <Col xs={24} md={6} className={indexStyles.col}>
-            <label htmlFor="signal">Trend</label>
-            <Select
-              size="large"
-              value={formState.trendType}
-              onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
-              id="signal"
-              className={indexStyles.select}
-            >
-              <Option value={signals.all}>All</Option>
-              <Option value={signals.buy}>UP</Option>
-              <Option value={signals.hodl}>HODL</Option>
-              <Option value={signals.sell}>DOWN</Option>
-            </Select>
-          </Col>
-          <Col xs={24} md={6} className={indexStyles.col}>
-            <label htmlFor="category">Category</label>
-            <Select
-              showSearch
-              size="large"
-              value={formState.category}
-              onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
-              id="category"
-              className={indexStyles.select}
-            >
-              <Option value={defaultFormState.category} key="all">All</Option>
-              <OptGroup label="Popular categories">
-                {
-                  priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
-                }
-              </OptGroup>
-              <OptGroup label="Other categories">
-                {
-                  restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
-                }
-              </OptGroup>
-            </Select>
           </Col>
           <Col xs={24} md={6}>
             <Button
@@ -586,6 +545,51 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
               <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio>
               <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.classic}>Classic</Radio>
             </Radio.Group>
+          </Col>
+        </Row>
+        <Divider className={indexStyles.divider} />
+        <Row gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" span={12}>
+            <span>Trend</span>
+          </Col>
+          <Col className="gutter-row" span={12}>
+            <span>Category</span>
+          </Col>
+        </Row>
+        <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+          <Col className="gutter-row" span={12} >
+            <Select
+              size="large"
+              value={formState.trendType}
+              onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
+              className={indexStyles.select}
+            >
+              <Option value={signals.all}>All</Option>
+              <Option value={signals.buy}>UP</Option>
+              <Option value={signals.hodl}>HODL</Option>
+              <Option value={signals.sell}>DOWN</Option>
+            </Select>
+          </Col>
+          <Col className="gutter-row" span={12}>
+            <Select
+              showSearch
+              size="large"
+              value={formState.category}
+              onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
+              className={indexStyles.select}
+            >
+              <Option value={defaultFormState.category} key="all">All</Option>
+              <OptGroup label="Popular categories">
+                {
+                  priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                }
+              </OptGroup>
+              <OptGroup label="Other categories">
+                {
+                  restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
+                }
+              </OptGroup>
+            </Select>
           </Col>
         </Row>
         <Divider className={indexStyles.divider} />
@@ -739,32 +743,11 @@ export default function Home({ coinsData, historicDailySuperSuperTrends, appData
           </Col>
         </Row>
       </Modal>
-      <Modal
-        open={marketHealthModalVisible}
-        centered
-        title={
-          <>
-            <span>Market Health Trend</span>
-            <Tooltip
-              placement={screens.sm ? 'bottom' : 'bottomRight'}
-              overlayClassName={baseStyles.tooltipIcon}
-              trigger={isHoverable ? 'hover' : 'click'}
-              title="Market Health tracks daily trends of 1000+ coins by marketcap. If you see a Market Extreme the trend is at risk of reversing. Exercise caution."
-            >
-              <InfoCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
-            </Tooltip>
-          </>
-        }
-        onCancel={() => setMarketHealthModalVisible(false)}
-        footer={null}
-        width={screens.lg ? 783 : 400}
-      >
-        <MarketHealthChart
-          historicDailySuperSuperTrends={historicDailySuperSuperTrends}
-          screens={screens}
-          darkMode={darkMode}
-        />
-      </Modal>
+      {/* <MarketHealthChart
+        historicDailySuperSuperTrends={historicDailySuperSuperTrends}
+        screens={screens}
+        darkMode={darkMode}
+      /> */}
       <Row className={indexStyles.tableRow}>
         <HomePageTable
           coinsData={coinsData}

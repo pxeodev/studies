@@ -9,7 +9,7 @@ const findMatchingCoinDropstab = async (symbol, name) => {
   symbol = symbol.toLowerCase();
   name = name.toLowerCase();
 
-  // TODO: Check if this symbol an anomaly. In that case, we need to find the matching coin by CSV
+  // Check if this symbol an anomaly. In that case, we need to find the matching coin by CSV
   const coingeckoSymbol = await isDropstabDiscrepancy(symbol.toUpperCase());
 
   let matchingCoin;
