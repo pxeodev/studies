@@ -58,8 +58,31 @@
 }
 
 .image {
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
+}
+
+.star {
+  background: #F0F0F0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  border-radius: 2px;
+  margin-right: 12px;
+
+  svg {
+    fill: #8C8C8C;
+    height: 15px;
+    vertical-align: -3px;
+  }
+
+  &.active {
+    background: #FFE7BA;
+
+    svg {
+      fill: #FA8C16;
+    }
+  }
 }
 
 .coin {
@@ -71,6 +94,7 @@
     }
 
     .symbol {
+        color: #8C8C8C;
         text-transform: uppercase;
         margin-left: 6px;
     }

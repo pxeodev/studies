@@ -1,9 +1,9 @@
 import { Table, Tooltip, Tag } from 'antd'
-import { QuestionCircleFilled } from '@ant-design/icons';
+import { QuestionCircleFilled, StarFilled } from '@ant-design/icons';
 import { VList } from 'virtuallist-antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import classnames from 'classnames'
@@ -19,6 +19,7 @@ import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variabl
 import indexTableStyles from '../styles/indexTable.module.less';
 import baseStyles from '../styles/base.module.less'
 import classNames from 'classnames';
+import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 
 const HomePageTable = ({
     coinsData,
@@ -40,6 +41,20 @@ const HomePageTable = ({
   const router = useRouter()
   const isHoverable = useIsHoverable()
   const hydrated = useHydrated()
+  const [watchlistCoins, setWatchlistCoins] = useState([])
+  useEffect(() => {
+    setWatchlistCoins(getWatchListCoins())
+  }, [])
+  const toggleCoin = useCallback((e, coinId) => {
+    if (watchlistCoins.includes(coinId)) {
+      const newWatchlistCoins = watchlistCoins.filter(coin => coin !== coinId)
+      setWatchlistCoins(newWatchlistCoins)
+      removeFromWatchList(coinId)
+    } else {
+      setWatchlistCoins([...watchlistCoins, coinId])
+      addToWatchList(coinId)
+    }
+  }, [watchlistCoins])
 
   if (superTrendFlavor === SUPERTREND_FLAVOR.classic) {
     coinsData = coinsData.map((coinData) => {
@@ -146,11 +161,17 @@ const HomePageTable = ({
       title: 'Coin',
       width: 200,
       dataIndex: 'coinData',
+      onCell: () => ({ onClick: (e) => {
+        console.log('on cell click name')
+        e.stopPropagation();
+      }}),
       fixed: hydrated ? (screens.lg ? null : 'left') : null,
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData) => {
+        const isCoinWatched = watchlistCoins.includes(coinData.id)
         return (
           (<Link href={`/coin/${coinData.id}`} className={indexTableStyles.coin} passHref>
+            <StarFilled className={classnames(indexTableStyles.star, { [indexTableStyles.active] : isCoinWatched })} onClick={(e) => toggleCoin(e, coinData.id)} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
             <span className={indexTableStyles.name}>{coinData.name}</span>
@@ -363,6 +384,7 @@ const HomePageTable = ({
       columns={columns}
       dataSource={tableData}
       onRow={(coin) => ({ onClick: () => {
+        console.log('on row')
         router.push(`/coin/${coin.coinData.id}`);
       }}) }
       rowClassName={indexTableStyles.row}

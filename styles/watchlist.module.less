@@ -1,0 +1,17 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.container {
+  &:extend(.container);
+
+  padding: 64px 24px;
+  align-items: center;
+
+  @media (max-width: @screen-md) {
+    padding: 32px 24px;
+  }
+
+  @media (max-width: @screen-sm) {
+    padding: 32px 16px;
+  }
+}
