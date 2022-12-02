@@ -2,6 +2,8 @@ import ReactMarkdown from 'react-markdown';
 import classnames from 'classnames';
 import { Card } from 'antd';
 import round from 'lodash/round';
+import take from 'lodash/take';
+import { useEffect } from 'react';
 
 import coinStyles from '../styles/coin.module.less'
 
@@ -40,6 +42,35 @@ const AnalysisTab = ({ coin, screens }) => {
     .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
     .replaceAll('{{year}}', today.getFullYear())
     .replaceAll('{{name}}', coin.name)
+
+    const preventCopy = (event) => {
+      let selection = window.getSelection().toString();
+      selection = selection.split(' ').map((piece) => {
+        if (Math.random() * 100 < 6) {
+          let interference = window.location.href
+          const moreRandom = Math.random() * 100
+          if (moreRandom < 20) {
+            interference = Math.random().toString(36).slice(2)
+          } else if (moreRandom < 40) {
+            interference = take([';', '.', '?', '\,'], 1)[0]
+          }
+          piece = `${piece} ${interference} `
+        }
+        return piece;
+      }).join(' ')
+
+      selection = `${selection}\nCopyright ${new Date().getFullYear()} CoinRotator. All rights reserved`
+      selection = `${selection}\nThe source of this text is ${window.location.href}`
+
+      event.clipboardData.setData('text/plain', selection);
+      event.preventDefault();
+    }
+    useEffect(() => {
+      document.addEventListener('copy', preventCopy)
+      return () => {
+        document.removeEventListener('copy', preventCopy)
+      }
+    }, [])
 
   return (<>
       {coin.description ? (

@@ -7,7 +7,6 @@ import { Prisma } from '@prisma/client'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import minBy from 'lodash/minBy';
 import pick from 'lodash/pick';
-import take from 'lodash/take';
 import { useCallback, useEffect, useState } from 'react';
 import levenshtein from 'js-levenshtein';
 
@@ -108,34 +107,6 @@ export default function Coin(coin) {
       ActiveTabComponent = TradeTab;
       break;
   }
-  const preventCopy = (event) => {
-    let selection = window.getSelection().toString();
-    selection = selection.split(' ').map((piece) => {
-      if (Math.random() * 100 < 6) {
-        let interference = window.location.href
-        const moreRandom = Math.random() * 100
-        if (moreRandom < 20) {
-          interference = Math.random().toString(36).slice(2)
-        } else if (moreRandom < 40) {
-          interference = take([';', '.', '?', '\,'], 1)[0]
-        }
-        piece = `${piece} ${interference} `
-      }
-      return piece;
-    }).join(' ')
-
-    selection = `${selection}\nCopyright ${new Date().getFullYear()} CoinRotator. All rights reserved`
-    selection = `${selection}\nThe source of this text is ${window.location.href}`
-
-    event.clipboardData.setData('text/plain', selection);
-    event.preventDefault();
-  }
-  useEffect(() => {
-    document.addEventListener('copy', preventCopy)
-    return () => {
-      document.removeEventListener('copy', preventCopy)
-    }
-  }, [])
 
   return <>
     <Head>
