@@ -20,6 +20,8 @@ const findMatchingCoinDropstab = async (symbol, name) => {
       },
       select: {
         id: true,
+        symbol: true,
+        name: true
       }
     });
   } else {

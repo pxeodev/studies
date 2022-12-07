@@ -13,7 +13,6 @@ import { init, startTransaction, captureException } from '@sentry/node';
 import * as Tracing from '@sentry/tracing'
 
 import { quoteSymbols } from '../utils/variables.mjs'
-import { getCategoriesByCoin } from '../utils/categories.mjs'
 import prisma from '../lib/prisma.mjs'
 import coinGecko, { getOhlc, getCoin } from '../lib/coinGecko.mjs'
 import cryptowatch from '../lib/cryptowatch.mjs'
@@ -39,7 +38,7 @@ const noRankError = 'no-rank-error'
 // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
 const marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx'].reverse()
 
-const fetchCoinDataCoingecko = async (coinId, categories) => {
+const fetchCoinDataCoingecko = async (coinId) => {
   let coinData
   try {
     coinData = (await getCoin(coinId)).data
@@ -109,7 +108,6 @@ const fetchCoinDataCoingecko = async (coinId, categories) => {
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
     tickers: tickers,
-    categories: categories[`${symbol}-${coinData.name}`],
     dailyChange: dailyChange,
     weeklyChange: weeklyChange,
   }
@@ -269,11 +267,10 @@ const fetchCoinDataAndOhlcs = async () => {
     coinIds = coinIds.slice(0, 10)
   }
   const chunkedCoinIds = chunk(coinIds, 5)
-  const categories = await getCategoriesByCoin();
 
   const coinsToFetchOhlcsFor = []
   for (let chunk of chunkedCoinIds) {
-    const responses = await Promise.all(chunk.map(coinId => fetchCoinDataCoingecko(coinId, categories)))
+    const responses = await Promise.all(chunk.map(coinId => fetchCoinDataCoingecko(coinId)))
 
     try {
       for (const [coinExists, symbol, coinId] of responses) {
