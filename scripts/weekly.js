@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 
 import prisma from '../lib/prisma.mjs'
 import findMatchingCoinDropstab from '../utils/findMatchingCoinDropstab.mjs';
+import { overrideCoinCategories } from '../utils/categories.mjs';
 
 init({
   dsn: process.env.SENTRY_DSN,
@@ -61,6 +62,7 @@ const fetchCoinData = async (url, coin, page) => {
   launch_date_start = isNaN(launch_date_start) ? null : new Date(launch_date_start);
   launch_date_end = Date.parse(launch_date_end);
   launch_date_end = isNaN(launch_date_end) ? null : new Date(launch_date_end);
+  categories = await overrideCoinCategories(coin.name, coin.symbol, categories)
 
   await prisma.coin.update({
     where: {
