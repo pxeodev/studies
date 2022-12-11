@@ -126,7 +126,9 @@ const getDropsTabData = async (browser) => {
 const dropsTab = async () => {
   let browser
   try {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      timeout: 100000,
+    });
     const dropsTabData = await getDropsTabData(browser);
 
     const page = await browser.newPage();
