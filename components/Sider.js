@@ -129,6 +129,10 @@ const Sider = ({ topCategories, categories, coins }) => {
       }
     ]
   }
+  let Trigger = MenuFoldOutlined
+  if (collapsed) {
+    Trigger = MenuFoldOutlined
+  }
 
   return (
     <Layout.Sider
@@ -137,7 +141,7 @@ const Sider = ({ topCategories, categories, coins }) => {
       onCollapse={value => setCollapsed(value)}
       collapsedWidth={56}
       width={240}
-      trigger={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      trigger={<Trigger className={styles.trigger} />}
       className={classnames(styles.sidebar, { [styles.collapsed]: collapsed })}
     >
       <Logo className={styles.logo} showText={!collapsed} />
