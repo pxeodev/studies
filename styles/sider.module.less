@@ -155,30 +155,22 @@
   bottom: 0;
   height: 128px;
   width: 100%;
-  padding: 12px;
   text-align: center;
 
   .socials {
-    a {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 100px;
-      background-color: var(--cr-secondary-bg);
-
-      &:hover {
-        background-color: @divider-color;
-      }
-    }
+    width: 100%;
+    justify-content: center;
+    padding: 10px 0;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
 
     img {
-      width: 24px;
-    }
+      width: 28px;
+      height: 28px;
 
-    .mediumIcon {
-      fill: var(--cr-primary-text);
+      &:hover {
+        filter: brightness(1.2);
+      }
     }
   }
 }
