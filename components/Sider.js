@@ -24,111 +24,94 @@ import DarkModeSwitch from './DarkModeSwitch'
 import { DarkModeContext } from '../pages/_app'
 import styles from "../styles/sider.module.less"
 
-const TABS = {
-  'screener': 'Screener',
-  'resources': 'Resources'
-}
 const Sider = ({ topCategories, categories, coins }) => {
   const [darkMode, setDarkMode] = useContext(DarkModeContext)
   const [collapsed, setCollapsed] = useState(false)
-  const [tab, setTab] = useState(TABS.screener)
-  let menuItems
-  if (tab === TABS.screener) {
-    menuItems = [
-      {
-        label: 'Data',
-        key: 'data',
-        children: [
-          {
-            label: <Link href="watchlist">Watchlist</Link>,
-            key: 'watchlist',
-            icon: <StarFilled className={styles.sunsetOrange} />
-          },
-          {
-            label: <Link href="trends">Trends</Link>,
-            key: 'trends',
-            icon: <UpCircleFilled className={styles.polarGreen} />
-          },
-          {
-            label: <Link href="market-health">Market Health</Link>,
-            key: 'market-health',
-            icon: <HeartFilled className={styles.dustRed} />
-          },
-          {
-            label: <Link href="top-coins">Top Coins</Link>,
-            key: 'top-coins',
-            icon: <RiseOutlined className={styles.geekBlue} />
-          },
-          {
-            label: <Link href="gainers-and-losers">Gainers & Losers</Link>,
-            key: 'gainers-and-losers',
-            icon: <LineChartOutlined className={styles.goldenPurple} />
-          },
-          {
-            label: <Link href="new-pairs">New Pairs</Link>,
-            key: 'new-pairs',
-            icon: <AlertFilled className={styles.daybreakBlue} />
-          },
-        ]
-      },
-      {
-        label: 'Top Categories',
-        key: 'topcategories',
-        children: topCategories.map((category) => {
-          return {
-            label: <Link href={`/?category=${category}`}>{category}</Link>,
-            key: category
-          }
-        })
-      }
-    ]
-  } else {
-    menuItems = [
-      {
-        label: 'About',
-        key: 'about',
-        children: [
-          {
-            label: 'Team',
-            key: 'team',
-            icon: <TeamOutlined className={styles.geekBlue} />
-          },
-          {
-            label: <Link href="faq">FAQ</Link>,
-            key: 'faq',
-            icon: <QuestionCircleFilled className={styles.sunsetOrange} />
-          },
-          {
-            label: <Link href="terms">Terms & Conditions</Link>,
-            key: 'terms',
-            icon: <ContainerFilled className={styles.polarGreen} />
-          }
-        ]
-      },
-      {
-        label: 'YouTube',
-        key: 'youtube',
-        children: [
-          {
-            label: <a href="https://youtu.be/OcyZcip24pM" target="_blank" rel="noreferrer">Basic Tutorial</a>,
-            key: 'tutorial',
-            icon: <VideoCameraFilled className={styles.gray} />
-          }
-        ]
-      },
-      {
-        label: 'Medium',
-        key: 'medium',
-        children: [
-          {
-            label: <a href="https://coinrotator.medium.com/how-to-search-the-most-profitable-altcoins-daily-d8ac02d52e23" target="_blank" rel="noreferrer">Find profitable Altcoins</a>,
-            key: 'profitable-altcoins',
-            icon: <ReadFilled className={styles.gray} />
-          }
-        ]
-      }
-    ]
-  }
+  const menuItems = [
+    {
+      label: 'Screener Tools',
+      key: 'screenertools',
+      children: [
+        {
+          label: <Link href="watchlist">Watchlist</Link>,
+          key: 'watchlist',
+          icon: <StarFilled className={styles.sunsetOrange} />
+        },
+        {
+          label: <Link href="trends">Trends</Link>,
+          key: 'trends',
+          icon: <UpCircleFilled className={styles.polarGreen} />
+        },
+        {
+          label: <Link href="market-health">Market Health</Link>,
+          key: 'market-health',
+          icon: <HeartFilled className={styles.dustRed} />
+        },
+        {
+          label: <Link href="top-coins">Top Coins</Link>,
+          key: 'top-coins',
+          icon: <RiseOutlined className={styles.geekBlue} />
+        },
+        {
+          label: <Link href="gainers-and-losers">Gainers & Losers</Link>,
+          key: 'gainers-and-losers',
+          icon: <LineChartOutlined className={styles.goldenPurple} />
+        },
+        {
+          label: <Link href="new-pairs">New Pairs</Link>,
+          key: 'new-pairs',
+          icon: <AlertFilled className={styles.daybreakBlue} />
+        },
+      ]
+    },
+    {
+      label: 'About',
+      key: 'about',
+      children: [
+        {
+          label: 'Team',
+          key: 'team',
+          icon: <TeamOutlined className={styles.geekBlue} />
+        },
+        {
+          label: <Link href="faq">FAQ</Link>,
+          key: 'faq',
+          icon: <QuestionCircleFilled className={styles.sunsetOrange} />
+        },
+        {
+          label: <Link href="terms">Terms & Conditions</Link>,
+          key: 'terms',
+          icon: <ContainerFilled className={styles.polarGreen} />
+        }
+      ]
+    },
+    {
+      label: 'Tutorials',
+      key: 'tutorials',
+      children: [
+        {
+          label: <a href="https://youtu.be/OcyZcip24pM" target="_blank" rel="noreferrer">Video Tutorials</a>,
+          key: 'video-tutorials',
+          icon: <VideoCameraFilled className={styles.gray} />
+        },
+        {
+          label: <a href="https://coinrotator.medium.com/how-to-search-the-most-profitable-altcoins-daily-d8ac02d52e23" target="_blank" rel="noreferrer">Article Tutorials</a>,
+          key: 'article-tutorials',
+          icon: <ReadFilled className={styles.gray} />
+        }
+      ]
+    },
+    {
+      label: 'Top Categories',
+      key: 'topcategories',
+      children: topCategories.map((category) => {
+        return {
+          label: <Link href={`/?category=${category}`}>{category}</Link>,
+          key: category
+        }
+      })
+    }
+  ]
   let Trigger = MenuFoldOutlined
   if (collapsed) {
     Trigger = MenuFoldOutlined
@@ -149,27 +132,10 @@ const Sider = ({ topCategories, categories, coins }) => {
         <Search categories={categories} coins={coins} collapsed={collapsed} />
         { collapsed ? <></> : <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Space>
-      <Radio.Group
-        value={tab}
-        onChange={({ target: { value } }) => setTab(value)}
-        options={[
-          {
-            label: TABS.screener,
-            value: TABS.screener
-          },
-          {
-            label: TABS.resources,
-            value: TABS.resources
-          }
-        ]}
-        optionType="button"
-        buttonStyle="solid"
-        className={styles.tabs}
-      />
       <Menu
         theme={darkMode ? 'dark' : 'light'}
         mode="inline"
-        openKeys={['data', 'topcategories', 'about', 'youtube']}
+        openKeys={['screenertools', 'topcategories', 'tutorials', 'about']}
         items={menuItems}
         className={styles.menu}
         inlineIndent={0}
