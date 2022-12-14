@@ -1,4 +1,4 @@
-import { Layout, Typography, Row, Col } from 'antd'
+import { Layout, Row, Col } from 'antd'
 import { Client } from 'react-hydration-provider'
 
 import useBreakPoint from '../hooks/useBreakPoint'
@@ -6,13 +6,6 @@ import footerStyles from '../styles/footer.module.less'
 
 const Footer = () => {
   const { Footer: AntFooter } = Layout;
-  const { Paragraph } = Typography;
-
-  const nfaBlock = <>
-    <Paragraph type="secondary" className={footerStyles.paragraph}>
-      This crypto coin screener is for informational purposes only. Users should not consider anything here as investment or financial advice. NFA.
-    </Paragraph>
-  </>
 
   const screens = useBreakPoint();
   let grid;
@@ -21,7 +14,6 @@ const Footer = () => {
     grid = (
       <Row gutter={32}>
         <Col span={6}>
-          {nfaBlock}
         </Col>
       </Row>
     )
@@ -29,7 +21,7 @@ const Footer = () => {
     grid = (
       <>
         <Row>
-          <Col span={24}>{nfaBlock}</Col>
+          <Col span={24}></Col>
         </Row>
       </>
     )
@@ -37,7 +29,7 @@ const Footer = () => {
     grid = (
       <span>
         <Row>
-          <Col span={24}>{nfaBlock}</Col>
+          <Col span={24}></Col>
         </Row>
       </span>
     )
@@ -45,7 +37,7 @@ const Footer = () => {
     grid = (
       <span>
         <Row>
-          <Col span={24}>{nfaBlock}</Col>
+          <Col span={24}></Col>
         </Row>
       </span>
     )

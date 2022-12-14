@@ -1,8 +1,9 @@
 @import './variables.module.less';
 
 .sidebar {
-  background: var(--cr-secondary-bg);
-  padding: 16px 0 0 0;
+  background: var(--cr-primary-bg);
+  padding: 16px 0 128px 0;
+  border-right: 1px solid #F0F0F0;
 
   :global(.ant-layout-sider-trigger) {
     top: 0;
@@ -38,9 +39,32 @@
   margin-bottom: 5px;
 }
 
+.tools {
+  width: 100%;
+  justify-content: center;
+  padding-bottom: 16px;
+}
+
 .menu {
+  font-size: 14px;
+  border-right: none;
+  max-height: 784px;
+  overflow-y: auto;
+
   :global(.ant-menu-submenu-title) {
     cursor: auto;
+    border-top: 1px solid #F0F0F0;
+    margin-bottom: 0;
+
+    :global(.ant-menu-title-content) {
+      font-size: 12px !important;
+      line-height: 22px !important;
+      color: #8C8C8C;
+    }
+  }
+
+  :global(.ant-menu-sub) {
+    background: var(--cr-primary-bg) !important;
   }
 
   :global(.ant-menu-submenu-arrow) {
@@ -129,7 +153,7 @@
 .footer {
   position: absolute;
   bottom: 0;
-  height: 46px;
+  height: 128px;
   width: 100%;
   padding: 12px;
   text-align: center;

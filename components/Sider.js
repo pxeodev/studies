@@ -65,6 +65,32 @@ const Sider = ({ topCategories, categories, coins }) => {
       ]
     },
     {
+      label: 'Tutorials',
+      key: 'tutorials',
+      children: [
+        {
+          label: <a href="https://youtu.be/OcyZcip24pM" target="_blank" rel="noreferrer">Video Tutorials</a>,
+          key: 'video-tutorials',
+          icon: <VideoCameraFilled className={styles.dustRed} />
+        },
+        {
+          label: <a href="https://coinrotator.medium.com/how-to-search-the-most-profitable-altcoins-daily-d8ac02d52e23" target="_blank" rel="noreferrer">Article Tutorials</a>,
+          key: 'article-tutorials',
+          icon: <ReadFilled className={styles.gray} />
+        }
+      ]
+    },
+    {
+      label: 'Top Categories',
+      key: 'topcategories',
+      children: topCategories.map((category) => {
+        return {
+          label: <Link href={`/?category=${category}`}>{category}</Link>,
+          key: category
+        }
+      })
+    },
+    {
       label: 'About',
       key: 'about',
       children: [
@@ -85,32 +111,6 @@ const Sider = ({ topCategories, categories, coins }) => {
         }
       ]
     },
-    {
-      label: 'Tutorials',
-      key: 'tutorials',
-      children: [
-        {
-          label: <a href="https://youtu.be/OcyZcip24pM" target="_blank" rel="noreferrer">Video Tutorials</a>,
-          key: 'video-tutorials',
-          icon: <VideoCameraFilled className={styles.gray} />
-        },
-        {
-          label: <a href="https://coinrotator.medium.com/how-to-search-the-most-profitable-altcoins-daily-d8ac02d52e23" target="_blank" rel="noreferrer">Article Tutorials</a>,
-          key: 'article-tutorials',
-          icon: <ReadFilled className={styles.gray} />
-        }
-      ]
-    },
-    {
-      label: 'Top Categories',
-      key: 'topcategories',
-      children: topCategories.map((category) => {
-        return {
-          label: <Link href={`/?category=${category}`}>{category}</Link>,
-          key: category
-        }
-      })
-    }
   ]
   let Trigger = MenuFoldOutlined
   if (collapsed) {
@@ -128,7 +128,7 @@ const Sider = ({ topCategories, categories, coins }) => {
       className={classnames(styles.sidebar, { [styles.collapsed]: collapsed })}
     >
       <Logo className={styles.logo} showText={!collapsed} />
-      <Space size={12}>
+      <Space size={12} className={styles.tools}>
         <Search categories={categories} coins={coins} collapsed={collapsed} />
         { collapsed ? <></> : <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Space>
