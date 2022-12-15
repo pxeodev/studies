@@ -22,3 +22,11 @@ Category,CoinSymbol,CoinName,addORremove
 "Proof of Stake",HIVE,Hive,add
 "Proof of Stake",LSK,Lisk,add
 "Proof of Stake",QTUM,Qtum,add
+"ZK Rollup",HEZ,Hermez Network,add
+"ZK Rollup",SYS,Syscoin,add
+"ZK Rollup",LRC,Loopring,add
+"ZK Rollup",MUTE,Mute,add
+"ZK Rollup",IMX,ImmutableX,add
+"ZK Rollup",ZKX,ZKSpace,add
+
+
