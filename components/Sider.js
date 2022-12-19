@@ -1,4 +1,4 @@
-import { Layout, Space, Radio, Menu } from 'antd'
+import { Layout, Space, Menu } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -114,7 +114,7 @@ const Sider = ({ topCategories, categories, coins }) => {
   ]
   let Trigger = MenuFoldOutlined
   if (collapsed) {
-    Trigger = MenuFoldOutlined
+    Trigger = MenuUnfoldOutlined
     menuItems = [
       {
         label: 'Watchlist',
