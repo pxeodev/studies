@@ -12,28 +12,26 @@ const Header = ({ categories, coins, screens }) => {
   const { Header: AntHeader } = Layout;
   const [darkMode, setDarkMode] = useContext(DarkModeContext);
 
+  if (screens.lg) return (<></>);
+
   const menuItems = [
     {
       label: <Logo />,
       className: headerStyles.logo,
       key: 'logo',
       'data-id': 'logo'
-    }
-  ]
-
-  if (screens.sm) {
-    menuItems.push({
+    },
+    {
       key: 'search',
       className: headerStyles.search,
       label: <Search categories={categories} coins={coins} collapsed />
-    })
-  }
-
-  menuItems.push({
-    key: 'dark-mode',
-    className: headerStyles.darkModeSwitchItem,
-    label: <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
-  })
+    },
+    {
+      key: 'dark-mode',
+      className: headerStyles.darkModeSwitchItem,
+      label: <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
+    }
+  ]
 
   return (
     <AntHeader className={headerStyles.header}>
