@@ -1,0 +1,29 @@
+@import './variables.module.less';
+
+.hamburgerButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+
+  width: 28px;
+  height: 28px;
+
+  background: #FFFFFF;
+
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
+}
+
+.modal {
+  width: 100vw !important;
+  margin: 0 !important;
+  max-width: unset !important;
+  height: calc(100vh - 52px) !important;
+  top: 52px !important;
+
+  :global(.ant-modal-content) {
+    height: 100%;
+  }
+}

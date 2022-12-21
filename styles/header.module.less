@@ -42,21 +42,13 @@
   }
 }
 
-.darkModeSwitchItem, .search {
+.search, .navigation {
   display: flex !important;
   align-items: center !important;
   user-select: none;
 }
 
-.darkModeSwitchItem {
-  padding: 0 16px !important;
-
-  @media (max-width: @screen-sm) {
-    margin-left: auto;
-  }
-}
-
-.darkModeSwitchItem::after, .search::after {
+.navigation::after, .search::after {
   display: none;
 }
 

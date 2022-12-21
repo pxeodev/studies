@@ -16,7 +16,7 @@ import Link from 'next/link'
 
 import styles from "../styles/navigationmenu.module.less"
 
-const NavigationMenu = ({ collapsed, darkMode, topCategories }) => {
+const NavigationMenu = ({ collapsed = false , topCategories }) => {
   let menuItems = [
     {
       label: 'Screener Tools',
@@ -153,7 +153,6 @@ const NavigationMenu = ({ collapsed, darkMode, topCategories }) => {
   }
   return (
     <Menu
-      theme={darkMode ? 'dark' : 'light'}
       mode="inline"
       openKeys={['screenertools', 'topcategories', 'tutorials', 'about']}
       items={menuItems}

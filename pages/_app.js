@@ -57,7 +57,12 @@ function MyApp({ Component, pageProps }) {
           </Client>
           <Layout className={baseStyles.innerLayout}>
             <Client>
-              <Header categories={categories} coins={coins} screens={screens}/>
+              <Header
+                categories={categories}
+                coins={coins}
+                screens={screens}
+                topCategories={topCategories}
+              />
             </Client>
             <Component {...pageProps} />
             <Footer />

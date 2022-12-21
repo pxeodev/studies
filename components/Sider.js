@@ -35,7 +35,7 @@ const Sider = ({ topCategories, categories, coins }) => {
         <Search categories={categories} coins={coins} collapsed={collapsed} />
         { collapsed ? <></> : <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Space>
-      <NavigationMenu topCategories={topCategories} darkMode={darkMode} collapsed={collapsed} />
+      <NavigationMenu topCategories={topCategories} collapsed={collapsed} />
       <div className={styles.footer}>
         <Socials />
         { collapsed ? <></> : <Funders />}
