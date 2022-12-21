@@ -85,17 +85,17 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
       key: 'about',
       children: [
         {
-          label: <Link href="team">Team</Link>,
+          label: <Link href="/team">Team</Link>,
           key: 'team',
           icon: <TeamOutlined className={styles.geekBlue} />
         },
         {
-          label: <Link href="faq">FAQ</Link>,
+          label: <Link href="/faq">FAQ</Link>,
           key: 'faq',
           icon: <QuestionCircleFilled className={styles.sunsetOrange} />
         },
         {
-          label: <Link href="terms">Terms & Conditions</Link>,
+          label: <Link href="/terms">Terms & Conditions</Link>,
           key: 'terms',
           icon: <ContainerFilled className={styles.polarGreen} />
         }
