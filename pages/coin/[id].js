@@ -108,7 +108,6 @@ export default function Coin(coin) {
       ActiveTabComponent = TradeTab;
       break;
   }
-  const coinTag = <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
 
   return <>
     <Head>
@@ -130,18 +129,10 @@ export default function Coin(coin) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
       </>}
-      postfix={coinTag}
+      postfix={<Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>}
     />
     <Content className={baseStyles.container}>
       <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
-        <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
-          <Space>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
-            <Title className={coinStyles.title}>{coin.name}</Title>
-            {coinTag}
-          </Space>
-        </Card.Grid>
         <div className={coinStyles.sectionsDailyAndWeekly}>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
