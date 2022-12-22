@@ -1,26 +1,20 @@
-import { Table, Tooltip, Tag } from 'antd'
-import { QuestionCircleFilled } from '@ant-design/icons';
-import { VList } from 'virtuallist-antd'
+import { Table, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
-import classnames from 'classnames'
 import { useHydrated } from "react-hydration-provider";
 
-import UpTag from './UpTag'
-import DownTag from './DownTag'
-import HodlTag from './HodlTag'
+import WatchlistStar from './WatchlistStar';
 import useBreakPoint from '../hooks/useBreakPoint'
 import useIsHoverable from '../hooks/useIsHoverable';
+import useVirtualTable from '../hooks/useVirtualTable';
 import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variables'
-import WatchlistStar from '../components/WatchlistStar';
+import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
+import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
 
 import indexTableStyles from '../styles/indexTable.module.less';
-import baseStyles from '../styles/base.module.less'
-import classNames from 'classnames';
-import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 
 const HomePageTable = ({
     coinsData,
@@ -135,8 +129,8 @@ const HomePageTable = ({
     shownExchanges = shownExchanges.slice(0, 5)
     return {
       key: `${coinData.id}-${coinData.name}`,
+      id: coinData.id,
       coinData: {
-        id: coinData.id,
         symbol: coinData.symbol,
         images: coinData.images,
         name: coinData.name
@@ -150,12 +144,6 @@ const HomePageTable = ({
   })
 
   const screens = useBreakPoint();
-  const numberFormatter = new Intl.NumberFormat([], {
-    notation: 'compact',
-    compactDisplay: 'short',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
 
   let columns = [
     {
@@ -164,12 +152,12 @@ const HomePageTable = ({
       dataIndex: 'coinData',
       fixed: hydrated ? (screens.lg ? null : 'left') : null,
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
-      render: (coinData) => {
-        const isCoinWatched = watchlistCoins.includes(coinData.id)
+      render: (coinData, data) => {
+        const isCoinWatched = watchlistCoins.includes(data.id)
         return (
           <span>
-            <WatchlistStar active={isCoinWatched} onClick={() => toggleCoin(coinData.id)} />
-            <Link href={`/coin/${coinData.id}`} className={indexTableStyles.coin} passHref>
+            <WatchlistStar active={isCoinWatched} onClick={() => toggleCoin(data.id)} />
+            <Link href={`/coin/${data.id}`} className={indexTableStyles.coin} passHref>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
               <span className={indexTableStyles.name}>{coinData.name}</span>
@@ -181,169 +169,22 @@ const HomePageTable = ({
     },
     {
       width: 100,
-      onCell: (data) => ({ onClick: () => router.push(`/coin/${data.coinData.id}`) }),
-      title: <span className={indexTableStyles.columnTitle}>
-        <span>Trend (24h)</span>
-        <Tooltip
-            placement={'right'}
-            trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
-        >
-          <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)}  />
-        </Tooltip>
-      </span>,
-      dataIndex: 'dailySuperSuperTrend',
-      defaultSortOrder: 'ascend',
-      sorter: {
-        compare: (a, b, sortOrder) => {
-          if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
-            if (sortOrder === 'ascend') {
-              return a.marketCap < b.marketCap ? 1 : -1
-            } else {
-              return b.marketCap < a.marketCap ? 1 : -1
-            }
-          } else {
-            if (a.dailySuperSuperTrend === signals.sell) {
-              return 1
-            } else if (a.dailySuperSuperTrend === signals.hodl) {
-              if (b.dailySuperSuperTrend === signals.sell) {
-                return -1
-              } else {
-                return 1
-              }
-            } else {
-              return -1
-            }
-          }
-        },
-        multiple: 1,
-      },
-      render: (dailySuperSupertrend) => {
-        let tag;
-        switch (dailySuperSupertrend) {
-          case signals.buy:
-            tag = <UpTag className={indexTableStyles.tag} />
-            break
-          case signals.sell:
-            tag = <DownTag className={indexTableStyles.tag} />
-            break
-          default:
-            tag = <HodlTag className={indexTableStyles.tag} />
-        }
-
-        return (
-          <>
-            {tag}
-
-          </>
-        )
-      }
+      ...dailySuperSuperTrend(router, isHoverable),
     },
     {
       width: 100,
-      onCell: (data) => ({ onClick: () => router.push(`/coin/${data.coinData.id}`) }),
-      title: <span className={indexTableStyles.columnTitle}>
-        <span>Trend (7d)</span>
-        <Tooltip
-            placement={'right'}
-            trigger={isHoverable ? 'hover' : 'click'}
-            title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
-        >
-          <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)} />
-        </Tooltip>
-      </span>,
-      dataIndex: 'weeklySuperSuperTrend',
-      sorter: {
-        compare: (a, b) => {
-          if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
-            return 0
-          } else if (a.weeklySuperSuperTrend === signals.sell) {
-            return 1
-          } else if (a.weeklySuperSuperTrend === signals.hodl) {
-            if (b.weeklySuperSuperTrend === signals.sell) {
-              return -1
-            } else {
-              return 1
-            }
-          } else {
-            return -1
-          }
-        },
-        multiple: 2,
-      },
-      render: (weeklySuperSuperTrend) => {
-        let tag;
-        switch (weeklySuperSuperTrend) {
-          case signals.buy:
-            tag = <UpTag className={indexTableStyles.tag} />
-            break
-          case signals.sell:
-            tag = <DownTag className={indexTableStyles.tag} />
-            break
-          default:
-            tag = <HodlTag className={indexTableStyles.tag} />
-        }
-
-        return (
-          <>
-            {tag}
-
-          </>
-        )
-      }
+      ...weeklySuperSuperTrend(router, isHoverable),
     }
   ];
 
   columns.push(
   {
-    title: 'Market Cap',
-    dataIndex: 'marketCap',
-    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.coinData.id}`) }),
     width: 90,
-    sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
-    render: (marketCap) => {
-      if (!marketCap) { return null }
-      return (
-        <div className={indexTableStyles.value}>
-          {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
-        </div>
-      )
-    }
+    ...marketCap(router, hydrated)
   },
   {
-    title: <span className={indexTableStyles.columnTitle}>
-      <span>Exchanges</span>
-      <Tooltip
-          placement={'right'}
-          trigger={isHoverable ? 'hover' : 'click'}
-          title="All the exchanges this coin is traded on"
-      >
-        <QuestionCircleFilled className={classNames(baseStyles.tooltipIcon, baseStyles.icon)}  />
-      </Tooltip>
-    </span>,
-    dataIndex: 'exchanges',
     width: 120,
-    className: indexTableStyles.unclickableCell,
-    render: (exchanges, data) => {
-      return <span title="Top 5 exchanges. Click to see more.">
-        {exchanges.map((exchange) => {
-          let matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
-          const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
-          const onTagClick = () =>
-            router.push(`/coin/${data.coinData.id}?tab=Trade`)
-          // eslint-disable-next-line @next/next/no-img-element
-          return <img
-            src={matchingExchangeImage}
-            alt={exchange[0]}
-            title={exchange[0]}
-            loading="lazy"
-            key={exchange[0]}
-            onClick={onTagClick}
-            className={classnames(indexTableStyles.clickableTag, indexTableStyles.image)}
-          />
-        })}
-      </span>;
-    }
+    ...exchangesCol(router, isHoverable, exchangeData)
   },
   {
     title: 'Derivatives',
@@ -354,7 +195,7 @@ const HomePageTable = ({
       return <span title="Top derivatives. Click to see more.">
         {derivatives.map((derivative) => {
           const onTagClick = () => {
-            router.push(`/coin/${data.coinData.id}?tab=Trade&filter=Derivatives`)
+            router.push(`/coin/${data.id}?tab=Trade&filter=Derivatives`)
           }
           return <Tag
             key={`${derivative.market}${derivative.symbol}`}
@@ -367,14 +208,6 @@ const HomePageTable = ({
   }
   )
 
-  // The table rows are 56px high.
-  const tableHeight = 9 * 56;
-  const vComponents = useMemo(() => {
-		return VList({
-			height: tableHeight
-		})
-	}, [tableHeight])
-
   return (
     <Table
       columns={columns}
@@ -383,10 +216,7 @@ const HomePageTable = ({
       pagination={{ position: ['none', 'none'], pageSize: 1000 }}
       bordered
       className={indexTableStyles.table}
-      scroll={{
-				y: tableHeight
-			}}
-      components={vComponents}
+      {...useVirtualTable()}
     />
   )
 }

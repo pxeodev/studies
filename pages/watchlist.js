@@ -2,30 +2,38 @@ import { Table, Row, Col, Layout } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Client } from 'react-hydration-provider';
+import { Client, useHydrated } from 'react-hydration-provider'
 import axios from 'axios'
 
+import globalData from '../lib/globalData'
 import { getWatchListCoins } from '../utils/watchlist'
-import globalData from '../lib/globalData';
-import styles from '../styles/watchlist.module.less'
-import indexTableStyles from '../styles/indexTable.module.less'
 import PageHeader from '../components/PageHeader'
+import useIsHoverable from '../hooks/useIsHoverable'
+import useVirtualTable from '../hooks/useVirtualTable'
+import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
+
+import indexTableStyles from '../styles/indexTable.module.less'
+import watchlistStyles from '../styles/watchlist.module.less'
 
 const { Content } = Layout;
 
 export async function getStaticProps() {
   const appData = await globalData()
+  const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
-      appData
+      appData,
+      exchangeData
     }
   }
 }
 
-export default function WatchList() {
+export default function WatchList({ exchangeData }) {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter()
+  const isHoverable = useIsHoverable()
+  const hydrated = useHydrated()
 
   useEffect(() => {
     let watchlistCoins = router.query.watchlist
@@ -54,7 +62,7 @@ export default function WatchList() {
     }
 
     fetchData()
-  }, [router])
+  }, [])
 
   const columns = [
     {
@@ -73,13 +81,29 @@ export default function WatchList() {
         );
       }
     },
+    {
+      width: 100,
+      ...dailySuperSuperTrend(router, isHoverable),
+    },
+    {
+      width: 100,
+      ...weeklySuperSuperTrend(router, isHoverable),
+    },
+    {
+      width: 100,
+      ...marketCap(router, hydrated),
+    },
+    {
+      width: 120,
+      ...exchanges(router, isHoverable, exchangeData),
+    }
   ]
 
   return (
     <>
       <PageHeader title="Watchlist" />
-      <Content className={styles.container}>
-        <Row className={styles.table}>
+      <Content className={watchlistStyles.container}>
+        <Row className={watchlistStyles.table}>
           <Col span={24}>
             <Client>
               <Table
@@ -87,6 +111,7 @@ export default function WatchList() {
                 dataSource={watchlist}
                 pagination={false}
                 loading={loading}
+                {...useVirtualTable()}
               />
             </Client>
           </Col>

@@ -1,0 +1,187 @@
+import { Tooltip } from 'antd'
+import { QuestionCircleFilled } from '@ant-design/icons'
+import classnames from 'classnames'
+
+import UpTag from '../components/UpTag'
+import DownTag from '../components/DownTag'
+import HodlTag from '../components/HodlTag'
+import { signals } from '../utils/variables'
+
+import indexTableStyles from '../styles/indexTable.module.less'
+import baseStyles from '../styles/base.module.less'
+
+export function dailySuperSuperTrend(router, isHoverable) {
+  return {
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    title: <span className={indexTableStyles.columnTitle}>
+      <span>Trend (24h)</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
+          >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
+      </Tooltip>
+    </span>,
+    dataIndex: 'dailySuperSuperTrend',
+    defaultSortOrder: 'ascend',
+    sorter: {
+      compare: (a, b, sortOrder) => {
+        if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
+          if (sortOrder === 'ascend') {
+            return a.marketCap < b.marketCap ? 1 : -1
+          } else {
+            return b.marketCap < a.marketCap ? 1 : -1
+          }
+        } else {
+          if (a.dailySuperSuperTrend === signals.sell) {
+            return 1
+          } else if (a.dailySuperSuperTrend === signals.hodl) {
+            if (b.dailySuperSuperTrend === signals.sell) {
+              return -1
+            } else {
+              return 1
+            }
+          } else {
+            return -1
+          }
+        }
+      },
+      multiple: 1,
+    },
+    render: (dailySuperSupertrend) => {
+      let tag;
+      switch (dailySuperSupertrend) {
+        case signals.buy:
+          tag = <UpTag className={indexTableStyles.tag} />
+          break
+          case signals.sell:
+            tag = <DownTag className={indexTableStyles.tag} />
+            break
+            default:
+              tag = <HodlTag className={indexTableStyles.tag} />
+            }
+
+            return (
+              <>
+          {tag}
+
+        </>
+      )
+    }
+  }
+}
+
+export function weeklySuperSuperTrend(router, isHoverable) {
+  return {
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    title: <span className={indexTableStyles.columnTitle}>
+      <span>Trend (7d)</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+      </Tooltip>
+    </span>,
+    dataIndex: 'weeklySuperSuperTrend',
+    sorter: {
+      compare: (a, b) => {
+        if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
+          return 0
+        } else if (a.weeklySuperSuperTrend === signals.sell) {
+          return 1
+        } else if (a.weeklySuperSuperTrend === signals.hodl) {
+          if (b.weeklySuperSuperTrend === signals.sell) {
+            return -1
+          } else {
+            return 1
+          }
+        } else {
+          return -1
+        }
+      },
+      multiple: 2,
+    },
+    render: (weeklySuperSuperTrend) => {
+      let tag;
+      switch (weeklySuperSuperTrend) {
+        case signals.buy:
+          tag = <UpTag className={indexTableStyles.tag} />
+          break
+        case signals.sell:
+          tag = <DownTag className={indexTableStyles.tag} />
+          break
+        default:
+          tag = <HodlTag className={indexTableStyles.tag} />
+      }
+
+      return (
+        <>
+          {tag}
+        </>
+      )
+    }
+  }
+}
+
+export function marketCap(router, hydrated) {
+  const numberFormatter = new Intl.NumberFormat([], {
+    notation: 'compact',
+    compactDisplay: 'short',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  return {
+    title: 'Market Cap',
+    dataIndex: 'marketCap',
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
+    render: (marketCap) => {
+      if (!marketCap) { return null }
+      return (
+        <div className={indexTableStyles.value}>
+          {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
+        </div>
+      )
+    }
+  }
+}
+
+export function exchanges(router, isHoverable, exchangeData) {
+  return {
+    title: <span className={indexTableStyles.columnTitle}>
+      <span>Exchanges</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="All the exchanges this coin is traded on"
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
+      </Tooltip>
+    </span>,
+    dataIndex: 'exchanges',
+    className: indexTableStyles.unclickableCell,
+    render: (exchanges, data) => {
+      return <span title="Top 5 exchanges. Click to see more.">
+        {exchanges.map((exchange) => {
+          let matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
+          const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
+          const onTagClick = () =>
+            router.push(`/coin/${data.id}?tab=Trade`)
+          // eslint-disable-next-line @next/next/no-img-element
+          return <img
+            src={matchingExchangeImage}
+            alt={exchange[0]}
+            title={exchange[0]}
+            loading="lazy"
+            key={exchange[0]}
+            onClick={onTagClick}
+            className={classnames(indexTableStyles.clickableTag, indexTableStyles.image)}
+          />
+        })}
+      </span>;
+    }
+  }
+}
