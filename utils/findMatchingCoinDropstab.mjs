@@ -41,7 +41,8 @@ const findMatchingCoinDropstab = async (symbol, name) => {
       withScope(scope => {
         scope.setLevel('warning');
         scope.setExtra('symbol', symbol);
-        captureMessage(`Detected the right coin via levenshtein distance: ${closestCoin.name} (${symbol})`);
+        scope.setExtra('closestCoinName', closestCoin.name);
+        captureMessage('Detected the right coin via levenshtein distance');
       });
       matchingCoin = closestCoin;
     } else {

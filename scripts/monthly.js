@@ -59,7 +59,8 @@ const fetchCoinpaprikaData = async () => {
       withScope(scope => {
         scope.setLevel('warning');
         scope.setExtra('symbol', symbol);
-        captureMessage(`Coinpaprika: Detected the right coin via levenshtein distance: ${closestCoin.name} (${symbol})`);
+        scope.setExtra('closestCoin', closestCoin.name);
+        captureMessage('Coinpaprika: Detected the right coin via levenshtein distance');
       });
       console.log('Found multiple coins', matchingCoins)
       console.log('Picked', closestCoin, ' for ', symbol, name)
