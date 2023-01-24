@@ -28,5 +28,7 @@ Category,CoinSymbol,CoinName,addORremove
 "ZK Rollup",MUTE,Mute,add
 "ZK Rollup",IMX,ImmutableX,add
 "ZK Rollup",ZKX,ZKSpace,add
-
-
+"Fractionalized NFT",DOG,The Doge NFT,add
+"Fractionalized NFT",NFT,APENFT,add
+"Fractionalized NFT",NFTX,NFTX,add
+"AI",PHB,Phoenix Global,add
