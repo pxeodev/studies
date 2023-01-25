@@ -14,6 +14,7 @@ import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variable
 import useBreakPoint from '../hooks/useBreakPoint';
 import convertToDailySignals from '../utils/convertToDailySignals';
 import getTrends from '../utils/getTrends.mjs'
+import prisma from "../lib/prisma.mjs"
 
 const { Content } = Layout;
 
