@@ -88,12 +88,9 @@ export async function getStaticProps() {
     date = subDays(date, 1)
   }
   historicDailySuperSuperTrends = historicDailySuperSuperTrends.reverse()
-  // TODO: Import ohlc data from production into staging also and commit&deploy to staging v2
-  // TODO: Toggl 5 hours
   for (const coin of coins) {
     for (let i = 0, date = yesterday; i < 30; i++) {
       const dateOhlcs = coin.ohlcs.filter(ohlc => ohlc.closeTime.getTime() <= date.getTime())
-      console.log(dateOhlcs)
       const dateDailyOhlcs = convertToDailySignals(dateOhlcs)
       const [_dailyTrends, dateSuperSuperTrend] = getTrends(dateDailyOhlcs, defaultAtrPeriods, defaultMultiplier, false)
       const historicIndex = historicDailySuperSuperTrends.findIndex((historicDataPoint) => {
