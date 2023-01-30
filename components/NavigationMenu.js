@@ -10,6 +10,8 @@ import {
   QuestionCircleFilled,
   ContainerFilled,
   VideoCameraFilled,
+  PlayCircleOutlined,
+  VerticalAlignBottomOutlined,
   ReadFilled
 } from '@ant-design/icons'
 import Link from 'next/link'
@@ -40,18 +42,18 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
           icon: <HeartFilled className={styles.dustRed} />
         },
         {
-          label: <Link href="/top-coins">Top Coins</Link>,
-          key: '/top-coins',
-          icon: <RiseOutlined className={styles.geekBlue} />
+          label: <Link href="/current-narratives">Current narratives</Link>,
+          key: '/current-narratives',
+          icon: <PlayCircleOutlined className={styles.geekBlue} />
         },
         {
-          label: <Link href="/gainers-and-losers">Gainers & Losers</Link>,
-          key: '/gainers-and-losers',
-          icon: <LineChartOutlined className={styles.goldenPurple} />
+          label: <Link href="/low-market-cap">Low market cap</Link>,
+          key: '/low-market-cap',
+          icon: <VerticalAlignBottomOutlined className={styles.goldenPurple} />
         },
         {
-          label: <Link href="/new-pairs">New Pairs</Link>,
-          key: '/new-pairs',
+          label: <Link href="/fresh-trends">Fresh Trends</Link>,
+          key: '/fresh-trends',
           icon: <AlertFilled className={styles.daybreakBlue} />
         },
       ]
@@ -72,25 +74,25 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
         }
       ]
     },
-    {
-      label: 'Top Categories',
-      key: 'topcategories',
-      children: topCategories.map((category) => {
-        return {
-          label: <Link href={`/?category=${category}`}>{category}</Link>,
-          key: `/${category}`
-        }
-      })
-    },
+    // {
+    //   label: 'Top Categories',
+    //   key: 'topcategories',
+    //   children: topCategories.map((category) => {
+    //     return {
+    //       label: <Link href={`/?category=${category}`}>{category}</Link>,
+    //       key: `/${category}`
+    //     }
+    //   })
+    // },
     {
       label: 'About',
       key: 'about',
       children: [
-        {
-          label: <Link href="/team">Team</Link>,
-          key: '/team',
-          icon: <TeamOutlined className={styles.geekBlue} />
-        },
+        // {
+        //   label: <Link href="/team">Team</Link>,
+        //   key: '/team',
+        //   icon: <TeamOutlined className={styles.geekBlue} />
+        // },
         {
           label: <Link href="/faq">FAQ</Link>,
           key: '/faq',
