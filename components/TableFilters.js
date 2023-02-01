@@ -15,7 +15,7 @@ import { signals, SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 const { Text } = Typography;
 const { Option, OptGroup } = Select;
 
-const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolioInputValue, formState, formDispatch, defaultFormState }) => {
+const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolioInputValue, formState, formDispatch, defaultFormState, hiddenFilters }) => {
   const screens = useBreakPoint();
   const [filterModalVisible, setFilterModalVisible] = useState(false)
   const setPredefinedMarketCap1 = useCallback(() => {
@@ -86,10 +86,13 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
 
     return exchangeNames.sort()
   }, [coinsData])
+  const showMarketCap = !hiddenFilters?.includes('marketCap')
 
   const renderAppliedFilters = () => {
-    const marketCapFilterApplied = Number(formState.marketCapMin) !== Number(defaultFormState.marketCapMin) ||
-                                   Number(formState.marketCapMax) !== Number(defaultFormState.marketCapMax)
+    const marketCapFilterApplied = showMarketCap && (
+                                    Number(formState.marketCapMin) !== Number(defaultFormState.marketCapMin) ||
+                                    Number(formState.marketCapMax) !== Number(defaultFormState.marketCapMax)
+    )
     const trendLengthFilterApplied = Number(formState.trendLengthMin) !== Number(defaultFormState.trendLengthMin) ||
                                      Number(formState.trendLengthMax) !== Number(defaultFormState.trendLengthMax)
     const trendTypeFilterApplied = !isEqual(formState.trendType, defaultFormState.trendType)
@@ -269,51 +272,57 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
             </Select>
           </Col>
         </Row>
-        <Divider className={indexStyles.divider} />
-        <Row>
-          <Col>
-            <div>Market Cap</div>
-          </Col>
-        </Row>
-        <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
-          <Col className="gutter-row" xs={10} md={11}>
-            <Input
-              className={classnames(indexStyles.modalInput)}
-              size="large"
-              onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: e.target.value })}
-              value={formState.marketCapMin}
-              placeholder="$1"
-              aria-label="Market Cap Min"
-            />
-          </Col>
-          <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
-            <Text type="secondary">TO</Text>
-          </Col>
-          <Col className="gutter-row" xs={11} md={11}>
-            <Input
-              className={classnames(indexStyles.modalInput)}
-              size="large"
-              onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: e.target.value })}
-              value={formState.marketCapMax}
-              placeholder="$100,000"
-              aria-label="Market Cap Max"
-            />
-          </Col>
-        </Row>
-        <Row justify="space-between">
-          <Col>
-            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
-          </Col>
-          <Col>
-            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
-          </Col>
-          <Col>
-            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
-          </Col>
-          <Col>
-            <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
-          </Col>
-        </Row>
+        {
+          showMarketCap ? (
+            <>
+              <Divider className={indexStyles.divider} />
+              <Row>
+                <Col>
+                  <div>Market Cap</div>
+                </Col>
+              </Row>
+              <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
+                <Col className="gutter-row" xs={10} md={11}>
+                  <Input
+                    className={classnames(indexStyles.modalInput)}
+                    size="large"
+                    onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: e.target.value })}
+                    value={formState.marketCapMin}
+                    placeholder="$1"
+                    aria-label="Market Cap Min"
+                  />
+                </Col>
+                <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
+                  <Text type="secondary">TO</Text>
+                </Col>
+                <Col className="gutter-row" xs={11} md={11}>
+                  <Input
+                    className={classnames(indexStyles.modalInput)}
+                    size="large"
+                    onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: e.target.value })}
+                    value={formState.marketCapMax}
+                    placeholder="$100,000"
+                    aria-label="Market Cap Max"
+                  />
+                </Col>
+              </Row>
+              <Row justify="space-between">
+                <Col>
+                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
+                </Col>
+                <Col>
+                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
+                </Col>
+                <Col>
+                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
+                </Col>
+                <Col>
+                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
+                </Col>
+              </Row>
+            </>
+          ) : <></>
+        }
         <Divider className={indexStyles.divider} />
         <Row>
           <Col>

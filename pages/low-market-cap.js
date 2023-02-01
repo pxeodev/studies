@@ -28,6 +28,7 @@ export default function LowMarketCap({ coinsData, appData, exchangeData }) {
           formDispatch={formDispatch}
           defaultFormState={defaultFormState}
           setPortfolioInputValue={setPortfolioInputValue}
+          hiddenFilters={['marketCap']}
         />
         <Row className={indexStyles.tableRow}>
           <CoinTable
