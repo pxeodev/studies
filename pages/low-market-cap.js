@@ -13,6 +13,7 @@ import convertToDailySignals from '../utils/convertToDailySignals';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import getTrends from '../utils/getTrends.mjs'
 import useTableFilters from '../hooks/useTableFilters';
+import prisma from "../lib/prisma.mjs";
 
 export default function LowMarketCap({ coinsData, appData, exchangeData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
