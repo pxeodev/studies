@@ -42,6 +42,11 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
           icon: <HeartFilled className={styles.dustRed} />
         },
         {
+          label: <Link href="/todays-trends" prefetch={false}>Today&apos;s Trends</Link>,
+          key: '/todays-trends',
+          icon: <AlertFilled className={styles.daybreakBlue} />
+        },
+        {
           label: <Link href="/current-narratives" prefetch={false}>Current narratives</Link>,
           key: '/current-narratives',
           icon: <PlayCircleOutlined className={styles.geekBlue} />
@@ -50,12 +55,7 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
           label: <Link href="/low-market-cap" prefetch={false}>Low market cap</Link>,
           key: '/low-market-cap',
           icon: <VerticalAlignBottomOutlined className={styles.goldenPurple} />
-        },
-        {
-          label: <Link href="/todays-trends" prefetch={false}>Today&apos;s Trends</Link>,
-          key: '/todays-trends',
-          icon: <AlertFilled className={styles.daybreakBlue} />
-        },
+        }
       ]
     },
     {
