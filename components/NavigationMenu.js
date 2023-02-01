@@ -52,7 +52,7 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
           icon: <VerticalAlignBottomOutlined className={styles.goldenPurple} />
         },
         {
-          label: <Link href="/todays-trends" prefetch={false}>Fresh Trends</Link>,
+          label: <Link href="/todays-trends" prefetch={false}>Today&apos;s Trends</Link>,
           key: '/todays-trends',
           icon: <AlertFilled className={styles.daybreakBlue} />
         },
