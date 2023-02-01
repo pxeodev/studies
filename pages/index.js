@@ -2,7 +2,7 @@ import { Row, Layout } from 'antd'
 import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
 
-import HomePageTable from '../components/HomePageTable';
+import CoinTable from '../components/CoinTable';
 import PageHeader from '../components/PageHeader';
 import TableFilters from '../components/TableFilters'
 import { defaultAtrPeriods, defaultMultiplier } from '../utils/variables.mjs'
@@ -116,7 +116,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
           setPortfolioInputValue={setPortfolioInputValue}
         />
         <Row className={indexStyles.tableRow}>
-          <HomePageTable
+          <CoinTable
             coinsData={coinsData}
             exchangeData={exchangeData}
             marketCapMax={formState.marketCapMax}

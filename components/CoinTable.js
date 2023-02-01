@@ -16,7 +16,7 @@ import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, exchanges as ex
 
 import indexTableStyles from '../styles/indexTable.module.less';
 
-const HomePageTable = ({
+const CoinTable = ({
     coinsData,
     exchangeData,
     marketCapMin,
@@ -44,7 +44,7 @@ const HomePageTable = ({
     .split(',')
     .map((coinName) => coinName.toLowerCase())
     .filter((coinName) => coinName.length)
-  const toggleCoin = useCallback((coinId) => {
+  const toggleWatchlistCoin = useCallback((coinId) => {
     if (watchlistCoins.includes(coinId)) {
       const newWatchlistCoins = watchlistCoins.filter(coin => coin !== coinId)
       setWatchlistCoins(newWatchlistCoins)
@@ -160,7 +160,7 @@ const HomePageTable = ({
         const isCoinWatched = watchlistCoins.includes(data.id)
         return (
           <span>
-            <WatchlistStar active={isCoinWatched} onClick={() => toggleCoin(data.id)} />
+            <WatchlistStar active={isCoinWatched} onClick={() => toggleWatchlistCoin(data.id)} />
             <Link href={`/coin/${data.id}`} className={indexTableStyles.coin} passHref>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
@@ -225,4 +225,4 @@ const HomePageTable = ({
   )
 }
 
-export default HomePageTable
+export default CoinTable
