@@ -1,6 +1,7 @@
 import { Layout, Row } from 'antd';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
+import isSameDay from 'date-fns/isSameDay/index.js';
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -85,11 +86,6 @@ export async function getStaticProps() {
         },
         orderBy: { closeTime: 'asc' }
       }
-    },
-    where: {
-      marketCap: {
-        lte: 100000000
-      }
     }
   }
   let coinsData
@@ -99,8 +95,11 @@ export async function getStaticProps() {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = coinsData.map((coinData) => {
+    let yesterdaysOhcls = coinData.ohlcs.filter(ohlc => !isSameDay(ohlc.closeTime, yesterday))
     const ohlcs = convertToDailySignals(coinData.ohlcs)
+    yesterdaysOhcls = convertToDailySignals(yesterdaysOhcls)
     const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
+    const [_yesterdayTrends, yesterdaySuperSuperTrend] = getTrends(yesterdaysOhcls, defaultAtrPeriods, defaultMultiplier)
     const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
     const [dailyClassicTrends, dailyClassicSuperSuperTrend] = getTrends(ohlcs, 10, 3, false)
     const [weeklyClassicTrends, weeklyClassicSuperSuperTrend] = getTrends(ohlcs, 10, 3, true)
@@ -113,6 +112,7 @@ export async function getStaticProps() {
       ...coinData,
       dailyTrends,
       dailySuperSuperTrend,
+      yesterdaySuperSuperTrend,
       weeklyTrends,
       weeklySuperSuperTrend,
       dailyClassicTrends,
@@ -127,6 +127,7 @@ export async function getStaticProps() {
       exchanges
     }
   })
+  coinsData = coinsData.filter((coinData) => coinData.todaySuperSuperTrend !== coinData.yesterdaySuperSuperTrend)
   const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
