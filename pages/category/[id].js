@@ -20,7 +20,7 @@ export default function Category({ coinsData, appData, exchangeData, category })
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
-      <PageHeader title={`${category} coins`} />
+      <PageHeader title={`${category.name} coins`} tooltipText={category.description} />
       <Layout.Content className={baseStyles.container}>
         <TableFilters
           coinsData={coinsData}
@@ -58,13 +58,14 @@ export async function getStaticPaths() {
   const categories = await getCategories()
 
   return {
-    paths: categories.map(category => ({ params: {id: category} }) ),
+    paths: categories.map(category => ({ params: {id: category.slug} }) ),
     fallback: false
   }
 }
 
 export async function getStaticProps({ params }) {
-  const category = params.id
+  const categories = await getCategories()
+  const category = categories.find(cat => cat.slug === params.id)
   const appData = await globalData();
   const yesterday = endOfYesterday();
   const coinQuery = {
@@ -99,7 +100,7 @@ export async function getStaticProps({ params }) {
     },
     where: {
       categories: {
-        hasSome: [category]
+        hasSome: category.name
       }
     }
   }

@@ -8,7 +8,6 @@ dotenv.config();
 const overrideCategories = async () => {
   const overrides = await getCategoryOverrides();
   for (const override of overrides) {
-    console.log(override.CoinName, override.CoinSymbol)
     const coinData = await prisma.coin.findFirst({
       where: {
         name: override.CoinName,

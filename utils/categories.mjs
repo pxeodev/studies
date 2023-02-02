@@ -2,6 +2,7 @@ import csv from 'csvtojson'
 import flow from 'lodash/fp/flow.js'
 import uniq from 'lodash/fp/uniq.js'
 import flatMap from 'lodash/fp/flatMap.js'
+import slugify from 'slugify'
 
 import prisma from '../lib/prisma.mjs'
 
@@ -33,6 +34,7 @@ export async function overrideCoinCategories(name, symbol, categories) {
 }
 
 export async function getCategories() {
+  const categoryDescriptions = await csv().fromFile('lib/CategoryDescriptions.csv');
   let categories = await prisma.coin.findMany({
     select: {
       categories: true
@@ -42,6 +44,15 @@ export async function getCategories() {
     flatMap('categories'),
     uniq
   )(categories)
+  categories = categories.sort((a, b) => a.localeCompare(b))
+  categories = categories.map((categoryName) => {
+    const description = categoryDescriptions.find((cat) => cat.CategoryName === categoryName)?.CategoryDescription
+    return {
+      name: categoryName,
+      slug: slugify(categoryName, { lower: true }),
+      description
+    }
+  })
 
-  return categories.sort((a, b) => a.localeCompare(b))
+  return categories
 }

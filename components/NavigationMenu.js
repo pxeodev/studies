@@ -79,8 +79,8 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
       key: 'topcategories',
       children: topCategories.map((category) => {
         return {
-          label: <Link href={`/category/${category}`} prefetch={false}>{category}</Link>,
-          key: `/${category}`
+          label: <Link href={`/category/${category.slug}`} prefetch={false}>{category.name}</Link>,
+          key: `/${category.slug}`
         }
       })
     },
