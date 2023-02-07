@@ -28,5 +28,80 @@ Category,CoinSymbol,CoinName,addORremove
 "ZK Rollup",MUTE,Mute,add
 "ZK Rollup",IMX,ImmutableX,add
 "ZK Rollup",ZKX,ZKSpace,add
-
-
+"Fractionalized NFT",DOG,The Doge NFT,add
+"Fractionalized NFT",NFT,APENFT,add
+"Fractionalized NFT",NFTX,NFTX,add
+"AI",PHB,Phoenix Global,add
+"NFT Finance",JPEG,JPEG'd,add
+"NFT Finance",X2Y2,X2Y2,add
+"NFT Finance",MAGIC,Magic,add
+"Curve Ecosystem",CRV,Curve DAO,add
+"Curve Ecosystem",CVX,Convex Finance,add
+"Curve Ecosystem",FXS,Frax Share,add
+"Curve Ecosystem",AURA,Aura Finance,add
+"Curve Ecosystem",BTRFLY,Redacted,add
+"LSD Tokens",LDO,Lido Dao,add
+"LSD Tokens",RPL,Rocket Pool,add
+"LSD Tokens",FXS,Frax Share,add
+"LSD Tokens",SSV,SSV Network,add
+"Optimism Ecosystem",OP,Optimism,add
+"Optimism Ecosystem",VELO,Velo,add
+"Optimism Ecosystem",LYRA,Lyra Finance,add
+"Optimism Ecosystem",SNX,Synthetic Network,add
+"AI",OCEAN,Ocean Protocol,add
+"AI",RLC,iExec RLC,add
+"China Coins",FIL,Filecoin,add
+"China Coins",ZIL,Zilliqa,add
+"China Coins",NEO,NEO,add
+"China Coins",VET,VeChain,add
+"Storage",STX,Stacks,add
+"Storage",GLM,Golem,add
+"Layer 1",AVAX,Avalanche,add
+"Layer 1",SOL,Solana,add
+"Layer 1",FTM,Fantoma,add
+"Layer 1",BNB,BNB,add
+"Layer 1",MATIC,Polygon,add
+"Layer 1",ATOM,Cosmos Hub,add
+"Layer 1",ADA,Cardano,add
+"Layer 1",ALGO,Algorand,add
+"Layer 1",TRX,TRON,add
+"Layer 1",APT,Aptos,add
+"Privacy Coin",ROSE,Oasis Network,add
+"Privacy Coin",PHA,Phala Network,add
+"Retail",XRP,XRP,add
+"Retail",ADA,Cardano,add
+"Retail",DOGE,Dogecoin,add
+"Retail",SHIB,Shiba Inu,add
+"Dino Coins",LTC,Litecoin,add
+"Dino Coins",DASH,Dash,add
+"Dino Coins",NEO,NEO,add
+"Dino Coins",XLM,Stellar,add
+"Dino Coins",ETC,Ethereum Classic,add
+"Dino Coins",EOS,EOS,add
+"Dino Coins",DGB,DigiByte,add
+"Dino Coins",XVG,Verge,add
+"ZK Rollup",DUSK,DUSK Network,add
+"ZK Rollup",MINA,MINA Protocol,add
+"ZK Rollup",MATIC,Polygon,add
+"Proof of Work",BTC,Bitcoin,add
+"Proof of Work",DOGE,Dogecoin,add
+"Proof of Work",LTC,Litecoin,add
+"Proof of Work",ETC,Ethereum Classic,add
+"Proof of Work",RVN,Ravencoin,add
+"Proof of Work",KDA,Kadena,add
+"Infrastructure",OCEAN,Ocean Protocol,add
+"Infrastructure",HNT,Helium,add
+"Infrastructure",BAT,Basic Attention,add
+"Infrastructure",ENS,Ethereum Name Service,add
+"Infrastructure",API3,API3,add
+"Infrastructure",RLC,iExec RLC,add
+"Infrastructure",OCEAN,Ocean Protocol,add
+"Infrastructure",BAND,Band Protocol,add
+"Metaverse",ILV,Illuvium,add
+"Metaverse",GALA,GALA,add
+"Metaverse",GMT,STEPN,add
+"Metaverse",BNX,BinaryX,add
+"Metaverse",CHZ,Chiliz,add
+"ZK Rollup",CELR,Celr Network,add
+"ZK Rollup",METIS,Metis,add
+"Zk Rollup",XFT,Offshift,add

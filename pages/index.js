@@ -100,8 +100,8 @@ export default function Home({ coinsData, appData, exchangeData }) {
   return (
     <>
       <PageHeader
-        title="Trends"
-        tooltipText="Test"
+        title="Uncover Early Crypto Trends with the Profitable <span>CoinRotator</span> Coin Screener"
+        tooltipText="Stay Ahead of the Crowd with Daily Updates and Proprietary Supertrend Analysis for Top 1,000 Cryptocurrencies"
       />
       <Layout.Content className={indexStyles.container}>
         {/* For quick alerts: */}

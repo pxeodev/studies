@@ -384,7 +384,7 @@ setTimeout(async () => {
   try {
     await fetchCoinDataAndOhlcs();
     await fetchDerivativesData();
-    await fetchLunrData();
+    // await fetchLunrData();
     if (process.env.NODE_ENV === 'production') {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/ZzMCeSY4lD')
     }
