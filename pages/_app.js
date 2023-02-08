@@ -6,7 +6,6 @@ import { Layout } from 'antd'
 import { createContext } from "react"
 import { HydrationProvider, Client } from "react-hydration-provider";
 
-import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Sider from '../components/Sider'
 import useDarkMode from "../hooks/usedarkmode"
@@ -65,7 +64,6 @@ function MyApp({ Component, pageProps }) {
               />
             </Client>
             <Component {...pageProps} />
-            <Footer />
           </Layout>
         </Layout>
       </DarkModeContext.Provider>
