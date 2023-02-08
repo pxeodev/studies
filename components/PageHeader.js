@@ -1,5 +1,5 @@
 import { Tooltip } from "antd"
-import { InfoCircleFilled } from "@ant-design/icons"
+import { InfoCircleOutlined } from "@ant-design/icons"
 
 import styles from "../styles/pageheader.module.less"
 import useIsHoverable from "../hooks/useIsHoverable"
@@ -16,7 +16,7 @@ const PageHeader = ({ title, tooltipText, prefix, postfix }) => {
           trigger={isHoverable ? 'hover' : 'click'}
           title={tooltipText}
         >
-          <InfoCircleFilled className={styles.explainer} />
+          <InfoCircleOutlined className={styles.explainer} />
         </Tooltip>
       )}
       {postfix}
