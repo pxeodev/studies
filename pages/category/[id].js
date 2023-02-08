@@ -1,6 +1,7 @@
 import { Layout, Row } from 'antd';
 import endOfYesterday from 'date-fns/endOfYesterday';
 import subWeeks from 'date-fns/subWeeks';
+import Head from 'next/head'
 
 import baseStyles from '../../styles/base.module.less'
 import indexStyles from '../../styles/index.module.less'
@@ -16,10 +17,20 @@ import useTableFilters from '../../hooks/useTableFilters';
 import prisma from "../../lib/prisma.mjs";
 import { getCategories } from '../../utils/categories.mjs'
 
-export default function Category({ coinsData, appData, exchangeData, category }) {
+export default function Category({ coinsData, appData, exchangeData, category, currentUrl }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
+  const metaTitle = `${category.name} coins - CoinRotator`
   return (
     <>
+      <Head>
+        <title key="title">{metaTitle}</title>
+        <meta name="description" key="description" content={category.description}/>
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={category.description} />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:type" content="app" />
+        <meta property="og:locale" content="en_US" />
+      </Head>
       <PageHeader title={`${category.name} coins`} tooltipText={category.description} />
       <Layout.Content className={baseStyles.container}>
         <TableFilters
