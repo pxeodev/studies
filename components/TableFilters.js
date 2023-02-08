@@ -158,7 +158,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
   return (
     <>
       <Card className={indexStyles.filters}>
-        <Row className={indexStyles.row} type="flex">
+        <Row className={indexStyles.row} type="flex" justify="space-between">
           <Col xs={24} md={8} className={indexStyles.col}>
             <Input
               ref={inputRef}
@@ -208,17 +208,15 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
         }
       >
         <Row>
-          <Col>
-            <span>
-              <span>SuperTrend Flavor</span>
-              <Tooltip
-                placement={'right'}
-                trigger={isHoverable ? 'hover' : 'click'}
-                title="CoinRotator: ATR=5 Multiplier=1.5. Classic: ATR=10 Multiplier=3."
-              >
-                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
-              </Tooltip>
-            </span>
+          <Col className={indexStyles.modalHeaderRow}>
+            <span>SuperTrend Flavor</span>
+            <Tooltip
+              placement={'right'}
+              trigger={isHoverable ? 'hover' : 'click'}
+              title="CoinRotator: ATR=5 Multiplier=1.5. Classic: ATR=10 Multiplier=3."
+            >
+              <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
+            </Tooltip>
           </Col>
           <Col className={indexStyles.modalInput}>
             <Radio.Group
@@ -232,7 +230,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
           </Col>
         </Row>
         <Divider className={indexStyles.divider} />
-        <Row gutter={{ xs: 2, md: 16 }}>
+        <Row gutter={{ xs: 2, md: 16 }} className={indexStyles.modalHeaderRow}>
           <Col className="gutter-row" span={12}>
             <span>Trend</span>
           </Col>
@@ -288,7 +286,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
           showMarketCap ? (
             <>
               <Divider className={indexStyles.divider} />
-              <Row>
+              <Row className={indexStyles.modalHeaderRow}>
                 <Col>
                   <div>Market Cap</div>
                 </Col>
@@ -318,7 +316,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
                   />
                 </Col>
               </Row>
-              <Row justify="space-between">
+              <Row gutter={12}>
                 <Col>
                   <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
                 </Col>
@@ -339,7 +337,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
           showTrendLength ? (
             <>
               <Divider className={indexStyles.divider} />
-              <Row>
+              <Row className={indexStyles.modalHeaderRow}>
                 <Col>
                   <div>Trend Streak</div>
                 </Col>
@@ -369,25 +367,25 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
                   />
                 </Col>
               </Row>
-              <Row justify="space-between">
+              <Row gutter={12}>
                 <Col>
-                  <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength1}>1-5</Button>
+                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength1}>1-5</Button>
                 </Col>
                 <Col>
-                  <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength2}>5-10</Button>
+                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength2}>5-10</Button>
                 </Col>
                 <Col>
-                  <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength3}>10-20</Button>
+                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength3}>10-20</Button>
                 </Col>
                 <Col>
-                  <Button className={indexStyles.modalInputButton} size="large" onClick={setPredefinedTrendLength4}>20+</Button>
+                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength4}>20+</Button>
                 </Col>
               </Row>
             </>
           ) : <></>
         }
         <Divider className={indexStyles.divider} />
-        <Row>
+        <Row className={indexStyles.modalHeaderRow}>
           <Col>
             <span>
               <span>Exchanges</span>
@@ -396,7 +394,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
                 trigger={isHoverable ? 'hover' : 'click'}
                 title="Select your exchanges to see a complete list of coins for each trend condition."
               >
-                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
               </Tooltip>
             </span>
           </Col>
@@ -417,7 +415,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
           </Col>
         </Row>
         <Divider className={indexStyles.divider} />
-        <Row>
+        <Row className={indexStyles.modalHeaderRow}>
           <Col>
             <span>
               <span>Derivative markets</span>
@@ -426,7 +424,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
                 trigger={isHoverable ? 'hover' : 'click'}
                 title="Select your derivatives markets to see their trend condition."
               >
-                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+                <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
               </Tooltip>
             </span>
           </Col>

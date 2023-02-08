@@ -77,17 +77,24 @@
 .tooltipIcon {
   margin-left: 4px;
   margin-right: 4px;
+  vertical-align: text-top;
 
   svg {
     width: 10px;
   }
 
   path {
-    fill: @text-color-secondary;
+    fill: var(--cr-primary-tooltip);
 
     &:hover {
         fill: @text-color;
     }
+  }
+}
+
+.tooltipIconBig {
+  svg {
+    width: 14px;
   }
 }
 
