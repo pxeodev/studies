@@ -37,6 +37,14 @@
     }
   }
 
+  :global(.ant-menu-item-selected) {
+    background-color: var(--cr-secondary-bg) !important;
+
+    &::after {
+      opacity: 0;
+    }
+  }
+
   :global(.anticon) {
     width: 22px;
     height: 22px;
