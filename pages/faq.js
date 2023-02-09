@@ -68,7 +68,7 @@ export default function Faq() {
           HODL is a mispelling of a very enthusiastic early investor in Bitcoin. The term stuck and has been used ever since. In the spirit of early adoption and the culture surrounding the revolutionary nature of crypto, we have adopted it to describe an uncertain near term situation in that coin.
         </Panel>
 <Panel header="Does CoinRotator have a token?" key="10">
-      No, CoinRotator doesn't have a token. If you come across a token or pre-sale claiming to be related to CoinRotator then it's likely a scam. Remember to always be cautious and do your own research before investing in any tokens on pre-sales.
+      No, CoinRotator doesn&apos;t have a token. If you come across a token or pre-sale claiming to be related to CoinRotator then it&apos;s likely a scam. Remember to always be cautious and do your own research before investing in any tokens on pre-sales.
         </Panel>
 
 <Panel header="Where does CoinRotator get data from?" key="11">
@@ -93,37 +93,37 @@ All tokens are listed on CoinRotator automatically as soon as they are added to 
 
 How do I update information about a token, such as description and social links?
 
-CoinRotator automatically looks for token information from external token lists, such as CoinGecko's. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
+CoinRotator automatically looks for token information from external token lists, such as CoinGecko&apos;s. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
 
-How does CoinRotator calculate a token's FDV and Market Cap?
+How does CoinRotator calculate a token&apos;s FDV and Market Cap?
 
 CoinRotator uses the following formula to calculate fully diluted valuation for any given token:
 
 FDV = (total supply - burned supply) * price
 
-In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don't burn supply that isn't in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
+In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don&apos;t burn supply that isn&apos;t in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
 
 Token Listing Issues
 
-All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider's APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
+All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider&apos;s APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
 
 
     </Panel>
 How do I update information about a token, such as description and social links?
 
-CoinRotator automatically looks for token information from external token lists, such as CoinGecko's. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
+CoinRotator automatically looks for token information from external token lists, such as CoinGecko&apos;s. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
 
-How does CoinRotator calculate a token's FDV and Market Cap?
+How does CoinRotator calculate a token&apos;s FDV and Market Cap?
 
 CoinRotator uses the following formula to calculate fully diluted valuation for any given token:
 
 FDV = (total supply - burned supply) * price
 
-In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don't burn supply that isn't in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
+In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don&apos;t burn supply that isn&apos;t in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
 
 Token Listing Issues
 
-All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider's APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
+All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider&apos;s APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
 
 <Panel header="How to Add a Dex Listing?" key="13">
 
@@ -142,7 +142,7 @@ The DEX has an active community and user base.
 
 All advertising-related inquiries are managed by a third party team, which is the premier advertising network in the cryptocurrency market, they serve as our only authorized representative.
 
-To advertise on our website, both individuals and companies must complete this company's external verification process, which includes KYC, prior to launching their campaigns. Please keep in mind that even if the process is completed successfully, we and our partner reserve the right to not promote the project on the website.
+To advertise on our website, both individuals and companies must complete this company&apos;s external verification process, which includes KYC, prior to launching their campaigns. Please keep in mind that even if the process is completed successfully, we and our partner reserve the right to not promote the project on the website.
 
 You can obtain additional information and a quote for advertising services on our website by contacting @coinrotatorapp and we will reveal the third party.
 
