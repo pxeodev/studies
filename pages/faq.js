@@ -59,7 +59,7 @@ export default function Faq() {
           We have personal experience with these trends for several years in the crypto market. They work, but not as a stand alone system. They are very powerful as a filtering mechanism (don’t fight the trend). We will begin publishing individual market performance for each altcoin in Q3 2022.
         </Panel>
         <Panel header="Can we access your API?" key="7">
-          Q4 2022
+          Q4 2023
         </Panel>
         <Panel header="Why does my coin say 'Up', but it's down a lot today?" key="8">
           Coinrotator issues trends once a day after the daily bar closes at 01:00 UTC. The price must violate the price threshold and stay at that point after this time. Once that happens the trends will reverse. At present we strongly discourage blindly following the trend alerts based on the coin screener.
@@ -67,6 +67,88 @@ export default function Faq() {
  <Panel header="Why do you use the word HODL in your signals?" key="9">
           HODL is a mispelling of a very enthusiastic early investor in Bitcoin. The term stuck and has been used ever since. In the spirit of early adoption and the culture surrounding the revolutionary nature of crypto, we have adopted it to describe an uncertain near term situation in that coin.
         </Panel>
+<Panel header="Does CoinRotator have a token?" key="10">
+      No, CoinRotator doesn't have a token. If you come across a token or pre-sale claiming to be related to CoinRotator then it's likely a scam. Remember to always be cautious and do your own research before investing in any tokens on pre-sales.
+        </Panel>
+
+<Panel header="Where does CoinRotator get data from?" key="11">
+
+CoinRotator gets data from popular APIs such as CoinGecko, CoinPaprika, CryptoWatch and some as yet to be revealed sources. As we scale, we will begin running nodes to specific chains to enhance our data and charting options. At some point we will offer our won API solutions, so stay tuned.
+        </Panel>
+<Panel header="Is there a CoinRotator app?" key="11">
+No, we are looking into the possibility though.
+    </Panel>
+<Panel header="Does CoinRotator have Telegram bots?" key="12">
+
+Yes! CoinRotator Daily Trend Alerts Bot https://t.me/+JvnH0f34vMw0ZTY8
+    </Panel>
+<Panel header="Does CoinRotator have Discord bots?" key="13">
+
+Yes! We have a Discord bot as well. If this link has expired, please message us directly on twitter @coinrotatorapp
+The discord has the Daily Trend Alerts as well as the 4hr signals sorted by sector.
+
+    </Panel>
+<Panel header="Token Listing Questions" key="13">
+All tokens are listed on CoinRotator automatically as soon as they are added to a liquidity pool and have at least one transaction. You can use the search bar to search for any particular token by its name, symbol, or address, as well as a pair address.
+
+How do I update information about a token, such as description and social links?
+
+CoinRotator automatically looks for token information from external token lists, such as CoinGecko's. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
+
+How does CoinRotator calculate a token's FDV and Market Cap?
+
+CoinRotator uses the following formula to calculate fully diluted valuation for any given token:
+
+FDV = (total supply - burned supply) * price
+
+In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don't burn supply that isn't in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
+
+Token Listing Issues
+
+All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider's APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
+
+
+    </Panel>
+How do I update information about a token, such as description and social links?
+
+CoinRotator automatically looks for token information from external token lists, such as CoinGecko's. Once a token is present on such a list, all of its information will be displayed on CoinRotator automatically. If we have missed something for your favorite project, you can always reach out to us @coinrotatorapp
+
+How does CoinRotator calculate a token's FDV and Market Cap?
+
+CoinRotator uses the following formula to calculate fully diluted valuation for any given token:
+
+FDV = (total supply - burned supply) * price
+
+In most cases, FDV will be the same as market cap, but there can be exceptions. For tokens that don't burn supply that isn't in circulation, CoinRotator will look for self-reported circulating supply from CoinGecko, and automatically use that amount to calculate market cap instead.
+
+Token Listing Issues
+
+All tokens that have been in the top 1500 marketcap on CoinGecko in the past two years are automatically tracked in the CoinRotator database and are updated through our provider's APIs. However, some new projects may not self-report their market cap or FDV to CoinGecko, in which case CoinRotator may mistakenly omit these projects from its screener.
+
+<Panel header="How to Add a Dex Listing?" key="13">
+
+For supported chains and protocols, CoinRotator will track all DEXes automatically, regardless of whether they are listed or not.
+
+Please reach out to us at @coinrotatorapp to request a DEX listing, but keep in mind that DEXes with low liquidity and volume may not be listed at all.
+
+Here are some of the factors we consider before listing a new DEX:
+The DEX has a significant amount of liquidity and daily volume.
+The DEX has open-sourced and audited smart contracts.
+The DEX has an active community and user base.
+
+   </Panel>
+
+<Panel header="CoinRotator Advertising" key="13">
+
+All advertising-related inquiries are managed by a third party team, which is the premier advertising network in the cryptocurrency market, they serve as our only authorized representative.
+
+To advertise on our website, both individuals and companies must complete this company's external verification process, which includes KYC, prior to launching their campaigns. Please keep in mind that even if the process is completed successfully, we and our partner reserve the right to not promote the project on the website.
+
+You can obtain additional information and a quote for advertising services on our website by contacting @coinrotatorapp and we will reveal the third party.
+
+Please note that it may take up to 24 hours during business hours and up to 72 hours during holidays and weekends to receive a response. Alternative communication channels such as Telegram or Skype are also available and will be confirmed via email to prevent impersonation.
+   </Panel>
+
       </Collapse>
     </Content>
   );
