@@ -45,6 +45,11 @@ const AnalysisTab = ({ coin, screens }) => {
       {coin.description ? (
         <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
             <ReactMarkdown>{interpolatedCoinDescription}</ReactMarkdown>
+            <div className={coinStyles.sectionDescriptionSource}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/chat-gpt-logo.jpeg" alt="Chat GPT Logo" className={coinStyles.sectionDescriptionSourceGPTLogo} />
+              <span className={coinStyles.sectionDescriptionSourceGPTSummarized}>Summarized in part by</span> ChatGPT 3.5
+            </div>
         </Card.Grid>
       ) : <></>}
     </>
