@@ -77,6 +77,8 @@ const Search = ({ categories, coins, collapsed }) => {
           allowClear
           getPopupContainer={() => searchRef.current}
           showSearch
+          className={searchStyles.searchSelect}
+          popupClassName={searchStyles.searchResults}
           filterOption={(input, option) => {
             const matchesValue = option?.value?.toLowerCase()?.includes(input.toLowerCase());
             if (option['data-type'] === 'coin') {

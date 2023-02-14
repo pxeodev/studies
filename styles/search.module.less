@@ -4,6 +4,10 @@
   :global(.ant-modal-body) {
     padding: 0;
   }
+
+  :global(.ant-modal-close-x) {
+    display: none;
+  }
 }
 
 .searchIcon {
@@ -41,6 +45,25 @@
 
 .placeholderText {
   color: @cr-gray-7;
+}
+
+.searchSelect {
+  width: 100%;
+
+  :global(.ant-select-selector) {
+    border: 0 !important;
+    padding: 0 !important;
+    height: 48px !important;
+
+    input {
+      height: 48px !important;
+    }
+  }
+}
+
+.searchResults {
+  margin-top: -3px;
+  border-radius: 0;
 }
 
 .coinOption {
