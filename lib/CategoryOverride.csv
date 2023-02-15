@@ -105,3 +105,7 @@ Category,CoinSymbol,CoinName,addORremove
 "ZK Rollup",CELR,Celr Network,add
 "ZK Rollup",METIS,Metis,add
 "Zk Rollup",XFT,Offshift,add
+"POA",VET,VeChain,add
+"POA",VTHO,VeThor,add
+"POA",POA,Proof of Network,add
+"POA",EWT,Energy Web,add 
