@@ -104,7 +104,7 @@ export default function Home({ coinsData, appData, exchangeData }) {
         tooltipText="Stay Ahead of the Trend with Daily Updates and Analysis for the Top 1000+ markets"
       />
       <Layout.Content className={indexStyles.container}>
-        {/* For quick alerts: */}
+        {/* For quick alerts */}
         {/* <Alert message={<span>Win 100 USDT. Please answer our <b>super brief</b> CoinRotator <a href='https://docs.google.com/forms/d/e/1FAIpQLSdaAbzeWl0wUMSnE3RZZEyX-MxqE9XOnVSCyWXg3Gcpv-rzdg/viewform' target='_blank' rel='noreferrer'>survey</a>.</span>} type="info" closable className={indexStyles.message}/> */}
         <TableFilters
           coinsData={coinsData}
