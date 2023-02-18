@@ -31,7 +31,7 @@ export default function Category({ coinsData, appData, exchangeData, category, c
         <meta property="og:type" content="app" />
         <meta property="og:locale" content="en_US" />
       </Head>
-      <PageHeader title={`${category.name} coins`} tooltipText={category.description} />
+      <PageHeader title={`${category.name} coins`} explainer={category.description} />
       <Layout.Content className={baseStyles.container}>
         <TableFilters
           coinsData={coinsData}
