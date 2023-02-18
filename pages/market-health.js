@@ -64,7 +64,7 @@ export async function getStaticProps() {
         where: {
           closeTime: {
             lte: yesterday,
-            gte: subWeeks(yesterday, 6)
+            gte: subWeeks(yesterday, 15)
           }
         },
         orderBy: { closeTime: 'asc' }
