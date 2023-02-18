@@ -6,6 +6,7 @@ import take from 'lodash/take';
 import { useEffect } from 'react';
 
 import coinStyles from '../styles/coin.module.less'
+import ChatGPTSource from './ChatGPTSource';
 
 const AnalysisTab = ({ coin, screens }) => {
   const notation = screens.sm ? 'standard' : 'compact'
@@ -76,11 +77,7 @@ const AnalysisTab = ({ coin, screens }) => {
       {coin.description ? (
         <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
             <ReactMarkdown>{interpolatedCoinDescription}</ReactMarkdown>
-            <div className={coinStyles.sectionDescriptionSource}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/chat-gpt-logo.jpeg" alt="Chat GPT Logo" className={coinStyles.sectionDescriptionSourceGPTLogo} />
-              <span className={coinStyles.sectionDescriptionSourceGPTSummarized}>Summarized in part by</span> ChatGPT 3.5
-            </div>
+            <ChatGPTSource />
         </Card.Grid>
       ) : <></>}
     </>

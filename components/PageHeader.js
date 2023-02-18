@@ -5,8 +5,9 @@ import ReactMarkdown from 'react-markdown';
 
 import styles from "../styles/pageheader.module.less"
 import useBreakPoint from '../hooks/useBreakPoint';
+import ChatGPTSource from './ChatGPTSource';
 
-const PageHeader = ({ title, explainer, prefix, postfix }) => {
+const PageHeader = ({ title, explainer, showSource, prefix, postfix }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const screens = useBreakPoint();
   const modalProps = {
@@ -30,6 +31,7 @@ const PageHeader = ({ title, explainer, prefix, postfix }) => {
           <InfoCircleFilled className={styles.explainer} onClick={() => setModalVisible(true)} />
           <Modal {...modalProps}>
             <ReactMarkdown>{explainer}</ReactMarkdown>
+            {showSource ? <ChatGPTSource /> : <></>}
           </Modal>
         </>
       )}
