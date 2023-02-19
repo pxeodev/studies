@@ -24,9 +24,14 @@
 
   .explainer {
     padding: 5px;
-    background-color: var(--cr-secondary-bg);
     border-radius: 14px;
     color: var(--cr-primary-tooltip);
+
+    &:hover, &:active {
+      path {
+        fill: var(--cr-secondary-text);
+      }
+    }
   }
 }
 
