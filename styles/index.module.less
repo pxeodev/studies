@@ -140,6 +140,12 @@
   padding: 4px 8px;
 }
 
+@media (max-width: @screen-sm) {
+  .modalInputButton {
+    height: 30px;
+  }
+}
+
 .modalExplainer {
   color: @text-color-secondary;
 }
@@ -155,6 +161,7 @@
 
 .modalSelect {
   width: 100%;
+  background-color: var(--cr-primary-bg);
 }
 
 :root[data-theme="theme-dark"] {

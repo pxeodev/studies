@@ -171,7 +171,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
               className={indexStyles.nameFilter}
             />
           </Col>
-          <Col xs={3} sm={8} md={6} lg={4}>
+          <Col xs={3} sm={8} md={6} xl={4}>
             <Button
               size="large"
               onClick={() => setFilterModalVisible(true)}
@@ -317,9 +317,9 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
                   />
                 </Col>
               </Row>
-              <Row gutter={12}>
+              <Row gutter={{xs: 12, sm: 8}}>
                 <Col>
-                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>$0-$100M</Button>
+                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>-$100M</Button>
                 </Col>
                 <Col>
                   <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
