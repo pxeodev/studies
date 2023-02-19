@@ -29,9 +29,11 @@
 .searchBar {
   width: 169px;
   background-color: var(--cr-primary-bg);
+  cursor: pointer !important;
 
   input {
     background-color: var(--cr-primary-bg);
+    cursor: pointer !important;
   }
 
   @media (max-width: @screen-sm) {
@@ -66,10 +68,7 @@
   border: 0 !important;
   border-bottom: 1px solid var(--cr-primary-border) !important;
   background-color: var(--cr-primary-bg) !important;
-
-  &:focus {
-    box-shadow: none;
-  }
+  box-shadow: none !important;
 
   input {
     background-color: var(--cr-primary-bg) !important;
@@ -89,38 +88,66 @@
 .searchResults {
   max-height: 380px;
   overflow: auto;
-  padding: 16px 8px;
+  padding: 8px;
   background-color: var(--cr-secondary-bg) !important;
 }
 
-.coinOption {
-  height: 48px;
+.empty {
+  height: 32px;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  background-color: var(--cr-secondary-bg) !important;
+  color: #8C8C8C !important;
+  padding-left: 8px;
+  user-select: none;
+
+  .noQueryHighlight {
+    color: var(--cr-primary-color) !important;
+  }
+}
+
+.optionTitle {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 8px;
+  color: #8C8C8C !important;
+  background-color: var(--cr-secondary-bg) !important;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  height: 48px;
   border-radius: 4px;
   background-color: var(--cr-secondary-bg) !important;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
 
   &:hover {
     background-color: var(--cr-primary-bg) !important;
+    border: 1px solid var(--cr-primary-border) !important;
   }
+}
 
+.coinOption {
   img {
     margin-left: 8px;
     height: 20px;
     width: 20px;
   }
-}
 
-.coinName {
-  margin-left: 10px;
-}
+  .coinName {
+    margin-left: 10px;
+  }
 
-.coinSymbol {
-  margin-left: 5px;
-  color: @cr-gray-7;
+  .coinSymbol {
+    margin-left: 5px;
+    color: @cr-gray-7;
+  }
 }
 
 .categoryOption {
-  padding-left: 12px;
+  padding-left: 4px;
 }
