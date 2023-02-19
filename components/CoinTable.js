@@ -116,7 +116,9 @@ const CoinTable = ({
     if (!isEmpty(derivatives)) {
       shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative.market))
     }
-    shownDerivatives = shownDerivatives.sort((derivative) => preferredExchanges.includes(derivative.market) ? -1 : 1)
+    shownDerivatives = shownDerivatives.sort((derivativeA, derivativeB) => {
+      return preferredExchanges.includes(derivativeA.market) ? 1 : derivativeA.market.localeCompare(derivativeB.market)
+    })
     let shownExchanges = coinData.exchanges.sort((exchangeA, exchangeB) => {
       if (preferredExchanges.includes(exchangeA[0])) {
         if (preferredExchanges.includes(exchangeB[0])) {
