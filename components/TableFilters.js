@@ -159,8 +159,8 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
   return (
     <>
       <Card className={indexStyles.filters}>
-        <Row className={indexStyles.row} type="flex" justify="space-between">
-          <Col xs={24} md={8} className={indexStyles.col}>
+        <Row className={indexStyles.row} type="flex" justify="space-between" gutter={{ xs: 8 }}>
+          <Col xs={21} sm={12} md={10} className={indexStyles.col}>
             <Input
               ref={inputRef}
               placeholder="Bitcoin, ETH, Polygon..."
@@ -171,14 +171,14 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
               className={indexStyles.nameFilter}
             />
           </Col>
-          <Col xs={24} md={6}>
+          <Col xs={3} sm={8} md={6}>
             <Button
               size="large"
               onClick={() => setFilterModalVisible(true)}
               icon={<SlidersOutlined />}
               className={indexStyles.allFiltersButton}
             >
-              Customize
+              {screens.sm ? 'Customize' : null}
             </Button>
           </Col>
         </Row>
