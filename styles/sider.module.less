@@ -5,7 +5,14 @@
   padding: 16px 0 128px 0;
   border-right: 1px solid var(--cr-primary-border);
 
+  &:hover {
+    :global(.ant-layout-sider-trigger) {
+      display: block;
+    }
+  }
+
   :global(.ant-layout-sider-trigger) {
+    display: none;
     position: absolute;
     top: 0;
     left: 217px;
@@ -29,6 +36,7 @@
     background: var(--cr-secondary-bg);
 
     :global(.ant-layout-sider-trigger) {
+      display: block !important;
       padding-right: unset;
       left: 16px;
       width: 20px !important;
