@@ -1,6 +1,9 @@
 @import './variables.module.less';
 
 .modal {
+  margin-top: 48px !important;
+  top: 0;
+
   :global(.ant-modal-body) {
     padding: 0;
   }
@@ -12,7 +15,6 @@
 
 @media screen and (max-width: @screen-sm) {
   .modal {
-    margin-top: 48px !important;
     padding: 0 16px !important;
   }
 }
