@@ -41,7 +41,6 @@ export default function MarketHealth({ historicDailySuperSuperTrends }) {
 export async function getStaticProps() {
   const appData = await globalData();
   const yesterday = endOfYesterday();
-  console.log('start market health')
   const coinQuery = {
     orderBy: { marketCapRank: 'asc' },
     select: {
@@ -110,8 +109,6 @@ export async function getStaticProps() {
 
     return historicalDataPoint
   })
-
-  console.log('end market health')
 
   return {
     props: {
