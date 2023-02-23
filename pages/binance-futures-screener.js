@@ -94,7 +94,7 @@ export async function getStaticProps() {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = coinsData.filter((coinData) => {
-    return coinData.derivatives.some((derivative) => {
+    return coinData.derivatives?.some((derivative) => {
       return derivative.market === 'Binance'
     })
   })
