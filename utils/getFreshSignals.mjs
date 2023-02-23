@@ -22,7 +22,7 @@ const getFreshSignals = async () => {
   })
   coinsData = coinsData.filter(coin => !excludedSymbols.includes(coin.symbol))
   for (let coin of coinsData) {
-    // console.log(`Fetching data for ${coin.name} (${coin.symbol})`)
+    console.log(`Fetching data for ${coin.name} (${coin.symbol})`)
     let ohlcs = await prisma.ohlc.findMany({
       select: {
         closeTime: true,
