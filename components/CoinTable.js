@@ -14,7 +14,7 @@ import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variabl
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
 
-import indexTableStyles from '../styles/indexTable.module.less';
+import coinTableStyles from '../styles/coinTable.module.less';
 
 const CoinTable = ({
     coinsData,
@@ -163,11 +163,11 @@ const CoinTable = ({
         return (
           <span>
             <WatchlistStar active={isCoinWatched} onClick={() => toggleWatchlistCoin(data.id)} />
-            <Link href={`/coin/${data.id}`} className={indexTableStyles.coin} passHref>
+            <Link href={`/coin/${data.id}`} className={coinTableStyles.coin} passHref>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coinData.images.small} alt={coinData.name} className={indexTableStyles.image} loading="lazy"/>
-              <span className={indexTableStyles.name}>{coinData.name}</span>
-              <span className={indexTableStyles.symbol}>{coinData.symbol}</span>
+              <img src={coinData.images.small} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
+              <span className={coinTableStyles.name}>{coinData.name}</span>
+              <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
           </span>
         );
@@ -196,7 +196,7 @@ const CoinTable = ({
     title: 'Derivatives',
     dataIndex: 'derivatives',
     width: 250,
-    className: indexTableStyles.unclickableCell,
+    className: coinTableStyles.unclickableCell,
     render: (derivatives, data) => {
       return <span title="Top derivatives. Click to see more.">
         {derivatives.map((derivative) => {
@@ -206,7 +206,7 @@ const CoinTable = ({
           return <Tag
             key={`${derivative.market}${derivative.symbol}`}
             onClick={onTagClick}
-            className={indexTableStyles.clickableTag}
+            className={coinTableStyles.clickableTag}
           >{derivative.symbol}</Tag>
         })}
       </span>;
@@ -218,10 +218,10 @@ const CoinTable = ({
     <Table
       columns={columns}
       dataSource={tableData}
-      rowClassName={indexTableStyles.row}
+      rowClassName={coinTableStyles.row}
       pagination={{ position: ['none', 'none'], pageSize: 1000 }}
       bordered
-      className={indexTableStyles.table}
+      className={coinTableStyles.table}
       {...useVirtualTable()}
     />
   )

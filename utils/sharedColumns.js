@@ -7,13 +7,13 @@ import DownTag from '../components/DownTag'
 import HodlTag from '../components/HodlTag'
 import { signals } from '../utils/variables'
 
-import indexTableStyles from '../styles/indexTable.module.less'
+import coinTableStyles from '../styles/coinTable.module.less'
 import baseStyles from '../styles/base.module.less'
 
 export function dailySuperSuperTrend(router, isHoverable) {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
-    title: <span className={indexTableStyles.columnTitle}>
+    title: <span className={coinTableStyles.columnTitle}>
       <span>Trend (24h)</span>
       <Tooltip
           placement={'right'}
@@ -53,13 +53,13 @@ export function dailySuperSuperTrend(router, isHoverable) {
       let tag;
       switch (dailySuperSupertrend) {
         case signals.buy:
-          tag = <UpTag className={indexTableStyles.tag} />
+          tag = <UpTag className={coinTableStyles.tag} />
           break
           case signals.sell:
-            tag = <DownTag className={indexTableStyles.tag} />
+            tag = <DownTag className={coinTableStyles.tag} />
             break
             default:
-              tag = <HodlTag className={indexTableStyles.tag} />
+              tag = <HodlTag className={coinTableStyles.tag} />
             }
 
             return (
@@ -75,7 +75,7 @@ export function dailySuperSuperTrend(router, isHoverable) {
 export function weeklySuperSuperTrend(router, isHoverable) {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
-    title: <span className={indexTableStyles.columnTitle}>
+    title: <span className={coinTableStyles.columnTitle}>
       <span>Trend (7d)</span>
       <Tooltip
           placement={'right'}
@@ -108,13 +108,13 @@ export function weeklySuperSuperTrend(router, isHoverable) {
       let tag;
       switch (weeklySuperSuperTrend) {
         case signals.buy:
-          tag = <UpTag className={indexTableStyles.tag} />
+          tag = <UpTag className={coinTableStyles.tag} />
           break
         case signals.sell:
-          tag = <DownTag className={indexTableStyles.tag} />
+          tag = <DownTag className={coinTableStyles.tag} />
           break
         default:
-          tag = <HodlTag className={indexTableStyles.tag} />
+          tag = <HodlTag className={coinTableStyles.tag} />
       }
 
       return (
@@ -141,7 +141,7 @@ export function marketCap(router, hydrated) {
     render: (marketCap) => {
       if (!marketCap) { return null }
       return (
-        <div className={indexTableStyles.value}>
+        <div className={coinTableStyles.value}>
           {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
         </div>
       )
@@ -151,7 +151,7 @@ export function marketCap(router, hydrated) {
 
 export function exchanges(router, isHoverable, exchangeData) {
   return {
-    title: <span className={indexTableStyles.columnTitle}>
+    title: <span className={coinTableStyles.columnTitle}>
       <span>Exchanges</span>
       <Tooltip
           placement={'right'}
@@ -162,7 +162,7 @@ export function exchanges(router, isHoverable, exchangeData) {
       </Tooltip>
     </span>,
     dataIndex: 'exchanges',
-    className: indexTableStyles.unclickableCell,
+    className: coinTableStyles.unclickableCell,
     render: (exchanges, data) => {
       return <span title="Top 5 exchanges. Click to see more.">
         {exchanges.map((exchange) => {
@@ -178,7 +178,7 @@ export function exchanges(router, isHoverable, exchangeData) {
             loading="lazy"
             key={exchange[0]}
             onClick={onTagClick}
-            className={classnames(indexTableStyles.clickableTag, indexTableStyles.image)}
+            className={classnames(coinTableStyles.clickableTag, coinTableStyles.image)}
           />
         })}
       </span>;

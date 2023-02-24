@@ -13,7 +13,7 @@ import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
 import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
 
-import indexTableStyles from '../styles/indexTable.module.less'
+import coinTableStyles from '../styles/coinTable.module.less'
 import watchlistStyles from '../styles/watchlist.module.less'
 
 const { Content } = Layout;
@@ -73,11 +73,11 @@ export default function WatchList({ exchangeData }) {
       sorter: (a, b) => a.coins.name.localeCompare(b.coins.name),
       render: (name, coin) => {
         return (
-          (<Link href={`/coin/${coin.id}`} className={indexTableStyles.coin} passHref>
+          (<Link href={`/coin/${coin.id}`} className={coinTableStyles.coin} passHref>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={coin.images.small} alt={name} className={indexTableStyles.image} loading="lazy"/>
-            <span className={indexTableStyles.name}>{name}</span>
-            <span className={indexTableStyles.symbol}>{coin.symbol}</span>
+            <img src={coin.images.small} alt={name} className={coinTableStyles.image} loading="lazy"/>
+            <span className={coinTableStyles.name}>{name}</span>
+            <span className={coinTableStyles.symbol}>{coin.symbol}</span>
           </Link>)
         );
       }
@@ -112,6 +112,8 @@ export default function WatchList({ exchangeData }) {
                 dataSource={watchlist}
                 pagination={false}
                 loading={loading}
+                className={coinTableStyles.table}
+                rowClassName={coinTableStyles.row}
                 {...useVirtualTable()}
               />
             </Client>
