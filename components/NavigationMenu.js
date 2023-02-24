@@ -3,8 +3,6 @@ import {
   StarFilled,
   UpCircleFilled,
   HeartFilled,
-  RiseOutlined,
-  LineChartOutlined,
   AlertFilled,
   TeamOutlined,
   QuestionCircleFilled,
@@ -34,7 +32,7 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
           icon: <StarFilled className={styles.sunsetOrange} />
         },
         {
-          label: <Link href="/" prefetch={false}>Trends</Link>,
+          label: <Link href="/" prefetch={false}>All Trends</Link>,
           key: '/',
           icon: <UpCircleFilled className={styles.polarGreen} />
         },
@@ -155,7 +153,7 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
         key: '/watchlist',
       },
       {
-        label: 'Trends',
+        label: 'All Trends',
         icon: <Link href="/" prefetch={false}><UpCircleFilled className={styles.polarGreen} /></Link>,
         key: '/'
       },
