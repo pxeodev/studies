@@ -19,7 +19,7 @@ import slugify from 'slugify'
 import styles from "../styles/navigationmenu.module.less"
 import { currentNarratives } from '../utils/variables.mjs'
 
-const NavigationMenu = ({ collapsed = false , topCategories }) => {
+const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected }) => {
   const router = useRouter()
   let menuItems = [
     {
@@ -212,6 +212,7 @@ const NavigationMenu = ({ collapsed = false , topCategories }) => {
       className={styles.menu}
       inlineIndent={0}
       selectedKeys={[selectedKey]}
+      onClick={onMenuItemSelected}
     />
   );
 }

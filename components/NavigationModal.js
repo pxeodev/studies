@@ -23,7 +23,7 @@ const NavigationModal = ({ topCategories }) => {
         mask={false}
         closable={false}
       >
-        <NavigationMenu topCategories={topCategories} />
+        <NavigationMenu topCategories={topCategories} onMenuItemSelected={() => setNavigationVisible(false)} />
         <Socials />
         <Funders />
       </Modal>
