@@ -18,17 +18,27 @@ import styles from "../styles/sider.module.less"
 const Sider = ({ topCategories, categories, coins }) => {
   const [darkMode, setDarkMode] = useContext(DarkModeContext)
   const [collapsed, setCollapsed] = useState(false)
+  const [collapsing, setCollapsing] = useState(false)
   let Trigger = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
 
   return (
     <Layout.Sider
       collapsible
       collapsed={collapsed}
-      onCollapse={value => setCollapsed(value)}
       collapsedWidth={56}
+      onCollapse={(value) => {
+        setCollapsing(true)
+        setCollapsed(value)
+        setTimeout(() => {
+          setCollapsing(false)
+        }, 100)
+      }}
       width={240}
       trigger={<Trigger className={styles.trigger} />}
-      className={classnames(styles.sidebar, { [styles.collapsed]: collapsed })}
+      className={classnames(styles.sidebar, {
+        [styles.collapsed]: collapsed,
+        [styles.collapsing]: collapsing,
+      })}
     >
       <Logo className={styles.logo} showText={!collapsed} size={collapsed ? 32 : 24} />
       <Space size={12} className={styles.tools}>

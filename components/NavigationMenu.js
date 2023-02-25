@@ -207,6 +207,7 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
   return (
     <Menu
       mode="inline"
+      motion={{}}
       openKeys={['screenertools', 'currentnarratives', 'preselects', 'topcategories', 'tutorials', 'about']}
       items={menuItems}
       className={styles.menu}
