@@ -7,7 +7,6 @@ import isEmpty from 'lodash/isEmpty'
 import { useHydrated } from "react-hydration-provider";
 
 import WatchlistStar from './WatchlistStar';
-import useBreakPoint from '../hooks/useBreakPoint'
 import useIsHoverable from '../hooks/useIsHoverable';
 import useVirtualTable from '../hooks/useVirtualTable';
 import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variables'
@@ -44,7 +43,8 @@ const CoinTable = ({
     .split(',')
     .map((coinName) => coinName.toLowerCase())
     .filter((coinName) => coinName.length)
-  const toggleWatchlistCoin = useCallback((coinId) => {
+  const toggleWatchlistCoin = useCallback((e, coinId) => {
+    e.stopPropagation()
     if (watchlistCoins.includes(coinId)) {
       const newWatchlistCoins = watchlistCoins.filter(coin => coin !== coinId)
       setWatchlistCoins(newWatchlistCoins)
@@ -149,27 +149,30 @@ const CoinTable = ({
     }
   })
 
-  const screens = useBreakPoint();
-
   let columns = [
     {
       title: 'Coin',
       width: 200,
       dataIndex: 'coinData',
+      onCell: ({ id }) => {
+        return {
+          onClick: () => router.push(`/coin/${id}`)
+        }
+      },
       fixed: hydrated ? 'left' : null,
       sorter: (a, b) => a.coinData.name.localeCompare(b.coinData.name),
       render: (coinData, data) => {
         const isCoinWatched = watchlistCoins.includes(data.id)
         return (
-          <span>
-            <WatchlistStar active={isCoinWatched} onClick={() => toggleWatchlistCoin(data.id)} />
+          <>
+            <WatchlistStar active={isCoinWatched} onClick={(e) => toggleWatchlistCoin(e, data.id)} />
             <Link href={`/coin/${data.id}`} className={coinTableStyles.coin} passHref>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={coinData.images.small} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
               <span className={coinTableStyles.name}>{coinData.name}</span>
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
-          </span>
+          </>
         );
       }
     },
