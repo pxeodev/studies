@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <HydrationProvider>
       <DarkModeContext.Provider value={darkMode}>
-        <Layout>
+        <Layout className={baseStyles.outerLayout}>
           {googleAnalytics}
           <Head>
             <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
