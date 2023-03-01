@@ -54,14 +54,14 @@ const CoinTable = ({
       removeFromWatchList(coinId)
       notification.open({
         message: `Removed ${coinName} from Watchlist`,
-        placement: 'bottomRight',
+        placement: 'topRight',
       })
     } else {
       setWatchlistCoins([...watchlistCoins, coinId])
       addToWatchList(coinId)
       notification.open({
         message: `Added ${coinName} to Watchlist`,
-        placement: 'bottomRight',
+        placement: 'topRight',
       })
     }
   }, [watchlistCoins])

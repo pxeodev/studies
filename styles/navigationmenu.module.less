@@ -6,12 +6,14 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: var(--cr-primary-bg);
-  max-height: calc(100vh - 124px - 128px);
+  max-height: calc(100vh - 110px - 128px);
 
   :global(.ant-menu-submenu-title) {
     cursor: auto;
     margin-bottom: 0;
-    border-top: 1px solid var(--cr-primary-border);
+    &:not(:first-child) {
+      border-top: 1px solid var(--cr-primary-border);
+    }
 
     :global(.ant-menu-title-content) {
       font-size: 12px !important;

@@ -92,13 +92,13 @@ export default function Coin(coin) {
       removeFromWatchList(coin.id)
       notification.open({
         message: `Removed ${coin.name} from Watchlist`,
-        placement: 'bottomRight',
+        placement: 'topRight',
       })
     } else {
       addToWatchList(coin.id)
       notification.open({
         message: `Added ${coin.name} to Watchlist`,
-        placement: 'bottomRight',
+        placement: 'topRight',
       })
     }
     setIsWatched(!isWatched)

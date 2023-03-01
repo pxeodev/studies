@@ -158,6 +158,12 @@ body {
   }
 }
 
+.ant-input {
+  &:hover {
+    border-color: var(--cr-primary-color);
+  }
+}
+
 .ant-input-clear-icon {
   svg {
     width: 16px;
@@ -168,8 +174,17 @@ body {
   }
 }
 
+.ant-spin-dot-item {
+  background-color: var(--cr-primary-color);
+}
+
+.ant-table-column-sorter-up.active, .ant-table-column-sorter-down.active {
+  color: var(--cr-primary-color);
+}
+
 .ant-select > * {
   background-color: var(--cr-primary-bg) !important;
+  box-shadow: none !important;
   color: var(--cr-primary-text);
 }
 
