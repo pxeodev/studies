@@ -62,6 +62,27 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
         })
       },
       {
+        label: 'Exchanges',
+        key: 'exchanges',
+        children: [
+          {
+            label: <Link href="/binance-screener" prefetch={false}>Binance</Link>,
+            key: '/binance-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/kucoin-screener" prefetch={false}>Kucoin</Link>,
+            key: '/kucoin-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/solana-screener" prefetch={false}>Solana</Link>,
+            key: '/solana-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          }
+        ]
+      },
+      {
         label: 'Preselects',
         key: 'preselects',
         children: [
@@ -69,21 +90,6 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
             label: <Link href="/low-market-cap" prefetch={false}>Low market cap</Link>,
             key: '/low-market-cap',
             icon: <VerticalAlignBottomOutlined className={styles.goldenPurple} />
-          },
-          {
-            label: <Link href="/binance-screener" prefetch={false}>Binance screener</Link>,
-            key: '/binance-screener',
-            icon: <SwapOutlined className={styles.geekBlue} />
-          },
-          {
-            label: <Link href="/kucoin-screener" prefetch={false}>Kucoin screener</Link>,
-            key: '/kucoin-screener',
-            icon: <SwapOutlined className={styles.geekBlue} />
-          },
-          {
-            label: <Link href="/solana-screener" prefetch={false}>Solana screener</Link>,
-            key: '/solana-screener',
-            icon: <SwapOutlined className={styles.geekBlue} />
           },
           {
             label: <Link href="/bybit-futures-screener" prefetch={false}>Bybit Futures screener</Link>,
@@ -208,7 +214,7 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
     <Menu
       mode="inline"
       motion={{}}
-      openKeys={['screenertools', 'currentnarratives', 'preselects', 'topcategories', 'tutorials', 'about']}
+      openKeys={['screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about']}
       items={menuItems}
       className={styles.menu}
       inlineIndent={0}
