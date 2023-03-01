@@ -39,6 +39,10 @@
   border: 1px solid var(--cr-primary-border);
   border-bottom: 0;
 
+  @media screen and (max-width: @screen-md) {
+    border: none;
+  }
+
   :global(.ant-card-body) {
     padding: 0;
   }
