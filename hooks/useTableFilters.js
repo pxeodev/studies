@@ -198,6 +198,20 @@ const useTableFilters = (coinsData) => {
       }
     })
   }, [router.isReady, router.query])
+  // useEffect(() => {
+  //   const handleRouteChange = (_url, { shallow }) => {
+  //     console.log('changed', _url, shallow)
+  //     if (!shallow) {
+  //       formDispatch({ type: 'RESET' })
+  //     }
+  //   }
+
+  //   router.events.on('routeChangeStart', handleRouteChange)
+
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChange)
+  //   }
+  // }, [])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setPortfolioDebounced = useCallback(debounce((portfolio) => {
     formDispatch({ type: 'SET_PORTFOLIO', payload: portfolio })

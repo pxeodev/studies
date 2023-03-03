@@ -40,6 +40,19 @@
   :global(.ant-modal-body *:last-child) {
     margin-bottom: 0;
   }
+
+  :global(.ant-modal-body) {
+    max-height: calc(700px - 56px);
+    overflow-y: auto;
+
+    @media (max-width: @screen-lg) {
+      max-height: calc(500px - 56px);
+    }
+
+    @media (max-width: @screen-md) {
+      max-height: unset;
+    }
+  }
 }
 
 @media (max-width: @screen-sm) {
