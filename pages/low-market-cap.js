@@ -67,6 +67,7 @@ From any page on the site, you can always deploy the customized screener and fur
             derivatives={formState.derivatives}
             showDerivatives={formState.showDerivatives}
             superTrendFlavor={formState.superTrendFlavor}
+            reverseMarketCapSort
           />
         </Row>
       </Layout.Content>

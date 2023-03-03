@@ -6,11 +6,12 @@ import UpTag from '../components/UpTag'
 import DownTag from '../components/DownTag'
 import HodlTag from '../components/HodlTag'
 import { signals } from '../utils/variables'
+import tableSort from '../utils/tableSort'
 
 import coinTableStyles from '../styles/coinTable.module.less'
 import baseStyles from '../styles/base.module.less'
 
-export function dailySuperSuperTrend(router, isHoverable) {
+export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
     title: <span className={coinTableStyles.columnTitle}>
@@ -26,27 +27,7 @@ export function dailySuperSuperTrend(router, isHoverable) {
     dataIndex: 'dailySuperSuperTrend',
     defaultSortOrder: 'ascend',
     sorter: {
-      compare: (a, b, sortOrder) => {
-        if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
-          if (sortOrder === 'ascend') {
-            return a.marketCap < b.marketCap ? 1 : -1
-          } else {
-            return b.marketCap < a.marketCap ? 1 : -1
-          }
-        } else {
-          if (a.dailySuperSuperTrend === signals.sell) {
-            return 1
-          } else if (a.dailySuperSuperTrend === signals.hodl) {
-            if (b.dailySuperSuperTrend === signals.sell) {
-              return -1
-            } else {
-              return 1
-            }
-          } else {
-            return -1
-          }
-        }
-      },
+      compare: tableSort(reverseMarketCapSort),
       multiple: 1,
     },
     render: (dailySuperSupertrend) => {

@@ -30,7 +30,8 @@ const CoinTable = ({
     exchanges,
     derivatives,
     showDerivatives,
-    superTrendFlavor
+    superTrendFlavor,
+    reverseMarketCapSort = false,
   }) => {
 
   const router = useRouter()
@@ -189,7 +190,7 @@ const CoinTable = ({
     },
     {
       width: 100,
-      ...dailySuperSuperTrend(router, isHoverable),
+      ...dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort),
     },
     {
       width: 100,
