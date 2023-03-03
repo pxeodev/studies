@@ -39,7 +39,7 @@ This allows traders to monitor changes in the market and identify potential oppo
 
 ## Creating a Long-Short Basket for Advanced Trading
 
-For those who are comfortable with derivatives trading, the <b>Today's Trends</b> screener can be used to create a long-short basket. This involves taking a long position in the strongest trends and a short position in the weakest trends, with the goal of profiting from the spread between the two.
+For those who are comfortable with derivatives trading, the **Today's Trends** screener can be used to create a long-short basket. This involves taking a long position in the strongest trends and a short position in the weakest trends, with the goal of profiting from the spread between the two.
 
 **Additional Advanced strategies for use with the CoinRotator Screener**
 
