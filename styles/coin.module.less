@@ -50,6 +50,10 @@
 .sectionParent {
   min-height: 35vh;
 
+  :global(.ant-card-body) {
+    background-color: var(--cr-primary-bg);
+  }
+
   @media screen and (max-width: @screen-sm) {
     min-height: unset;
   }
@@ -138,7 +142,6 @@
 
 .sectionContract {
   border-top: 0 !important;
-  box-shadow: 1px 0 0 0 var(--cr-primary-border), 0 0px 0 0 var(--cr-primary-border), 1px 0px 0 0 var(--cr-primary-border), 1px 0 0 0 var(--cr-primary-border) inset, 0 0px 0 0 var(--cr-primary-border) inset !important;
 
   @media screen and (max-width: @screen-lg) {
     width: 100% !important;
@@ -209,6 +212,11 @@
 
 .valueTable {
   margin-top: 5px;
+  max-width: 40%;
+
+  table {
+    border-top: 1px solid var(--cr-primary-border) !important;
+  }
 
   thead th {
     font-weight: bold;
@@ -242,11 +250,7 @@
 }
 
 .sectionIco {
-  width: 30%;
-
-  @media screen and (max-width: @screen-lg) {
-    width: 100%;
-  }
+  width: 100%;
 }
 
 .sectionTags .sectionSimilarCoins {
