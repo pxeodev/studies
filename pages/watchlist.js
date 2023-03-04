@@ -95,8 +95,8 @@ export default function WatchList({ exchangeData }) {
       defaultSortOrder: 'ascend'
     },
     {
-      width: 80,
-      ...dailySuperSuperTrendStreak(router),
+      width: 90,
+      ...dailySuperSuperTrendStreak(router, isHoverable),
     },
     {
       width: 100,

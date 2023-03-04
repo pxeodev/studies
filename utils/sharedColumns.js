@@ -52,10 +52,19 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) 
   }
 }
 
-export function dailySuperSuperTrendStreak(router) {
+export function dailySuperSuperTrendStreak(router, isHoverable) {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
-    title: 'Trend Streak',
+    title: <span className={coinTableStyles.columnTitle}>
+      <span>Trend Streak</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="The Trend Streak is the number of consecutive days that the trend has been in an UP, HODL or DOWNtrend."
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+      </Tooltip>
+    </span>,
     dataIndex: 'dailySuperSuperTrendStreak',
     sorter: (a, b) => Number(a.dailySuperSuperTrendStreak) - Number(b.dailySuperSuperTrendStreak),
     render: (dailySuperSuperTrendStreak) => {

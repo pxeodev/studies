@@ -200,8 +200,8 @@ const CoinTable = ({
   if (showTrendStreak) {
     columns.push(
       {
-        width: 80,
-        ...dailySuperSuperTrendStreak(router),
+        width: 90,
+        ...dailySuperSuperTrendStreak(router, isHoverable),
       }
     )
   }
