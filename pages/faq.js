@@ -17,8 +17,7 @@ export default function Faq() {
   return (
     <>
       <PageHeader title="FAQ" />
-      <Content className={baseStyles.container}>
-        <Title className={baseStyles.title}>FAQ</Title>
+      <Content className={faqStyles.container}>
         <Paragraph type="secondary" className={baseStyles.subTitle}>Find answers to your frequently asked questions here.</Paragraph>
         <Collapse className={baseStyles.collapse} defaultActiveKey={['0']} accordion>
         <Panel header="What is CoinRotator?" key="0">

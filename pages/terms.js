@@ -1,7 +1,6 @@
 import { Typography, Layout } from 'antd';
 import Link from 'next/link'
 
-import baseStyles from '../styles/base.module.less'
 import tcStyles from '../styles/terms.module.less'
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
@@ -13,9 +12,8 @@ export default function Terms() {
   return (
     <>
       <PageHeader title="Terms and Conditions" />
-      <Content className={baseStyles.container}>
-        <Title className={tcStyles.title}><span className={tcStyles.bold}>CoinRotator&nbsp;</span>Terms of Use</Title>
-        <Paragraph className={tcStyles.paragraph}>These Terms of Use (the &quot;Terms&quot;) govern your access to and use of this website, CoinRotator (the &quot;Website&quot;), and associated content, software and applications (collectively, the &quot;Service&quot;). These Terms also include our Privacy Policy, which is located at <Link href="https://CoinRotator/terms" className={tcStyles.terms}>CoinRotator/terms</Link>.</Paragraph>
+      <Content className={tcStyles.container}>
+        <Paragraph className={tcStyles.paragraph}>These Terms of Use (the &quot;Terms&quot;) govern your access to and use of this website, CoinRotator (the &quot;Website&quot;), and associated content, software and applications (collectively, the &quot;Service&quot;). These Terms also include our Privacy Policy, which is located at <Link href="/terms" className={tcStyles.terms}>coinrotator.app/terms</Link>.</Paragraph>
         <Paragraph className={tcStyles.paragraph}>The Service is administered and maintained by CoinRotator. The terms &quot;we&quot;, &quot;us&quot; and &quot;our&quot; also refer to CoinRotator. The term &quot;you&quot; refers to the person visiting this Website.</Paragraph>
         <Paragraph className={tcStyles.paragraph}>Please read these Terms carefully. They contain important information regarding your legal rights, including limitations on CoinRotator&apos;s and certain third parties&apos; liability, disclaimers of warranties and a submission to jurisdiction. Each time you access the Service by any means (for example, through the Internet or on a mobile device), you irrevocably agree to comply with the version of the Terms posted on this Website at the time you access this Website. You may not use the Service if you do not agree to these Terms.</Paragraph>
         <Title level={2} className={tcStyles.subtitle}>Eligibility</Title>

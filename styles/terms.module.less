@@ -1,6 +1,14 @@
 @import (reference) './base.module.less';
 @import './variables.module.less';
 
+.container {
+  &:extend(.container);
+
+  @media (max-width: @screen-sm) {
+    padding: 16px 24px 32px 24px;
+  }
+}
+
 .title {
   &:extend(.title);
 
@@ -11,14 +19,11 @@
   @media (max-width: @screen-md) {
     margin-bottom: 16px !important;
   }
-
-  .bold {
-    font-weight: 600;
-  }
 }
 
 .subtitle {
   &:extend(.title);
+  text-align: left;
 
   margin-top: 24px !important;
 
