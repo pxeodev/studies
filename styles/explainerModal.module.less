@@ -20,8 +20,20 @@
 
   :global(.ant-modal-body) {
     max-height: calc(700px - 56px);
+    padding: 16px;
     overflow-y: auto;
     &:extend(.markdown all);
+
+    h2, h3 {
+      font-size: 16px;
+      line-height: 24px;
+
+      &:not(:first-child) {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--cr-primary-border);
+      }
+    }
 
     @media (max-width: @screen-lg) {
       max-height: calc(500px - 56px);
