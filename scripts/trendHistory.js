@@ -59,11 +59,11 @@ const compileTrendHistory = async () => {
          reverseBtcTrends[i] !== '' && reverseEthTrends[i] !== '' && reverseUsdTrends[i] !== '';
          i++, date = startOfDay(subDays(date, 1))
         ) {
-      const superSupertrend = supersupertrend({
-        eth: reverseEthTrends[i] || 0,
-        btc: reverseBtcTrends[i] || 0,
-        usd: reverseUsdTrends[i] || 0
-      })
+      const superSupertrend = supersupertrend([
+        reverseEthTrends[i] || 0,
+        reverseBtcTrends[i] || 0,
+        reverseUsdTrends[i] || 0
+      ])
       dailySuperSuperTrends.push({
         date,
         superSupertrend

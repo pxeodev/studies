@@ -1,14 +1,9 @@
 import { signals } from './variables.mjs'
 
-// Input:
-// {
-//   eth: 'UP',
-//   btc: 'UP',
-//   usd: 'DOWN'
-// }
+// Input: ['UP', 'UP', 'DOWN']
 const supersupertrend = (trends) => {
   let superSupertrend
-  const superTrends = Object.values(trends).filter(trend => trend.length)
+  const superTrends = trends.filter(trend => trend.length)
   if (superTrends.length === 2) {
     superSupertrend = superTrends[0] === superTrends[1] ? superTrends[0] : signals.hodl
   } else if (superTrends.every(tr => tr === signals.buy)) {

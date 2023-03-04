@@ -1,5 +1,5 @@
 import mapValues from 'lodash/mapValues.js'
-import zip from 'lodash/zip.js'
+import zipWith from 'lodash/zipWith.js'
 
 import supertrend from './supertrend.mjs'
 import convertToWeeklySignals from './convertToWeeklySignals.mjs'
@@ -17,7 +17,7 @@ export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySigna
     const [lastTrend, trendLength] = getTrendStreak(trends)
     return [lastTrend, trendLength, trends]
   })
-  const superSupertrend = supersupertrend(mapValues(trends, (trends) => trends[0]))
+  const superSupertrend = supersupertrend(Object.values(mapValues(trends, (trends) => trends[0])))
   const streak = superSupertrendStreak(trends)
 
   return [trends, superSupertrend, streak]
@@ -25,10 +25,8 @@ export default function getTrends(ohlcs, atrPeriods, multiplier, showWeeklySigna
 
 function superSupertrendStreak(trends) {
   const supertrends = Object.values(trends).map(t => t[2])
-  const supertrendsByTime = zip(...supertrends)
-  const supersuperTrends = supertrendsByTime.map(supertrends => {
-    return supersupertrend(supertrends)
-  })
+  const supertrendsByTime = zipWith(...supertrends, (a, b, c) => [a || '', b || '', c || ''])
+  const supersuperTrends = supertrendsByTime.map(supertrends => supersupertrend(supertrends))
 
   return getTrendStreak(supersuperTrends)[1]
 }
