@@ -36,7 +36,7 @@ The screener categorizes coins as being in an UpTrend against BTC and ETH or a D
 
 The Market Health trend measures the total health of the trend in one direction or the other.
 
-## HeadingAssessing Trend Status
+## Assessing Trend Status
 
 The Market Health Screener can help traders assess the status of a trend. If the largest percentage of coins is in an UpTrend, the Market Health will show this with the color yellow. If the largest percentage of coins is in a Downtrend, it will show this with the color red. If the trend is indecisive, the color blue will be shown above the other two conditions, indicating a HODL trend status.
 
