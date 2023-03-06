@@ -38,7 +38,7 @@ Consider the [Market Health](https://coinrotator.app/market-health). Undervalued
   - Supertrend Flavor: This option allows you to adjust the settings of the Supertrend, which is a popular trend-following indicator. CoinRotator's Supertrend is optimized for the crypto market and is much faster than the traditional version.
   - Trend: This option lets you screen for UpTrends, DownTrends, or Hodl status (no trend identified).
   - Marketcap: This option allows you to expand your search for higher marketcap coins, which may be less volatile and therefore less risky.
-  -  Exchanges: This option enables you to screen coins based on the exchange on which they are traded. This can be helpful if you prefer to invest on a particular exchange or want to diversify your portfolio across multiple exchanges.
+  - Exchanges: This option enables you to screen coins based on the exchange on which they are traded. This can be helpful if you prefer to invest on a particular exchange or want to diversify your portfolio across multiple exchanges.
   - [Derivatives](https://coinrotator.app/binance-fufures-screener): This option informs you which coins have leverage trading available, which can be useful if you are looking to use leverage in your investment strategy.`} />
       <Layout.Content className={baseStyles.container}>
         <TableFilters

@@ -39,8 +39,8 @@ If you are looking for a high volatility environment on a centralized exchange, 
 
 Here are additional ways to use the screener:
 - Look for coins with high trading volume for liquidity
--  Pay attention to the market cap to avoid thinly traded coins
--  Check for coins that recently formed uptrends with trend streaks of 1-5 Remember, trading carries inherent risk, so practice proper position sizing and minimize leverage.
+- Pay attention to the market cap to avoid thinly traded coins
+- Check for coins that recently formed uptrends with trend streaks of 1-5 Remember, trading carries inherent risk, so practice proper position sizing and minimize leverage.
 
 While CoinRotator's screener can help inform your trades, it's still essential to conduct your own research and make wise investment decisions, never go full ape on any one trade.`} />
       <Layout.Content className={baseStyles.container}>

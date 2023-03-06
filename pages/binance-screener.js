@@ -37,7 +37,7 @@ Here are some features and strategies to consider:
 
 - Hedge your spot positions with coin margined or usdt margin features on Binance
 - Deposit your spot or stable coins to leverage larger positions.
--  Use a pair trade strategy to buy strong coins and short coins of equal value to reduce downside risk
+- Use a pair trade strategy to buy strong coins and short coins of equal value to reduce downside risk
 
 However, it's important to note that these are advanced [Binance Futures](https://coinrotator.app/binance-futures-screener)  strategies and can be risky.
 

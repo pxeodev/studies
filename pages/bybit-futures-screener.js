@@ -30,7 +30,7 @@ Its futures screener on CoinRotator sorts the strongest trends on the Bybit futu
 
 Bybit offers no-KYC leverage trading, enabling traders from jurisdictions where futures trading has been banned to trade alts on high leverage. Known for blowing out stops and heavy open interest against the trend, Bybit is one of the most exciting places in crypto to trade these days. However, be very wary as liquidity can be an issue at times.
 
-# Bybit Futures Screener Capabilities
+## Bybit Futures Screener Capabilities
 
  - Daily updates on the trend status of all Bybit-listed coins
  - Sorting options based on market cap and derivatives market availability (check table below).
@@ -38,8 +38,8 @@ Bybit offers no-KYC leverage trading, enabling traders from jurisdictions where 
 ## Strategies to Consider on Bybit Futures
 
  - Hedge your positions with coin-margined or USDT-margined features on Bybit -
- -  Deposit your coins to leverage larger positions (they offer margin on most major coins you deposit)
- -   Use a pair trade strategy to reduce downside risk
+ - Deposit your coins to leverage larger positions (they offer margin on most major coins you deposit)
+ - Use a pair trade strategy to reduce downside risk
 
 However, it's important to note that these are advanced **Bybit Futures strategies** and can be risky. It's crucial to do your own research and carefully consider your investment strategy before making any decisions. As with all trading, there are inherent risks involved, so be sure to practice proper position sizing and keep leverage to a minimum.`}/>
       <Layout.Content className={baseStyles.container}>

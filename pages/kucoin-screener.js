@@ -32,7 +32,7 @@ If you're considering trading on KuCoin, tracking trends with CoinRotator's scre
 
 Here are some features and strategies to consider:
 
-# KuCoin Screener Capabilities
+## KuCoin Screener Capabilities
  Daily updates on the trend status of all KuCoin-listed coins
  -  Sorting options based on market cap and volume
 
