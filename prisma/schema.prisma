@@ -91,7 +91,7 @@ model Ohlc {
   coinId      String   @db.VarChar(255)
   closeTime   DateTime
   quoteSymbol String
-  coin        Coin     @relation(fields: [coinId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coin        Coin     @relation(fields: [coinId], references: [id])
 
   @@unique([coinId, quoteSymbol, closeTime])
   @@index([closeTime(sort: Desc)])
