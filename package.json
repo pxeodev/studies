@@ -17,6 +17,7 @@
     "monthly": "swc scripts/monthly.js -o dist/monthly.mjs",
     "bot": "swc scripts/bot.js -o dist/bot.mjs",
     "trendHistory": "swc scripts/trendHistory.js -o dist/trendHistory.mjs",
+    "ohlcToSupertrendMigration": "swc scripts/ohlcToSupertrendMigration.js -o dist/ohlcToSupertrendMigration.mjs",
     "start": "next start",
     "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs"
   },

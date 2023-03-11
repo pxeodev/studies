@@ -3,7 +3,6 @@ import { Card, Layout, Space, Tag, Tooltip, Typography } from 'antd';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Prisma } from '@prisma/client'
-import endOfYesterday from 'date-fns/endOfYesterday';
 import minBy from 'lodash/minBy';
 import pick from 'lodash/pick';
 import { useCallback, useEffect, useState, useContext } from 'react';
@@ -19,11 +18,10 @@ import AnalyticsTab from '../../components/AnalysisTab';
 import TradeTab from '../../components/TradeTab';
 import PageHeader from '../../components/PageHeader';
 import WatchlistStar from '../../components/WatchlistStar';
-import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables.mjs';
-import getTrends from '../../utils/getTrends.mjs';
+import { signals } from '../../utils/variables.mjs';
+import { getSuperTrends } from '../../utils/getTrends.mjs';
 import getChainsData from '../../utils/getChainsData';
 import getPlatformData from '../../utils/getPlatformData';
-import convertToDailySignals from '../../utils/convertToDailySignals.mjs';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../../utils/watchlist.js';
 import useBreakPoint from '../../hooks/useBreakPoint';
@@ -262,23 +260,7 @@ export async function getStaticProps({ params }) {
   let coinData = await prisma.coin.findUnique({
     where: {
       id: params.id,
-    },
-    include: { ohlcs: {
-      select: {
-        closeTime: true,
-        open: true,
-        high: true,
-        low: true,
-        close: true,
-        quoteSymbol: true
-      },
-      where: {
-        closeTime: {
-          lte: endOfYesterday(),
-        }
-      },
-      orderBy: { closeTime: 'asc' }
-    }}
+    }
   })
   let similarCoins = []
   if (coinData.categories.length) {
@@ -293,16 +275,8 @@ export async function getStaticProps({ params }) {
       LIMIT 10;
     `;
   }
-  let ohlcs = coinData.ohlcs.map(ohlc => ({
-    ...ohlc,
-    open: Number(ohlc.open),
-    high: Number(ohlc.high),
-    low: Number(ohlc.low),
-    close: Number(ohlc.close),
-  }))
-  ohlcs = convertToDailySignals(ohlcs)
-  const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
-  const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
+  const [dailyTrends, dailySuperSuperTrend] = await getSuperTrends(coinData.id)
+  const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
   const description = await getDescriptionByCoin(coinData)
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)

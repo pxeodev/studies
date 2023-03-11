@@ -9,6 +9,8 @@ export const signals = {
 
 export const defaultAtrPeriods = 5
 export const defaultMultiplier = 1.5
+export const classicAtrPeriods = 10
+export const classicMultiplier = 3
 
 export const currentNarratives = [
   "AI",
