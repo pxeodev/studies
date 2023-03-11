@@ -1,6 +1,4 @@
 import { Layout, Row } from 'antd';
-import endOfYesterday from 'date-fns/endOfYesterday';
-import subWeeks from 'date-fns/subWeeks';
 import Head from 'next/head';
 
 import baseStyles from '../styles/base.module.less'
@@ -9,10 +7,9 @@ import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import TableFilters from '../components/TableFilters'
 import CoinTable from '../components/CoinTable';
-import { defaultAtrPeriods, defaultMultiplier } from '../utils/variables.mjs'
-import convertToDailySignals from '../utils/convertToDailySignals';
+import { SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
-import getTrends from '../utils/getTrends.mjs'
+import { getSuperTrends } from '../utils/getTrends.mjs'
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 
@@ -81,7 +78,6 @@ Here are some features and strategies to consider:
 
 export async function getStaticProps() {
   const appData = await globalData();
-  const yesterday = endOfYesterday();
   const coinQuery = {
     orderBy: { marketCapRank: 'asc' },
     select: {
@@ -94,23 +90,6 @@ export async function getStaticProps() {
       categories: true,
       tickers: true,
       derivatives: true,
-      ohlcs: {
-        select: {
-          closeTime: true,
-          open: true,
-          high: true,
-          low: true,
-          close: true,
-          quoteSymbol: true
-        },
-        where: {
-          closeTime: {
-            lte: yesterday,
-            gte: subWeeks(yesterday, 6)
-          }
-        },
-        orderBy: { closeTime: 'asc' }
-      }
     }
   }
   let coinsData
@@ -119,36 +98,36 @@ export async function getStaticProps() {
   } else {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
-  coinsData = coinsData.map((coinData) => {
-    const ohlcs = convertToDailySignals(coinData.ohlcs)
-    const [dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
-    const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
-    const [dailyClassicTrends, dailyClassicSuperSuperTrend] = getTrends(ohlcs, 10, 3, false)
-    const [weeklyClassicTrends, weeklyClassicSuperSuperTrend] = getTrends(ohlcs, 10, 3, true)
-    delete coinData.ohlcs
+  coinsData = await Promise.all(
+    coinsData.map(async (coinData) => {
+      const [dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
+      const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
+      const [dailyClassicTrends, dailyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
+      const [weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
 
-    const exchanges = convertTickersToExchanges(coinData.tickers)
-    delete coinData.tickers
+      const exchanges = convertTickersToExchanges(coinData.tickers)
+      delete coinData.tickers
 
-    return {
-      ...coinData,
-      dailyTrends,
-      dailySuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      weeklyTrends,
-      weeklySuperSuperTrend,
-      dailyClassicTrends,
-      dailyClassicSuperSuperTrend,
-      weeklyClassicTrends,
-      weeklyClassicSuperSuperTrend,
-      ath: Number(coinData.ath),
-      atl: Number(coinData.atl),
-      fullyDilutedValue: Number(coinData.fullyDilutedValue),
-      circulatingSupply: Number(coinData.circulatingSupply),
-      totalSupply: Number(coinData.totalSupply),
-      exchanges
-    }
-  })
+      return {
+        ...coinData,
+        dailyTrends,
+        dailySuperSuperTrend,
+        dailySuperSuperTrendStreak,
+        weeklyTrends,
+        weeklySuperSuperTrend,
+        dailyClassicTrends,
+        dailyClassicSuperSuperTrend,
+        weeklyClassicTrends,
+        weeklyClassicSuperSuperTrend,
+        ath: Number(coinData.ath),
+        atl: Number(coinData.atl),
+        fullyDilutedValue: Number(coinData.fullyDilutedValue),
+        circulatingSupply: Number(coinData.circulatingSupply),
+        totalSupply: Number(coinData.totalSupply),
+        exchanges
+      }
+    })
+  )
   coinsData = coinsData.filter((coin) => {
     return coin.exchanges.some((exchange) => exchange[0] === 'KuCoin')
   })

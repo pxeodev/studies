@@ -3,19 +3,18 @@ import endOfYesterday from 'date-fns/endOfYesterday';
 import { useContext } from 'react'
 import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
-import isEqualDate from 'date-fns/isEqual';
-import subWeeks from 'date-fns/subWeeks';
-import Head from 'next/head'
+import Head from 'next/head';
+import groupBy from 'lodash/groupBy.js';
+import countBy from 'lodash/countBy.js';
 
 import { DarkModeContext } from './_app';
 import baseStyles from '../styles/base.module.less'
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import MarketHealthChart from '../components/MarketHealthChart';
-import { signals, defaultAtrPeriods, defaultMultiplier } from '../utils/variables.mjs'
+import { signals, SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 import useBreakPoint from '../hooks/useBreakPoint';
-import convertToDailySignals from '../utils/convertToDailySignals';
-import getTrends from '../utils/getTrends.mjs'
+import supersupertrend from '../utils/supersupertrend.mjs';
 import prisma from "../lib/prisma.mjs"
 import styles from "../styles/market-health.module.less"
 
@@ -79,23 +78,6 @@ export async function getStaticProps() {
       categories: true,
       tickers: true,
       derivatives: true,
-      ohlcs: {
-        select: {
-          closeTime: true,
-          open: true,
-          high: true,
-          low: true,
-          close: true,
-          quoteSymbol: true
-        },
-        where: {
-          closeTime: {
-            lte: yesterday,
-            gte: subWeeks(yesterday, 6)
-          }
-        },
-        orderBy: { closeTime: 'asc' }
-      }
     }
   }
   let coins
@@ -107,29 +89,29 @@ export async function getStaticProps() {
   let historicDailySuperSuperTrends = []
   const dateFormatter = new Intl.DateTimeFormat([], { month: 'short', day: 'numeric' })
   for (let i = 0, date = yesterday; i < 30; i++) {
+    let superTrends = await prisma.superTrend.findMany({
+      where: {
+        date: date,
+        flavor: SUPERTREND_FLAVOR.coinrotator,
+        weekly: false
+      }
+    })
+    superTrends = groupBy(superTrends, 'coinId')
+    const supersupertrends = Object.values(superTrends).flatMap((trends) => {
+      return supersupertrend(trends.map(t => t.trend))
+    })
+
     for (const trend of [signals.buy, signals.hodl, signals.sell]) {
       historicDailySuperSuperTrends.push({
         date,
-        amount: 0,
+        amount: countBy(supersupertrends, (st) => st === trend).true,
         trend
       })
     }
+
     date = subDays(date, 1)
   }
   historicDailySuperSuperTrends = historicDailySuperSuperTrends.reverse()
-  for (const coin of coins) {
-    for (let i = 0, date = yesterday; i < 30; i++) {
-      const dateOhlcs = coin.ohlcs.filter(ohlc => ohlc.closeTime.getTime() <= date.getTime())
-      const dateDailyOhlcs = convertToDailySignals(dateOhlcs)
-      const [_dailyTrends, dateSuperSuperTrend] = getTrends(dateDailyOhlcs, defaultAtrPeriods, defaultMultiplier, false)
-      const historicIndex = historicDailySuperSuperTrends.findIndex((historicDataPoint) => {
-        return isEqualDate(historicDataPoint.date, date) && historicDataPoint.trend === dateSuperSuperTrend
-      })
-      historicDailySuperSuperTrends[historicIndex].amount++
-
-      date = subDays(date, 1)
-    }
-  }
   historicDailySuperSuperTrends = historicDailySuperSuperTrends.map((historicalDataPoint) => {
     historicalDataPoint.date = dateFormatter.format(addDays(historicalDataPoint.date, 1))
 

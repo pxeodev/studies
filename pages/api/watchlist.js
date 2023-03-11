@@ -1,12 +1,8 @@
 import isEmpty from 'lodash/isEmpty'
-import endOfYesterday from 'date-fns/endOfYesterday';
-import subWeeks from 'date-fns/subWeeks';
 
 import prisma from '../../lib/prisma.mjs'
-import convertToDailySignals from '../../utils/convertToDailySignals.mjs'
 import convertTickersToExchanges from '../../utils/convertTickersToExchanges.js'
-import { defaultAtrPeriods, defaultMultiplier } from '../../utils/variables.mjs'
-import getTrends from '../../utils/getTrends.mjs'
+import { getSuperTrends } from '../../utils/getTrends.mjs'
 
 const handler = async (req, res) => {
   let requestedCoins = req.query['coins[]']
@@ -16,7 +12,6 @@ const handler = async (req, res) => {
   if (req.method !== 'GET' || !requestedCoins instanceof Array) {
     res.status(400)
   } else {
-    const yesterday = endOfYesterday();
     let coins = await prisma.coin.findMany({
       where: {
         id: {
@@ -30,41 +25,24 @@ const handler = async (req, res) => {
         symbol: true,
         marketCap: true,
         tickers: true,
-        ohlcs: {
-          select: {
-            closeTime: true,
-            open: true,
-            high: true,
-            low: true,
-            close: true,
-            quoteSymbol: true
-          },
-          where: {
-            closeTime: {
-              lte: yesterday,
-              gte: subWeeks(yesterday, 6)
-            }
-          },
-          orderBy: { closeTime: 'asc' }
+      }
+    })
+    coins = await Promise.all(
+      coins.map(async (coin) => {
+        const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coin.id)
+        const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coin.id, { weekly: true })
+        const exchanges = convertTickersToExchanges(coin.tickers)
+        delete coin.tickers
+        return {
+          ...coin,
+          exchanges,
+          marketCap: Number(coin.marketCap),
+          dailySuperSuperTrend,
+          dailySuperSuperTrendStreak,
+          weeklySuperSuperTrend
         }
-      }
-    })
-    coins = coins.map((coin) => {
-      const ohlcs = convertToDailySignals(coin.ohlcs)
-      const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
-      const [_weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
-      const exchanges = convertTickersToExchanges(coin.tickers)
-      delete coin.ohlcs
-      delete coin.tickers
-      return {
-        ...coin,
-        exchanges,
-        marketCap: Number(coin.marketCap),
-        dailySuperSuperTrend,
-        dailySuperSuperTrendStreak,
-        weeklySuperSuperTrend
-      }
-    })
+      })
+    )
     res.status(200).json({ coins })
   }
 }
