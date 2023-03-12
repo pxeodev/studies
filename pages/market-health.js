@@ -70,14 +70,6 @@ export async function getStaticProps() {
     orderBy: { marketCapRank: 'asc' },
     select: {
       id: true,
-      symbol: true,
-      name: true,
-      images: true,
-      marketCap: true,
-      marketCapRank: true,
-      categories: true,
-      tickers: true,
-      derivatives: true,
     }
   }
   let coins
@@ -90,16 +82,22 @@ export async function getStaticProps() {
   const dateFormatter = new Intl.DateTimeFormat([], { month: 'short', day: 'numeric' })
   for (let i = 0, date = yesterday; i < 30; i++) {
     let superTrends = await prisma.superTrend.findMany({
+      select: {
+        coinId: true,
+        trend: true,
+        date: true
+      },
       where: {
+        coinId: {
+          in: coins.map(c => c.id)
+        },
         date: date,
         flavor: SUPERTREND_FLAVOR.coinrotator,
         weekly: false
       }
     })
     superTrends = groupBy(superTrends, 'coinId')
-    const supersupertrends = Object.values(superTrends).flatMap((trends) => {
-      return supersupertrend(trends.map(t => t.trend))
-    })
+    const supersupertrends = Object.values(superTrends).flatMap((trends) => supersupertrend(trends.map(t => t.trend)))
 
     for (const trend of [signals.buy, signals.hodl, signals.sell]) {
       historicDailySuperSuperTrends.push({
