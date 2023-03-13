@@ -8,7 +8,7 @@ import PlatformSelectMP from './PlatformSelectMP';
 
 import platformSelectStyles from '../styles/platformSelect.module.less'
 
-// TODO Remove this hack once we have the right names
+// TODO: Remove this hack once we have the right names
 const getChainData = (chainsData, platform, platformName) => {
   return chainsData.find(chain => chain.name.toLowerCase().includes(platformName.toLowerCase()) ||
   chain.name.toLowerCase().includes(platform.toLowerCase()))
