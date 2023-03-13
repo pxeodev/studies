@@ -71,10 +71,9 @@ const CoinTable = ({
 
   if (superTrendFlavor === SUPERTREND_FLAVOR.classic) {
     coinsData = coinsData.map((coinData) => {
-      coinData.dailyTrends = coinData.dailyClassicTrends
       coinData.dailySuperSuperTrend = coinData.dailyClassicSuperSuperTrend
-      coinData.weeklyTrends = coinData.weeklyClassicTrends
       coinData.weeklySuperSuperTrend = coinData.weeklyClassicSuperSuperTrend
+      coinData.dailySuperSuperTrendStreak = coinData.dailyClassicSuperSuperTrendStreak
 
       return coinData
     })
@@ -103,15 +102,7 @@ const CoinTable = ({
     let max = parseInt(trendLengthMax)
     max = isFinite(max) ? max : Number.POSITIVE_INFINITY
 
-    const trendValues = Object.values(coinData.dailyTrends)
-    const trends = trendValues.filter(trend => trend[0].length)
-    if (trends.length === 0) {
-      return false;
-    }
-
-    return trends
-      .map(trend => trend[1])
-      .every(trendLength => trendLength >= min && trendLength <= max)
+    return coinData.dailySuperSuperTrendStreak >= min && coinData.dailySuperSuperTrendStreak <= max
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
     if (trendType === signals.all) {

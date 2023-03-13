@@ -103,25 +103,22 @@ export async function getStaticProps() {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
-    const [dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
-    const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
-    const [dailyClassicTrends, dailyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
-    const [weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
+    const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
+    const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
+    const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
+    const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
 
     return {
       ...coinData,
-      dailyTrends,
       dailySuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      weeklyTrends,
       weeklySuperSuperTrend,
-      dailyClassicTrends,
       dailyClassicSuperSuperTrend,
-      weeklyClassicTrends,
       weeklyClassicSuperSuperTrend,
+      dailySuperSuperTrendStreak,
+      dailyClassicSuperSuperTrendStreak,
       ath: Number(coinData.ath),
       atl: Number(coinData.atl),
       fullyDilutedValue: Number(coinData.fullyDilutedValue),
