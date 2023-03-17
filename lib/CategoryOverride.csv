@@ -126,5 +126,13 @@ Category,CoinSymbol,CoinName,addORremove
 "BTC Halving 2024",RIF,RSK Infrastructure Framework,add
 "BTC Halving 2024",REN,REN,add
 "BTC Halving 2024",ALEX,ALEX Lab,add
+"ISO 20022",QNT,Quant,add
+"ISO 20022",ALGO,Algorand,add
+"ISO 20022",MIOTA,IOTA,add
+"ISO 20022",XDC,XDC Network,add
+"ISO 20022",XRP,XRP,add
+"ISO 20022",XLM,Stellar,add
+"ISO 20022",HBAR,Hedera,add
+
 
 
