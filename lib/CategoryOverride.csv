@@ -80,9 +80,9 @@ Category,CoinSymbol,CoinName,addORremove
 "Dino Coins",EOS,EOS,add
 "Dino Coins",DGB,DigiByte,add
 "Dino Coins",XVG,Verge,add
-"ZK Rollup",DUSK,DUSK Network,add
-"ZK Rollup",MINA,MINA Protocol,add
-"ZK Rollup",MATIC,Polygon,add
+"Zk Rollup",DUSK,DUSK Network,add
+"Zk Rollup",MINA,MINA Protocol,add
+"Zk Rollup",MATIC,Polygon,add
 "Proof of Work",BTC,Bitcoin,add
 "Proof of Work",DOGE,Dogecoin,add
 "Proof of Work",LTC,Litecoin,add
@@ -102,8 +102,8 @@ Category,CoinSymbol,CoinName,addORremove
 "Metaverse",GMT,STEPN,add
 "Metaverse",BNX,BinaryX,add
 "Metaverse",CHZ,Chiliz,add
-"ZK Rollup",CELR,Celr Network,add
-"ZK Rollup",METIS,Metis,add
+"Zk Rollup",CELR,Celr Network,add
+"Zk Rollup",METIS,Metis,add
 "Zk Rollup",XFT,Offshift,add
 "POA",VET,VeChain,add
 "POA",VTHO,VeThor,add
