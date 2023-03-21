@@ -22,12 +22,12 @@ Category,CoinSymbol,CoinName,addORremove
 "Proof of Stake",HIVE,Hive,add
 "Proof of Stake",LSK,Lisk,add
 "Proof of Stake",QTUM,Qtum,add
-"ZK Rollup",HEZ,Hermez Network,add
-"ZK Rollup",SYS,Syscoin,add
-"ZK Rollup",LRC,Loopring,add
-"ZK Rollup",MUTE,Mute,add
-"ZK Rollup",IMX,ImmutableX,add
-"ZK Rollup",ZKX,ZKSpace,add
+"Zk Rollup",HEZ,Hermez Network,add
+"Zk Rollup",SYS,Syscoin,add
+"Zk Rollup",LRC,Loopring,add
+"Zk Rollup",MUTE,Mute,add
+"Zk Rollup",IMX,ImmutableX,add
+"Zk Rollup",ZKX,ZKSpace,add
 "Fractionalized NFT",DOG,The Doge NFT,add
 "Fractionalized NFT",NFT,APENFT,add
 "Fractionalized NFT",NFTX,NFTX,add
