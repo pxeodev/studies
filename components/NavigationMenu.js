@@ -11,7 +11,9 @@ import {
   VerticalAlignBottomOutlined,
   SwapOutlined,
   ReadFilled,
-  StepBackwardOutlined
+  StepBackwardOutlined,
+  LineChartOutlined,
+  TagsOutlined
 } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -46,6 +48,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           label: <Link href="/todays-trends" prefetch={false}>Today&apos;s Trends</Link>,
           key: '/todays-trends',
           icon: <AlertFilled className={styles.daybreakBlue} />
+        },
+        {
+          label: <Link href="https://www.tradingview.com/u/pxeo/#published-scripts" prefetch={false}>TradingView indicator</Link>,
+          key: '/tradingview-indicator',
+          icon: <LineChartOutlined className={styles.goldenPurple} />
         }
       ]
     },
@@ -58,6 +65,7 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           {
             label: <Link href={`/category/${slug}`} prefetch={false}>{category}</Link>,
             key: `narrative-${slug}`,
+            icon: <TagsOutlined className={styles.goldenPurple} />
           }
           )
         })
@@ -131,7 +139,8 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
       children: topCategories.map((category) => {
         return {
           label: <Link href={`/category/${category.slug}`} prefetch={false}>{category.name}</Link>,
-          key: `/${category.slug}`
+          key: `/${category.slug}`,
+          icon: <TagsOutlined className={styles.goldenPurple} />
         }
       })
     },
