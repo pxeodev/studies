@@ -19,6 +19,8 @@ import cryptowatch from '../lib/cryptowatch.mjs'
 import { getAllCoins } from '../lib/lunr.mjs'
 import { Prisma } from '@prisma/client'
 import { hasPlatforms } from '../utils/coingecko.mjs';
+import convertToDailySignals from '../utils/convertToDailySignals.mjs';
+import { saveDailyOhlcsToSupertrends } from '../utils/supersupertrend.mjs';
 
 dotenv.config();
 init({
@@ -49,6 +51,11 @@ const fetchCoinDataCoingecko = async (coinId) => {
     if (e === noRankError || e.response?.status === 404) {
       // CoinGecko doesn't know this coin, so we assume it got delisted
       await prisma.ohlc.deleteMany({
+        where: {
+          coinId,
+        },
+      })
+      await prisma.superTrend.deleteMany({
         where: {
           coinId,
         },
@@ -240,6 +247,8 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
   }
 
   await prisma.ohlc.createMany({ data: ohlcs, skipDuplicates: true })
+  const dailyOhlcs = convertToDailySignals(ohlcs, true)
+  await saveDailyOhlcsToSupertrends(dailyOhlcs, coinId)
 }
 
 const fetchCoinDataAndOhlcs = async () => {

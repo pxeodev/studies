@@ -7,3 +7,4 @@ dist/**
 # Sentry
 .sentryclirc
 .DS_Store
+.vercel

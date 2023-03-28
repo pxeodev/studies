@@ -9,7 +9,15 @@ export const signals = {
 
 export const defaultAtrPeriods = 5
 export const defaultMultiplier = 1.5
+export const classicAtrPeriods = 10
+export const classicMultiplier = 3
 
+export const currentNarratives = [
+  "China Coins",
+  "LSD Tokens",
+  "AI",
+  "Arbitrum Ecosystem"
+]
 export const preferredExchanges = [
   'Binance',
   'OKX',
@@ -130,4 +138,4 @@ export const SUPERTREND_FLAVOR = {
   'classic': 'Classic',
 }
 
-export const excludedExchanges = ['ftx', 'ftx_us', 'ftx_spot', 'ftx_tr']
+export const excludedExchanges = ['ftx', 'ftx_us', 'ftx_spot', 'ftx_tr', 'binance_dex_mini']

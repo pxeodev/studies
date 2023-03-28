@@ -2,15 +2,14 @@ import { Layout, Menu } from 'antd'
 
 import Logo from './Logo'
 import Search from './Search'
+import NavigationModal from './NavigationModal'
 
 import headerStyles from '../styles/header.module.less'
-import DarkModeSwitch from './DarkModeSwitch';
-import { DarkModeContext } from '../pages/_app';
-import { useContext } from 'react';
 
-const Header = ({ categories, coins, renderSearch }) => {
+const Header = ({ categories, screens, topCategories }) => {
   const { Header: AntHeader } = Layout;
-  const [darkMode, setDarkMode] = useContext(DarkModeContext);
+
+  if (screens.lg) return (<></>);
 
   const menuItems = [
     {
@@ -18,22 +17,18 @@ const Header = ({ categories, coins, renderSearch }) => {
       className: headerStyles.logo,
       key: 'logo',
       'data-id': 'logo'
-    }
-  ]
-
-  if (renderSearch) {
-    menuItems.push({
+    },
+    {
       key: 'search',
       className: headerStyles.search,
-      label: <Search categories={categories} coins={coins} />
-    })
-  }
-
-  menuItems.push({
-    key: 'dark-mode',
-    className: headerStyles.darkModeSwitchItem,
-    label: <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />
-  })
+      label: <Search categories={categories} collapsed />
+    },
+    {
+      key: 'dark-mode',
+      className: headerStyles.navigation,
+      label: <NavigationModal topCategories={topCategories} />
+    }
+  ]
 
   return (
     <AntHeader className={headerStyles.header}>

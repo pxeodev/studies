@@ -1,0 +1,188 @@
+import { Tooltip } from 'antd'
+import { QuestionCircleFilled } from '@ant-design/icons'
+import classnames from 'classnames'
+
+import UpTag from '../components/UpTag'
+import DownTag from '../components/DownTag'
+import HodlTag from '../components/HodlTag'
+import { signals } from '../utils/variables'
+import tableSort from '../utils/tableSort'
+
+import coinTableStyles from '../styles/coinTable.module.less'
+import baseStyles from '../styles/base.module.less'
+
+export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) {
+  return {
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    title: <span className={coinTableStyles.columnTitle}>
+      <span>Trend (24h)</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
+          >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
+      </Tooltip>
+    </span>,
+    dataIndex: 'dailySuperSuperTrend',
+    sorter: {
+      compare: tableSort(reverseMarketCapSort),
+      multiple: 1,
+    },
+    render: (dailySuperSupertrend) => {
+      let tag;
+      switch (dailySuperSupertrend) {
+        case signals.buy:
+          tag = <UpTag className={coinTableStyles.tag} />
+          break
+          case signals.sell:
+            tag = <DownTag className={coinTableStyles.tag} />
+            break
+            default:
+              tag = <HodlTag className={coinTableStyles.tag} />
+            }
+
+            return (
+              <>
+          {tag}
+
+        </>
+      )
+    }
+  }
+}
+
+export function dailySuperSuperTrendStreak(router, isHoverable) {
+  return {
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    title: <span className={coinTableStyles.columnTitle}>
+      <span>Trend Streak</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="The Trend Streak is the number of consecutive days that the trend has been in an UP, HODL or DOWNtrend."
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+      </Tooltip>
+    </span>,
+    dataIndex: 'dailySuperSuperTrendStreak',
+    sorter: (a, b) => Number(a.dailySuperSuperTrendStreak) - Number(b.dailySuperSuperTrendStreak),
+    render: (dailySuperSuperTrendStreak) => {
+      return dailySuperSuperTrendStreak
+    }
+  }
+}
+
+export function weeklySuperSuperTrend(router, isHoverable) {
+  return {
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    title: <span className={coinTableStyles.columnTitle}>
+      <span>Trend (7d)</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="CoinRotator trend signals are based on SuperTrend and a proprietary sorting algorithm. Possible values include UP, DOWN and HODL. They are updated once daily at 1AM UTC. NFA."
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)} />
+      </Tooltip>
+    </span>,
+    dataIndex: 'weeklySuperSuperTrend',
+    sorter: {
+      compare: (a, b) => {
+        if (a.weeklySuperSuperTrend === b.weeklySuperSuperTrend) {
+          return 0
+        } else if (a.weeklySuperSuperTrend === signals.sell) {
+          return 1
+        } else if (a.weeklySuperSuperTrend === signals.hodl) {
+          if (b.weeklySuperSuperTrend === signals.sell) {
+            return -1
+          } else {
+            return 1
+          }
+        } else {
+          return -1
+        }
+      },
+      multiple: 2,
+    },
+    render: (weeklySuperSuperTrend) => {
+      let tag;
+      switch (weeklySuperSuperTrend) {
+        case signals.buy:
+          tag = <UpTag className={coinTableStyles.tag} />
+          break
+        case signals.sell:
+          tag = <DownTag className={coinTableStyles.tag} />
+          break
+        default:
+          tag = <HodlTag className={coinTableStyles.tag} />
+      }
+
+      return (
+        <>
+          {tag}
+        </>
+      )
+    }
+  }
+}
+
+export function marketCap(router, hydrated) {
+  const numberFormatter = new Intl.NumberFormat([], {
+    notation: 'compact',
+    compactDisplay: 'short',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  return {
+    title: 'Market Cap',
+    dataIndex: 'marketCap',
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    sorter: (a, b) => Number(a.marketCap) - Number(b.marketCap),
+    render: (marketCap) => {
+      if (!marketCap) { return null }
+      return (
+        <div className={coinTableStyles.value}>
+          {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
+        </div>
+      )
+    }
+  }
+}
+
+export function exchanges(router, isHoverable, exchangeData) {
+  return {
+    title: <span className={coinTableStyles.columnTitle}>
+      <span>Exchanges</span>
+      <Tooltip
+          placement={'right'}
+          trigger={isHoverable ? 'hover' : 'click'}
+          title="All the exchanges this coin is traded on"
+      >
+        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
+      </Tooltip>
+    </span>,
+    dataIndex: 'exchanges',
+    className: coinTableStyles.unclickableCell,
+    render: (exchanges, data) => {
+      return <span title="Top 5 exchanges. Click to see more.">
+        {exchanges.map((exchange) => {
+          let matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
+          const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
+          const onTagClick = () =>
+            router.push(`/coin/${data.id}?tab=Trade`)
+          // eslint-disable-next-line @next/next/no-img-element
+          return <img
+            src={matchingExchangeImage}
+            alt={exchange[0]}
+            title={exchange[0]}
+            loading="lazy"
+            key={exchange[0]}
+            onClick={onTagClick}
+            className={classnames(coinTableStyles.clickableTag, coinTableStyles.image)}
+          />
+        })}
+      </span>;
+    }
+  }
+}

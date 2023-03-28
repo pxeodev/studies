@@ -1,32 +1,37 @@
 @import './variables.module.less';
 
+@font-face {
+  font-family: 'Satoshi-Variable';
+  src: url('../public/Satoshi-Variable.woff2') format('woff2');
+  font-weight: 500 700;
+  font-display: swap;
+  font-style: normal;
+}
+
 // Layout
 .container {
   display: flex;
   flex-direction: column;
-  width: 1440px;
+  width: 100%;
   margin: 0 auto !important;
-  padding: 16px 24px 64px 24px;
-
-  @media (max-width: @screen-xl) {
-    width: 100%;
-  }
+  padding: 16px 16px 24px 16px;
+  overflow-y: hidden;
 
   @media (max-width: @screen-md) {
     padding: 16px 24px 32px 24px;
   }
 
   @media (max-width: @screen-sm) {
-    padding: 16px 16px 32px 16px;
+    padding: 0;
   }
 }
 
-.breadcrumbs {
-  margin-bottom: 48px;
+.outerLayout {
+  max-height: 100vh;
+}
 
-  @media (max-width: @screen-md) {
-      margin-bottom: 32px;
-  }
+.innerLayout {
+  background: var(--cr-secondary-bg);
 }
 
 // Typography
@@ -65,7 +70,7 @@
 
   &:hover {
     path {
-      fill: @text-color !important;
+      fill: var(--cr-secondary-text);
     }
   }
 }
@@ -73,17 +78,24 @@
 .tooltipIcon {
   margin-left: 4px;
   margin-right: 4px;
+  vertical-align: text-top;
 
   svg {
     width: 10px;
   }
 
   path {
-    fill: @text-color-secondary;
+    fill: var(--cr-primary-tooltip);
 
     &:hover {
-        fill: @text-color;
+      fill: var(--cr-secondary-text);
     }
+  }
+}
+
+.tooltipIconBig {
+  svg {
+    width: 14px;
   }
 }
 
@@ -131,14 +143,48 @@
   border-bottom: 1px solid var(--cr-primary-border) !important;
 }
 
-:root[data-theme="theme-dark"] {
-  .homeBreadCrumb {
-    color: var(--cr-fifth-bg) !important;
+.markdown {
+  h1, h2, h3 {
+    color: var(--cr-primary-text);
+    font-weight: bold;
+    margin-bottom: 16px;
   }
-}
 
-:root[data-theme="theme-light"] {
-  .homeBreadCrumb {
-    color: var(--cr-fifth-bg) !important;
+  p {
+    margin-bottom: 0;
+  }
+
+  img {
+    max-width: 800px;
+    max-height: 600px;
+    margin-bottom: 16px;
+
+    @media screen and (max-width: @screen-lg) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  blockquote {
+    border-left: 4px solid rgba(var(--cr-primary-text), .08);
+    background: rgba(var(--cr-primary-text), .02);
+    padding: 12px;
+    margin-bottom: 16px;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    margin-bottom: 16px;
+  }
+
+  a {
+    color: var(--cr-primary-color);
+
+    &:hover, &:focus {
+      filter: brightness(1.2);
+    }
   }
 }

@@ -1,10 +1,18 @@
 @import (reference) './base.module.less';
 @import './variables.module.less';
 
-.table table {
-  colgroup col:first-child {
-    @media screen and (max-width: @screen-lg) {
-      width: 150px;
+.table {
+  :global(.ant-table-header) {
+    table {
+      border-top: 1px solid var(--cr-primary-border) !important;
+    }
+  }
+
+  table {
+    colgroup col:first-child {
+      @media screen and (max-width: @screen-lg) {
+        width: 150px;
+      }
     }
   }
 }
@@ -45,7 +53,6 @@
 }
 
 .table > div > div > div > div {
-  border-left: 1px solid var(--cr-primary-border) !important;
   background-color: var(--cr-secondary-bg);
 }
 
@@ -54,12 +61,13 @@
 }
 
 .ant-table-container {
-  border-left: 1px solid var(--cr-primary-border) !important;
+  border-right: 1px solid var(--cr-primary-border) !important;
+  border-left: 0 !important;
 }
 
 .image {
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
 }
 
 .coin {
@@ -71,6 +79,7 @@
     }
 
     .symbol {
+        color: #8C8C8C;
         text-transform: uppercase;
         margin-left: 6px;
     }

@@ -3,16 +3,14 @@ import { Line } from '@ant-design/plots';
 import variableStyles from '../styles/variables.module.less'
 import { signals } from '../utils/variables'
 
-const MarketHealthChart = ({ historicDailySuperSuperTrends, screens, darkMode }) => {
+const MarketHealthChart = ({ historicDailySuperSuperTrends, darkMode }) => {
   return (
     <Line
       data={historicDailySuperSuperTrends}
-      autoFit={false}
-      height={200}
-      width={screens.lg ? 700 : 327}
       seriesField={'trend'}
       xField="date"
       yField="amount"
+      theme={darkMode ? 'dark' : 'light'}
       legend={{
         position: 'top'
       }}

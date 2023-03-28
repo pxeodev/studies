@@ -1,6 +1,14 @@
 @import (reference) './base.module.less';
 @import './variables.module.less';
 
+.container {
+  &:extend(.container);
+
+  @media (max-width: @screen-sm) {
+    padding: 16px 24px 32px 24px;
+  }
+}
+
 .imageList {
   padding-inline-start: 5px;
   margin-left: 8px;

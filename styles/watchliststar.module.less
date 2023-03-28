@@ -1,0 +1,24 @@
+@import './variables.module.less';
+
+.star {
+  background: var(--cr-primary-border);
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  border-radius: 2px;
+  margin-right: 12px;
+
+  svg {
+    fill: #8C8C8C;
+    height: 15px;
+    vertical-align: -3px;
+  }
+
+  &.active {
+    background: #FFE7BA;
+
+    svg {
+      fill: #FA8C16;
+    }
+  }
+}

@@ -1,7 +1,12 @@
 {
   "name": "coinrotator",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "private": true,
+  "author": {
+    "name": "Sascha Mayr",
+    "email": "mayr.sascha@gmail.com",
+    "url": "https://saschamayr.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,15 +17,15 @@
     "monthly": "swc scripts/monthly.js -o dist/monthly.mjs",
     "bot": "swc scripts/bot.js -o dist/bot.mjs",
     "trendHistory": "swc scripts/trendHistory.js -o dist/trendHistory.mjs",
-    "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs",
+    "ohlcToSupertrendMigration": "swc scripts/ohlcToSupertrendMigration.js -o dist/ohlcToSupertrendMigration.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs"
   },
   "dependencies": {
     "@ant-design/plots": "^1.2.2",
     "@metamask/detect-provider": "2",
     "@next/bundle-analyzer": "^13.1.2",
-    "@prisma/client": "^4.10.1",
+    "@prisma/client": "^4.11.0",
     "@sentry/nextjs": "^7.21.1",
     "@sentry/node": "^7.37.2",
     "@swc/cli": "^0.1.61",
@@ -40,7 +45,7 @@
     "next": "^13.1.2",
     "next-superjson": "^0.0.4",
     "next-with-less": "^2.0.5",
-    "prisma": "^4.6.1",
+    "prisma": "^4.11.0",
     "puppeteer": "^19.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -49,6 +54,7 @@
     "react-responsive": "^9.0.0",
     "react-ts-tradingview-widgets": "^1.0.13",
     "retry-axios": "3",
+    "slugify": "^1.6.5",
     "superjson": "^1.12.2",
     "telegraf": "^4.11.2",
     "twitter-lite": "^1.1.0",

@@ -1,15 +1,13 @@
 import { InfoCircleFilled } from '@ant-design/icons';
-import { Breadcrumb, Card, Layout, Space, Tag, Tooltip, Typography } from 'antd';
-import Link from 'next/link'
+import { Card, Layout, Space, Tag, Tooltip, Typography } from 'antd';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Prisma } from '@prisma/client'
-import endOfYesterday from 'date-fns/endOfYesterday';
 import minBy from 'lodash/minBy';
 import pick from 'lodash/pick';
-import take from 'lodash/take';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import levenshtein from 'js-levenshtein';
+import classnames from 'classnames';
 
 import prisma from '../../lib/prisma.mjs'
 import UpTag from '../../components/UpTag';
@@ -18,16 +16,18 @@ import HodlTag from '../../components/HodlTag';
 import PriceDataTab from '../../components/PriceDataTab';
 import AnalyticsTab from '../../components/AnalysisTab';
 import TradeTab from '../../components/TradeTab';
-import { defaultAtrPeriods, defaultMultiplier, signals } from '../../utils/variables.mjs';
-import getTrends from '../../utils/getTrends.mjs';
+import PageHeader from '../../components/PageHeader';
+import WatchlistStar from '../../components/WatchlistStar';
+import { signals } from '../../utils/variables.mjs';
+import { getSuperTrends } from '../../utils/getTrends.mjs';
 import getChainsData from '../../utils/getChainsData';
 import getPlatformData from '../../utils/getPlatformData';
-import convertToDailySignals from '../../utils/convertToDailySignals.mjs';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
+import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../../utils/watchlist.js';
 import useBreakPoint from '../../hooks/useBreakPoint';
 import useIsHoverable from '../../hooks/useIsHoverable';
 import globalData from '../../lib/globalData';
-import classnames from 'classnames';
+import { NotificationContext } from '../../pages/_app';
 
 import baseStyles from '../../styles/base.module.less'
 import coinStyles from '../../styles/coin.module.less'
@@ -70,6 +70,7 @@ export default function Coin(coin) {
 
   const screens = useBreakPoint();
   const isHoverable = useIsHoverable();
+  const notification = useContext(NotificationContext)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
@@ -77,6 +78,29 @@ export default function Coin(coin) {
   const metaDescription = `Coinrotator issues a daily trend for ${coin.name}. A coin screener that captures strong momentum in both directions!`
 
   const router = useRouter();
+  const [isWatched, setIsWatched] = useState(false);
+  useEffect(() => {
+    const watchlistCoins = getWatchListCoins()
+    if (watchlistCoins.indexOf(coin.id) !== -1) {
+      setIsWatched(true)
+    }
+  }, [coin.id])
+  const toggleWatched = useCallback(() => {
+    if (isWatched) {
+      removeFromWatchList(coin.id)
+      notification.open({
+        message: `Removed ${coin.name} from Watchlist`,
+        placement: 'topRight',
+      })
+    } else {
+      addToWatchList(coin.id)
+      notification.open({
+        message: `Added ${coin.name} to Watchlist`,
+        placement: 'topRight',
+      })
+    }
+    setIsWatched(!isWatched)
+  }, [coin.id, isWatched])
   const [activeTab, setActiveTab] = useState(TABS.pricedata)
   useEffect(() => {
     if (router.isReady) {
@@ -108,34 +132,6 @@ export default function Coin(coin) {
       ActiveTabComponent = TradeTab;
       break;
   }
-  const preventCopy = (event) => {
-    let selection = window.getSelection().toString();
-    selection = selection.split(' ').map((piece) => {
-      if (Math.random() * 100 < 6) {
-        let interference = window.location.href
-        const moreRandom = Math.random() * 100
-        if (moreRandom < 20) {
-          interference = Math.random().toString(36).slice(2)
-        } else if (moreRandom < 40) {
-          interference = take([';', '.', '?', '\,'], 1)[0]
-        }
-        piece = `${piece} ${interference} `
-      }
-      return piece;
-    }).join(' ')
-
-    selection = `${selection}\nCopyright ${new Date().getFullYear()} CoinRotator. All rights reserved`
-    selection = `${selection}\nThe source of this text is ${window.location.href}`
-
-    event.clipboardData.setData('text/plain', selection);
-    event.preventDefault();
-  }
-  useEffect(() => {
-    document.addEventListener('copy', preventCopy)
-    return () => {
-      document.removeEventListener('copy', preventCopy)
-    }
-  }, [])
 
   return <>
     <Head>
@@ -151,20 +147,17 @@ export default function Coin(coin) {
       <meta property="og:image:height" content="250" />
       <meta property="og:image:type" content="image/png" />
     </Head>
+    <PageHeader
+      title={coin.name}
+      prefix={<>
+        <WatchlistStar active={isWatched} onClick={toggleWatched} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
+      </>}
+      postfix={<Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>}
+    />
     <Content className={baseStyles.container}>
-      <Breadcrumb className={baseStyles.breadcrumbs}>
-        <Breadcrumb.Item><Link href="/" className={baseStyles.homeBreadCrumb}>Home</Link></Breadcrumb.Item>
-        <Breadcrumb.Item><Link href={`/coin/${coin.id}`}>{coin.name}</Link></Breadcrumb.Item>
-      </Breadcrumb>
       <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
-        <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionHeader, coinStyles.sectionFlex)}>
-          <Space>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
-            <Title className={coinStyles.title}>{coin.name}</Title>
-            <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
-          </Space>
-        </Card.Grid>
         <div className={coinStyles.sectionsDailyAndWeekly}>
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
@@ -267,23 +260,7 @@ export async function getStaticProps({ params }) {
   let coinData = await prisma.coin.findUnique({
     where: {
       id: params.id,
-    },
-    include: { ohlcs: {
-      select: {
-        closeTime: true,
-        open: true,
-        high: true,
-        low: true,
-        close: true,
-        quoteSymbol: true
-      },
-      where: {
-        closeTime: {
-          lte: endOfYesterday(),
-        }
-      },
-      orderBy: { closeTime: 'asc' }
-    }}
+    }
   })
   let similarCoins = []
   if (coinData.categories.length) {
@@ -298,16 +275,8 @@ export async function getStaticProps({ params }) {
       LIMIT 10;
     `;
   }
-  let ohlcs = coinData.ohlcs.map(ohlc => ({
-    ...ohlc,
-    open: Number(ohlc.open),
-    high: Number(ohlc.high),
-    low: Number(ohlc.low),
-    close: Number(ohlc.close),
-  }))
-  ohlcs = convertToDailySignals(ohlcs)
-  const [dailyTrends, dailySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, false)
-  const [weeklyTrends, weeklySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
+  const [dailyTrends, dailySuperSuperTrend] = await getSuperTrends(coinData.id)
+  const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
   const description = await getDescriptionByCoin(coinData)
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)

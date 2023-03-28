@@ -3,8 +3,6 @@
 
 .container {
   &:extend(.container);
-
-  padding: 64px 24px;
   align-items: center;
 
   @media (max-width: @screen-md) {
@@ -12,7 +10,7 @@
   }
 
   @media (max-width: @screen-sm) {
-    padding: 32px 16px;
+    padding: 0;
   }
 }
 
@@ -27,30 +25,6 @@
   }
 }
 
-.title {
-  &:extend(.title);
-
-  text-align: center;
-  color: var(--cr-primary-text) !important;
-}
-
-.subtitle {
-  font-size: 16px !important;
-  line-height: 24px !important;
-  max-width: 928px;
-  text-align: center;
-  margin-bottom: 24px !important;
-
-  @media (max-width: @screen-md) {
-    margin-bottom: 32px !important;
-  }
-
-  span {
-    font-weight: 600;
-    color: var(--cr-primary-text) !important;
-  }
-}
-
 .marketHealthButton {
   margin-bottom: 64px;
   font-size: 16px;
@@ -61,13 +35,39 @@
 // Filters
 .filters {
   width: 100%;
-  margin-bottom: 32px;
   background-color: var(--cr-primary-bg);
   border: 1px solid var(--cr-primary-border);
+  border-bottom: 0;
+
+  @media screen and (max-width: @screen-sm) {
+    border: none;
+  }
+
+  :global(.ant-card-body) {
+    padding: 0;
+  }
+
+  .nameFilter {
+    background-color: var(--cr-primary-bg);
+    box-shadow: none !important;
+
+    input {
+      background-color: var(--cr-primary-bg);
+    }
+  }
 
   .row {
     width: 100%;
     margin-left: 0 !important;
+    padding: 16px;
+  }
+
+  .filterDivider {
+    margin: 0;
+  }
+
+  .appliedFilterCol {
+    line-height: 40px;
   }
 
   .col {
@@ -75,28 +75,72 @@
       margin-bottom: 12px;
     }
 
+    @media screen and (max-width: @screen-md) {
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
+
     label {
       color: var(--cr-primary-text);
     }
-
   }
+}
 
-  .select {
-    width: 100%;
-  }
+.select {
+  width: 100%;
 }
 
 .allFiltersButton {
   width: 100%;
-  margin-top: 22px;
+  max-width: 150px;
+  background-color: var(--cr-primary-bg);
 
   @media screen and (max-width: @screen-md) {
     margin: 0;
   }
 }
 
-.appliedFilterTag:not(:last-child) {
-  margin-bottom: 10px;
+.configModal {
+  :global(.ant-modal-body) {
+    max-height: calc(700px - 56px - 64px);
+    overflow-y: auto;
+
+    @media (max-width: @screen-lg) {
+      max-height: calc(500px - 56px - 64px);
+    }
+
+    @media (max-width: @screen-md) {
+      max-height: unset;
+    }
+  }
+}
+
+.configModalButtons {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.appliedFilterTag {
+  margin-right: 16px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--cr-primary-color);
+  background: var(--cr-quintiary-bg);
+  color: var(--cr-secondary-text);
+
+  :global(.anticon-close) {
+    color: var(--cr-primary-color);
+    margin-left: 4px !important;
+    vertical-align: initial;
+  }
+}
+
+.appliedFilterTagValue {
+  color: var(--cr-primary-color);
+}
+
+.modalHeaderRow {
+  margin-bottom: 8px;
 }
 
 .modalRow {
@@ -111,11 +155,13 @@
   color: var(--cr-primary-text);
   background-color: var(--cr-secondary-bg) !important;
   border: 1px solid var(--cr-secondary-border);
+  padding: 4px 8px;
 }
 
-.modalInputButton:hover {
-  color: var(--cr-primary-text);
-  background-color: var(--cr-secondary-bg) !important;
+@media (max-width: @screen-sm) {
+  .modalInputButton {
+    height: 30px;
+  }
 }
 
 .modalExplainer {
@@ -133,6 +179,7 @@
 
 .modalSelect {
   width: 100%;
+  background-color: var(--cr-primary-bg);
 }
 
 :root[data-theme="theme-dark"] {
@@ -141,14 +188,6 @@
     color: var(--cr-secondary-text) !important;
     border-color: var(--cr-secondary-border) !important;
   }
-
-  .resetFilters {
-    background-color: #E84749;
-  }
-}
-
-.applyFilters {
-  background-color: var(--cr-primary-color);
 }
 
 .modalSelect > div {
@@ -157,7 +196,6 @@
 
 .tableRow {
   width: 100%;
-  flex-grow: 1;
   background-color: var(--cr-primary-bg);
 }
 

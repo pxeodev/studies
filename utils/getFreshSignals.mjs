@@ -1,14 +1,8 @@
-import endOfYesterday from 'date-fns/endOfYesterday/index.js';
-import isSameDay from 'date-fns/isSameDay/index.js';
-
 import prisma from '../lib/prisma.mjs'
-import convertToDailySignals from './convertToDailySignals.mjs';
-import getTrends from './getTrends.mjs';
-import { defaultAtrPeriods, defaultMultiplier } from './variables.mjs'
+import { getSuperTrends } from './getTrends.mjs';
 
 const getFreshSignals = async () => {
   const excludedSymbols = ['usdd', 'ustc']
-  const yesterday = endOfYesterday();
 
   let coinsData = await prisma.coin.findMany({
     orderBy: { marketCapRank: 'asc' },
@@ -23,31 +17,11 @@ const getFreshSignals = async () => {
   coinsData = coinsData.filter(coin => !excludedSymbols.includes(coin.symbol))
   for (let coin of coinsData) {
     console.log(`Fetching data for ${coin.name} (${coin.symbol})`)
-    let ohlcs = await prisma.ohlc.findMany({
-      select: {
-        closeTime: true,
-        open: true,
-        high: true,
-        low: true,
-        close: true,
-        quoteSymbol: true
-      },
-      where: {
-        coinId: coin.id,
-        closeTime: {
-          lte: yesterday,
-        }
-      },
-      orderBy: { closeTime: 'asc' }
-    })
-    let yesterdaysOhcls = ohlcs.filter(ohlc => !isSameDay(ohlc.closeTime, yesterday))
-    ohlcs = convertToDailySignals(ohlcs)
-    yesterdaysOhcls = convertToDailySignals(yesterdaysOhcls)
 
-    const [_todayTrends, todaySuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier)
-    const [_yesterdayTrends, yesterdaySuperSuperTrend] = getTrends(yesterdaysOhcls, defaultAtrPeriods, defaultMultiplier)
-    const [_weekTrends, weekSuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true)
-    const [_lastWeekTrends, lastWeekSuperSuperTrend] = getTrends(ohlcs, defaultAtrPeriods, defaultMultiplier, true, true)
+    const [_todayTrends, todaySuperSuperTrend] = await getSuperTrends(coin.id)
+    const [_yesterdayTrends, yesterdaySuperSuperTrend] = await getSuperTrends(coin.id, { skipLast: true })
+    const [_weekTrends, weekSuperSuperTrend] = await getSuperTrends(coin.id, { weekly: true })
+    const [_lastWeekTrends, lastWeekSuperSuperTrend] = await getSuperTrends(coin.id, { weekly: true, skipLast: true })
 
     coin.yesterdaySuperSuperTrend = yesterdaySuperSuperTrend
     coin.todaySuperSuperTrend = todaySuperSuperTrend

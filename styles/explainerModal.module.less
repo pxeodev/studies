@@ -1,0 +1,61 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.explainer {
+  padding: 5px;
+  border-radius: 14px;
+  color: var(--cr-primary-tooltip);
+
+  &:hover, &:active {
+    path {
+      fill: var(--cr-secondary-text);
+    }
+  }
+}
+
+.lastUpdated {
+  margin-bottom: 16px;
+}
+
+.modal {
+  :global(.ant-modal-body *:last-child) {
+    margin-bottom: 0;
+  }
+
+  :global(.ant-modal-body) {
+    max-height: calc(700px - 56px);
+    padding: 16px;
+    overflow-y: auto;
+    &:extend(.markdown all);
+
+    h2, h3 {
+      font-size: 16px;
+      line-height: 24px;
+
+      &:not(:first-child) {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--cr-primary-border);
+      }
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    @media (max-width: @screen-lg) {
+      max-height: calc(500px - 56px);
+    }
+
+    @media (max-width: @screen-md) {
+      max-height: unset;
+    }
+  }
+}
+
+@media (max-width: @screen-sm) {
+  .modal {
+    margin-top: 48px !important;
+    padding: 0 16px !important;
+  }
+}

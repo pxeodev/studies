@@ -1,0 +1,35 @@
+@import './variables.module.less';
+
+.fundedby {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #8C8C8C !important;
+  text-align: center;
+  background-color: var(--cr-primary-bg) !important;
+}
+
+.funders {
+  width: 100%;
+  justify-content: center;
+  background-color: var(--cr-primary-bg) !important;
+
+  svg {
+    height: 20px;
+  }
+
+  .ga:hover path {
+    fill: #5D7DF1;;
+  }
+}
+
+@media (max-width: @screen-md) {
+  .funders {
+    padding-bottom: 10px;
+  }
+
+  .fundedby, .funders {
+    background-color: var(--cr-secondary-bg) !important;
+  }
+}
