@@ -5019,10 +5019,10 @@ react-responsive@^9.0.0:
     prop-types "^15.6.1"
     shallow-equal "^1.2.1"
 
-react-ts-tradingview-widgets@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.0.13.tgz#eed1e1e9e95b5d113df623559ccacada651737bb"
-  integrity sha512-S1x1sV/IgPzf8LdfBXY/0/bJoiPDbO0WIXcgHTvkdYWu9CRh5CvH9NwBNh5KV6oXPXRyM8rWahjLCJMf3BHTkg==
+react-ts-tradingview-widgets@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.0.14.tgz#bb82be565e721e0f535821f1095dfdaa72a0d3d8"
+  integrity sha512-gnpW/p2pi428nm5JshCjT69pJETT0eNJC7pI1juRwwNGNT67x8ZETTszK6vHgMnye3LUGiMJNXQSllzSbxTx/Q==
 
 react@^18.2.0:
   version "18.2.0"
