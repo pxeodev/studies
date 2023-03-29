@@ -30,6 +30,11 @@ export async function getStaticProps() {
   }
 }
 
+const getWatchListFromUrl = (urlPath) => {
+  if (!urlPath.includes('?watchlist')) return []
+  return new URLSearchParams(urlPath.split('?')[1]).getAll('watchlist')
+}
+
 export default function WatchList({ exchangeData, appData }) {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,8 +43,8 @@ export default function WatchList({ exchangeData, appData }) {
   const hydrated = useHydrated()
 
   useEffect(() => {
-    let watchlistCoins = router.query.watchlist
-    if (!watchlistCoins?.length) {
+    let watchlistCoins = getWatchListFromUrl(router.asPath)
+    if (!watchlistCoins.length) {
       watchlistCoins = getWatchListCoins()
     }
     watchlistCoins = compact(watchlistCoins)
