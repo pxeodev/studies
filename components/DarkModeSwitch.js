@@ -5,10 +5,6 @@ const DarkModeSwitch = ({ darkMode, setDarkMode }) => {
   const switchMode = useCallback(() => {
     setDarkMode(!darkMode);
   }, [darkMode, setDarkMode])
-  useEffect(() => {
-    const html = document.querySelector('html');
-    html.dataset.theme = darkMode ? 'theme-dark' : 'theme-light';
-  }, [darkMode])
   return (
     <div onClick={switchMode} className={styles.darkModeSwitch} >
       <span>

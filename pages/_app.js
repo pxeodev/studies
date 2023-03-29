@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { Layout, notification } from 'antd'
-import { createContext } from "react"
+import { createContext, useEffect } from "react"
 import { HydrationProvider, Client } from "react-hydration-provider";
 
 import Header from '../components/Header'
@@ -18,6 +18,11 @@ export const NotificationContext = createContext(null);
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const darkMode = useDarkMode();
+  const isDark = darkMode[0]
+  useEffect(() => {
+    const html = document.querySelector('html');
+    html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
+  }, [isDark])
   const screens = useBreakPoint();
   const [api, contextHolder] = notification.useNotification();
 
