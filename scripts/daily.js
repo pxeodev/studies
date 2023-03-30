@@ -252,26 +252,37 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
 }
 
 const fetchCoinDataAndOhlcs = async () => {
-  const coinMarketsPage1 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250')
-  const coinMarketsPage2 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
-  const coinMarketsPage3 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=3')
-  const coinMarketsPage4 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=4')
-  let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data, ...coinMarketsPage3.data, ...coinMarketsPage4.data]
-  coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
-  coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
-  let coinIds = coinsMarketData.map(({ id }) => id)
-  let databaseCoinIds = await prisma.coin.findMany({
+  // const coinMarketsPage1 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250')
+  // const coinMarketsPage2 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=2')
+  // const coinMarketsPage3 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=3')
+  // const coinMarketsPage4 = await coinGecko.get('/coins/markets?vs_currency=usd&per_page=250&page=4')
+  // let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data, ...coinMarketsPage3.data, ...coinMarketsPage4.data]
+  // coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
+  // coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
+  // let coinIds = coinsMarketData.map(({ id }) => id)
+  // let databaseCoinIds = await prisma.coin.findMany({
+  //   select: {
+  //     id: true
+  //   }
+  // })
+  // databaseCoinIds = databaseCoinIds.map(({ id }) => id)
+  // coinIds = union(coinIds, databaseCoinIds)
+  // unrankedCoins.forEach((unrankedCoin) => {
+  //   if (!coinIds.includes(unrankedCoin)) {
+  //     coinIds.push(unrankedCoin)
+  //   }
+  // })
+  let coinIds = await prisma.coin.findMany({
     select: {
       id: true
-    }
+    },
+    orderBy: {
+      marketCapRank: 'asc'
+    },
+    take: 1000
   })
-  databaseCoinIds = databaseCoinIds.map(({ id }) => id)
-  coinIds = union(coinIds, databaseCoinIds)
-  unrankedCoins.forEach((unrankedCoin) => {
-    if (!coinIds.includes(unrankedCoin)) {
-      coinIds.push(unrankedCoin)
-    }
-  })
+  coinIds = coinIds.map(({ id }) => id)
+  console.log(coinIds)
   if (process.env.NODE_ENV == "development") {
     coinIds = coinIds.slice(0, 10)
   }
