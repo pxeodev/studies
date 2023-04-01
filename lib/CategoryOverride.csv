@@ -133,6 +133,28 @@ Category,CoinSymbol,CoinName,addORremove
 "ISO 20022",XRP,XRP,add
 "ISO 20022",XLM,Stellar,add
 "ISO 20022",HBAR,Hedera,add
+"Liquid Staking Providers","RPL","Rocket Pool",remove
+"LSD Tokens","RPL","Rocket Pool",add
+"Liquid Staking Providers","FXS","Frax Share",remove
+"LSD Tokens","FXS","Frax Share",add
+"Liquid Staking Providers","FIS","Stafi",remove
+"LSD Tokens","FIS","Stafi",add
+"Liquid Staking Providers","PSTAKE","pSTAKE Finance",remove
+"LSD Tokens","PSTAKE","pSTAKE Finance",add
+"Liquid Staking providers","LDO","Lido DAO",remove
+"LSD Tokens","LDO","Lido DAO",add
+"Liquid Staking Providers","ANKR","Ankr Network",remove
+"LSD Tokens","ANKR","Ankr Network",add
+"Liquid Staking Providers","SWISE","StakeWise",remove
+"LSD Tokens","SWISE","StakeWise",add
+"Liquid Staking Providers","QI","BENQI",remove
+"LSD Tokens","QI","BENQI",add
+"Liquid Staking Providers","SD","Stader",remove
+"LSD Tokens","SD","Stader",add
+
+
+
+
 
 
 
