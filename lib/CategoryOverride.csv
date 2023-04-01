@@ -143,13 +143,13 @@ Category,CoinSymbol,CoinName,addORremove
 "LSD Tokens","PSTAKE","pSTAKE Finance",add
 "Liquid Staking providers","LDO","Lido DAO",remove
 "LSD Tokens","LDO","Lido DAO",add
-"Liqiid Staking Providers","ANKR","Ankr Network",remove
+"Liquid Staking Providers","ANKR","Ankr Network",remove
 "LSD Tokens","ANKR","Ankr Network",add
 "Liquid Staking Providers","SWISE","StakeWise",remove
 "LSD Tokens","SWISE","StakeWise",add
-"Liquid Staking Derivatives","QI","BENQI",remove
+"Liquid Staking Providers","QI","BENQI",remove
 "LSD Tokens","QI","BENQI",add
-"Liquid Staking Derivatives","SD","Stader",remove
+"Liquid Staking Providers","SD","Stader",remove
 "LSD Tokens","SD","Stader",add
 
 
