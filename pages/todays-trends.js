@@ -106,7 +106,6 @@ export async function getStaticProps() {
   }
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
     const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
-    const [_yesterdayTrends, yesterdaySuperSuperTrend] = await getSuperTrends(coinData.id, { skipLast: true })
     const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
     const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
     const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
@@ -117,7 +116,6 @@ export async function getStaticProps() {
     return {
       ...coinData,
       dailySuperSuperTrend,
-      yesterdaySuperSuperTrend,
       weeklySuperSuperTrend,
       dailyClassicSuperSuperTrend,
       weeklyClassicSuperSuperTrend,
@@ -131,7 +129,7 @@ export async function getStaticProps() {
       exchanges
     }
   })
-  coinsData = coinsData.filter((coinData) => coinData.todaySuperSuperTrend !== coinData.yesterdaySuperSuperTrend)
+  coinsData = coinsData.filter((coinData) => coinData.dailySuperSuperTrendStreak === 1)
   const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
