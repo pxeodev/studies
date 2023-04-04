@@ -22,7 +22,7 @@
     "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs"
   },
   "dependencies": {
-    "@ant-design/plots": "^1.2.2",
+    "@ant-design/plots": "^1.2.5",
     "@metamask/detect-provider": "2",
     "@next/bundle-analyzer": "^13.2.4",
     "@prisma/client": "^4.11.0",
