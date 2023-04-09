@@ -1,17 +1,16 @@
 import subDays from 'date-fns/subDays'
-import endOfYesterday from 'date-fns/endOfYesterday'
 import prisma from '../../lib/prisma.mjs'
+import pick from 'lodash/pick';
 
-// TODO: Make him use an API key
 const handler = async (req, res) => {
-  if (req.method !== 'GET') {
-    res.status(400)
+  if (req.query.apiKey !== 'TEST_API_KEY') {
+    res.status(401).send("Unauthorized")
+  } else if (req.method !== 'GET') {
+    res.status(400).send("Bad request")
   } else {
-    // TODO: How far back
-    // TODO: Top 100
-    const coins = await prisma.coin.findMany({
+    let coins = await prisma.coin.findMany({
       orderBy: { marketCapRank: 'asc' },
-      take: 2,
+      take: 100,
       include: {
         ohlcs: {
           select: {
@@ -24,12 +23,18 @@ const handler = async (req, res) => {
           },
           where: {
             closeTime: {
-              lte: endOfYesterday(),
+              gte: subDays(new Date(), 30),
             }
           },
           orderBy: { closeTime: 'asc' },
         }
       }
+    })
+    coins = coins.map(coin => {
+      coin.ohlcs = coin.ohlcs.map(ohlcv => {
+        return [Number(ohlcv.open), Number(ohlcv.high), Number(ohlcv.low), Number(ohlcv.close), ohlcv.closeTime.getTime(), ohlcv.quoteSymbol]
+      })
+      return pick(coin, ['symbol', 'name', 'ohlcs'])
     })
     res.status(200).json({ coins })
   }
