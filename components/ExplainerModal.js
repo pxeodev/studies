@@ -1,7 +1,8 @@
 import { Modal } from 'antd'
 import { InfoCircleFilled } from "@ant-design/icons"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ReactMarkdown from 'react-markdown';
+import { useRouter } from 'next/router'
 
 import styles from "../styles/explainerModal.module.less"
 import useBreakPoint from '../hooks/useBreakPoint';
@@ -9,6 +10,14 @@ import ChatGPTSource from './ChatGPTSource';
 
 const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter()
+  useEffect(() => {
+    const path = router.asPath
+    const afterHash = path.split('#')[1]
+    if (afterHash === 'description') {
+      setModalVisible(true)
+    }
+  }, [router.asPath])
   const screens = useBreakPoint();
   const modalProps = {
     open: modalVisible,
