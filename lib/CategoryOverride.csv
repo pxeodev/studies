@@ -151,6 +151,7 @@ Category,CoinSymbol,CoinName,addORremove
 "LSD Tokens","QI","BENQI",add
 "Liquid Staking Providers","SD","Stader",remove
 "LSD Tokens","SD","Stader",add
+"Fan Token","APL","Apollo",remove
 
 
 
