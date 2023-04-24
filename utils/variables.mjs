@@ -13,7 +13,7 @@ export const classicAtrPeriods = 10
 export const classicMultiplier = 3
 
 export const currentNarratives = [
-  "China Coins",
+  "DEX",
   "LSD Tokens",
   "AI",
   "Arbitrum Ecosystem"
