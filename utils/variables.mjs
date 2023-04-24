@@ -15,7 +15,7 @@ export const classicMultiplier = 3
 export const currentNarratives = [
   "DEX",
   "LSD Tokens",
-  "AI",
+  "Artificial-Intelligence-(AI)",
   "Arbitrum Ecosystem"
 ]
 export const preferredExchanges = [
