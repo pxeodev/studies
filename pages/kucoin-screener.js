@@ -22,11 +22,11 @@ export default function KucoinScreener({ coinsData, appData, exchangeData }) {
         <title key="title">Kucoin Screener</title>
         <meta name="description" key="description" content="Explore the potential of KuCoin - a Seychelles-based crypto exchange with over 700 coins. Discover advanced strategies & features with CoinRotator."/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="KuCoin screener" explainer={`KuCoin offers trading for over 700 coins, many of which are not available on other exchanges.
+      <PageHeader lastUpdated={appData.lastUpdated} title="KuCoin Screener" explainer={`KuCoin offers trading for over 700 coins, many of which are not available on other exchanges.
 
 The exchange is primarily focused on the Asian market, as its founder is originally from China. KuCoin is registered in Seychelles, which is a common location for offshore exchanges.
 
-If you're considering trading on KuCoin, tracking trends with CoinRotator's screener can help inform your decisions.
+If you're considering trading on KuCoin, tracking trends with CoinRotator's token screener can help inform your decisions.
 
 Here are some features and strategies to consider:
 
@@ -42,7 +42,7 @@ Here are some features and strategies to consider:
 
  It's important to note that these are advanced trading strategies and can be risky. It's crucial to do your own research and carefully consider your investment strategy before making any decisions, as it's easy to end up with losing positions in crypto.
 
-**Similiar Exchanges** - [Binance](https://coinrotator.app/?exchanges=Binance) - [Huobi](https://coinrotator.app/?exchanges=Huobi) - [Gate](https://coinrotator.app/?exchanges=Gate.io)`}/>
+**Similiar Exchanges** - [Binance](https://coinrotator.app/binance-screener) - [Huobi](https://coinrotator.app/?exchanges=Huobi) - [Gate](https://coinrotator.app/?exchanges=Gate.io)`}/>
       <Layout.Content className={baseStyles.container}>
         <TableFilters
           coinsData={coinsData}
