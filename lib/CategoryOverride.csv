@@ -31,7 +31,7 @@ Category,CoinSymbol,CoinName,addORremove
 "Fractionalized NFT",DOG,The Doge NFT,add
 "Fractionalized NFT",NFT,APENFT,add
 "Fractionalized NFT",NFTX,NFTX,add
-"AI",PHB,Phoenix Global,add
+"Artificial-Intelligence(AI)",PHB,Phoenix Global,add
 "NFT Finance",JPEG,JPEG'd,add
 "NFT Finance",X2Y2,X2Y2,add
 "NFT Finance",MAGIC,Magic,add
@@ -48,8 +48,8 @@ Category,CoinSymbol,CoinName,addORremove
 "Optimism Ecosystem",VELO,Velo,add
 "Optimism Ecosystem",LYRA,Lyra Finance,add
 "Optimism Ecosystem",SNX,Synthetic Network,add
-"AI",OCEAN,Ocean Protocol,add
-"AI",RLC,iExec RLC,add
+"Artificial-Intelligence(AI)",OCEAN,Ocean Protocol,add
+"Artificial-Intelligence(AI)",RLC,iExec RLC,add
 "China Coins",FIL,Filecoin,add
 "China Coins",ZIL,Zilliqa,add
 "China Coins",NEO,NEO,add
