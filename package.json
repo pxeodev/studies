@@ -59,7 +59,7 @@
     "superjson": "^1.12.2",
     "telegraf": "^4.11.2",
     "twitter-lite": "^1.1.0",
-    "virtuallist-antd": "^0.7.4"
+    "virtuallist-antd": "^0.7.6"
   },
   "devDependencies": {
     "assert": "^2.0.0",

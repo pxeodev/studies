@@ -6102,10 +6102,10 @@ vfile@^5.0.0:
     unist-util-stringify-position "^3.0.0"
     vfile-message "^3.0.0"
 
-virtuallist-antd@^0.7.4:
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/virtuallist-antd/-/virtuallist-antd-0.7.4.tgz#759a28ccdf1dda295d33867ee9197519bd5ad6e2"
-  integrity sha512-MNzhQa34VAuLZO265FIhzDv6rzsRDOQMgxo3AL0HLq+hSVpqTmIp8sjBdFLnk+8yQh6SsBb1FZ/IjOlXF0vbmw==
+virtuallist-antd@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/virtuallist-antd/-/virtuallist-antd-0.7.6.tgz#377c718333d2e3b98d7731edf16984ac4a858f8a"
+  integrity sha512-mVlxseQBpdJ4o0KRu1UTIewKQlz44VWAJfN382sjG+OKB5nbCMuJO1U9kODgLVrjD03uxKcE6bUEAeTfdxjkXA==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
