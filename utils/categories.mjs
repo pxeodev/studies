@@ -36,7 +36,7 @@ export async function overrideCoinCategories(name, symbol, categories) {
 }
 
 export async function getCategories() {
-  const { data } = await strapi.query({
+  const {data} = await strapi.query({
     query: gql`
       query Categories {
         categories(pagination: { page: 1, pageSize: 1000 }) {
