@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
+import Fuse from 'fuse.js/dist/fuse.basic'
 
 import searchStyles from '../styles/search.module.less'
 
@@ -14,11 +15,13 @@ const Search = ({ categories, collapsed }) => {
   const [searchValue, setSearchValue] = useState('');
   const [query, setQuery] = useState(searchValue);
   const searchInputRef = useRef(null)
+  const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
   useEffect(() => {
     const fetchCoins = async () => {
       const res = await fetch('/api/search')
       const { coins } = await res.json()
       setCoins(coins)
+      setFuseCoinIndex(Fuse.createIndex(['name', 'symbol'], coins))
     }
     fetchCoins()
     const eventRef = document.addEventListener('keydown', (e) => {
@@ -67,9 +70,14 @@ const Search = ({ categories, collapsed }) => {
     </div>
   }
   let coinOptions = null
-  const filteredCoins = coins.filter((coin) => {
-    return coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
-  })
+  const filteredCoins = new Fuse(
+    coins,
+    {
+      keys: ['name', 'symbol'],
+      threshold: 0.2,
+    },
+    fuseCoinIndex
+  ).search(query).map((result) => result.item)
   if (filteredCoins.length > 0) {
     coinOptions = (
       <>
@@ -97,9 +105,13 @@ const Search = ({ categories, collapsed }) => {
   }
 
   let categoryOptions = null
-  const filteredCategories = categories.filter((category) => {
-    return category.toLowerCase().includes(query)
-  })
+  const filteredCategories = new Fuse(
+    categories,
+    {
+      minMatchCharLength: 3,
+      threshold: 0.1
+    },
+    ).search(query).map((result) => result.item)
   if (filteredCategories.length > 0) {
     categoryOptions = (
       <>
