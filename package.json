@@ -57,7 +57,7 @@
     "react-ts-tradingview-widgets": "^1.0.14",
     "retry-axios": "3",
     "slugify": "^1.6.5",
-    "superjson": "^1.12.2",
+    "superjson": "^1.12.3",
     "telegraf": "^4.11.2",
     "twitter-lite": "^1.1.0",
     "virtuallist-antd": "^0.7.6"
