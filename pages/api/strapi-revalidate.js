@@ -3,20 +3,20 @@ import slugify from "slugify"
 const strapiModels = ["category", "coin", "page"];
 
 export default async function strapiRevalidate(req, res) {
-  console.log('strapiRevalidate', req.body, req.query)
   const entry = req.body.entry
+  const model = req.body.model
 
   if (req.query.secret !== process.env.STRAPI_REVALIDATE_SECRET) {
     return res.status(401).json({ message: 'Invalid token' })
   }
 
-  if (strapiModels.includes(entry.model)) {
+  if (strapiModels.includes(model)) {
     let revalidatePath;
-    if (entry.model === "category") {
+    if (model === "category") {
       revalidatePath = `/category/${slugify(entry.name)}`
-    } else if (entry.model === "coin") {
+    } else if (model === "coin") {
       revalidatePath = `/coin/${entry.slug}`
-    } else if (entry.model === "page") {
+    } else if (model === "page") {
       revalidatePath = `/`
     }
     try {
