@@ -3,6 +3,7 @@ import slugify from "slugify"
 const strapiModels = ["category", "coin", "page"];
 
 export default async function strapiRevalidate(req, res) {
+  console.log('strapiRevalidate', req.body, req.query)
   const entry = req.body.entry
 
   if (req.query.secret !== process.env.STRAPI_REVALIDATE_SECRET) {
