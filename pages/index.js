@@ -20,7 +20,7 @@ export async function getStaticProps() {
   const { data } = await strapi.query({
     query: gql`
       query Home {
-        pages(filters: { title: { eq: "home" }}) {
+        pages(filters: { slug: { eq: "/" }}) {
           data {
             attributes {
               title
