@@ -18,8 +18,8 @@ Of course, don’t trust price predictions alone, always check the Coinrotator t
 export async function getDescriptionByCoin(coin) {
   const { data } = await strapi.query({
     query: gql`
-      query Coins {
-        coins(pagination: { page: 1, pageSize: 100000 }) {
+      query Coins($slug: String) {
+        coins(filters: {slug: {eq: $slug}}) {
           data {
             attributes {
               name
@@ -31,9 +31,11 @@ export async function getDescriptionByCoin(coin) {
         }
       }
     `,
+    variables: {
+      slug: coin.id,
+    }
   })
-  const coinsData = data.coins.data
-  const coinData = coinsData.find(data => data.attributes.symbol.toLowerCase() === coin.symbol)
+  const coinData = data.coins.data[0]
 
   let description
   if (coinData) {
