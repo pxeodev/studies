@@ -152,6 +152,7 @@ Category,CoinSymbol,CoinName,addORremove
 "Liquid Staking Providers","SD","Stader",remove
 "LSD Tokens","SD","Stader",add
 "Fan Token","APL","Apollo",remove
+"CEX","BGB","Bitget Token",add
 
 
 
