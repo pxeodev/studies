@@ -100,7 +100,7 @@ export default function Coin(coin) {
       })
     }
     setIsWatched(!isWatched)
-  }, [coin.id, isWatched])
+  }, [coin.id, coin.name, isWatched, notification])
   const [activeTab, setActiveTab] = useState(TABS.pricedata)
   useEffect(() => {
     if (router.isReady) {

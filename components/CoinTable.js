@@ -67,7 +67,7 @@ const CoinTable = ({
         placement: 'topRight',
       })
     }
-  }, [watchlistCoins])
+  }, [watchlistCoins, notification])
 
   if (superTrendFlavor === SUPERTREND_FLAVOR.classic) {
     coinsData = coinsData.map((coinData) => {

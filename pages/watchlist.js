@@ -74,6 +74,7 @@ export default function WatchList({ exchangeData, appData }) {
     } else {
       fetchData()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const columns = [
