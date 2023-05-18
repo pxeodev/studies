@@ -128,6 +128,7 @@ const dropsTab = async () => {
   try {
     browser = await puppeteer.launch({
       timeout: 100000,
+      headless: 'new'
     });
     const dropsTabData = await getDropsTabData(browser);
 
