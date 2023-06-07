@@ -49,7 +49,7 @@
     "next-superjson": "^0.0.4",
     "next-with-less": "^2.0.5",
     "prisma": "^4.14.1",
-    "puppeteer": "^20.2.1",
+    "puppeteer": "^20.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hydration-provider": "^1.0.2",
