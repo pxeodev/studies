@@ -33,7 +33,9 @@ const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
   }
   return (
     <>
-      <InfoCircleFilled className={styles.explainer} onClick={() => setModalVisible(true)} />
+      <a href="#description">
+        <InfoCircleFilled className={styles.explainer} onClick={() => setModalVisible(true)} />
+      </a>
       <Modal {...modalProps}>
         {lastUpdated ? <div className={styles.lastUpdated}>Last Data Update: {new Intl.DateTimeFormat([]).format(lastUpdated)}</div> : <></>}
         <ReactMarkdown>{explainer}</ReactMarkdown>
