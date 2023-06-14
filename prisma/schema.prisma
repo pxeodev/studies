@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Coin {
-  id                           String       @id @db.VarChar(255)
+  id                           String           @id @db.VarChar(255)
   symbol                       String
   name                         String
   categories                   String[]
@@ -27,8 +27,8 @@ model Coin {
   totalSupply                  Decimal?
   platforms                    Json?
   defaultPlatform              String?
-  dailyChange                  Decimal      @default(0.0)
-  weeklyChange                 Decimal      @default(0.0)
+  dailyChange                  Decimal          @default(0.0)
+  weeklyChange                 Decimal          @default(0.0)
   launch_date_end              DateTime?
   launch_date_start            DateTime?
   launch_price                 Decimal?
@@ -63,7 +63,7 @@ model Coin {
   coinpaprikaDevelopmentStatus String?
   coinpaprikaHardwarewallet    Boolean?
   coinpaprikaHashAlgorithm     String?
-  coinpaprikaId                String?      @db.VarChar(255)
+  coinpaprikaId                String?          @db.VarChar(255)
   coinpaprikaLaunchDateStart   String?
   coinpaprikaLinks             Json?
   coinpaprikaLinksExtended     Json?
@@ -127,4 +127,14 @@ model SuperTrend {
   weekly      Boolean  @default(false)
 
   @@unique([coinId, quoteSymbol, date, flavor, weekly])
+}
+
+model FourHourTrends {
+  id         Int      @id @default(autoincrement())
+  coinSymbol String   @db.VarChar(255)
+  date       DateTime @db.Date
+  trend      String
+  categories String[]
+
+  @@unique([coinSymbol, date])
 }
