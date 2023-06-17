@@ -16,7 +16,7 @@ export default function Custom404() {
         <Title className={baseStyles.title}>Page Not Found</Title>
         <Paragraph className={notFoundStyles.paragraph}>The page you’re trying to reach doesn’t exist or couldn’t be found.</Paragraph>
       </div>
-      <Button type="primary" size="large" href="/all-trends">Back to Home</Button>
+      <Button type="primary" size="large" href="/">Back to Home</Button>
     </Layout.Content>
   )
 }

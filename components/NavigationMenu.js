@@ -35,8 +35,8 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           icon: <StarFilled className={styles.sunsetOrange} />
         },
         {
-          label: <Link href="/all-trends" prefetch={false}>All Trends</Link>,
-          key: '/all-trends',
+          label: <Link href="/" prefetch={false}>All Trends</Link>,
+          key: '/',
           icon: <UpCircleFilled className={styles.polarGreen} />
         },
         {
@@ -175,8 +175,8 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
       },
       {
         label: 'All Trends',
-        icon: <Link href="/all-trends" prefetch={false}><UpCircleFilled className={styles.polarGreen} /></Link>,
-        key: '/all-trends',
+        icon: <Link href="/" prefetch={false}><UpCircleFilled className={styles.polarGreen} /></Link>,
+        key: '/'
       },
       {
         label: 'Market Health',
