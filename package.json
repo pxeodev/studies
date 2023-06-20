@@ -47,7 +47,7 @@
     "lodash": "^4.17.21",
     "next": "^13.2.4",
     "next-superjson": "^0.0.4",
-    "next-with-less": "^2.0.5",
+    "next-with-less": "^3.0.1",
     "prisma": "^4.15.0",
     "puppeteer": "^20.7.2",
     "react": "^18.2.0",
