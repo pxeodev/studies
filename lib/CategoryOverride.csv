@@ -154,6 +154,19 @@ Category,CoinSymbol,CoinName,addORremove
 "Fan Token","APL","Apollo",remove
 "CEX","BGB","Bitget Token",add
 "Big Data","RNDR","Render",add
+"Lending Platform","XCN","Onyxcoin",add
+"Lending Platform","JST","Just",add
+"Lending Platform","MNW","Morpheus Network",add
+"Lending Platform","TONIC","Tectonic",add
+"Lending Platform","FXS","Frax Share",add
+"Lending Platform","QI","BENQI",add
+"Lending Platform","VIRES","Vires Finance",add
+"Lending Platform","DF","dForce",add
+"Lending Platform","BPRO","B.Protocol",add
+"Lending Platform","SONNE","Sonne Finance",add
+"Lending Platform","WING","Wing Finance",add
+"Lending Platform","CANTO","CANTO",add
+"Lending Platform","BIFI","Beefy.Finance",add
 
 
 
