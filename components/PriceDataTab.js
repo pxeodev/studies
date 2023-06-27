@@ -246,6 +246,8 @@ const PriceDataTab = ({ coin, screens }) => {
           container_id={coinStyles.chart}
           theme={darkMode ? "dark" : "light"}
           studies={["STD;Supertrend"]}
+          calendar
+          details
         /> :
         <></>
       }
