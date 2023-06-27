@@ -68,7 +68,7 @@
     "browserify-zlib": "^0.2.0",
     "domain-browser": "^4.22.0",
     "eslint": "^8.41.0",
-    "eslint-config-next": "^13.4.6",
+    "eslint-config-next": "^13.4.7",
     "events": "^3.3.0",
     "https-browserify": "^1.0.0",
     "next-sitemap": "^4.1.3",
