@@ -180,7 +180,11 @@ const CoinTable = ({
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
             <Link href={`/coin/${data.id}#chart`} passHref onClick={(e) => e.stopPropagation()}>
-              <BarChartOutlined className={coinTableStyles.chart} />
+              <BarChartOutlined
+                className={coinTableStyles.chart}
+                alt="Real time chart"
+                title="Real time chart"
+              />
             </Link>
           </>
         );
