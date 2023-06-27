@@ -179,7 +179,7 @@ const CoinTable = ({
               <span className={coinTableStyles.name}>{coinData.name}</span>
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
-            <Link href={`/coin/${data.id}#chart`} passHref>
+            <Link href={`/coin/${data.id}#chart`} passHref onClick={(e) => e.stopPropagation()}>
               <BarChartOutlined className={coinTableStyles.chart} />
             </Link>
           </>
