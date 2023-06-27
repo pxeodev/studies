@@ -245,6 +245,7 @@ const PriceDataTab = ({ coin, screens }) => {
           hide_side_toolbar={!screens.sm}
           container_id={coinStyles.chart}
           theme={darkMode ? "dark" : "light"}
+          studies={["STD;Supertrend"]}
         /> :
         <></>
       }
