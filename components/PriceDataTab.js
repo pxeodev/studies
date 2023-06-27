@@ -236,7 +236,7 @@ const PriceDataTab = ({ coin, screens }) => {
         </Card.Grid>
       ) : <></>
     }
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)}>
+    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart">
       { showChart ?
         <AdvancedRealTimeChart
           autosize

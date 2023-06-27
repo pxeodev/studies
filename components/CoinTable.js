@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useContext } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import { useHydrated } from "react-hydration-provider";
+import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
 
 import WatchlistStar from './WatchlistStar';
 import useIsHoverable from '../hooks/useIsHoverable';
@@ -177,6 +178,9 @@ const CoinTable = ({
               <img src={coinData.images.small} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
               <span className={coinTableStyles.name}>{coinData.name}</span>
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
+            </Link>
+            <Link href={`/coin/${data.id}#chart`} passHref>
+              <BarChartOutlined className={coinTableStyles.chart} />
             </Link>
           </>
         );
