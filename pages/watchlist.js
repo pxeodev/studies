@@ -16,7 +16,7 @@ import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
 
-import coinTableStyles from '../styles/coinTable.module.less'
+import tableStyles from '../styles/table.module.less'
 import watchlistStyles from '../styles/watchlist.module.less'
 
 export async function getStaticProps() {
@@ -86,11 +86,11 @@ export default function WatchList({ exchangeData, appData }) {
       sorter: (a, b) => a.coins.name.localeCompare(b.coins.name),
       render: (name, coin) => {
         return (
-          (<Link href={`/coin/${coin.id}`} className={coinTableStyles.coin} passHref>
+          (<Link href={`/coin/${coin.id}`} className={tableStyles.coin} passHref>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={coin.images.small} alt={name} className={coinTableStyles.image} loading="lazy"/>
-            <span className={coinTableStyles.name}>{name}</span>
-            <span className={coinTableStyles.symbol}>{coin.symbol}</span>
+            <img src={coin.images.small} alt={name} className={tableStyles.image} loading="lazy"/>
+            <span className={tableStyles.name}>{name}</span>
+            <span className={tableStyles.symbol}>{coin.symbol}</span>
           </Link>)
         );
       }
@@ -153,8 +153,8 @@ Coins will stay in your watchlist until you remove them by clicking the star ico
             dataSource={watchlist}
             pagination={false}
             loading={loading}
-            className={classnames(coinTableStyles.table, watchlistStyles.table)}
-            rowClassName={coinTableStyles.row}
+            className={classnames(tableStyles.table, watchlistStyles.table)}
+            rowClassName={tableStyles.row}
             {...useVirtualTable()}
           />
         </Client>

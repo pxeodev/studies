@@ -14,7 +14,7 @@ import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
 import { NotificationContext } from '../pages/_app';
 
-import coinTableStyles from '../styles/coinTable.module.less';
+import coinTableStyles from '../styles/table.module.less';
 
 const CoinTable = ({
     coinsData,

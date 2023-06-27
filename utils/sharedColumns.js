@@ -8,7 +8,7 @@ import HodlTag from '../components/HodlTag'
 import { signals } from '../utils/variables'
 import tableSort from '../utils/tableSort'
 
-import coinTableStyles from '../styles/coinTable.module.less'
+import coinTableStyles from '../styles/table.module.less'
 import baseStyles from '../styles/base.module.less'
 
 export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) {
