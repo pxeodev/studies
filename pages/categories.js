@@ -29,7 +29,6 @@ export default function Categories({ categoryData, appData }) {
       onClick: () => router.push(`/category/${slugify(record.name)}`)
     }
   }, [router])
-  // TODO: Fix default sorting
   const columns = [
     {
       title: 'Category',
@@ -41,6 +40,7 @@ export default function Categories({ categoryData, appData }) {
     {
       width: 100,
       ...dailySuperSuperTrend(router, isHoverable),
+      defaultSortOrder: 'ascend',
       onCell: onCellClick
     },
     {
