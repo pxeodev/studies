@@ -1,4 +1,5 @@
 import { Typography, Collapse, Layout } from 'antd';
+import Link from 'next/link'
 
 import baseStyles from "../styles/base.module.less";
 import faqStyles from "../styles/faq.module.less"
@@ -26,7 +27,7 @@ export default function Faq() {
         <Panel header="How do you use CoinRotator?" key="1">
           <p>There are several ways CoinRotator will become an indispensable part of your daily Crypto trading routine.</p>
           <ol>
-            <li>Check for new trends daily in order to buy into coins which are outperforming BTC ETH and USDT. After checking the Market Health <a href="https://coinrotator.app/market-health">here</a>, general health of the market (BTCUSD), you can take a position and check its performance daily. The CoinRotator screener currently updates once per day at 07:00 UTC.</li>
+            <li>Check for new trends daily in order to buy into coins which are outperforming BTC ETH and USDT. After checking the Market Health <Link href="/market-health">here</Link>, general health of the market (BTCUSD), you can take a position and check its performance daily. The CoinRotator screener currently updates once per day at 07:00 UTC.</li>
             <li>Search your favorite altcoin in the top 1000+ (based on market cap) and see if it is a <UpTag /> <DownTag /> and <HodlTag /> trend. Consider your time horizon and profit expectations. If you are in profit, consider taking some profits based on what the CoinRotator trend streak or market health.</li>
             <li>Seek out undervalued low marketcap coins by applying advanced settings in the filter. Choose &lt;100m and trend streak 1-5 and select UP only. Here will be a screen result of the best performing small marketcap coins in the top 1000. Be warned, these coins are more volatile than the top ranked coins but if BTC behaves you will see much larger gains in our experience.</li>
             <li>Check out our explainer video for more details</li>
