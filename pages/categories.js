@@ -167,6 +167,7 @@ export async function getStaticProps() {
   }
   for (const category of categoryData) {
     let allDailyCoinTrends = zip(...category.coins.map(coin => coin.dailyTrends))
+    allDailyCoinTrends = allDailyCoinTrends.map((dailyCoinTrends) => dailyCoinTrends.filter(trend => trend !== undefined))
     const dailyCategoryTrends = allDailyCoinTrends.map((dailyCoinTrends) => mode(dailyCoinTrends))
     let [dailyCurrentTrend, dailyTrendStreak] = [dailyCategoryTrends[0], 0];
     for (let i = 0; i < dailyCategoryTrends.length; i++) {
@@ -179,6 +180,7 @@ export async function getStaticProps() {
     category.dailySuperSuperTrendStreak = dailyTrendStreak
 
     let allWeeklyCoinTrends = zip(...category.coins.map(coin => coin.weeklyTrends))
+    allWeeklyCoinTrends = allWeeklyCoinTrends.map((weeklyCoinTrends) => weeklyCoinTrends.filter(trend => trend !== undefined))
     const weeklyCategoryTrends = allWeeklyCoinTrends.map((weeklyCoinTrends) => mode(weeklyCoinTrends))
     let [weeklyCurrentTrend, weeklyTrendStreak] = [weeklyCategoryTrends[0], 0];
     for (let i = 0; i < weeklyCategoryTrends.length; i++) {
