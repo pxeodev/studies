@@ -167,6 +167,12 @@ Category,CoinSymbol,CoinName,addORremove
 "Lending Platform","WING","Wing Finance",add
 "Lending Platform","CANTO","CANTO",add
 "Lending Platform","BIFI","Beefy.Finance",add
+"RWA Protocols","MPL","Maple",add
+"RWA Protocols","CFG","Centrifuge",add
+"RWA Protocols","GFI","Goldfinch",add
+"RWA Protocols","RBN","Ribbon Finance",add
+"RWA Protocols","TRU","TrueFi",add
+
 
 
 

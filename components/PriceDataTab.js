@@ -236,7 +236,7 @@ const PriceDataTab = ({ coin, screens }) => {
         </Card.Grid>
       ) : <></>
     }
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)}>
+    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart">
       { showChart ?
         <AdvancedRealTimeChart
           autosize
@@ -245,6 +245,9 @@ const PriceDataTab = ({ coin, screens }) => {
           hide_side_toolbar={!screens.sm}
           container_id={coinStyles.chart}
           theme={darkMode ? "dark" : "light"}
+          studies={["STD;Supertrend"]}
+          calendar
+          details
         /> :
         <></>
       }
