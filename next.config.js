@@ -1,11 +1,13 @@
 const withLess = require("next-with-less");
-const { withSuperjson } = require('next-superjson')
 const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
 let moduleExports = {
+  experimental: {
+    swcPlugins: [["next-superjson-plugin", {}]],
+  },
   lessLoaderOptions: {
     /* ... */
   },
@@ -34,7 +36,7 @@ let moduleExports = {
     ]
   },
 }
-moduleExports = withLess(withSuperjson()(moduleExports))
+moduleExports = withLess(moduleExports)
 moduleExports = withSentryConfig(moduleExports, {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that
   // the following options are set automatically, and overriding them is not
