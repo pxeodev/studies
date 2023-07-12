@@ -16,7 +16,7 @@ export const currentNarratives = [
   "DEX",
   "LSD Tokens",
   "Artificial Intelligence (AI)",
-  "Optimism Ecosystem"
+  "Binance Launchpad"
 ]
 export const preferredExchanges = [
   'Binance',
