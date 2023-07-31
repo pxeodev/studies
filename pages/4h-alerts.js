@@ -50,10 +50,11 @@ export default function FourHourAlerts({ alerts, appData }) {
     {
       width: 100,
       ...dailySuperSuperTrend(router, isHoverable),
+      title: 'Trend',
       onCell: onCellClick
     },
     {
-      title: 'Time',
+      title: 'Timestamp',
       width: 150,
       onCell: onCellClick,
       dataIndex: 'timestamp',
@@ -64,7 +65,7 @@ export default function FourHourAlerts({ alerts, appData }) {
       }
     },
     {
-      width: 120,
+      width: 130,
       ...marketCap(router, hydrated)
     }
   ]
