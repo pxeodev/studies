@@ -48,6 +48,7 @@ const MarketHealthChart = ({ historicDailySuperSuperTrends, darkMode }) => {
         }
       })}
       yAxis={({
+        maxLimit: 1000,
         title: {
           text: 'Trends'
         },
