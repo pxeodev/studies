@@ -33,7 +33,7 @@ const handler = async (req, res) => {
       }
     })
     coins = coins.map(coin => {
-      coin = pick(coin, ['symbol', 'name', 'superTrends'])
+      coin = pick(coin, ['id', 'symbol', 'name', 'superTrends'])
       coin.trends = groupBy(coin.superTrends, 'date')
       delete coin.superTrends
       coin.trends = mapKeys(coin.trends, (_trends, date) => {
