@@ -78,7 +78,7 @@ No, we are looking into the possibility though.
     </Panel>
 <Panel header="Does CoinRotator have Telegram bots?" key="13">
 
-Yes! CoinRotator Daily Trend Alerts Bot https://t.me/+JvnH0f34vMw0ZTY8
+Yes! CoinRotator Daily Trend Alerts Bot is <Link href="https://t.me/+JvnH0f34vMw0ZTY8">here</Link> In addition to providing links to fresh trend changes, it has daily lists you can export to TradingView if you have a paid account.
     </Panel>
 <Panel header="Does CoinRotator have Discord bots?" key="14">
 
