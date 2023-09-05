@@ -13,7 +13,7 @@ export const classicAtrPeriods = 10
 export const classicMultiplier = 3
 
 export const currentNarratives = [
-  "DEX",
+  "DWF Labs",
   "LSD Tokens",
   "Artificial Intelligence (AI)",
   "Binance Launchpad"
@@ -21,7 +21,6 @@ export const currentNarratives = [
 export const preferredExchanges = [
   'Binance',
   'OKX',
-  'FTX',
   'Coinbase Exchange',
   'KuCoin',
   'Gate.io',
