@@ -4,7 +4,7 @@ import { useContext } from 'react';
 
 import variableStyles from '../styles/variables.module.less'
 import signalStyles from '../styles/signalTag.module.less'
-import { DarkModeContext } from '../pages/_app';
+import { DarkModeContext } from '../layouts/screener';
 
 const HodlTag = ({ className = '' }) => {
   const [darkMode] = useContext(DarkModeContext);

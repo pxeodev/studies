@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import variableStyles from '../styles/variables.module.less'
 import signalStyles from '../styles/signalTag.module.less'
 import { useContext } from 'react'
-import { DarkModeContext } from '../pages/_app'
+import { DarkModeContext } from '../layouts/screener.js'
 
 const UpTag = ({ className = '' }) => {
   const [darkMode] = useContext(DarkModeContext);

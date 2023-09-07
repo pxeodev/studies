@@ -3,8 +3,10 @@ import flow from 'lodash/fp/flow.js'
 import uniq from 'lodash/fp/uniq.js'
 import flatMap from 'lodash/fp/flatMap.js'
 import slugify from 'slugify'
+import { gql } from '@apollo/client'
 
 import prisma from '../lib/prisma.mjs'
+import strapi from './strapi.js'
 
 let overrides
 
@@ -34,7 +36,22 @@ export async function overrideCoinCategories(name, symbol, categories) {
 }
 
 export async function getCategories() {
-  const categoryDescriptions = await csv().fromFile('lib/CategoryDescriptions.csv');
+  const { data } = await strapi.query({
+    query: gql`
+      query Categories {
+        categories(pagination: { page: 1, pageSize: 1000 }) {
+          data {
+            attributes {
+              name
+              metaDescription
+              description
+            }
+          }
+        }
+      }
+    `,
+  })
+  const categoryDescriptions = data.categories.data
   let categories = await prisma.coin.findMany({
     select: {
       categories: true
@@ -46,12 +63,12 @@ export async function getCategories() {
   )(categories)
   categories = categories.sort((a, b) => a.localeCompare(b))
   categories = categories.map((categoryName) => {
-    const matchingCategory = categoryDescriptions.find((cat) => cat.CategoryName === categoryName)
+    const matchingCategory = categoryDescriptions.find((cat) => cat.attributes.name === categoryName)
     return {
       name: categoryName,
       slug: slugify(categoryName),
-      description: matchingCategory?.CategoryDescription,
-      metaDescription: matchingCategory?.CategroyMetaDescription
+      description: matchingCategory?.attributes?.description,
+      metaDescription: matchingCategory?.attributes?.metaDescription
     }
   })
 

@@ -2,15 +2,15 @@
 
 .menu {
   font-size: 14px;
-  border-right: none;
+  border-right: none !important;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--cr-primary-bg);
+  background-color: var(--cr-primary-bg) !important;
   max-height: calc(100vh - 110px - 128px);
 
   :global(.ant-menu-submenu-title) {
     cursor: auto;
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
     &:not(:first-child) {
       border-top: 1px solid var(--cr-primary-border);
     }
@@ -45,7 +45,7 @@
     background-color: var(--cr-secondary-bg) !important;
 
     &::after {
-      opacity: 0;
+      opacity: 0 !important;
     }
   }
 

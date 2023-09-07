@@ -7,7 +7,7 @@ import Head from 'next/head';
 import groupBy from 'lodash/groupBy.js';
 import countBy from 'lodash/countBy.js';
 
-import { DarkModeContext } from './_app';
+import { DarkModeContext } from '../layouts/screener.js';
 import baseStyles from '../styles/base.module.less'
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'

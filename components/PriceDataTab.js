@@ -11,7 +11,7 @@ import slugify from 'slugify'
 import PlatformSelect from './PlatformSelect';
 import coinStyles from '../styles/coin.module.less'
 import variableStyles from '../styles/variables.module.less'
-import { DarkModeContext } from '../pages/_app';
+import { DarkModeContext } from '../layouts/screener.js';
 
 const { Title } = Typography;
 
