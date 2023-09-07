@@ -38,7 +38,7 @@ export default function Faq() {
           Yes! CoinRotator provides three forms of trends. <UpTag />, <HodlTag />, and <DownTag />. When Bitcoin is weak, down trends are better than up trends. Be advised shorting crypto is as risky as it gets. You can lose more than your entire investment if you are overleveraged.
         </Panel>
         <Panel header="What are Trends based on?" key="3">
-          Primarily on the SuperTrend indicator. CoinRotator&apos;s default settings are faster than the respective indicator found on Tradingview. In addition we track the performance of altcoins against BTC ETH and USDT. An "actionable" trend is only generated if all three markets are in agreement. If not, a <HodlTag /> trend is issued.
+          Primarily on the SuperTrend indicator. CoinRotator&apos;s default settings are faster than the respective indicator found on Tradingview. In addition we track the performance of altcoins against BTC ETH and USDT. An &quot;actionable&quot; trend is only generated if all three markets are in agreement. If not, a <HodlTag /> trend is issued.
         </Panel>
         <Panel header="How accurate are Trends?" key="4">
           They are not designed to be a complete trading system. You&apos;ll need to check the trend health of the overall market before taking any position (we built a <Link href="https://coinrotator.app/market-health">Market Health oscillator</Link> to asses the overall market conditions). Also, check out the Twitter feed for your chosen coin (found on the coin pages), and then check the trend staus of BTC. If things look positive (or excessively negative, for that matter), it&apos;s a likely winner.
