@@ -1293,10 +1293,10 @@ axe-core@^4.3.5:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.4.1.tgz"
   integrity sha512-gd1kmb21kwNuWr6BQz8fv6GNECPBnUasepcoLbekws23NVBLODdsClRZ+bQ8+9Uomf3Sm3+Vwn0oYG9NvwnJCw==
 
-axios-logger@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/axios-logger/-/axios-logger-2.6.2.tgz#dacdce78f7dbd175712be555a57e67666033d09e"
-  integrity sha512-31ZKZfCUCJVLG1COvoz9t9SpCbNf/69L9Wkd8cEHT+VcjunK02LkGgHgyq77qKCWmFBBraQxARXKXQnnldrFGQ==
+axios-logger@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/axios-logger/-/axios-logger-2.7.0.tgz#5198925234e2c1e79612acdf1f6fb549e3f98ce9"
+  integrity sha512-KtcOtObecsvZD7hKg8ucBaCgM1I4w36tn34vFJCBqe1c5qel+NSJSC2cqo8deFTIBbmmvpM8Xm2sA09+gj9Zxw==
   dependencies:
     chalk "^4.1.0"
     dateformat "^3.0.3"
