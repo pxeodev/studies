@@ -3,6 +3,8 @@ import slugify from "slugify"
 const strapiModels = ["category", "coin", "page"];
 
 export default async function strapiRevalidate(req, res) {
+  console.log("strapiRevalidate")
+  console.dir(req.body)
   const entry = req.body.entry
   const model = req.body.model
 
