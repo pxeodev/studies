@@ -13,7 +13,7 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build && next-sitemap",
     "prisma:generate": "prisma generate",
     "daily": "swc scripts/daily.js -o dist/daily.mjs",
-    "weekly": "swc scripts/weekly.js -o dist/weekly.mjs && node node_modules/puppeteer/install.js",
+    "weekly": "swc scripts/weekly.js -o dist/weekly.mjs && npm pkg set 'type'='module' && node node_modules/puppeteer/install.js",
     "monthly": "swc scripts/monthly.js -o dist/monthly.mjs",
     "bot": "swc scripts/bot.js -o dist/bot.mjs",
     "trendHistory": "swc scripts/trendHistory.js -o dist/trendHistory.mjs",
