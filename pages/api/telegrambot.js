@@ -5,7 +5,7 @@ import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
 
 import prisma from '../../lib/prisma.mjs'
-import mode from '../../utils/mode.js'
+import supersupertrend from '../../utils/supersupertrend.mjs';
 
 const handler = async (req, res) => {
   if (req.query.apiKey !== 'TELEGRAM_BOT_API_KEY') {
@@ -43,7 +43,7 @@ const handler = async (req, res) => {
       coin.trends = mapValues(coin.trends, (trends, _date) => {
         return {
           superTrends: trends.map(superTrend => pick(superTrend, ['trend', 'quoteSymbol'])),
-          superSuperTrend: mode(trends.map(superTrend => superTrend.trend)),
+          superSuperTrend: supersupertrend(trends.map(superTrend => superTrend.trend)),
         }
       })
 
