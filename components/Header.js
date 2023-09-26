@@ -32,7 +32,7 @@ const Header = ({ categories, screens, topCategories }) => {
 
   return (
     <AntHeader className={headerStyles.header}>
-      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px' }} />
+      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px' }} disabledOverflow />
     </AntHeader>
   );
 }
