@@ -81,7 +81,8 @@ No, we are looking into the possibility though. You can always bookmark the weba
     </Panel>
 <Panel header="Does CoinRotator have Telegram bots?" key="13">
 
-Yes! CoinRotator Daily Trend Alerts Bot is <Link href="https://t.me/+JvnH0f34vMw0ZTY8">here</Link> In addition to providing links to fresh trend changes, it has daily lists you can export to TradingView if you have a paid account.
+Yes! CoinRotator Daily Trend Alerts Bot is <Link href="https://t.me/+JvnH0f34vMw0ZTY8">here</Link> In addition to providing links to fresh trend changes, it has daily lists you can export to TradingView if you have a paid account. 
+If you prefer you can always bookmark <Link href="https://coinrotator.app/todays-trends">crypto trends for today</Link> and check back each day for updates.
     </Panel>
 <Panel header="Does CoinRotator have Discord bots?" key="14">
 
