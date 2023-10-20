@@ -33,6 +33,24 @@ let moduleExports = {
           }
         ],
       },
+      {
+        source: "/api/prenftwithelist",
+        headers: [
+            { key: "Access-Control-Allow-Credentials", value: "false" },
+            { key: "Access-Control-Allow-Origin", value: "*" },
+            { key: "Access-Control-Allow-Methods", value: "POST" },
+            { key: "Access-Control-Allow-Headers", value: "*" },
+        ]
+      }
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/categories',
+        destination: '/category',
+        permanent: true,
+      },
     ]
   },
 }

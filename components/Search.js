@@ -43,6 +43,9 @@ const Search = ({ categories, collapsed }) => {
   }, [searchModalVisible])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setQueryDebounced = useCallback(debounce(setQuery, 250), []);
+  const openSearchModal = useCallback(() => {
+    setSearchModalVisible(true)
+  }, []);
   const onSearchValueChange = useCallback((e) => {
     setSearchValue(e.target.value);
     setQueryDebounced(e.target.value.trim().toLowerCase());
@@ -54,7 +57,7 @@ const Search = ({ categories, collapsed }) => {
   }, []);
   const router = useRouter()
 
-  let searchTrigger = <div onClick={() => setSearchModalVisible(true)}>
+  let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
       className={searchStyles.searchBar}
       prefix={<>
@@ -65,7 +68,7 @@ const Search = ({ categories, collapsed }) => {
     />
   </div>
   if (collapsed) {
-    searchTrigger = <div onClick={() => setSearchModalVisible(true)} className={searchStyles.searchIcon} >
+    searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchIcon} >
       <SearchOutlined className={searchStyles.placeholderMagnifier} />
     </div>
   }

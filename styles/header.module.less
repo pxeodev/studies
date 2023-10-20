@@ -1,20 +1,29 @@
 @import './variables.module.less';
 
 .header {
-  background: var(--cr-primary-bg);
-  padding: 0;
+  background: var(--cr-primary-bg) !important;
+  padding: 0 !important;
   position: static;
   width: 100%;
   z-index: 1;
-  height: 60px;
+  height: 60px !important;
 
   ul {
     background: var(--cr-primary-bg);
     color: var(--cr-primary-text);
     border-bottom: 1px solid var(--cr-primary-border) !important;
     height: 60px;
-    li {
-      flex-grow: unset !important;
+    li:first-child {
+      flex-grow: 1;
+      width: calc(100% - 80px);
+    }
+    li:nth-child(2) {
+      padding-left: 0 !important;
+      width: 28px;
+    }
+    li:nth-child(3) {
+      width: 50px;
+      vertical-align: 1px !important;
     }
   }
 }
@@ -43,13 +52,16 @@
 }
 
 .search, .navigation {
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   user-select: none;
+  vertical-align: inherit !important;
+  height: 60px !important;
 }
 
 .navigation {
   padding-left: 8px !important;
+  padding-right: 12px !important;
 }
 
 .navigation::after, .search::after {

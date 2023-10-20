@@ -1,6 +1,6 @@
-import csv from 'csvtojson'
+import { gql } from '@urql/core'
 
-let data;
+import strapi from './strapi.js'
 
 function addTemplateDescription(description, coin) {
   return `${description}
@@ -16,13 +16,31 @@ Of course, don’t trust price predictions alone, always check the Coinrotator t
 }
 
 export async function getDescriptionByCoin(coin) {
-  data ||= await csv().fromFile('lib/CoinDescription.csv');
-  const descriptionRow = data.find(description => description.Symbol.toLowerCase() === coin.symbol)
+  const { data } = await strapi.query(
+    gql`
+      query Coins($slug: String) {
+        coins(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              name
+              symbol
+              description
+              isArticle
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: coin.id,
+    }
+  )
+  const coinData = data.coins.data[0]
 
   let description
-  if (descriptionRow) {
-    description = descriptionRow.Description
-    if (descriptionRow.Article !== 'yes') {
+  if (coinData) {
+    description = coinData.attributes.description
+    if (coinData.attributes.isArticle !== 'yes') {
       description = addTemplateDescription(description, coin)
     }
   } else {

@@ -7,6 +7,7 @@ import axios from 'axios'
 import compact from 'lodash/compact'
 import classnames from 'classnames'
 import Head from 'next/head'
+import { gql } from '@urql/core'
 
 import globalData from '../lib/globalData'
 import prisma from '../lib/prisma.mjs'
@@ -15,6 +16,7 @@ import PageHeader from '../components/PageHeader'
 import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
+import strapi from '../utils/strapi';
 
 import tableStyles from '../styles/table.module.less'
 import watchlistStyles from '../styles/watchlist.module.less'
@@ -22,10 +24,30 @@ import watchlistStyles from '../styles/watchlist.module.less'
 export async function getStaticProps() {
   const appData = await globalData()
   const exchangeData = await prisma.exchange.findMany()
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: 'watchlist',
+    }
+  )
+  data = data.pages.data[0].attributes
   return {
     props: {
       appData,
-      exchangeData
+      exchangeData,
+      pageData: data
     }
   }
 }
@@ -35,7 +57,7 @@ const getWatchListFromUrl = (urlPath) => {
   return new URLSearchParams(urlPath.split('?')[1]).getAll('watchlist')
 }
 
-export default function WatchList({ exchangeData, appData }) {
+export default function WatchList({ exchangeData, appData, pageData }) {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter()
@@ -121,31 +143,10 @@ export default function WatchList({ exchangeData, appData }) {
   return (
     <>
       <Head>
-        <title key="title">Crypto Watchlist - CoinRotator</title>
-        <meta name="description" key="description" content="Create a personalized watchlist with CoinRotator's Watchlist tool. Track daily and weekly trends of the top 1000 coins in crypto, compare their strength, and monitor the market health."/>
+        <title key="title">{pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="Crypto Watchlist - CoinRotator" explainer={`### How to Use The Watchlist
-Stay up-to-date on the daily and weekly trends of the top 1000 coins in crypto. Add coins to your watchlist by clicking the star icon, and keep a close eye on their strength or weakness.
-
-### Track and Monitor Your Favorite Coins
-
-Select coins of importance based on the recent narrative surrounding their connection to other coins in the same category, coins you own, or coins that you should keep an eye on for a reversal. Keep a close eye on extreme trend readings, coins with too many days in an uptrend or downtrend, and more.
-
-### Measure the Relative Strength of Coins in a Sector
-
-Compare the relative strength or weakness of all coins in a sector by tracking them in your watchlist. Gain valuable insights into which coins are performing well and which ones to avoid.
-
-### Check the Trend Status of Coins in Your Portfolio
-
-Keep track of the trend status of coins in your portfolio by adding them to your watchlist. Quickly and easily see if your coins are gaining strength or losing strength, and make informed decisions about when to buy, hold, or sell.
-
-### General Market Health
-
-If you're unsure about the trend status of the coins in your watchlist, you can check the general health of the market using CoinRotator's [Market Health indicator](https://coinrotator.app/market-health). This tool allows you to see whether the market is strong or weak and whether buying weakness in a range or selling strength in a range is preferable.
-
-### Coins Stay in Your Watchlist Until You Remove Them
-
-Coins will stay in your watchlist until you remove them by clicking the star icon next to the ticker. With CoinRotator's Watchlist, you have full control over the coins you want to track and monitor.`}/>
+      <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
       <Layout.Content className={watchlistStyles.container}>
         <Client>
           <Table

@@ -24,7 +24,8 @@ const useVirtualTable = () => {
   }, [screens])
   const vComponents = useMemo(() => {
 		return VList({
-			height: tableHeight
+			height: tableHeight,
+      resetTopWhenDataChange: false,
 		})
 	}, [tableHeight])
 

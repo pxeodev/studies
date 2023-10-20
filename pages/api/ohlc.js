@@ -3,7 +3,7 @@ import prisma from '../../lib/prisma.mjs'
 import pick from 'lodash/pick';
 
 const handler = async (req, res) => {
-  if (req.query.apiKey !== 'TEST_API_KEY') {
+  if (req.query.apiKey !== 'YET_ANOTHER_UNGUESSABLE_API_KEY') {
     res.status(401).send("Unauthorized")
   } else if (req.method !== 'GET') {
     res.status(400).send("Bad request")

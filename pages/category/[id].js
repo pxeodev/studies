@@ -115,7 +115,7 @@ export async function getStaticProps({ params }) {
     },
     where: {
       categories: {
-        hasSome: category.name
+        hasSome: [category.name]
       }
     }
   }

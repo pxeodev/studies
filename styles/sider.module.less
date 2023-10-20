@@ -3,7 +3,7 @@
 .sidebar {
   height: 100vh;
   padding: 16px 0 128px 0;
-  background: var(--cr-primary-bg);
+  background: var(--cr-primary-bg) !important;
   border-right: 1px solid var(--cr-primary-border);
 
   &:hover {
@@ -40,7 +40,7 @@
 
   &.collapsed {
     padding-top: 30px;
-    background: var(--cr-secondary-bg);
+    background: var(--cr-secondary-bg) !important;
 
     :global(.ant-layout-sider-trigger) {
       display: block !important;
@@ -68,20 +68,20 @@
     :global(.anticon) {
       width: 28px;
       height: 28px;
-      vertical-align: -6px;
+      vertical-align: -6px !important;
 
       :global(svg:not([data-icon="menu-unfold"])) {
         height: 17px;
-        vertical-align: 3px;
+        vertical-align: 3px !important;
       }
     }
 
     :global([aria-label="menu-unfold"]) {
-      vertical-align: -3px;
+      vertical-align: -3px !important;
     }
 
     :global([role="menu"]) {
-      padding-top: 2px;
+      padding-top: 2px !important;
     }
 
     :global([role="menuitem"]) {

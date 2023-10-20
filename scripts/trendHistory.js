@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
-import endOfYesterday from 'date-fns/endOfYesterday.j';
-import subDays from 'date-fns/subDays.js'
-import format from 'date-fns/format.js'
-import startOfDay from 'date-fns/startOfDay.js'
+import endOfYesterday from 'date-fns/endOfYesterday/index.js';
+import subDays from 'date-fns/subDays/index.js'
+import format from 'date-fns/format/index.js'
+import startOfDay from 'date-fns/startOfDay/index.js'
 import mapValues from 'lodash/mapValues.js'
 import { promises as fs } from 'fs';
 

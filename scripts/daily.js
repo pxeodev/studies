@@ -140,42 +140,46 @@ const fetchCoinDataCoingecko = async (coinId) => {
   return [true, symbol, coinId]
 }
 
-const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
-  const cryptoWatchAfterParam = Math.round((subDays(new Date(), fetchOhlcDays)).valueOf() / 1000)
+const fetchOhlcData = async (coinId, symbol) => {
+  // const cryptoWatchAfterParam = Math.round((subDays(new Date(), fetchOhlcDays)).valueOf() / 1000)
   const ohlcPerQuoteSymbolEndpoints = quoteSymbols.map((quoteSymbol) => {
     if(symbol === quoteSymbol) {
       return []
     }
 
-    let matchingMarkets = cryptowatchMarkets.filter((market) => {
-      const realQuoteSymbol = quoteSymbol === 'usd' ? 'usdt' : quoteSymbol
-      if (market.pair === `${symbol}${realQuoteSymbol}`) {
-        market.inverse = false
-        return true
-      } else if (market.pair === `${realQuoteSymbol}${symbol}`) {
-        market.inverse = true
-        return true
-      } else {
-        return false
-      }
-    })
+    // let matchingMarkets = cryptowatchMarkets.filter((market) => {
+    //   const realQuoteSymbol = quoteSymbol === 'usd' ? 'usdt' : quoteSymbol
+    //   if (market.pair === `${symbol}${realQuoteSymbol}`) {
+    //     market.inverse = false
+    //     return true
+    //   } else if (market.pair === `${realQuoteSymbol}${symbol}`) {
+    //     market.inverse = true
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // })
 
-    matchingMarkets = matchingMarkets.sort((a, b) => marketPriority.indexOf(b.exchange) - marketPriority.indexOf(a.exchange))
+    // matchingMarkets = matchingMarkets.sort((a, b) => marketPriority.indexOf(b.exchange) - marketPriority.indexOf(a.exchange))
 
-    const endPoints = matchingMarkets.map((market) => {
-      return {
-        inverse: market.inverse,
-        route: `https://api.cryptowat.ch/markets/${market.exchange}/${market.pair}/ohlc?periods=14400&after=${cryptoWatchAfterParam}`,
-        quoteSymbol
-      }
-    })
+    // const endPoints = matchingMarkets.map((market) => {
+    //   return {
+    //     inverse: market.inverse,
+    //     route: `https://api.cryptowat.ch/markets/${market.exchange}/${market.pair}/ohlc?periods=14400&after=${cryptoWatchAfterParam}`,
+    //     quoteSymbol
+    //   }
+    // })
 
-    endPoints.push({
+    // endPoints.push({
+    //   isCoinGecko: true,
+    //   quoteSymbol
+    // })
+
+    // return endPoints
+    return [{
       isCoinGecko: true,
       quoteSymbol
-    })
-
-    return endPoints
+    }]
   })
   let ohlcs = []
   const now = new Date()
@@ -185,7 +189,7 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
     }
     for (let { route, inverse, isCoinGecko, quoteSymbol } of ohlcEndPoints) {
       let ohlcData = {}
-      if (isCoinGecko) {
+      // if (isCoinGecko) {
         let response
         try {
           response = await getOhlc(coinId, quoteSymbol, fetchOhlcDays)
@@ -209,40 +213,40 @@ const fetchOhlcData = async (coinId, symbol, cryptowatchMarkets) => {
         })
         ohlcData = ohlcData.filter((ohlc) => ohlc.closeTime < now)
         ohlcs = [...ohlcs, ...ohlcData]
-      } else {
-        const response = await cryptowatch.get(route)
-        ohlcData = response.data.result['14400']
-        // Sometimes cryptowatch can't give us all the OHLC data, because a coin just recently got listed on an exchange
-        if (ohlcData.length < fetchOhlcDays * 6) {
-          continue
-        }
-        ohlcData = ohlcData.map((frame) => {
-          const ohlcCloseTimeUnix = new Date(frame[0] * 1000)
-          return {
-            closeTime: ohlcCloseTimeUnix,
-            open: frame[1],
-            high: frame[2],
-            low: frame[3],
-            close: frame[4],
-            coinId: coinId,
-            quoteSymbol
-          }
-        })
-        if (inverse) {
-          ohlcData = ohlcData.map((ohlc) => {
-            return {
-              ...ohlc,
-              open: 1 / ohlc.open,
-              high: 1 / ohlc.high,
-              low: 1 / ohlc.low,
-              close: 1 / ohlc.close,
-            }
-          })
-        }
-        ohlcData = ohlcData.filter((ohlc) => new Date(ohlc.closeTime) < now)
-        ohlcs = [...ohlcs, ...ohlcData]
-        break
-      }
+      // } else {
+      //   const response = await cryptowatch.get(route)
+      //   ohlcData = response.data.result['14400']
+      //   // Sometimes cryptowatch can't give us all the OHLC data, because a coin just recently got listed on an exchange
+      //   if (ohlcData.length < fetchOhlcDays * 6) {
+      //     continue
+      //   }
+      //   ohlcData = ohlcData.map((frame) => {
+      //     const ohlcCloseTimeUnix = new Date(frame[0] * 1000)
+      //     return {
+      //       closeTime: ohlcCloseTimeUnix,
+      //       open: frame[1],
+      //       high: frame[2],
+      //       low: frame[3],
+      //       close: frame[4],
+      //       coinId: coinId,
+      //       quoteSymbol
+      //     }
+      //   })
+      //   if (inverse) {
+      //     ohlcData = ohlcData.map((ohlc) => {
+      //       return {
+      //         ...ohlc,
+      //         open: 1 / ohlc.open,
+      //         high: 1 / ohlc.high,
+      //         low: 1 / ohlc.low,
+      //         close: 1 / ohlc.close,
+      //       }
+      //     })
+      //   }
+      //   ohlcData = ohlcData.filter((ohlc) => new Date(ohlc.closeTime) < now)
+      //   ohlcs = [...ohlcs, ...ohlcData]
+      //   break
+      // }
     }
   }
 
@@ -295,13 +299,13 @@ const fetchCoinDataAndOhlcs = async () => {
     }
   }
 
-  const cryptowatchMarketsResponse = await cryptowatch.get('/markets')
-  let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
-  cryptowatchMarkets = cryptowatchMarkets.filter(market => market.active)
+  // const cryptowatchMarketsResponse = await cryptowatch.get('/markets')
+  // let cryptowatchMarkets = cryptowatchMarketsResponse.data.result
+  // cryptowatchMarkets = cryptowatchMarkets.filter(market => market.active)
   const chunkedOhlcRequests = chunk(coinsToFetchOhlcsFor, 5)
 
   for (let chunk of chunkedOhlcRequests) {
-    await Promise.all(chunk.map(({ coinId, symbol }) => fetchOhlcData(coinId, symbol, cryptowatchMarkets)))
+    await Promise.all(chunk.map(({ coinId, symbol }) => fetchOhlcData(coinId, symbol)))
   }
 }
 

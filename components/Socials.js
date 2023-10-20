@@ -4,7 +4,7 @@ import { useContext } from 'react'
 
 import styles from "../styles/socials.module.less"
 import DarkModeSwitch from './DarkModeSwitch'
-import { DarkModeContext } from '../pages/_app'
+import { DarkModeContext } from '../layouts/screener.js'
 
 const Socials = ({ collapsed }) => {
   const [darkMode, setDarkMode] = useContext(DarkModeContext)

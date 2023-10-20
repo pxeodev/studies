@@ -11,7 +11,7 @@ import slugify from 'slugify'
 import PlatformSelect from './PlatformSelect';
 import coinStyles from '../styles/coin.module.less'
 import variableStyles from '../styles/variables.module.less'
-import { DarkModeContext } from '../pages/_app';
+import { DarkModeContext } from '../layouts/screener.js';
 
 const { Title } = Typography;
 
@@ -124,7 +124,7 @@ const PriceDataTab = ({ coin, screens }) => {
       </Card.Grid>
     ) : <></>}
     <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
-      <Title level={3} className={coinStyles.label}>Tags</Title>
+      <Title level={3} className={coinStyles.label}>Categories</Title>
       {
         coin.categories.map((tag) => {
           const categorySlug = slugify(tag);

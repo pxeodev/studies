@@ -141,3 +141,9 @@ model User {
   walletAddress String @unique
   email         String
 }
+
+model WhiteListAddress {
+  id            Int    @id @default(autoincrement())
+  ip           String @unique
+  walletAddress String @unique
+}

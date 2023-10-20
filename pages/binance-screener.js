@@ -1,5 +1,6 @@
 import { Layout, Row } from 'antd';
 import Head from 'next/head';
+import { gql } from '@urql/core'
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -13,33 +14,17 @@ import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
+import strapi from '../utils/strapi';
 
-export default function BinanceScreener({ coinsData, appData, exchangeData }) {
+export default function BinanceScreener({ coinsData, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
       <Head>
-        <title key="title">Binance Screener</title>
-        <meta name="description" key="description" content="Stay up-to-date with Binance-listed coins using CoinRotator's daily and weekly screener. Sort by marketcap and identify trends on Binance to inform your investment decisions."/>
+        <title key="title">{pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="Binance screener" explainer={`Tracking trends on Binance with CoinRotator's screener can help inform your decisions on using spot or derivatives insturments.
-
-Here are some features and strategies to consider:
-
-## Binance Screener Capabilities
-
-- Daily updates for all Binance-listed coins' trend status
-- Sorting options based on marketcap and derivatives market availability
-
-## Strategies to Consider
-
-- Hedge your spot positions with coin margined or usdt margin features on Binance
-- Deposit your spot or stable coins to leverage larger positions.
-- Use a pair trade strategy to buy strong coins and short coins of equal value to reduce downside risk
-
-However, it's important to note that these are advanced [Binance Futures](https://coinrotator.app/binance-futures-screener)  strategies and can be risky.
-
-It's crucial to do your own research and carefully consider your investment strategy before making any decisions, as it's easy to get into losing positions on both sides of the trade.`}/>
+      <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
       <Layout.Content className={baseStyles.container}>
         <TableFilters
           coinsData={coinsData}
@@ -90,6 +75,25 @@ export async function getStaticProps() {
       derivatives: true,
     }
   }
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: 'binance-screener',
+    }
+  )
+  data = data.pages.data[0].attributes
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
@@ -129,7 +133,8 @@ export async function getStaticProps() {
     props: {
       coinsData,
       exchangeData,
-      appData
+      appData,
+      pageData: data,
     }
   }
 }

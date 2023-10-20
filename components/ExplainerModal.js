@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import { InfoCircleFilled } from "@ant-design/icons"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import ReactMarkdown from 'react-markdown';
 import { useRouter } from 'next/router'
 
@@ -19,6 +19,7 @@ const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
     }
   }, [router.asPath])
   const screens = useBreakPoint();
+  const modalRef = useRef(null)
   const modalProps = {
     open: modalVisible,
     centered: screens.sm,
@@ -29,10 +30,11 @@ const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
     closeIcon: null,
     style: {
       top: screens.sm ? null : 20,
-    }
+    },
+    getContainer: () => modalRef.current,
   }
   return (
-    <>
+    <div ref={modalRef}>
       <a href="#description">
         <InfoCircleFilled className={styles.explainer} onClick={() => setModalVisible(true)} />
       </a>
@@ -41,7 +43,7 @@ const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
         <ReactMarkdown>{explainer}</ReactMarkdown>
         {showSource ? <ChatGPTSource /> : <></>}
       </Modal>
-    </>
+    </div>
   );
 }
 

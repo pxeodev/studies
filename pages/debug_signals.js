@@ -6,7 +6,7 @@ import styles from '../styles/404.module.less';
 import getFreshSignals from '../utils/getFreshSignals';
 
 export default function DebugSignals(props) {
-  const groupedTrends = groupBy(props.coinsData, 'superSuperTrend')
+  const groupedTrends = groupBy(props.coinsData, 'todaySuperSuperTrend')
   return (
     <Layout.Content className={styles.content}>
       <Typography.Title>

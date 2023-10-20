@@ -1,7 +1,7 @@
 import { Table, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import { useHydrated } from "react-hydration-provider";
@@ -10,10 +10,11 @@ import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
 import WatchlistStar from './WatchlistStar';
 import useIsHoverable from '../hooks/useIsHoverable';
 import useVirtualTable from '../hooks/useVirtualTable';
+import useSocketStore from '../hooks/useSocketStore';
 import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variables'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
-import { NotificationContext } from '../pages/_app';
+import { NotificationContext } from '../layouts/screener.js';
 
 import coinTableStyles from '../styles/table.module.less';
 
@@ -42,6 +43,35 @@ const CoinTable = ({
   const hydrated = useHydrated()
   const notification = useContext(NotificationContext)
   const [watchlistCoins, setWatchlistCoins] = useState([])
+  const socket = useSocketStore(state => state.socket)
+  const [prices, setPrices] = useState({})
+
+  const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
+  useEffect(() => {
+    const prices = JSON.parse(localStorage.getItem("prices"))
+    if (prices) {
+      setPrices(prices)
+    }
+  }, [])
+  useEffect(() => {
+    if (socket) {
+      socket.on("i", (prices) => {
+        setPrices(prices)
+        localStorage.setItem("prices", JSON.stringify(prices))
+        console.debug("Received initial prices", prices);
+      });
+
+      socket.on('p', (priceUpdates) => {
+        setPrices((prevPrices) => {
+          const newPrices = { ...prevPrices }
+          Object.entries(priceUpdates).forEach(([coinSymbol, price]) => {
+            newPrices[coinSymbol] = price
+          })
+          return newPrices
+        })
+      })
+    }
+  }, [socket, currencyFormatter])
   useEffect(() => {
     setWatchlistCoins(getWatchListCoins())
   }, [])
@@ -142,6 +172,7 @@ const CoinTable = ({
     return {
       key: `${coinData.id}-${coinData.name}`,
       id: coinData.id,
+      price: prices[coinData.symbol],
       coinData: {
         symbol: coinData.symbol,
         images: coinData.images,
@@ -158,7 +189,7 @@ const CoinTable = ({
 
   let columns = [
     {
-      title: 'Coin',
+      title: () => `Coin (${tableData.length})`,
       width: 200,
       dataIndex: 'coinData',
       onCell: ({ id }) => {
@@ -211,6 +242,13 @@ const CoinTable = ({
       ...weeklySuperSuperTrend(router, isHoverable),
     }
   )
+
+  columns.push({
+    width: 125,
+    title: 'Live Price',
+    dataIndex: 'price',
+    render: (price) => price ? currencyFormatter.format(price) : null
+  })
 
   columns.push(
   {

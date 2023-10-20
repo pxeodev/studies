@@ -12,7 +12,7 @@ import Funders from './Funders'
 import Socials from './Socials'
 import NavigationMenu from './NavigationMenu'
 import DarkModeSwitch from './DarkModeSwitch'
-import { DarkModeContext } from '../pages/_app'
+import { DarkModeContext } from '../layouts/screener.js'
 import styles from "../styles/sider.module.less"
 
 const Sider = ({ topCategories, categories }) => {

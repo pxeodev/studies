@@ -7,23 +7,25 @@ import classnames from 'classnames';
 import { useCallback } from 'react';
 import mapValues from 'lodash/mapValues';
 import zip from 'lodash/zip';
+import { gql } from '@urql/core'
 
-import baseStyles from '../styles/base.module.less'
-import indexStyles from '../styles/index.module.less'
-import globalData from '../lib/globalData';
-import PageHeader from '../components/PageHeader'
-import { getSuperTrends } from '../utils/getTrends.mjs'
-import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
-import prisma from "../lib/prisma.mjs";
-import useVirtualTable from '../hooks/useVirtualTable';
-import mode from '../utils/mode';
-import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrendStreak } from '../utils/sharedColumns';
-import useIsHoverable from '../hooks/useIsHoverable';
+import baseStyles from '../../styles/base.module.less'
+import indexStyles from '../../styles/index.module.less'
+import globalData from '../../lib/globalData';
+import PageHeader from '../../components/PageHeader'
+import { getSuperTrends } from '../../utils/getTrends.mjs'
+import chunkedPromiseAll from '../../utils/chunkedPromiseAll.mjs'
+import prisma from "../../lib/prisma.mjs";
+import useVirtualTable from '../../hooks/useVirtualTable';
+import mode from '../../utils/mode';
+import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrendStreak } from '../../utils/sharedColumns';
+import useIsHoverable from '../../hooks/useIsHoverable';
+import strapi from '../../utils/strapi';
 
-import tableStyles from '../styles/table.module.less'
-import supersupertrend from '../utils/supersupertrend.mjs';
+import tableStyles from '../../styles/table.module.less'
+import supersupertrend from '../../utils/supersupertrend.mjs';
 
-export default function Categories({ categoryData, appData }) {
+export default function Categories({ categoryData, appData, pageData }) {
   const router = useRouter()
   const hydrated = useHydrated()
   const isHoverable = useIsHoverable()
@@ -89,10 +91,10 @@ export default function Categories({ categoryData, appData }) {
   return (
     <>
       <Head>
-        <title key="title">Categories</title>
-        <meta name="description" key="description" content="Discover all categories and their trends on CoinRotator."/>
+        <title key="title">{pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="Categories" />
+      <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
       <Layout.Content className={baseStyles.container}>
         <Row className={indexStyles.tableRow}>
           <Table
@@ -122,6 +124,25 @@ export async function getStaticProps() {
       categories: true,
     }
   }
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: 'categories',
+    }
+  )
+  data = data.pages.data[0].attributes
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
@@ -199,7 +220,8 @@ export async function getStaticProps() {
   return {
     props: {
       categoryData,
-      appData
+      appData,
+      pageData: data
     }
   }
 }

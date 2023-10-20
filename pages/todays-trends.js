@@ -1,5 +1,6 @@
 import { Layout, Row } from 'antd';
 import Head from 'next/head'
+import { gql } from '@urql/core'
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -13,40 +14,17 @@ import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
+import strapi from '../utils/strapi';
 
-export default function TodaysTrends({ coinsData, appData, exchangeData }) {
+export default function TodaysTrends({ coinsData, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
       <Head>
-        <title key="title">Today&apos;s Trends - CoinRotator</title>
-        <meta name="description" key="description" content="Unlock the power of cryptocurrency trading with CoinRotator's Today's Trends Table. Spot new trade conditions and identify the strongest and weakest coins in the market. Stay informed with the latest trends and maximize your success."/>
+        <title key="title">{pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="Today's Trends" explainer={`## Identifying New Trends Today
-
-Today's Trends table lists all coins that have shifted from one trade status to another, indicating whether they are in an UPtrend or DOWNtrend or have gone neutral with a HODL status. By monitoring this information, traders can identify the strongest and weakest coins in the market and make informed investment decisions.
-
-## Build A Watchlist for Easy Tracking
-
-Advanced traders can use the Today's Trends screener to build a [watchlist of coins](https://coinrotator.app/watchlist) that are in the strongest or weakest trends right now.
-
-By clicking on the star next to the coin, they can save these coins in their watchlist for easy tracking over time.
-
-This allows traders to monitor changes in the market and identify potential opportunities for buying or selling.
-
-## Creating a Long-Short Basket for Advanced Trading
-
-For those who are comfortable with derivatives trading, the **Today's Trends** screener can be used to create a long-short basket. This involves taking a long position in the strongest trends and a short position in the weakest trends, with the goal of profiting from the spread between the two.
-
-**Additional Advanced strategies for use with the CoinRotator Screener**
-
-- Use trailing stop-loss orders to maximize profits and minimize
-   losses.
-- Apply position sizing strategies such as the Kelly    criterion to
-   optimize risk management.
-- Monitor market sentiment through social media and news sources to
-   identify potential catalysts that could affect trends.
-- Consider using options at [Binance](https://coinrotator.app/binance-screener) or Deribit to hedge against potential losses or to benefit from high volatility in the market.`} />
+      <PageHeader lastUpdated={appData.lastUpdated}  title={pageData.title} explainer={pageData.content}/>
       <Layout.Content className={baseStyles.container}>
         <TableFilters
           coinsData={coinsData}
@@ -98,6 +76,25 @@ export async function getStaticProps() {
       derivatives: true,
     }
   }
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: 'todays-trends',
+    }
+  )
+  data = data.pages.data[0].attributes
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
@@ -135,7 +132,8 @@ export async function getStaticProps() {
     props: {
       coinsData,
       exchangeData,
-      appData
+      appData,
+      pageData: data,
     }
   }
 }

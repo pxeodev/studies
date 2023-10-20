@@ -31,7 +31,7 @@
 }
 
 .innerLayout {
-  background: var(--cr-secondary-bg);
+  background: var(--cr-secondary-bg) !important;
 }
 
 // Typography
@@ -101,7 +101,7 @@
 
 .card {
   background-color: var(--cr-primary-bg);
-  color: var(--cr-primary-text);
+  color: var(--cr-primary-text) !important;
   border: var(--cr-primary-border);
 }
 
@@ -150,8 +150,20 @@
     margin-bottom: 16px;
   }
 
+  h1 {
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 20px;
+  }
+
+  h2, h3 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
   p {
-    margin-bottom: 0;
+    margin-bottom: 1em;
+    font-size: 16px;
   }
 
   img {
@@ -169,7 +181,7 @@
     border-left: 4px solid rgba(var(--cr-primary-text), .08);
     background: rgba(var(--cr-primary-text), .02);
     padding: 12px;
-    margin-bottom: 16px;
+    font-style: italic;
 
     p {
       margin-bottom: 0;

@@ -1,5 +1,6 @@
 import { Row, Layout } from 'antd'
 import Head from 'next/head'
+import { gql } from '@urql/core'
 
 import CoinTable from '../components/CoinTable';
 import PageHeader from '../components/PageHeader';
@@ -11,6 +12,7 @@ import globalData from '../lib/globalData';
 import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
+import strapi from '../utils/strapi';
 
 import indexStyles from '../styles/index.module.less'
 
@@ -30,6 +32,25 @@ export async function getStaticProps() {
       derivatives: true,
     }
   }
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: '/',
+    }
+  )
+  data = data.pages.data[0].attributes
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
@@ -66,40 +87,25 @@ export async function getStaticProps() {
     props: {
       coinsData,
       exchangeData,
-      appData
+      appData,
+      pageData: data
     }
   }
 }
 
-export default function Home({ coinsData, appData, exchangeData }) {
+export default function Home({ coinsData, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
 
   return (
     <>
       <Head>
-        <title key="title">Coin Screener - CoinRotator</title>
-        <meta name="description" key="description" content={`Find early trends with Coinrotator's powerful coin screener, featuring proprietary tracking and valuable metrics. Use it as a tool to stay informed and make smart investments in the dynamic crypto market.`}/>
+        <title key="title">{pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
       <PageHeader
         lastUpdated={appData.lastUpdated}
-        title="Crypto&apos;s Best Coin Screener"
-        explainer={`## Identify Early Trends: CoinRotator's Proprietary Method
-Coinrotator is the ultimate crypto trend analysis tool designed to help you identify early trends before the masses catch on. With its proprietary method, Coinrotator tracks all coins against Bitcoin (BTC), Ethereum (ETH), and Tether (USDT) to signal an uptrend when a coin is on the rise against all three or a downtrend when it is weaker against them. This gives traders a valuable edge in assessing investment opportunities and taking advantage of trends early on.
-
-## CoinRotator Screener Table
-
-This screener table is a treasure trove of data that allows traders to filter the top 1000+ coins in the crypto market by various metrics, including market capitalization, exchange, derivatives, and trend freshness. By utilizing CoinRotator's capabilities, traders can save hours of time tracking coins with strong momentum, allowing them to focus on making smart trades and investments in the crypto market.
-
-## Latest Daily Trends
-
-The token screener page showcases all of the trend changes each day on the web app, providing an up-to-date overview of the latest trends in the crypto market. If you're only interested in the freshest daily trends, you can easily navigate to that specific page instead. Whether you're an experienced trader or new to the world of cryptocurrency, CoinRotator's screener has got you covered.
-
-## Use CoinRotator as a Tool, Not a Standalone System
-
- It's important to remember that CoinRotator is a crypto tool and should not be relied on as a standalone system. It's best used in conjunction with other market analysis tools to help make informed decisions.
- However, with its powerful trend analysis capabilities, extensive data offerings, and user-friendly platform, CoinRotator can provide valuable insights to help traders stay ahead of the curve in the ever-changing world of cryptocurrency.
-
-**CoinRotator screener page** is a useful resource for those interested in staying up-to-date with the latest price trends in the crypto market. It showcases all the trend changes each day on the web app, and if you're only interested in the freshest daily trends, you can navigate to [Today's trends](https://coinrotator.app/todays-trends) to catch the first day indicatons of a new trend. But we warned, these are not the most stable trends, but when they are correct it provides the highest risk reward of any trends.`}
+        title={pageData.title}
+        explainer={pageData.content}
       />
       <Layout.Content className={indexStyles.container}>
         {/* For quick alerts */}

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Prisma } from '@prisma/client'
 import minBy from 'lodash/minBy';
 import pick from 'lodash/pick';
-import { useCallback, useEffect, useState, useContext } from 'react';
+import { useCallback, useEffect, useState, useContext, useRef, useMemo } from 'react';
 import levenshtein from 'js-levenshtein';
 import classnames from 'classnames';
 
@@ -26,8 +26,9 @@ import { getDescriptionByCoin } from '../../utils/coinDescriptions';
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../../utils/watchlist.js';
 import useBreakPoint from '../../hooks/useBreakPoint';
 import useIsHoverable from '../../hooks/useIsHoverable';
+import useSocketStore from '../../hooks/useSocketStore';
 import globalData from '../../lib/globalData';
-import { NotificationContext } from '../../pages/_app';
+import { NotificationContext } from '../../layouts/screener.js';
 
 import baseStyles from '../../styles/base.module.less'
 import coinStyles from '../../styles/coin.module.less'
@@ -72,6 +73,37 @@ export default function Coin(coin) {
   const isHoverable = useIsHoverable();
   const notification = useContext(NotificationContext)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
+  const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
+  const coinPriceRef = useRef(null)
+  const socket = useSocketStore(state => state.socket)
+
+  useEffect(() => {
+    const localPrices = JSON.parse(localStorage.getItem("prices"))
+    if (localPrices) {
+      const price = localPrices[coin.symbol]
+      if (price && coinPriceRef.current) {
+        coinPriceRef.current.innerText = currencyFormatter.format(price)
+      }
+    }
+  }, [coin.symbol, currencyFormatter])
+  useEffect(() => {
+    if (socket) {
+      socket.on("i", (prices) => {
+        const price = prices[coin.symbol]
+        if (price && coinPriceRef.current) {
+          coinPriceRef.current.innerText = currencyFormatter.format(price)
+        }
+        console.debug("Received initial prices", prices);
+      });
+
+      socket.on('p', (priceUpdates) => {
+        const priceUpdate = priceUpdates[coin.symbol]
+        if (priceUpdate && coinPriceRef.current) {
+          coinPriceRef.current.innerText = currencyFormatter.format(priceUpdate)
+        }
+      })
+    }
+  }, [socket, coin.symbol, currencyFormatter])
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
@@ -154,7 +186,12 @@ export default function Coin(coin) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
       </>}
-      postfix={<Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>}
+      postfix={
+        <>
+          <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
+          <span ref={coinPriceRef} />
+        </>
+      }
     />
     <Content className={baseStyles.container}>
       <Card className={classnames(baseStyles.card, coinStyles.sectionParent)}>
