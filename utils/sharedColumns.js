@@ -11,7 +11,7 @@ import tableSort from '../utils/tableSort'
 import coinTableStyles from '../styles/table.module.less'
 import baseStyles from '../styles/base.module.less'
 
-export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) {
+export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, dataIndex = 'dailySuperSuperTrend') {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
     title: <span className={coinTableStyles.columnTitle}>
@@ -24,7 +24,7 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort) 
         <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
       </Tooltip>
     </span>,
-    dataIndex: 'dailySuperSuperTrend',
+    dataIndex,
     sorter: {
       compare: tableSort(reverseMarketCapSort),
       multiple: 1,

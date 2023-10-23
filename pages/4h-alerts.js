@@ -1,10 +1,11 @@
-import { Layout, Row, Table } from 'antd';
+import { Layout, Row, Table, Tag } from 'antd';
 import Head from 'next/head'
 import { useHydrated } from "react-hydration-provider";
 import { useRouter } from 'next/router'
 import slugify from 'slugify';
 import { useCallback } from 'react';
 import Link from 'next/link'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -12,9 +13,12 @@ import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import prisma from "../lib/prisma.mjs";
 import useVirtualTable from '../hooks/useVirtualTable';
-import { dailySuperSuperTrend, marketCap } from '../utils/sharedColumns';
+import { dailySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrend } from '../utils/sharedColumns';
 import useIsHoverable from '../hooks/useIsHoverable';
 import { signals } from '../utils/variables';
+import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import { getSuperTrends } from '../utils/getTrends.mjs'
+import { SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 
 import tableStyles from '../styles/table.module.less'
 import coinTableStyles from '../styles/table.module.less';
@@ -28,7 +32,6 @@ export default function FourHourAlerts({ alerts, appData }) {
       onClick: () => router.push(`/coin/${slugify(record.coin.name)}`)
     }
   }, [router])
-  const dateFormatter = new Intl.DateTimeFormat([], { day: 'numeric', month: 'numeric', hour: 'numeric', minute: 'numeric' })
   const columns = [
     {
       title: 'Coin',
@@ -49,20 +52,47 @@ export default function FourHourAlerts({ alerts, appData }) {
     },
     {
       width: 100,
-      ...dailySuperSuperTrend(router, isHoverable),
+      ...dailySuperSuperTrend(router, isHoverable, false, 'fourHourTrend'),
       title: 'Trend',
       onCell: onCellClick
     },
     {
       title: 'Timestamp',
-      width: 150,
+      width: 120,
       onCell: onCellClick,
       dataIndex: 'timestamp',
       sorter: (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
       defaultSortOrder: 'descend',
       render: (timestamp) => {
-        return dateFormatter.format(new Date(timestamp))
+        return `${formatDistanceToNowStrict(new Date(timestamp))} ago`
       }
+    },
+    {
+      title: 'Categories',
+      width: 350,
+      dataIndex: 'categories',
+      render: (categories) => {
+        return categories.map((category) => {
+          const categorySlug = slugify(category);
+          return (
+            <Link href={`/category/${categorySlug}`} key={category} prefetch={false}>
+              <Tag>{category}</Tag>
+            </Link>
+          );
+        });
+      }
+    },
+    {
+      width: 100,
+      ...dailySuperSuperTrend(router, isHoverable),
+    },
+    {
+      width: 90,
+      ...dailySuperSuperTrendStreak(router, isHoverable),
+    },
+    {
+      width: 100,
+      ...weeklySuperSuperTrend(router, isHoverable),
     },
     {
       width: 130,
@@ -99,7 +129,7 @@ export async function getStaticProps() {
   for (const alert of alerts) {
     coinSymbols.add(alert.coinSymbol.toLowerCase())
   }
-  const coins = await prisma.Coin.findMany({
+  let coins = await prisma.Coin.findMany({
     where: {
       symbol: {
         in: [...coinSymbols]
@@ -111,7 +141,24 @@ export async function getStaticProps() {
       symbol: true,
       categories: true,
       images: true,
-      marketCap: true
+      marketCap: true,
+      categories: true
+    }
+  })
+  coins = await chunkedPromiseAll(coins, 5, async (coinData) => {
+    const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
+    const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
+    const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
+    const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
+
+    return {
+      ...coinData,
+      dailySuperSuperTrend,
+      weeklySuperSuperTrend,
+      dailyClassicSuperSuperTrend,
+      weeklyClassicSuperSuperTrend,
+      dailySuperSuperTrendStreak,
+      dailyClassicSuperSuperTrendStreak,
     }
   })
   const alertsToDelete = []
@@ -126,17 +173,23 @@ export async function getStaticProps() {
     alert.image = coin.images.small
     alert.id = coin.id
     alert.marketCap = coin.marketCap
+    alert.dailySuperSuperTrend = coin.dailySuperSuperTrend
+    alert.weeklySuperSuperTrend = coin.weeklySuperSuperTrend
+    alert.dailyClassicSuperSuperTrend = coin.dailyClassicSuperSuperTrend
+    alert.weeklyClassicSuperSuperTrend = coin.weeklyClassicSuperSuperTrend
+    alert.dailySuperSuperTrendStreak = coin.dailySuperSuperTrendStreak
+    alert.dailyClassicSuperSuperTrendStreak = coin.dailyClassicSuperSuperTrendStreak
     switch (alert.trend) {
       case 'BULL':
       case 'MEAN REV BULL':
-        alert.dailySuperSuperTrend = signals.buy
+        alert.fourHourTrend = signals.buy
         break;
       case 'BEAR':
       case 'MEAN REV BEAR':
-        alert.dailySuperSuperTrend = signals.sell
+        alert.fourHourTrend = signals.sell
         break;
       default:
-        alert.dailySuperSuperTrend = signals.hodl
+        alert.fourHourTrend = signals.hodl
     }
   }
   for (const i of alertsToDelete.reverse()) {
