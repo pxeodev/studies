@@ -2832,10 +2832,10 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
-graphql@^16.8.0:
-  version "16.8.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.0.tgz#374478b7f27b2dc6153c8f42c1b80157f79d79d4"
-  integrity sha512-0oKGaR+y3qcS5mCu1vb7KG+a89vjn06C7Ihq/dDl3jA+A8B3TKomvi3CiEcVLJQGalbu8F52LxkOym7U5sSfbg==
+graphql@^16.8.1:
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.1.tgz#1930a965bef1170603702acdb68aedd3f3cf6f07"
+  integrity sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==
 
 gzip-size@^6.0.0:
   version "6.0.0"
@@ -4917,10 +4917,10 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-hydration-provider@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-hydration-provider/-/react-hydration-provider-1.0.2.tgz#7e8ce8ccb6d7bb919800a41daa662c79f3de89ae"
-  integrity sha512-2LhJbrUZ6DNB5HXc52XGoTlfOrRXmuqWgOj9CHJ6I4UUlWl/eQwFAgOYMr9owa86F+OvAEw3Rr1ik00zKuG52A==
+react-hydration-provider@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-hydration-provider/-/react-hydration-provider-2.0.0.tgz#c3813ef4a654951f38fe9e1c661dfa703207f3f0"
+  integrity sha512-Jgd5lu1Fmefks9MNnh+eJ+REbuz54qoVvB25a81idGCaPTDqTqMyj4fqEH7Jroro3Y4x4+e9hBgzt+nfUOyTow==
 
 react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -4963,10 +4963,10 @@ react-responsive@^9.0.2:
     prop-types "^15.6.1"
     shallow-equal "^1.2.1"
 
-react-ts-tradingview-widgets@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.0.14.tgz#bb82be565e721e0f535821f1095dfdaa72a0d3d8"
-  integrity sha512-gnpW/p2pi428nm5JshCjT69pJETT0eNJC7pI1juRwwNGNT67x8ZETTszK6vHgMnye3LUGiMJNXQSllzSbxTx/Q==
+react-ts-tradingview-widgets@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.2.0.tgz#e44d56c671de5a3fdea8cb9909384c50690bb181"
+  integrity sha512-9DlZ7QmpYxdmunLYYdPCnnE0DyAPMNdE0FDrlL7dnUeRXXSTzh6hm0jqV9p5AkSXTK5OaizRDIPLBAM7FKjQCg==
 
 react@^18.2.0:
   version "18.2.0"
