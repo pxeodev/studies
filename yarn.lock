@@ -4963,7 +4963,7 @@ react-responsive@^9.0.2:
     prop-types "^15.6.1"
     shallow-equal "^1.2.1"
 
-react-ts-tradingview-widgets@^1.2.0:
+react-ts-tradingview-widgets@^1.0.14:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-ts-tradingview-widgets/-/react-ts-tradingview-widgets-1.2.0.tgz#e44d56c671de5a3fdea8cb9909384c50690bb181"
   integrity sha512-9DlZ7QmpYxdmunLYYdPCnnE0DyAPMNdE0FDrlL7dnUeRXXSTzh6hm0jqV9p5AkSXTK5OaizRDIPLBAM7FKjQCg==
