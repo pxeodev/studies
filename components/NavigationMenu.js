@@ -30,11 +30,6 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
       key: 'screenertools',
       children: [
         {
-          label: <Link href="/watchlist">Watchlist</Link>,
-          key: '/watchlist',
-          icon: <StarFilled className={styles.sunsetOrange} />
-        },
-        {
           label: <Link href="/" prefetch={false}>Crypto Trends</Link>,
           key: '/',
           icon: <UpCircleFilled className={styles.polarGreen} />
@@ -63,6 +58,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           label: <a href="https://www.tradingview.com/script/yNrotMjf-CoinRotator" target="_blank"  rel="noopener noreferrer">TradingView indicator</a>,
           key: '/tradingview-indicator',
           icon: <LineChartOutlined className={styles.goldenPurple} />
+        },
+        {
+          label: <Link href="/watchlist">Watchlist</Link>,
+          key: '/watchlist',
+          icon: <StarFilled className={styles.sunsetOrange} />
         }
       ]
     },
