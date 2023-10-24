@@ -16,7 +16,7 @@ import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
 
-export default function KucoinFuturesScreener({ coinsData, appData, exchangeData, pageData }) {
+export default function KuCoinFuturesScreener({ coinsData, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData, true)
   return (
     <>
@@ -102,7 +102,7 @@ export async function getStaticProps() {
   }
   coinsData = coinsData.filter((coinData) => {
     return coinData.derivatives?.some((derivative) => {
-      return derivative.market === 'Kucoin'
+      return derivative.market === 'KuCoin'
     })
   })
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
