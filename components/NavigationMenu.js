@@ -103,6 +103,31 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
             label: <Link href="/binance-futures-screener" prefetch={false}>Binance Futures Screener</Link>,
             key: '/binance-futures-screener',
             icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/kucoin-futures-screener" prefetch={false}>Kucoin Futures Screener</Link>,
+            key: '/kucoin-futures-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/okx-futures-screener" prefetch={false}>OKX Futures Screener</Link>,
+            key: '/okx-futures-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/mexc-futures-screener" prefetch={false}>MEXC Futures Screener</Link>,
+            key: '/mexc-futures-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/bitget-futures-screener" prefetch={false}>Bitget Futures Screener</Link>,
+            key: '/bitget-futures-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
+          },
+          {
+            label: <Link href="/bingx-futures-screener" prefetch={false}>BingX Futures Screener</Link>,
+            key: '/bingx-futures-screener',
+            icon: <SwapOutlined className={styles.geekBlue} />
           }
         ]
       },

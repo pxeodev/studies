@@ -311,7 +311,13 @@ const fetchCoinDataAndOhlcs = async () => {
 
 const fetchDerivativesData = async() => {
   const derivativesData = (await coinGecko.get('derivatives')).data
-  const perpetualDerivatives = derivativesData.filter(derivate => derivate.contract_type === 'perpetual')
+  let perpetualDerivatives = derivativesData.filter(derivate => derivate.contract_type === 'perpetual')
+  perpetualDerivatives = perpetualDerivatives.map(derivate => {
+    if (derivate.market === 'KuCoin Futures') {
+      derivate.index_id = derivate.index_id.replace('USDT', '').substring(1) // KuCoin Futures symbols are special for some reason
+    }
+    return derivate
+  })
   const derivativesByCoin = groupBy(perpetualDerivatives, 'index_id')
 
   for (const [coinId, derivatives] of Object.entries(derivativesByCoin)) {
@@ -395,7 +401,7 @@ setTimeout(async () => {
     name: `Datafetch ${new Date()}`,
   });
   try {
-    await fetchCoinDataAndOhlcs();
+    // await fetchCoinDataAndOhlcs();
     await fetchDerivativesData();
     // await fetchLunrData();
     if (process.env.NODE_ENV === 'production') {
