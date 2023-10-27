@@ -23,6 +23,8 @@ export const cleanupCoinLink = (link, symbol) => {
   let url
   if (symbol === 'ICX') {
     url = new URL('https://icon.community')
+  } else if (symbol === 'RLB') {
+    url = new URL('https://rollbit.com/')
   } else if (removeWebsiteLinkSymbols.includes(symbol)) {
     url = null
   } else {
