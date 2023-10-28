@@ -132,8 +132,8 @@ model SuperTrend {
 model FourHourTrends {
   id         Int       @id @default(autoincrement())
   trend      String
-  coinSymbol String    @db.VarChar(255)
-  timestamp  DateTime? @db.Timestamp(6)
+  coinsymbol String    @db.VarChar(255) @default("")
+  timestamp  DateTime? @db.Timestamp(6) @default(now())
 }
 
 model User {
