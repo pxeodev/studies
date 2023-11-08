@@ -127,6 +127,7 @@ model SuperTrend {
   weekly      Boolean  @default(false)
 
   @@unique([coinId, quoteSymbol, date, flavor, weekly])
+  @@index([coinId, flavor, weekly])
 }
 
 model FourHourTrends {
