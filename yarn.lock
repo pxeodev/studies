@@ -697,6 +697,11 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
+"@sqltools/formatter@^1.2.3":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@sqltools/formatter/-/formatter-1.2.5.tgz#3abc203c79b8c3e90fd6c156a0c62d5403520e12"
+  integrity sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==
+
 "@swc/cli@^0.1.62":
   version "0.1.62"
   resolved "https://registry.yarnpkg.com/@swc/cli/-/cli-0.1.62.tgz#6442fde2fcf75175a300fb4fcf30f8c60bbb3ab3"
@@ -4371,6 +4376,13 @@ prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
+
+prisma-query-log@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/prisma-query-log/-/prisma-query-log-3.2.0.tgz#6e620a7196456075b1eaddb7cb10b86cb7be2ab4"
+  integrity sha512-Em7u3eedHZR6JJSzEMDEwoyS9zy2MsdQLrKxkfTbLdJF2LwfMetRVDBtkGQdcxM4ntT3wFWGBi/zNR5Q107Jgw==
+  dependencies:
+    "@sqltools/formatter" "^1.2.3"
 
 prisma@^5.3.1:
   version "5.3.1"
