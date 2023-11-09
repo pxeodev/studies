@@ -108,12 +108,12 @@ export default function WatchList({ exchangeData, appData, pageData }) {
       sorter: (a, b) => a.coins.name.localeCompare(b.coins.name),
       render: (name, coin) => {
         return (
-          (<Link href={`/coin/${coin.id}`} className={tableStyles.coin} passHref>
+          (<a href={`/coin/${coin.id}`} className={tableStyles.coin} passHref>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={coin.images.small} alt={name} className={tableStyles.image} loading="lazy"/>
             <span className={tableStyles.name}>{name}</span>
             <span className={tableStyles.symbol}>{coin.symbol}</span>
-          </Link>)
+          </a>)
         );
       }
     },

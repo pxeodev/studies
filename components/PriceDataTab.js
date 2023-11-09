@@ -127,9 +127,9 @@ const PriceDataTab = ({ coin, screens }) => {
         coin.categories.map((tag) => {
           const categorySlug = slugify(tag);
           return (
-            <Link href={`/category/${categorySlug}`} key={tag} prefetch={false}>
+            <a href={`/category/${categorySlug}`} key={tag} prefetch={false}>
               <Tag>{tag}</Tag>
-            </Link>
+            </a>
           );
         })
       }
@@ -142,7 +142,7 @@ const PriceDataTab = ({ coin, screens }) => {
             // eslint-disable-next-line @next/next/no-img-element
             coin.similarCoins.map(coin =>
               (
-                (<Link href={`/coin/${coin.id}`} key={coin.id}>
+                (<a href={`/coin/${coin.id}`} key={coin.id}>
 
                   <Tag
                     className={coinStyles.similarCoin}
@@ -153,7 +153,7 @@ const PriceDataTab = ({ coin, screens }) => {
                     {coin.name}
                   </Tag>
 
-                </Link>)
+                </a>)
               )
             )
           }
