@@ -3,7 +3,7 @@ import prisma from '../lib/prisma.mjs';
 import { defaultAtrPeriods, defaultMultiplier, classicAtrPeriods, classicMultiplier, SUPERTREND_FLAVOR } from './variables.mjs';
 import supertrend from './supertrend.mjs';
 import convertToWeeklySignals from './convertToWeeklySignals.mjs';
-import { subDays } from 'date-fns';
+import { subDays, isMonday } from 'date-fns';
 import convertToDailySignals from './convertToDailySignals.mjs';
 
 // Input: ['UP', 'UP', 'DOWN']
@@ -22,7 +22,7 @@ const supersupertrend = (trends) => {
   return superSupertrend;
 }
 
-const convertOhlcsToSuperTrends = (ohlcs, coinId, quoteSymbol, flavor, weekly = false) => {
+export const convertOhlcsToSuperTrends = (ohlcs, coinId, quoteSymbol, flavor, weekly = false) => {
   if (weekly) {
     ohlcs = convertToWeeklySignals(ohlcs, true)
   }
@@ -51,23 +51,26 @@ export async function saveDailyOhlcsToSupertrends (ohlcs, coinId) {
     const classicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic)
     await prisma.superTrend.createMany({ data: classicTrends, skipDuplicates: true })
 
-    let weeklyCoinOhlcs = await prisma.ohlc.findMany({
-      where: {
-        coinId,
-        quoteSymbol,
-        closeTime: {
-          gte: subDays(new Date(), 12 * 7)
+    const today = new Date()
+    if (isMonday(today)) {
+      let weeklyCoinOhlcs = await prisma.ohlc.findMany({
+        where: {
+          coinId,
+          quoteSymbol,
+          closeTime: {
+            gte: subDays(today, 12 * 7)
+          }
+        },
+        orderBy: {
+          closeTime: 'asc'
         }
-      },
-      orderBy: {
-        closeTime: 'asc'
-      }
-    })
-    weeklyCoinOhlcs = convertToDailySignals(weeklyCoinOhlcs, true)[quoteSymbol] || []
-    const weeklyCrTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, true)
-    await prisma.superTrend.createMany({ data: weeklyCrTrends, skipDuplicates: true })
-    const weeklyClassicTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, true)
-    await prisma.superTrend.createMany({ data: weeklyClassicTrends, skipDuplicates: true })
+      })
+      weeklyCoinOhlcs = convertToDailySignals(weeklyCoinOhlcs, true)[quoteSymbol] || []
+      const weeklyCrTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, true)
+      await prisma.superTrend.createMany({ data: weeklyCrTrends, skipDuplicates: true })
+      const weeklyClassicTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, true)
+      await prisma.superTrend.createMany({ data: weeklyClassicTrends, skipDuplicates: true })
+    }
   }
 }
 
