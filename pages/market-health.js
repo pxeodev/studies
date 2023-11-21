@@ -29,7 +29,7 @@ export default function MarketHealth({ historicDailySuperSuperTrends, appData, p
   return (
     <>
       <Head>
-        <title key="title">{pageData.title}</title>
+        <title key="title">{pageData.metaTitle || pageData.title}</title>
         <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
       <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
@@ -62,6 +62,7 @@ export async function getStaticProps() {
           data {
             attributes {
               title
+              metaTitle
               metaDescription
               content
             }

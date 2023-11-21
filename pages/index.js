@@ -39,6 +39,7 @@ export async function getStaticProps() {
           data {
             attributes {
               title
+              metaTitle
               metaDescription
               content
             }
@@ -99,7 +100,7 @@ export default function Home({ coinsData, appData, exchangeData, pageData }) {
   return (
     <>
       <Head>
-        <title key="title">{pageData.title}</title>
+        <title key="title">{pageData.metaTitle || pageData.title}</title>
         <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
       <PageHeader
