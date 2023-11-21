@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "render-build": "vercel pull --environment=production --token 2EUiAIbl6KE29YR2DP79LdNM && vercel build --token 2EUiAIbl6KE29YR2DP79LdNM --prod && vercel deploy --prod --prebuilt --token 2EUiAIbl6KE29YR2DP79LdNM",
     "vercel-build": "prisma generate && prisma migrate deploy && next build && next-sitemap",
     "prisma:generate": "prisma generate",
     "daily": "swc scripts/daily.js -o dist/daily.mjs",
