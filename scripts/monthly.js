@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-import { init, withScope, captureMessage, startTransaction, captureException } from '@sentry/node';
-import * as Tracing from '@sentry/tracing'
 import pick from 'lodash/pick.js'
 import minBy from 'lodash/minBy.js';
 import levenshtein from 'js-levenshtein';
@@ -11,14 +9,6 @@ import { getCoin, getCoins } from '../lib/coinpaprika.mjs'
 import { excludedExchanges } from '../utils/variables.mjs';
 
 dotenv.config();
-init({
-  dsn: process.env.SENTRY_DSN,
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
 
 const fetchExchanges = async () => {
   const exchangesData = (await coinGecko.get('/exchanges/list')).data
@@ -55,13 +45,6 @@ const fetchCoinpaprikaData = async () => {
       matchingCoin = matchingCoins[0]
     } else if (matchingCoins.length > 1) {
       const closestCoin = minBy(matchingCoins, (coin) => levenshtein(coin.name, name));
-
-      withScope(scope => {
-        scope.setLevel('warning');
-        scope.setExtra('symbol', symbol);
-        scope.setExtra('closestCoin', closestCoin.name);
-        captureMessage('Coinpaprika: Detected the right coin via levenshtein distance');
-      });
       console.log('Found multiple coins', matchingCoins)
       console.log('Picked', closestCoin, ' for ', symbol, name)
       matchingCoin = closestCoin;
@@ -108,17 +91,6 @@ const fetchCoinpaprikaData = async () => {
 }
 
 setTimeout(async () => {
-  const transaction = startTransaction({
-    op: "monthly",
-    name: "monthly",
-  });
-  try {
-    await fetchCoinpaprikaData()
-    await fetchExchanges()
-  } catch (e) {
-    captureException(e);
-    console.log(e)
-  } finally {
-    transaction.finish();
-  }
+  await fetchCoinpaprikaData()
+  await fetchExchanges()
 }, 99);

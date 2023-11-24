@@ -1,19 +1,8 @@
-import { init, startTransaction, captureException } from '@sentry/node';
-import * as Tracing from '@sentry/tracing'
 import puppeteer from 'puppeteer';
 
 import prisma from '../lib/prisma.mjs'
 import { overrideCoinCategories } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
-
-init({
-  dsn: process.env.SENTRY_DSN,
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
 
 const fetchCoinData = async (url, coin, page) => {
   console.log('Fetch launch data for', coin.symbol);
@@ -115,19 +104,7 @@ const dropsTab = async () => {
 }
 
 const weekly = async () => {
-  const transaction = startTransaction({
-    op: "Weekly",
-    name: "Weekly",
-  });
-  try {
-    await dropsTab()
-  } catch (error) {
-    console.log(error)
-    captureException(error);
-    throw(error)
-  } finally {
-    transaction.finish();
-  }
+  await dropsTab()
 }
 
 weekly()

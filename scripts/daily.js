@@ -9,8 +9,6 @@ import minBy from 'lodash/minBy.js';
 import isNil from 'lodash/isNil.js'
 import union from 'lodash/union.js'
 import uniqBy from 'lodash/uniqBy.js'
-import { init, startTransaction, captureException } from '@sentry/node';
-import * as Tracing from '@sentry/tracing'
 
 import { quoteSymbols } from '../utils/variables.mjs'
 import prisma from '../lib/prisma.mjs'
@@ -23,14 +21,6 @@ import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { saveDailyOhlcsToSupertrends } from '../utils/supersupertrend.mjs';
 
 dotenv.config();
-init({
-  dsn: process.env.SENTRY_DSN,
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
 
 const fetchOhlcDays = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'rsr', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'qc', 'dgd', 'eurs', 'susd', 'sai', 'cusd', 'alusd', 'seur', 'eeur', 'eth2x-fli', 'dfuk']
@@ -396,21 +386,10 @@ const fetchLunrData = async() => {
 }
 
 setTimeout(async () => {
-  const transaction = startTransaction({
-    op: "Datafetch",
-    name: `Datafetch ${new Date()}`,
-  });
-  try {
-    await fetchCoinDataAndOhlcs();
-    await fetchDerivativesData();
-    // await fetchLunrData();
-    if (process.env.NODE_ENV === 'production') {
-      await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
-    }
-  } catch (e) {
-    console.log(e)
-    captureException(e);
-  } finally {
-    transaction.finish();
+  await fetchCoinDataAndOhlcs();
+  await fetchDerivativesData();
+  // await fetchLunrData();
+  if (process.env.NODE_ENV === 'production') {
+    await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
   }
 }, 99);
