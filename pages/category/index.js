@@ -8,6 +8,7 @@ import { useCallback } from 'react';
 import mapValues from 'lodash/mapValues';
 import zip from 'lodash/zip';
 import { gql } from '@urql/core'
+import pick from 'lodash/pick';
 
 import baseStyles from '../../styles/base.module.less'
 import indexStyles from '../../styles/index.module.less'
@@ -217,6 +218,7 @@ export async function getStaticProps() {
     category.weeklySuperSuperTrend = mode(category.coins.map(coin => coin.weeklySuperSuperTrend))
     category.marketCap = category.coins.reduce((acc, coin) => acc + Number(coin.marketCap), 0)
     category.coins = category.coins.sort((a, b) => a.marketCapRank - b.marketCapRank).slice(0, 5)
+    category.coins = category.coins.map(coin => pick(coin, ['id', 'name', 'image']))
   }
   return {
     props: {

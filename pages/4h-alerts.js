@@ -124,7 +124,12 @@ export default function FourHourAlerts({ alerts, appData }) {
 
 export async function getStaticProps() {
   const appData = await globalData();
-  const alerts = await prisma.FourHourTrends.findMany();
+  const alerts = await prisma.FourHourTrends.findMany({
+    take: 1000,
+    orderBy: {
+      timestamp: 'desc'
+    },
+  });
   let coinSymbols = new Set()
   for (const alert of alerts) {
     coinSymbols.add(alert.coinsymbol.toLowerCase())
