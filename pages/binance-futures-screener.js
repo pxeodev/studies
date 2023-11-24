@@ -15,6 +15,8 @@ import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
+import { getImageSlug } from '../utils/minifyImageURL';
+import pick from 'lodash/pick';
 
 export default function BinanceFuturesScreener({ coinsData, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData, true)
@@ -114,7 +116,19 @@ export async function getStaticProps() {
     const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
-    delete coinData.tickers
+
+    coinData.imageSlug = getImageSlug(coinData.images.large)
+
+    coinData = pick(coinData, [
+      'id',
+      'symbol',
+      'name',
+      'imageSlug',
+      'marketCap',
+      'marketCapRank',
+      'derivatives',
+      'categories'
+    ])
 
     return {
       ...coinData,

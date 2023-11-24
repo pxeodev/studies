@@ -20,6 +20,7 @@ import { signals } from '../../utils/variables.mjs';
 import { getSuperTrends } from '../../utils/getTrends.mjs';
 import getChainsData from '../../utils/getChainsData';
 import getPlatformData from '../../utils/getPlatformData';
+import { getImageSlug, getImageURL } from '../../utils/minifyImageURL.js';
 import { getDescriptionByCoin } from '../../utils/coinDescriptions';
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../../utils/watchlist.js';
 import useBreakPoint from '../../hooks/useBreakPoint';
@@ -172,7 +173,7 @@ export default function Coin(coin) {
       <meta property="og:url" content={coin.currentUrl} />
       <meta property="og:type" content="app" />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={coin.images.large} />
+      <meta property="og:image" content={getImageURL(coin.imageSlug)} />
       <meta property="og:image:width" content="250" />
       <meta property="og:image:height" content="250" />
       <meta property="og:image:type" content="image/png" />
@@ -182,7 +183,7 @@ export default function Coin(coin) {
       prefix={<>
         <WatchlistStar active={isWatched} onClick={toggleWatched} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={coin.images.small} width={24} height={24} alt={`${coin.name} logo`} />
+        <img src={getImageURL(coin.imageSlug, 'small')} width={24} height={24} alt={`${coin.name} logo`} />
       </>}
       postfix={
         <>
@@ -279,7 +280,18 @@ export default function Coin(coin) {
   </>;
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  const coinsData = await prisma.coin.findMany({
+    select: { id: true }
+  })
+
+  return {
+    paths: coinsData.map(coin => ({ params: { ...coin }}) ),
+    fallback: false
+  }
+}
+
+export async function getStaticProps({ params }) {
   const appData = await globalData();
   let coinData = await prisma.coin.findUnique({
     where: {
@@ -298,6 +310,10 @@ export async function getServerSideProps({ params }) {
       ORDER BY 4 desc, 1
       LIMIT 10;
     `;
+    similarCoins = similarCoins.map((coin) => {
+      coin.imageSlug = getImageSlug(coin.images.large)
+      return pick(coin, ['id', 'name', 'imageSlug'])
+    })
   }
   const [dailyTrends, dailySuperSuperTrend] = await getSuperTrends(coinData.id)
   const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
@@ -305,11 +321,12 @@ export async function getServerSideProps({ params }) {
 
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
   const chainsData = await getChainsData();
+  coinData.imageSlug = getImageSlug(coinData.images.large)
   coinData = pick(coinData, [
     'id',
     'symbol',
     'name',
-    'images',
+    'imageSlug',
     'categories',
     'defaultPlatform',
     'marketCap',

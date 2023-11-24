@@ -12,6 +12,7 @@ import { SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
@@ -109,6 +110,9 @@ export async function getStaticProps() {
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
+
+    coinData.imageSlug = getImageSlug(coinData.images.large)
+    delete coinData.images
 
     return {
       ...coinData,

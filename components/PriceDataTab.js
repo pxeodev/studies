@@ -13,6 +13,7 @@ import coinStyles from '../styles/coin.module.less'
 import variableStyles from '../styles/variables.module.less'
 import { DarkModeContext } from '../layouts/screener.js';
 import { cleanupCoinLink } from "../utils/cleanupLinks";
+import { getImageURL } from "../utils/minifyImageURL.js";
 
 const { Title } = Typography;
 
@@ -46,7 +47,7 @@ const PriceDataTab = ({ coin, screens }) => {
     {coin.platforms.length ? (
       <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
         <PlatformSelect
-          images={coin.images}
+          imageSlug={coin.imageSlug}
           platforms={coin.platforms}
           symbol={coin.symbol}
           chainsData={coin.chainsData}
@@ -147,7 +148,7 @@ const PriceDataTab = ({ coin, screens }) => {
                   <Tag
                     className={coinStyles.similarCoin}
                     // eslint-disable-next-line @next/next/no-img-element
-                    icon={<img className={coinStyles.similarCoin} width={14} height={14} src={coin.images.thumb} alt={coin.name} />}
+                    icon={<img className={coinStyles.similarCoin} width={14} height={14} src={getImageURL(coin.imageSlug, 'thumb')} alt={coin.name} />}
                     key={coin.name}
                   >
                     {coin.name}

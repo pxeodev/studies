@@ -1,6 +1,7 @@
 import { Layout, Row } from 'antd';
 import Head from 'next/head';
 import { gql } from '@urql/core'
+import pick from 'lodash/pick';
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -12,6 +13,7 @@ import { SUPERTREND_FLAVOR } from '../utils/variables.mjs'
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
@@ -114,7 +116,18 @@ export async function getStaticProps() {
     const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
-    delete coinData.tickers
+    coinData.imageSlug = getImageSlug(coinData.images.large)
+
+    coinData = pick(coinData, [
+      'id',
+      'symbol',
+      'name',
+      'imageSlug',
+      'marketCap',
+      'marketCapRank',
+      'derivatives',
+      'categories'
+    ])
 
     return {
       ...coinData,

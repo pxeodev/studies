@@ -5,6 +5,7 @@ import { Client } from "react-hydration-provider";
 import CopyButton from './CopyButton'
 import MetaMaskButton from './MetaMaskButton'
 import PlatformSelectMP from './PlatformSelectMP';
+import { getImageURL } from '../utils/minifyImageURL';
 
 import platformSelectStyles from '../styles/platformSelect.module.less'
 
@@ -14,7 +15,7 @@ const getChainData = (chainsData, platform, platformName) => {
   chain.name.toLowerCase().includes(platform.toLowerCase()))
 }
 
-const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
+const PlatformSelect = ({ imageSlug, platforms, symbol, chainsData }) => {
   const upperCaseSymbol = symbol.toUpperCase();
   let platformSelect;
   if (platforms.length > 1) {
@@ -23,10 +24,11 @@ const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
       const platformName = startCase(platform)
       const chainData = getChainData(chainsData, platform, platformName)
       const displayedAddress = `${address.substr(0, 6)}...${address.substr(-6)}`
+      const image = getImageURL(imageSlug)
       const metamaskButton = <MetaMaskButton
         className={platformSelectStyles.metamaskButton}
         symbol={upperCaseSymbol}
-        image={images.large}
+        image={image}
         address={address}
         chainId={chainData?.id}
       />
@@ -70,7 +72,7 @@ const PlatformSelect = ({ images, platforms, symbol, chainsData }) => {
   return (
     <Space size={12} wrap>
       <PlatformSelectMP
-        image={images.large}
+        image={getImageURL(imageSlug)}
         platform={firstPlatform}
         symbol={upperCaseSymbol}
         address={firstAddress}

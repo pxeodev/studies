@@ -11,6 +11,7 @@ import prisma from '../lib/prisma.mjs'
 import globalData from '../lib/globalData';
 import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import strapi from '../utils/strapi';
 
@@ -66,6 +67,9 @@ export async function getStaticProps() {
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
+
+    coinData.imageSlug = getImageSlug(coinData.images.large)
+    delete coinData.images
 
     return {
       ...coinData,

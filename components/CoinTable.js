@@ -13,6 +13,7 @@ import useVirtualTable from '../hooks/useVirtualTable';
 import useSocketStore from '../hooks/useSocketStore';
 import { signals, preferredExchanges, SUPERTREND_FLAVOR } from '../utils/variables'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
+import { getImageURL } from '../utils/minifyImageURL';
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
 import { NotificationContext } from '../layouts/screener.js';
 
@@ -176,7 +177,7 @@ const CoinTable = ({
       price: prices[coinData.symbol],
       coinData: {
         symbol: coinData.symbol,
-        images: coinData.images,
+        imageSlug: coinData.imageSlug,
         name: coinData.name
       },
       exchanges: shownExchanges,
@@ -207,7 +208,7 @@ const CoinTable = ({
             <WatchlistStar active={isCoinWatched} onClick={(e) => toggleWatchlistCoin(e, data.id, coinData.name)} />
             <a href={`/coin/${data.id}`} className={coinTableStyles.coin}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coinData.images.small} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
+              <img src={getImageURL(coinData.imageSlug, 'small')} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
               <span className={coinTableStyles.name}>{coinData.name}</span>
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </a>

@@ -19,6 +19,7 @@ import prisma from "../../lib/prisma.mjs";
 import { getCategories } from '../../utils/categories.mjs'
 import chunkedPromiseAll from '../../utils/chunkedPromiseAll.mjs'
 import mode from '../../utils/mode';
+import { getImageSlug } from '../../utils/minifyImageURL';
 
 export default function Category({ coinsData, appData, exchangeData, category, currentUrl, categorySuperTrend }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
@@ -87,7 +88,16 @@ export default function Category({ coinsData, appData, exchangeData, category, c
   );
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  const categories = await getCategories()
+
+  return {
+    paths: categories.map(category => ({ params: {id: category.slug} }) ),
+    fallback: false
+  }
+}
+
+export async function getStaticProps({ params }) {
   const categories = await getCategories()
   const category = categories.find(cat => cat.slug === params.id)
   const appData = await globalData();
@@ -124,6 +134,9 @@ export async function getServerSideProps({ params }) {
 
     const exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
+
+    coinData.imageSlug = getImageSlug(coinData.images.large)
+    delete coinData.images
 
     return {
       ...coinData,
