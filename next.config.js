@@ -11,9 +11,6 @@ let moduleExports = {
   lessLoaderOptions: {
     /* ... */
   },
-  sentry: {
-    hideSourceMaps: true
-  },
   staticPageGenerationTimeout: 60 * 60,
   images: {
     domains: ['assets.coingecko.com'],

@@ -4,8 +4,6 @@ node_modules
 markets.json
 .next
 dist/**
-# Sentry
-.sentryclirc
 .DS_Store
 .vercel
 
