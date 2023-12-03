@@ -282,7 +282,9 @@ export default function Coin(coin) {
 
 export async function getStaticPaths() {
   const coinsData = await prisma.coin.findMany({
-    select: { id: true }
+    select: { id: true },
+      orderBy: { marketCapTank: 'asc' },
+      take: 1000
   })
 
   return {
@@ -295,9 +297,7 @@ export async function getStaticProps({ params }) {
   const appData = await globalData();
   let coinData = await prisma.coin.findUnique({
     where: {
-      id: params.id,
-      orderBy: { marketCapTank: 'asc' },
-      take: 1000
+      id: params.id
     }
   })
   let similarCoins = []
