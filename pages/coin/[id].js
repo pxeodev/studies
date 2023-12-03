@@ -296,6 +296,8 @@ export async function getStaticProps({ params }) {
   let coinData = await prisma.coin.findUnique({
     where: {
       id: params.id,
+      orderBy: { marketCapTank: 'asc' },
+      take: 1000
     }
   })
   let similarCoins = []
