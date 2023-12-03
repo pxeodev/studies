@@ -283,7 +283,7 @@ export default function Coin(coin) {
 export async function getStaticPaths() {
   const coinsData = await prisma.coin.findMany({
     select: { id: true },
-      orderBy: { marketCapTank: 'asc' },
+      orderBy: { marketCapRank: 'asc' },
       take: 1000
   })
 
