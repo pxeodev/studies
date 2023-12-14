@@ -10,6 +10,7 @@ import tableSort from '../utils/tableSort'
 
 import coinTableStyles from '../styles/table.module.less'
 import baseStyles from '../styles/base.module.less'
+import LoadingTag from '../components/LoadingTag'
 
 export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, dataIndex = 'dailySuperSuperTrend') {
   return {
@@ -35,19 +36,17 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, 
         case signals.buy:
           tag = <UpTag className={coinTableStyles.tag} />
           break
-          case signals.sell:
-            tag = <DownTag className={coinTableStyles.tag} />
-            break
-            default:
-              tag = <HodlTag className={coinTableStyles.tag} />
-            }
+        case signals.sell:
+          tag = <DownTag className={coinTableStyles.tag} />
+          break
+        case signals.hodl:
+          tag = <HodlTag className={coinTableStyles.tag} />
+          break
+        default:
+          tag = <LoadingTag />
+      }
 
-            return (
-              <>
-          {tag}
-
-        </>
-      )
+      return <>{tag}</>
     }
   }
 }
@@ -135,8 +134,11 @@ export function weeklySuperSuperTrend(router, isHoverable) {
         case signals.sell:
           tag = <DownTag className={coinTableStyles.tag} />
           break
-        default:
+        case signals.hodl:
           tag = <HodlTag className={coinTableStyles.tag} />
+          break
+        default:
+          tag = <LoadingTag />
       }
 
       return (

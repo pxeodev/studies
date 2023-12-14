@@ -1,13 +1,14 @@
 import { Table, Layout } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Client, useHydrated } from 'react-hydration-provider'
 import axios from 'axios'
 import compact from 'lodash/compact'
 import classnames from 'classnames'
 import Head from 'next/head'
 import { gql } from '@urql/core'
+import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 
 import globalData from '../lib/globalData'
 import prisma from '../lib/prisma.mjs'
@@ -17,6 +18,7 @@ import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
 import strapi from '../utils/strapi';
+import useSocketStore from '../hooks/useSocketStore'
 
 import tableStyles from '../styles/table.module.less'
 import watchlistStyles from '../styles/watchlist.module.less'
@@ -61,10 +63,35 @@ const getWatchListFromUrl = (urlPath) => {
 export default function WatchList({ exchangeData, appData, pageData }) {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const socket = useSocketStore(state => state.socket)
   const router = useRouter()
   const isHoverable = useIsHoverable()
   const hydrated = useHydrated()
+  const [trends, setTrends] = useState(null)
 
+  const fetchTrends = useCallback(() => {
+    if (socket) {
+      socket.emit('get_trends', {
+        flavor: SUPERTREND_FLAVOR.coinrotator
+      })
+    }
+  }, [socket])
+  useEffect(() => {
+    console.log('useeffect fetch trends')
+    fetchTrends()
+  }, [fetchTrends])
+  useEffect(() => {
+    if (socket) {
+      socket.on('trends', (trends) => setTrends(trends))
+      socket.on('new_trends', fetchTrends)
+    }
+    return () => {
+      if (socket) {
+        socket.off('trends')
+        socket.off('new_trends')
+      }
+    }
+  }, [socket, fetchTrends])
   useEffect(() => {
     let watchlistCoins = getWatchListFromUrl(router.asPath)
     if (!watchlistCoins.length) {
@@ -140,6 +167,16 @@ export default function WatchList({ exchangeData, appData, pageData }) {
       ...exchanges(router, isHoverable, exchangeData),
     }
   ]
+  const tableData = watchlist.map(coin => {
+    const dailyTrend = trends?.daily?.[coin.id]
+    const weeklyTrend = trends?.weekly?.[coin.id]
+    if (dailyTrend) {
+      coin.dailySuperSuperTrend = dailyTrend.supersuperTrend.trend
+      coin.dailySuperSuperTrendStreak = dailyTrend.supersuperTrend.streak
+      coin.weeklySuperSuperTrend = weeklyTrend.supersuperTrend.trend
+    }
+    return coin
+  })
 
   return (
     <>
@@ -152,7 +189,7 @@ export default function WatchList({ exchangeData, appData, pageData }) {
         <Client>
           <Table
             columns={columns}
-            dataSource={watchlist}
+            dataSource={tableData}
             pagination={false}
             loading={loading}
             className={classnames(tableStyles.table, watchlistStyles.table)}

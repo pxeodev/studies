@@ -16,8 +16,7 @@ import AnalyticsTab from '../../components/AnalysisTab';
 import TradeTab from '../../components/TradeTab';
 import PageHeader from '../../components/PageHeader';
 import WatchlistStar from '../../components/WatchlistStar';
-import { signals } from 'coinrotator-utils/variables.mjs';
-import { getSuperTrends } from '../../utils/getTrends.mjs';
+import { SUPERTREND_FLAVOR, signals } from 'coinrotator-utils/variables.mjs';
 import getChainsData from '../../utils/getChainsData';
 import getPlatformData from '../../utils/getPlatformData';
 import { getImageSlug, getImageURL } from '../../utils/minifyImageURL.js';
@@ -31,6 +30,7 @@ import { NotificationContext } from '../../layouts/screener.js';
 
 import baseStyles from '../../styles/base.module.less'
 import coinStyles from '../../styles/coin.module.less'
+import LoadingTag from '../../components/LoadingTag.js';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -43,7 +43,8 @@ const TABS = {
 export default function Coin(coin) {
   let dailySignal
   let dailySignalTag
-  switch (coin.dailySuperSuperTrend) {
+  const [trends, setTrends] = useState(null)
+  switch (trends?.daily?.supersuperTrend?.trend) {
     case signals.buy:
       dailySignal = 'UP'
       dailySignalTag = <a href="#markets"><UpTag /></a>
@@ -52,20 +53,27 @@ export default function Coin(coin) {
       dailySignal = 'DOWN'
       dailySignalTag = <a href="#markets"><DownTag /></a>
       break;
-    default:
+    case signals.hodl:
       dailySignal = 'HODL'
       dailySignalTag = <a href="#markets"><HodlTag /></a>
+      break;
+    default:
+      dailySignal = '      '
+      dailySignalTag = <a href="#markets"><LoadingTag /></a>
   }
   let weeklySignalTag
-  switch (coin.weeklySuperSuperTrend) {
+  switch (trends?.weekly?.supersuperTrend?.trend) {
     case signals.buy:
       weeklySignalTag = <a href="#markets"><UpTag /></a>
       break;
     case signals.sell:
       weeklySignalTag = <a href="#markets"><DownTag /></a>
       break;
-    default:
+    case signals.hodl:
       weeklySignalTag = <a href="#markets"><HodlTag /></a>
+      break;
+    default:
+      weeklySignalTag = <a href="#markets"><LoadingTag /></a>
   }
 
   const screens = useBreakPoint();
@@ -76,6 +84,18 @@ export default function Coin(coin) {
   const coinPriceRef = useRef(null)
   const socket = useSocketStore(state => state.socket)
 
+  const fetchTrends = useCallback(() => {
+    if (socket) {
+      socket.emit('get_trends', {
+        coinId: coin.id,
+        flavor: SUPERTREND_FLAVOR.coinrotator
+      })
+    }
+  }, [socket, coin.id])
+  useEffect(() => {
+    console.log('useeffect fetch trends')
+    fetchTrends()
+  }, [fetchTrends])
   useEffect(() => {
     const localPrices = JSON.parse(localStorage.getItem("prices"))
     if (localPrices) {
@@ -101,8 +121,19 @@ export default function Coin(coin) {
           coinPriceRef.current.innerText = currencyFormatter.format(priceUpdate)
         }
       })
+
+      socket.on('trends', (trends) => setTrends(trends))
+      socket.on('new_trends', fetchTrends)
     }
-  }, [socket, coin.symbol, currencyFormatter])
+    return () => {
+      if (socket) {
+        socket.off('i')
+        socket.off('p')
+        socket.off('trends')
+        socket.off('new_trends')
+      }
+    }
+  }, [socket, coin.symbol, currencyFormatter, fetchTrends])
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | ${dailySignal.toUpperCase()} | Daily Crypto Screener`
   const ogTitle = `${coin.name} | ${dailySignal.toUpperCase()} | ${dateFormatter.format(new Date())} | Coinrotator`
@@ -210,9 +241,9 @@ export default function Coin(coin) {
               </Space>
               <Space size={12} className={coinStyles.trendTag} wrap>
                 {dailySignalTag}
-                {Object.keys(coin.dailyTrends).map((trendKey) => {
-                  const trend = coin.dailyTrends[trendKey]
-                  const trendText = `${trend[0]} (${trend[1]})`
+                {Object.keys(trends?.daily || {}).filter(key => key !== 'supersuperTrend').map((trendKey) => {
+                  const trend = trends.daily[trendKey]
+                  const trendText = `${trend.trend} (${trend.streak})`
                   return (
                     <Tag key={trendKey}>
                       <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
@@ -238,9 +269,9 @@ export default function Coin(coin) {
               </Space>
               <Space size={12} className={coinStyles.trendTag} wrap>
                 {weeklySignalTag}
-                {Object.keys(coin.weeklyTrends).map((trendKey) => {
-                  const trend = coin.weeklyTrends[trendKey]
-                  const trendText = `${trend[0]} (${trend[1]})`
+                {Object.keys(trends?.weekly || {}).filter(key => key !== 'supersuperTrend').map((trendKey) => {
+                  const trend = trends.weekly[trendKey]
+                  const trendText = `${trend.trend} (${trend.streak})`
                   return (
                     <Tag key={trendKey}>
                       <span className={coinStyles.trendKey}>{trendKey.toUpperCase()}:&nbsp;</span>
@@ -315,10 +346,7 @@ export async function getStaticProps({ params }) {
       return pick(coin, ['id', 'name', 'imageSlug'])
     })
   }
-  const [dailyTrends, dailySuperSuperTrend] = await getSuperTrends(coinData.id)
-  const [weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
   const description = await getDescriptionByCoin(coinData)
-
   const platforms = await getPlatformData(coinData.platforms, coinData.defaultPlatform)
   const chainsData = await getChainsData();
   coinData.imageSlug = getImageSlug(coinData.images.large)
@@ -364,10 +392,6 @@ export async function getStaticProps({ params }) {
       currentPrice: Number(coinData.currentPrice),
       platforms,
       chainsData,
-      dailyTrends,
-      dailySuperSuperTrend,
-      weeklyTrends,
-      weeklySuperSuperTrend,
       description,
       similarCoins,
       appData,

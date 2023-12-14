@@ -9,9 +9,7 @@ import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import TableFilters from '../components/TableFilters'
 import CoinTable from '../components/CoinTable';
-import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
-import { getSuperTrends } from '../utils/getTrends.mjs'
 import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
@@ -104,11 +102,6 @@ export async function getStaticProps() {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
-    const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
-    const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
-    const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
-    const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
-
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     coinData.imageSlug = getImageSlug(coinData.images.large)
     coinData.derivatives = coinData.derivatives?.slice(0, 5)
@@ -125,15 +118,7 @@ export async function getStaticProps() {
       'exchanges'
     ])
 
-    return {
-      ...coinData,
-      dailySuperSuperTrend,
-      weeklySuperSuperTrend,
-      dailyClassicSuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      dailyClassicSuperSuperTrendStreak,
-      weeklyClassicSuperSuperTrend,
-    }
+    return coinData
   })
   coinsData = coinsData.filter((coin) => {
     return coin.exchanges.some((exchange) => exchange[0] === 'KuCoin')

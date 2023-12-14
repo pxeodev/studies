@@ -2,7 +2,6 @@ import isEmpty from 'lodash/isEmpty'
 
 import prisma from '../../lib/prisma.mjs'
 import convertTickersToExchanges from '../../utils/convertTickersToExchanges.js'
-import { getSuperTrends } from '../../utils/getTrends.mjs'
 
 const handler = async (req, res) => {
   let requestedCoins = req.query['coins[]']
@@ -29,17 +28,12 @@ const handler = async (req, res) => {
     })
     coins = await Promise.all(
       coins.map(async (coin) => {
-        const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coin.id)
-        const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coin.id, { weekly: true })
         const exchanges = convertTickersToExchanges(coin.tickers)
         delete coin.tickers
         return {
           ...coin,
           exchanges,
           marketCap: Number(coin.marketCap),
-          dailySuperSuperTrend,
-          dailySuperSuperTrendStreak,
-          weeklySuperSuperTrend
         }
       })
     )
