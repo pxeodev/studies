@@ -3,9 +3,10 @@ import Head from 'next/head'
 import { useHydrated } from "react-hydration-provider";
 import { useRouter } from 'next/router'
 import slugify from 'slugify';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link'
 import { formatDistanceToNowStrict } from 'date-fns'
+import { signals, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -15,10 +16,7 @@ import prisma from "../lib/prisma.mjs";
 import useVirtualTable from '../hooks/useVirtualTable';
 import { dailySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrend } from '../utils/sharedColumns';
 import useIsHoverable from '../hooks/useIsHoverable';
-import { signals } from '../utils/variables';
-import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
-import { getSuperTrends } from '../utils/getTrends.mjs'
-import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
+import useSocketStore from '../hooks/useSocketStore';
 
 import tableStyles from '../styles/table.module.less'
 import coinTableStyles from '../styles/table.module.less';
@@ -27,6 +25,31 @@ export default function FourHourAlerts({ alerts, appData }) {
   const router = useRouter()
   const hydrated = useHydrated()
   const isHoverable = useIsHoverable()
+  const socket = useSocketStore(state => state.socket)
+  const [trends, setTrends] = useState(null)
+  const fetchTrends = useCallback(() => {
+    if (socket) {
+      socket.emit('get_trends', {
+        flavor: SUPERTREND_FLAVOR.coinrotator,
+      })
+    }
+  }, [socket])
+  useEffect(() => {
+    console.log('useeffect fetch trends')
+    fetchTrends()
+  }, [fetchTrends])
+  useEffect(() => {
+    if (socket) {
+      socket.on('trends', (trends) => setTrends(trends))
+      socket.on('new_trends', fetchTrends)
+    }
+    return () => {
+      if (socket) {
+        socket.off('trends')
+        socket.off('new_trends')
+      }
+    }
+  }, [socket, fetchTrends])
   const onCellClick = useCallback((record) => {
     return {
       onClick: () => router.push(`/coin/${slugify(record.coin.name)}`)
@@ -99,6 +122,14 @@ export default function FourHourAlerts({ alerts, appData }) {
       }
     }
   ]
+  const tableData = alerts.map(alert => {
+    return {
+      ...alert,
+      dailySuperSuperTrend: trends?.daily[alert.id]?.supersuperTrend?.trend,
+      dailySuperSuperTrendStreak: trends?.daily[alert.id]?.supersuperTrend?.streak,
+      weeklySuperSuperTrend: trends?.weekly[alert.id]?.supersuperTrend?.trend,
+    }
+  })
   return (
     <>
       <Head>
@@ -110,7 +141,7 @@ export default function FourHourAlerts({ alerts, appData }) {
         <Row className={indexStyles.tableRow}>
           <Table
             columns={columns}
-            dataSource={alerts}
+            dataSource={tableData}
             rowClassName={tableStyles.row}
             pagination={{ position: ['none', 'none'], pageSize: 1000 }}
             className={tableStyles.table}
@@ -150,22 +181,6 @@ export async function getStaticProps() {
       categories: true
     }
   })
-  coins = await chunkedPromiseAll(coins, 5, async (coinData) => {
-    const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
-    const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
-    const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
-    const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
-
-    return {
-      ...coinData,
-      dailySuperSuperTrend,
-      weeklySuperSuperTrend,
-      dailyClassicSuperSuperTrend,
-      weeklyClassicSuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      dailyClassicSuperSuperTrendStreak,
-    }
-  })
   const alertsToDelete = []
   for (const [i, alert] of alerts.entries()) {
     const coin = coins.find(coin => coin.symbol.toLowerCase() === alert.coinsymbol.toLowerCase())
@@ -178,12 +193,6 @@ export async function getStaticProps() {
     alert.image = coin.images.small
     alert.id = coin.id
     alert.marketCap = coin.marketCap
-    alert.dailySuperSuperTrend = coin.dailySuperSuperTrend
-    alert.weeklySuperSuperTrend = coin.weeklySuperSuperTrend
-    alert.dailyClassicSuperSuperTrend = coin.dailyClassicSuperSuperTrend
-    alert.weeklyClassicSuperSuperTrend = coin.weeklyClassicSuperSuperTrend
-    alert.dailySuperSuperTrendStreak = coin.dailySuperSuperTrendStreak
-    alert.dailyClassicSuperSuperTrendStreak = coin.dailyClassicSuperSuperTrendStreak
     switch (alert.trend) {
       case 'BULL':
       case 'MEAN REV BULL':
