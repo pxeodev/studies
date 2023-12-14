@@ -39,6 +39,7 @@ const CoinTable = ({
     showExchanges = true,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
+    passTrends,
   }) => {
 
   const router = useRouter()
@@ -49,6 +50,12 @@ const CoinTable = ({
   const socket = useSocketStore(state => state.socket)
   const [prices, setPrices] = useState({})
   const [trends, setTrends] = useState(null)
+  const updateTrends = useCallback((trends) => {
+    setTrends(trends)
+    if (passTrends) {
+      passTrends(trends)
+    }
+  }, [passTrends])
 
   const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
   useEffect(() => {
@@ -86,7 +93,7 @@ const CoinTable = ({
         })
       })
 
-      socket.on('trends', (trends) => setTrends(trends))
+      socket.on('trends', (trends) => updateTrends(trends))
       socket.on('new_trends', fetchTrends)
     }
     return () => {

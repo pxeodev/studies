@@ -1,5 +1,7 @@
 import { Layout, Row } from 'antd';
 import Head from 'next/head'
+import { useState } from 'react';
+import pickBy from 'lodash/pickBy';
 
 import baseStyles from '../../styles/base.module.less'
 import indexStyles from '../../styles/index.module.less'
@@ -11,9 +13,9 @@ import CoinTable from '../../components/CoinTable';
 import UpTag from '../../components/UpTag';
 import DownTag from '../../components/DownTag';
 import HodlTag from '../../components/HodlTag';
-import { SUPERTREND_FLAVOR, signals } from 'coinrotator-utils/variables.mjs'
+import LoadingTag from '../../components/LoadingTag';
+import { signals } from 'coinrotator-utils/variables.mjs'
 import convertTickersToExchanges from '../../utils/convertTickersToExchanges';
-import { getSuperTrends } from '../../utils/getTrends.mjs'
 import useTableFilters from '../../hooks/useTableFilters';
 import prisma from "../../lib/prisma.mjs";
 import { getCategories } from '../../utils/categories.mjs'
@@ -21,8 +23,18 @@ import chunkedPromiseAll from '../../utils/chunkedPromiseAll.mjs'
 import mode from '../../utils/mode';
 import { getImageSlug } from '../../utils/minifyImageURL';
 
-export default function Category({ coinsData, appData, exchangeData, category, currentUrl, categorySuperTrend }) {
+export default function Category({ coinsData, appData, exchangeData, category, currentUrl }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
+  const [trends, setTrends] = useState(null)
+  let categorySuperTrend
+  if (trends) {
+    const categoryCoinIds = coinsData.map(coin => coin.id)
+    let dailyCategorySuperTrends = pickBy(trends.daily, (_value, coinId) => {
+      return categoryCoinIds.includes(coinId)
+    })
+    dailyCategorySuperTrends = Object.values(dailyCategorySuperTrends).map(trend => trend.supersuperTrend.trend)
+    categorySuperTrend = mode(dailyCategorySuperTrends)
+  }
   const metaTitle = `${category.name} - CoinRotator`
   let dailySignalTag
   switch (categorySuperTrend) {
@@ -32,8 +44,11 @@ export default function Category({ coinsData, appData, exchangeData, category, c
     case signals.sell:
       dailySignalTag = <DownTag className={categoryStyles.tag} />
       break;
-    default:
+    case signals.hodl:
       dailySignalTag = <HodlTag className={categoryStyles.tag} />
+      break;
+    default:
+      dailySignalTag = <LoadingTag />
   }
   return (
     <>
@@ -81,6 +96,7 @@ export default function Category({ coinsData, appData, exchangeData, category, c
             derivatives={formState.derivatives}
             showDerivatives={formState.showDerivatives}
             superTrendFlavor={formState.superTrendFlavor}
+            passTrends={setTrends}
           />
         </Row>
       </Layout.Content>
@@ -127,43 +143,21 @@ export async function getStaticProps({ params }) {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
   }
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
-    const [_dailyTrends, dailySuperSuperTrend, dailySuperSuperTrendStreak] = await getSuperTrends(coinData.id)
-    const [_weeklyTrends, weeklySuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true })
-    const [_dailyClassicTrends, dailyClassicSuperSuperTrend, dailyClassicSuperSuperTrendStreak] = await getSuperTrends(coinData.id, { flavor: SUPERTREND_FLAVOR.classic })
-    const [_weeklyClassicTrends, weeklyClassicSuperSuperTrend] = await getSuperTrends(coinData.id, { weekly: true, flavor: SUPERTREND_FLAVOR.classic })
-
-    const exchanges = convertTickersToExchanges(coinData.tickers)
+    coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
 
     coinData.imageSlug = getImageSlug(coinData.images.large)
     delete coinData.images
 
-    return {
-      ...coinData,
-      dailySuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      weeklySuperSuperTrend,
-      dailyClassicSuperSuperTrend,
-      weeklyClassicSuperSuperTrend,
-      dailySuperSuperTrendStreak,
-      dailyClassicSuperSuperTrendStreak,
-      ath: Number(coinData.ath),
-      atl: Number(coinData.atl),
-      fullyDilutedValue: Number(coinData.fullyDilutedValue),
-      circulatingSupply: Number(coinData.circulatingSupply),
-      totalSupply: Number(coinData.totalSupply),
-      exchanges
-    }
+    return coinData
   })
-  const categorySuperTrend = mode(coinsData.map(coin => coin.dailySuperSuperTrend))
   const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
       coinsData,
       exchangeData,
       appData,
-      category,
-      categorySuperTrend
+      category
     }
   }
 }
