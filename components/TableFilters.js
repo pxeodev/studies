@@ -5,6 +5,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
+import compact from 'lodash/compact'
 
 import indexStyles from '../styles/index.module.less'
 import baseStyles from '../styles/base.module.less'
@@ -82,7 +83,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
   })
   const restCategories = categories.filter(category => !priorityCategories.includes(category))
   const allExchangeNames = useMemo(() => {
-    const exchangeData = coinsData.flatMap((coin) => coin.exchanges)
+    const exchangeData = compact(coinsData.flatMap((coin) => coin.exchanges))
     const exchangeNames = uniq(exchangeData.map(exchange => exchange[0]))
 
     return exchangeNames.sort()

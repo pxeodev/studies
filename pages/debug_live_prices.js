@@ -15,7 +15,6 @@ import useSocketStore from '../hooks/useSocketStore';
 
 import tableStyles from '../styles/table.module.less'
 import watchlistStyles from '../styles/watchlist.module.less'
-import convertTickersToExchanges from '../utils/convertTickersToExchanges'
 
 export async function getStaticProps() {
   const appData = await globalData()
@@ -25,16 +24,9 @@ export async function getStaticProps() {
       name: true,
       symbol: true,
       images: true,
-      tickers: true,
     },
     orderBy: {
       marketCapRank: 'asc',
-    }
-  })
-  coins = coins.map((coin) => {
-    return {
-      ...coin,
-      exchanges: convertTickersToExchanges(coin.tickers),
     }
   })
   return {
@@ -154,6 +146,7 @@ export default function LivePriceDebugger({ coins, appData }) {
           formState={formState}
           formDispatch={formDispatch}
           defaultFormState={defaultFormState}
+          hiddenFilters={['exchanges']}
         />
         <Client>
           <Table
