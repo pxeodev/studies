@@ -390,7 +390,9 @@ setTimeout(async () => {
   await fetchDerivativesData();
   // await fetchLunrData();
   if (process.env.NODE_ENV === 'production') {
-    await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
     await axios.post('https://coinrotator-realtime.onrender.com/new-trends')
+    setTimeout(async () => {
+      await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
+    }, 1000 * 60 * 5) // Wait 5 minutes so the realtime server can start
   }
 }, 99);
