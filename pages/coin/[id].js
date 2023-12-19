@@ -340,7 +340,6 @@ export async function getStaticProps({ params }) {
     'totalSupply',
     'maxSupply',
     'twitter',
-    'twitterFollowers',
     'homepage',
     'launch_price',
     'launch_date_start',

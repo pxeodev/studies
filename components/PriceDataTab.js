@@ -34,7 +34,6 @@ const PriceDataTab = ({ coin, screens }) => {
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
   const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation }), [notation])
-  const compactNumberFormatter = new Intl.NumberFormat([], { notation: 'compact' })
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
 
@@ -59,7 +58,7 @@ const PriceDataTab = ({ coin, screens }) => {
         { coin.twitter ? (
           <a href={`https://twitter.com/${coin.twitter}`} target="_blank" rel="noreferrer">
             <Tag icon={<TwitterOutlined />} color="#55ACEE" className={coinStyles.button}>
-            @{coin.twitter}&nbsp;({hydrated ? compactNumberFormatter.format(coin.twitterFollowers) : coin.twitterFollowers})
+            @{coin.twitter}
             </Tag>
           </a>
         ) : <></> }
