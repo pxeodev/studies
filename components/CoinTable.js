@@ -66,11 +66,25 @@ const CoinTable = ({
   }, [])
   const fetchTrends = useCallback(() => {
     if (socket) {
-      socket.emit('get_trends', {
-        flavor: superTrendFlavor,
-      })
+      let cache = sessionStorage.getItem(`trends_${superTrendFlavor}`)
+      cache = JSON.parse(cache)
+      if (cache) {
+        socket.emit('get_trends_outdated', cache.lastUpdated, (outdated) => {
+          if (outdated) {
+            socket.emit('get_trends', {
+              flavor: superTrendFlavor,
+            })
+          } else {
+            updateTrends(cache)
+          }
+        })
+      } else {
+        socket.emit('get_trends', {
+          flavor: superTrendFlavor,
+        })
+      }
     }
-  }, [socket, superTrendFlavor])
+  }, [socket, superTrendFlavor, updateTrends])
   useEffect(() => {
     console.log('useeffect fetch trends')
     fetchTrends()
@@ -93,7 +107,10 @@ const CoinTable = ({
         })
       })
 
-      socket.on('trends', (trends) => updateTrends(trends))
+      socket.on('trends', (trends) => {
+        sessionStorage.setItem(`trends_${superTrendFlavor}`, JSON.stringify(trends))
+        updateTrends(trends)
+      })
       socket.on('new_trends', fetchTrends)
     }
     return () => {
@@ -104,7 +121,7 @@ const CoinTable = ({
         socket.off('new_trends')
       }
     }
-  }, [socket, fetchTrends])
+  }, [socket, fetchTrends, updateTrends, superTrendFlavor])
   useEffect(() => {
     setWatchlistCoins(getWatchListCoins())
   }, [])
