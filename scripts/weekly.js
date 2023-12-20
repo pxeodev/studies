@@ -1,8 +1,11 @@
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 import prisma from '../lib/prisma.mjs'
 import { overrideCoinCategories } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
+
+puppeteer.use(StealthPlugin())
 
 const fetchCoinData = async (url, coin, page) => {
   console.log('Fetch launch data for', coin.symbol);
