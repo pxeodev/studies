@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 import prisma from '../lib/prisma.mjs'
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
-import { saveDailyOhlcsToSupertrends } from 'coinrotator-utils/supersupertrend.mjs';
+import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
 
 dotenv.config();
 

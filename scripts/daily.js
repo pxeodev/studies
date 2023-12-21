@@ -18,7 +18,7 @@ import { getAllCoins } from '../lib/lunr.mjs'
 import { Prisma } from '@prisma/client'
 import { hasPlatforms } from '../utils/coingecko.mjs';
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
-import { saveDailyOhlcsToSupertrends } from 'coinrotator-utils/supersupertrend.mjs';
+import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
 
 dotenv.config();
 
