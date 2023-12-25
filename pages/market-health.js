@@ -79,7 +79,7 @@ export default function MarketHealth({ appData, pageData }) {
       <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
       <Content className={baseStyles.container}>
         <Card className={styles.marketHealthCard}>
-          { trends === null ? <Skeleton active/> : (
+          { trends === null ? <Skeleton paragraph={{ rows: 11 }} active/> : (
             <MarketHealthChart
               historicDailySuperSuperTrends={historicDailySuperSuperTrends}
               screens={screens}
