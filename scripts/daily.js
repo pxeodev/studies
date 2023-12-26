@@ -25,7 +25,7 @@ dotenv.config();
 const fetchOhlcDays = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'rsr', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'qc', 'dgd', 'eurs', 'susd', 'sai', 'cusd', 'alusd', 'seur', 'eeur', 'eth2x-fli', 'dfuk']
 const excludedTokens = ['thorchain-erc20']
-const unrankedCoins = ['aleph-zero', 'ftx-token', 'rats']
+const unrankedCoins = ['aleph-zero', 'ftx-token', 'rats', 'bitdao']
 const noRankError = 'no-rank-error'
 // We have to potentially try to get OHLC data from all of these markets, since some of them might only recently have listed a pair
 const marketPriority = ['binance', 'bitfinex', 'huobi', 'ftx'].reverse()
