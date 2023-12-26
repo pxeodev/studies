@@ -1,13 +1,11 @@
-import clone from 'lodash/clone.js';
-import chunk from 'lodash/chunk.js';
+import groupBy from 'lodash/groupBy.js';
+import getWeek from 'date-fns/getWeek/index.js';
 import max from 'date-fns/max/index.js';
 
 export default function convertToWeeklySignals(ohlcs, returnWeek = false) {
-  let weeklyOhcls = clone(ohlcs).reverse();
-  weeklyOhcls = chunk(weeklyOhcls, 7);
+  let weeklyOhcls = groupBy(ohlcs, (ohlc) => getWeek(ohlc[4], { weekStartsOn: 1 }))
+  weeklyOhcls = Object.values(weeklyOhcls)
   weeklyOhcls = weeklyOhcls.filter(ohlc => ohlc.length === 7);
-  weeklyOhcls.reverse()
-  weeklyOhcls = weeklyOhcls.map(weeklyOhlcData => weeklyOhlcData.reverse());
   weeklyOhcls = weeklyOhcls.map((weeklyOhlcData) => {
     const weekOpen = weeklyOhlcData[0][0]
     const weekHigh = Math.max(...weeklyOhlcData.map(ohlc => ohlc[1]))
