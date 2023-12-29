@@ -201,8 +201,8 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
         },
         {
           label: 'Sitemap',
-          icon: <Link href="/sitemap.xml"><SnippetsOutlined className={styles.daybreakBlue} /></Link>,
-          key: '/sitemap.xml'
+          icon: <Link href="/sitemap"><SnippetsOutlined className={styles.daybreakBlue} /></Link>,
+          key: '/sitemap'
         }
       ]
     },
@@ -252,7 +252,7 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
       {
         label: 'Sitemap',
         icon: <Link href="/sitemap.xml"><SnippetsOutlined className={styles.daybreakBlue} /></Link>,
-        key: '/sitemap.xml'
+        key: '/sitemap'
       }
     ]
   }
