@@ -53,7 +53,7 @@ export default function Category({ coinsData, appData, exchangeData, category, c
   if (trends) {
     categorySuperTrend = trends.daily[0]
   }
-  const metaTitle = `${category.name} - CoinRotator`
+  const metaTitle = `Find the daily trends of all ${coinsData.length} ${category.name} coins | CoinRotator`
   let dailySignalTag
   switch (categorySuperTrend) {
     case signals.buy:
