@@ -1,8 +1,9 @@
 import subDays from 'date-fns/subDays';
-import pick from 'lodash/pick';
 import groupBy from 'lodash/groupBy';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
+import pick from 'lodash/pick';
+import reduce from 'lodash/reduce';
 
 import prisma from '../../lib/prisma.mjs'
 import supersupertrend from 'coinrotator-utils/supersupertrend.mjs';
@@ -13,27 +14,30 @@ const handler = async (req, res) => {
   } else if (req.method !== 'GET') {
     res.status(400).send("Bad request")
   } else {
-    let coins = await prisma.coin.findMany({
-      orderBy: { marketCapRank: 'asc' },
-      include: {
-        superTrends: {
-          select: {
-            trend: true,
-            quoteSymbol: true,
-            date: true,
-          },
-          where: {
-            flavor: 'CoinRotator',
-            weekly: false,
-            date: {
-              gte: subDays(new Date(), 2),
-            }
-          },
+    let twoDaysAgo = subDays(new Date(), 2)
+    let coins = await prisma.$queryRaw`
+      SELECT "Coin"."id", "symbol", "name", "SuperTrend"."date", "SuperTrend"."trend", "SuperTrend"."quoteSymbol"
+      FROM "Coin"
+      LEFT JOIN "SuperTrend" ON "SuperTrend"."coinId" = "Coin"."id"
+      WHERE "SuperTrend"."flavor" = 'CoinRotator'
+      AND "SuperTrend"."weekly" = false
+      AND "SuperTrend"."date" >= ${twoDaysAgo}
+      ORDER BY "marketCapRank" ASC
+    `
+    coins = reduce(coins, (result, coin) => {
+      if (!result[coin.id]) {
+        result[coin.id] = {
+          id: coin.id,
+          symbol: coin.symbol,
+          name: coin.name,
+          superTrends: [],
         }
       }
-    })
+      result[coin.id].superTrends.push(pick(coin, ['date', 'trend', 'quoteSymbol']))
+      return result
+    }, [])
+    coins = Object.values(coins)
     coins = coins.map(coin => {
-      coin = pick(coin, ['id', 'symbol', 'name', 'superTrends'])
       coin.trends = groupBy(coin.superTrends, 'date')
       delete coin.superTrends
       coin.trends = mapKeys(coin.trends, (_trends, date) => {
