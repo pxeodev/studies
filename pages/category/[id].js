@@ -51,7 +51,7 @@ export default function Category({ coinsData, appData, exchangeData, category, c
   }, [socket, fetchTrends])
   let categorySuperTrend
   if (trends) {
-    categorySuperTrend = trends.daily[0]
+    categorySuperTrend = trends.daily.trend
   }
   const metaTitle = `Find the daily trends of all ${coinsData.length} ${category.name} coins | CoinRotator`
   let dailySignalTag

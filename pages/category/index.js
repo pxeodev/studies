@@ -112,10 +112,10 @@ export default function Categories({ categoryData, appData, pageData }) {
     if (trends) {
       const matchingDailyCategory = trends.daily[category.name]
       const matchingWeeklyCategory = trends.weekly[category.name]
-      category.dailySuperSuperTrend = matchingDailyCategory ? matchingDailyCategory[0] : null
-      category.dailySuperSuperTrendStreak = matchingDailyCategory ? matchingDailyCategory[1] : null
-      category.weeklySuperSuperTrend = matchingWeeklyCategory ? matchingWeeklyCategory[0] : null
-      category.weeklySuperSuperTrendStreak = matchingWeeklyCategory ? matchingWeeklyCategory[1] : null
+      category.dailySuperSuperTrend = matchingDailyCategory?.trend
+      category.dailySuperSuperTrendStreak = matchingDailyCategory?.streak
+      category.weeklySuperSuperTrend = matchingWeeklyCategory?.trend
+      category.weeklySuperSuperTrendStreak = matchingWeeklyCategory?.streak
     }
 
     return category
