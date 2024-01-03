@@ -167,11 +167,11 @@ Category,CoinSymbol,CoinName,addORremove
 "Lending Platform","WING","Wing Finance",add
 "Lending Platform","CANTO","CANTO",add
 "Lending Platform","BIFI","Beefy.Finance",add
-"RWA Protocols","MPL","Maple",add
-"RWA Protocols","CFG","Centrifuge",add
-"RWA Protocols","GFI","Goldfinch",add
-"RWA Protocols","RBN","Ribbon Finance",add
-"RWA Protocols","TRU","TrueFi",add
+"RWA (Real World Assets)","MPL","Maple",add
+"RWA (Real World Assets)","CFG","Centrifuge",add
+"RWA (Real World Assets)","RBN","Ribbon Finance",add
+"RWA (Real World Assets)","USDR","Real USD",add
+"RWA (Real World Assets)","BTM","Bytom",add
 "DWF Labs","KAVA","Kava",add
 "DWF Labs","CRV","Curve DAO",add
 "DWF Labs","CYBER","CyberCONNECT",add
@@ -252,15 +252,15 @@ Category,CoinSymbol,CoinName,addORremove
 "Social","XCAD","XCAD Network",add
 "Social","BGB","Bitget Token",add
 "Application","UNI","Uniswap",add
-"RWA Protocols","EL","ELYSIA",add
-"RWA Protocols","PROPC","Propchain",add
-"RWA Protocols","OPUL","Opulous",add
-"RWA Protocols","BOSON","Boson Protocol",add
-"RWA Protocols","PRO","Propy",add
-"RWA Protocols","Creditcoin","CTC",add
-"RWA Protocols","BTM","Bytom",add
-"RWA Protocols","POLYX","Polymesh",add
-"RWA Protocols","POLY","Polymath",add
+"RWA (Real World Assets)","EL","ELYSIA",add
+"RWA (Real World Assets)","PROPC","Propchain",add
+"RWA (Real World Assets)","OPUL","Opulous",add
+"RWA (Real World Assets)","BOSON","Boson Protocol",add
+"RWA (Real World Assets)","PRO","Propy",add
+"RWA (Real World Assets)","Creditcoin","CTC",add
+"RWA (Real World Assets)","BTM","Bytom",add
+"RWA (Real World Assets)","POLYX","Polymesh",add
+"RWA (Real World Assets)","POLY","Polymath",add
 "Artificial Intelligence (AI)","IMGNAI","Image Generation AI",add
 "DWF Labs","LINA","Linear",add
 "BRC-20","TRAC","TRAC (Ordinals)",add
@@ -272,6 +272,20 @@ Category,CoinSymbol,CoinName,addORremove
 "Privacy Coin","RAIL","Railgun",add
 "Zero Knowledge","RAIL","Railgun",add
 "Storage","ICP","Internet Computer",add
+"BRC-20 Token","TRAC","TRAC (Ordinals)",remove
+"RWA Protocols","EL","ELYSIA",remove
+"RWA Protocols","PROPC","Propchain",remove
+"RWA Protocols","OPUL","Opulous",remove
+"RWA Protocols","BOSON","Boson Protocol", remove
+"RWA Protocols","PRO","Propy",remove
+"RWA Protocols","Creditcoin","CTC",remove
+"RWA Protocols","BTM","Bytom",remove
+"RWA Protocols","POLYX","Polymesh",remove
+"RWA Protocols","POLY","Polymath",remove
+"RWA Protocols","USDR","Real USD",remove
+"RWA Protocols","MKR","Maker",remove
+"RWA (Real World Assets)","EL","ELYSIA",add
+
 
 
 
