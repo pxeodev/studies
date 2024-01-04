@@ -14,7 +14,7 @@ import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
 
 const { Title } = Typography;
-const EXCLUDED_PAGES = ['_app.js', '_document.js', '_error.js', 'sitemap.js', '404.js', '500.js']
+const EXCLUDED_PAGES = ['_app.js', '_document.js', '_error.js', 'sitemap.js', '404.js', '500.js', 'index.js']
 const SHALLOW_PAGES_FILTER = (page) =>
   page.endsWith('.js') &&
   !page.startsWith('_') &&
@@ -45,6 +45,7 @@ export default function Sitemap({ coinsData, appData, pageData, shallowPages }) 
           <Breadcrumb.Item href="#categories" className={breadCrumbItemClass}>Categories</Breadcrumb.Item>
         </Breadcrumb>
         <Title id="tools" level={2} className={sitemapStyles.title}>Tools</Title>
+        <Link prefetch={false} className={sitemapStyles.link} href={`/`} key="home">Home</Link>
         {toolsPages.map(page =>
           <Link prefetch={false} className={sitemapStyles.link} href={`/${page}`} key={page}>{HUMANIZE_PAGE_NAMES(page)}</Link>
         )}
