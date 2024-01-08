@@ -285,7 +285,48 @@ Category,CoinSymbol,CoinName,addORremove
 "RWA Protocols","USDR","Real USD",remove
 "RWA Protocols","MKR","Maker",remove
 "RWA (Real World Assets)","EL","ELYSIA",add
-
+"DePIN","FIL","Filecoin",add
+"DePIN","RNDR","Render",add
+"DePIN","THETA","Theta Network",add
+"DePIN","IOTA","IOTA",add
+"DePIN","HNT","Helium",add
+"DePIN","AKT","Akash Network",add
+"DePIN","AR","Arweave",add
+"DePIN","SC","Siacoin",add
+"DePIN","IOTX","IoTeX",add
+"DePIN","HOT","Holo",add
+"DePIN","XCH","Chia",add
+"DePIN","POKT","Pocket Network",add
+"DePIN","OCEAN","Ocean Protocol",add
+"DePIN","MOBILE","Helium Mobile",add
+"DePIN","GLM","Golem",add
+"DePIN","LPT","Livepeer",add
+"DePIN","SHDW","Shadow Token",add
+"DePIN","FLUX","Flux",add
+"DePIN","AIOZ","AIOZ Network",add
+"DePIN","HONEY","Hivemapper",add
+"DePIN","STORJ","Storj",add
+"DePIN","XYO","XYO Network",add
+"DePIN","DIMO","DIMO",add
+"DePIN","STOS","Stratos",add
+"DePIN","WMT","World Mobile Token",add
+"DePIN","CUDOS","Cudos",add
+"DePIN","OXT","Orchid Protocol",add
+"DePIN","CRU","Crust Network",add
+"DePIN","DATA","Streamr",add
+"DePIN","IOT","Helium IOT",add
+"DePIN","JKL","Jackal Protocol",add
+"DePIN","CERE","Cere Network",add
+"DePIN","DVPN","Sentinel",add
+"DePIN","HOPR","HOPR",add
+"DePIN","ALEPH","Aleph.im",add
+"DePIN","NODL","Nodle Network",add
+"DePIN","WNT","Wicrypt",add
+"DePIN","ZCN","Zus",add
+"DePIN","WIFI","WiFi Map",add
+"DePIN","NCDT","Nuco.cloud",add
+"DePIN","GEOD","Geodnet",add
+"DePIN","FOAM","FOAM",add
 
 
 
