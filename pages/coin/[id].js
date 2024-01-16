@@ -253,7 +253,7 @@ export default function Coin(coin) {
               </Space>
             </Space>
           </Card.Grid>
-          {/* <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
+          <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
               <Space>
                 <b>Weekly Trend</b>
@@ -280,7 +280,7 @@ export default function Coin(coin) {
                 })}
               </Space>
             </Space>
-          </Card.Grid> */}
+          </Card.Grid>
         </div>
         {Object.values(TABS).map((tab) => {
           return (

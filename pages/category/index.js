@@ -73,16 +73,16 @@ export default function Categories({ categoryData, appData, pageData }) {
       ...dailySuperSuperTrendStreak(router, isHoverable),
       onCell: onCellClick
     },
-    // {
-    //   width: 100,
-    //   ...weeklySuperSuperTrend(router, isHoverable),
-    //   onCell: onCellClick
-    // },
-    // {
-    //   width: 150,
-    //   ...weeklySuperSuperTrendStreak(router, isHoverable),
-    //   onCell: onCellClick
-    // },
+    {
+      width: 100,
+      ...weeklySuperSuperTrend(router, isHoverable),
+      onCell: onCellClick
+    },
+    {
+      width: 150,
+      ...weeklySuperSuperTrendStreak(router, isHoverable),
+      onCell: onCellClick
+    },
     {
       width: 100,
       ...marketCap(router, hydrated),

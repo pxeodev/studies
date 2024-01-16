@@ -96,10 +96,10 @@ export default function FourHourAlerts({ alerts, appData }) {
       width: 90,
       ...dailySuperSuperTrendStreak(router, isHoverable),
     },
-    // {
-    //   width: 100,
-    //   ...weeklySuperSuperTrend(router, isHoverable),
-    // },
+    {
+      width: 100,
+      ...weeklySuperSuperTrend(router, isHoverable),
+    },
     {
       width: 130,
       ...marketCap(router, hydrated)
