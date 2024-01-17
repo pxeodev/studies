@@ -55,7 +55,7 @@ export function dailySuperSuperTrendStreak(router, isHoverable) {
   return {
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
     title: <span className={coinTableStyles.columnTitle}>
-      <span>Trend Streak</span>
+      <span>Trend Streak (24h)</span>
       <Tooltip
           placement={'right'}
           trigger={isHoverable ? 'hover' : 'click'}
