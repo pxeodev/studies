@@ -1,7 +1,5 @@
 import { Layout, Card, Skeleton } from 'antd';
 import { useContext, useCallback, useEffect, useState } from 'react'
-import subDays from 'date-fns/subDays';
-import addDays from 'date-fns/addDays';
 import Head from 'next/head';
 import { gql } from '@urql/core'
 
@@ -19,7 +17,6 @@ import styles from "../styles/market-health.module.less"
 const { Content } = Layout;
 
 export default function MarketHealth({ appData, pageData }) {
-  const dateFormatter = new Intl.DateTimeFormat([], { month: 'short', day: 'numeric' })
   const [darkMode] = useContext(DarkModeContext);
   const screens = useBreakPoint();
   const socket = useSocketStore(state => state.socket)
@@ -43,33 +40,6 @@ export default function MarketHealth({ appData, pageData }) {
       }
     }
   }, [socket, fetchTrends])
-  let historicDailySuperSuperTrends = []
-  if (trends) {
-    for (const [_quoteSymbol, { historical }] of Object.entries(trends)) {
-      for (const [date, trend] of Object.entries(historical)) {
-        const matchingDate = historicDailySuperSuperTrends.find((dataPoint) => dataPoint.date === date && dataPoint.trend === trend)
-        if (matchingDate) {
-          matchingDate.amount++
-        } else {
-          historicDailySuperSuperTrends.push({
-            date,
-            amount: 1,
-            trend
-          })
-        }
-      }
-    }
-    const thirtyDaysAgo = subDays(new Date(), 30).getTime()
-    historicDailySuperSuperTrends = historicDailySuperSuperTrends.filter(dataPoint => dataPoint.date > thirtyDaysAgo)
-    historicDailySuperSuperTrends = historicDailySuperSuperTrends.sort((a, b) => a.date - b.date)
-    historicDailySuperSuperTrends = historicDailySuperSuperTrends.map((dataPoint) => {
-      let date = new Date(parseInt(dataPoint.date))
-      date = addDays(date, 1)
-      dataPoint.date = dateFormatter.format(date)
-
-      return dataPoint
-    })
-  }
   return (
     <>
       <Head>
@@ -81,7 +51,7 @@ export default function MarketHealth({ appData, pageData }) {
         <Card className={styles.marketHealthCard}>
           { trends === null ? <Skeleton paragraph={{ rows: 11 }} active/> : (
             <MarketHealthChart
-              historicDailySuperSuperTrends={historicDailySuperSuperTrends}
+              historicDailySuperSuperTrends={trends}
               screens={screens}
               darkMode={darkMode}
             />
