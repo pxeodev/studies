@@ -57,6 +57,7 @@ export default function FourHourAlerts({ alerts, appData }) {
     {
       title: 'Coin',
       dataIndex: 'name',
+      width: 200,
       fixed: hydrated ? 'left' : null,
       sorter: (a, b) => a.coin.name.localeCompare(b.coin.name),
       onCell: onCellClick,
