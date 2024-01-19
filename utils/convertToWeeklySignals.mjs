@@ -23,6 +23,6 @@ export default function convertToWeeklySignals(ohlcs, returnWeek = false) {
 
     return weekOhlc
   })
-  weeklyOhcls = orderBy(weeklyOhcls, ohlc => ohlc[4], 'asc')
+  weeklyOhcls = orderBy(weeklyOhcls, ohlc => ohlc[4], 'asc') // Re-order after losing sorting through groupBy
   return weeklyOhcls;
 }

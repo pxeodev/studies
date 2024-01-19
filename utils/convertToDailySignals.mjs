@@ -15,7 +15,6 @@ export default function convertToDailySignals(ohlcs, returnDays = false) {
     })
 
     ohlcs[quoteSymbol] = Object.values(dailyQuoteSymbolOhlcs).map((dailyOhlcs) => {
-      const dayDate = subSeconds(dailyOhlcs[0].closeTime, 1)
       const dayOpen = Number(minBy(dailyOhlcs, 'closeTime').open)
       const dayHigh = Math.max(...dailyOhlcs.map(ohlc => ohlc.high))
       const dayLow = Math.min(...dailyOhlcs.map(ohlc => ohlc.low))
@@ -24,6 +23,7 @@ export default function convertToDailySignals(ohlcs, returnDays = false) {
       const dayOhlc = [dayOpen, dayHigh, dayLow, dayClose]
 
       if (returnDays) {
+        const dayDate = subSeconds(dailyOhlcs[0].closeTime, 1)
         dayOhlc.push(dayDate)
       }
 

@@ -152,10 +152,10 @@ export default function WatchList({ exchangeData, appData, pageData }) {
       width: 90,
       ...dailySuperSuperTrendStreak(router, isHoverable),
     },
-    // {
-    //   width: 100,
-    //   ...weeklySuperSuperTrend(router, isHoverable),
-    // },
+    {
+      width: 100,
+      ...weeklySuperSuperTrend(router, isHoverable),
+    },
     {
       width: 100,
       ...marketCap(router, hydrated),

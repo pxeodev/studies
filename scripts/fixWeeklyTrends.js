@@ -13,6 +13,14 @@ const fixWeeklyTrends = async () => {
       id: true,
     }
   })
+  await prisma.superTrend.deleteMany({
+    where: {
+      weekly: true,
+      date: {
+        gte: '2023-12-10T00:00:00.000Z'
+      }
+    }
+  })
   allCoinIds = allCoinIds.map(coin => coin.id)
   for (const coinId of allCoinIds) {
     console.log(coinId)
