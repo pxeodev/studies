@@ -228,7 +228,7 @@ export default function Coin(coin) {
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDailyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
               <Space>
-                <b>Daily Trend</b>
+                <b>Trend (24h)</b>
                 <Tooltip
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
                   overlayClassName={coinStyles.tooltip}
@@ -256,7 +256,7 @@ export default function Coin(coin) {
           <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionWeeklyTrend, coinStyles.sectionFlex)}>
             <Space direction="vertical">
               <Space>
-                <b>Weekly Trend</b>
+                <b>Trend (7d)</b>
                 <Tooltip
                   placement={screens.sm ? 'bottom' : 'bottomRight'}
                   overlayClassName={coinStyles.tooltip}
