@@ -194,6 +194,7 @@ const useTableFilters = (coinsData) => {
         trendLengthMin: router.query.trendLengthMin,
         trendLengthMax: router.query.trendLengthMax,
         superTrendFlavor: router.query.superTrendFlavor,
+        showMarketCapFDV: router.query.showMarketCapFDV,
       }
     })
   }, [router.isReady, router.query])
