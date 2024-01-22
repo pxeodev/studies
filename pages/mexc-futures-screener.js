@@ -17,7 +17,7 @@ import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
 
 export default function MexcFuturesScreener({ coinsData, appData, exchangeData, pageData }) {
-  const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData, true)
+  const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
       <Head>

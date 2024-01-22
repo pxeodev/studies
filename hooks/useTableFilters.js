@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
 
 import { signals, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 
-const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
+const useTableFilters = (coinsData) => {
   const router = useRouter()
   const defaultFormState = useMemo(() =>
   ({
@@ -17,7 +17,6 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
       trendType: signals.all,
       exchanges: [],
       derivatives: [],
-      showDerivatives: showDerivativesByDefault,
       showMarketCapFDV: false,
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
@@ -62,11 +61,6 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
         return {
           ...state,
           derivatives: action.payload
-        }
-      case 'SET_SHOW_DERIVATIVES':
-        return {
-          ...state,
-          showDerivatives: action.payload
         }
       case 'SET_SHOW_MARKET_CAP_FDV':
         return {
@@ -195,7 +189,6 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
         trendType: router.query.trendType,
         exchanges,
         derivatives,
-        showDerivatives: router.query.showDerivatives,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
         trendLengthMin: router.query.trendLengthMin,

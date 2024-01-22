@@ -17,7 +17,7 @@ import { getImageSlug } from '../utils/minifyImageURL';
 import pick from 'lodash/pick';
 
 export default function BinanceFuturesScreener({ coinsData, appData, exchangeData, pageData }) {
-  const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData, true)
+  const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
       <Head>

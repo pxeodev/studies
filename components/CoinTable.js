@@ -1,4 +1,4 @@
-import { Table, Tag } from 'antd'
+import { Table } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
@@ -43,7 +43,6 @@ const CoinTable = ({
     trendType,
     exchanges,
     derivatives,
-    showDerivatives,
     superTrendFlavor,
     showMarketCapFDV,
   } = formState
@@ -338,30 +337,6 @@ const CoinTable = ({
       {
         width: 120,
         ...exchangesCol(router, isHoverable, exchangeData)
-      }
-    )
-  }
-  if (showDerivatives) {
-    columns.push(
-      {
-        title: 'Derivatives',
-        dataIndex: 'derivatives',
-        width: 250,
-        className: coinTableStyles.unclickableCell,
-        render: (derivatives, data) => {
-          return <span title="Top derivatives. Click to see more.">
-            {derivatives.map((derivative) => {
-              const onTagClick = () => {
-                router.push(`/coin/${data.id}?tab=Trade&filter=Derivatives`)
-              }
-              return <Tag
-                key={`${derivative.market}${derivative.symbol}`}
-                onClick={onTagClick}
-                className={coinTableStyles.clickableTag}
-              >{derivative.symbol}</Tag>
-            })}
-          </span>;
-        }
       }
     )
   }

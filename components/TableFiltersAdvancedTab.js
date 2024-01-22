@@ -19,18 +19,6 @@ const TableFiltersAdvancedTab = ({
       {
         showDerivativesOptions ? (
           <>
-            <Row className={indexStyles.modalRow}>
-              <Col span={22}>
-                <span>Show Derivatives</span>
-              </Col>
-              <Col span={2}>
-                <Switch
-                  className={indexStyles.modalSwitch}
-                  checked={formState.showDerivatives}
-                  onChange={(checked) => { formDispatch({ type: 'SET_SHOW_DERIVATIVES', payload: checked }) }}
-                />
-              </Col>
-            </Row>
             <Row className={indexStyles.modalHeaderRow}>
               <Col>
                 <span>
