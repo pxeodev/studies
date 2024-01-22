@@ -40,18 +40,8 @@ export default function KucoinScreener({ coinsData, appData, exchangeData, pageD
           <CoinTable
             coinsData={coinsData}
             exchangeData={exchangeData}
-            marketCapMax={formState.marketCapMax}
-            marketCapMin={formState.marketCapMin}
-            trendLengthMin={formState.trendLengthMin}
-            trendLengthMax={formState.trendLengthMax}
-            portfolio={formState.portfolio}
-            category={formState.category}
-            trendType={formState.trendType}
-            defaultCategory={defaultFormState.category}
-            exchanges={formState.exchanges}
-            derivatives={formState.derivatives}
-            showDerivatives={formState.showDerivatives}
-            superTrendFlavor={formState.superTrendFlavor}
+            formState={formState}
+            defaultFormState={defaultFormState}
           />
         </Row>
       </Layout.Content>
@@ -70,6 +60,7 @@ export async function getStaticProps() {
       images: true,
       marketCap: true,
       marketCapRank: true,
+      fullyDilutedValuation: true,
       categories: true,
       tickers: true,
       derivatives: true,
@@ -105,6 +96,7 @@ export async function getStaticProps() {
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     coinData.imageSlug = getImageSlug(coinData.images.large)
     coinData.derivatives = coinData.derivatives?.slice(0, 5)
+    coinData.fullyDilutedValuation = Number(coinData.fullyDilutedValuation)
 
     coinData = pick(coinData, [
       'id',
@@ -112,6 +104,7 @@ export async function getStaticProps() {
       'name',
       'marketCap',
       'marketCapRank',
+      'fullyDilutedValuation',
       'categories',
       'imageSlug',
       'derivatives',

@@ -18,6 +18,7 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
       exchanges: [],
       derivatives: [],
       showDerivatives: showDerivativesByDefault,
+      showMarketCapFDV: false,
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -66,6 +67,11 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
         return {
           ...state,
           showDerivatives: action.payload
+        }
+      case 'SET_SHOW_MARKET_CAP_FDV':
+        return {
+          ...state,
+          showMarketCapFDV: action.payload
         }
       case 'SET_SUPERTREND_FLAVOR':
         return {

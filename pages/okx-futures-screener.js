@@ -40,18 +40,8 @@ export default function OkxFuturesScreener({ coinsData, appData, exchangeData, p
           <CoinTable
             coinsData={coinsData}
             exchangeData={exchangeData}
-            marketCapMax={formState.marketCapMax}
-            marketCapMin={formState.marketCapMin}
-            trendLengthMin={formState.trendLengthMin}
-            trendLengthMax={formState.trendLengthMax}
-            portfolio={formState.portfolio}
-            category={formState.category}
-            trendType={formState.trendType}
-            defaultCategory={defaultFormState.category}
-            exchanges={formState.exchanges}
-            derivatives={formState.derivatives}
-            showDerivatives={formState.showDerivatives}
-            superTrendFlavor={formState.superTrendFlavor}
+            formState={formState}
+            defaultFormState={defaultFormState}
             showExchanges={false}
           />
         </Row>
@@ -112,6 +102,7 @@ export async function getStaticProps() {
     coinData.imageSlug = getImageSlug(coinData.images.large)
 
     coinData.derivatives = coinData.derivatives?.slice(0, 5)
+    coinData.fullyDilutedValuation = Number(coinData.fullyDilutedValuation)
 
     coinData = pick(coinData, [
       'id',

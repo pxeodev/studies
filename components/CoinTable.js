@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
+import round from 'lodash/round'
 import { useHydrated } from "react-hydration-provider";
 import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
 
@@ -22,18 +23,8 @@ import coinTableStyles from '../styles/table.module.less';
 const CoinTable = ({
     coinsData,
     exchangeData,
-    marketCapMin,
-    marketCapMax,
-    trendLengthMin,
-    trendLengthMax,
-    trendType,
-    portfolio,
-    category,
-    defaultCategory,
-    exchanges,
-    derivatives,
-    showDerivatives,
-    superTrendFlavor,
+    formState,
+    defaultFormState,
     reverseMarketCapSort = false,
     showTrendStreak = true,
     showExchanges = true,
@@ -41,6 +32,24 @@ const CoinTable = ({
     filter,
     passTrends,
   }) => {
+
+  const {
+    marketCapMax,
+    marketCapMin,
+    trendLengthMin,
+    trendLengthMax,
+    portfolio,
+    category,
+    trendType,
+    exchanges,
+    derivatives,
+    showDerivatives,
+    superTrendFlavor,
+    showMarketCapFDV,
+  } = formState
+  const {
+    category: defaultCategory,
+  } = defaultFormState
 
   const router = useRouter()
   const isHoverable = useIsHoverable()
@@ -249,8 +258,11 @@ const CoinTable = ({
       dailySuperSuperTrendStreak: coinData.dailySuperSuperTrendStreak,
       weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
       weeklySuperSuperTrendStreak: coinData.weeklySuperSuperTrendStreak,
+      marketCapFDV: round(Number(coinData.marketCap) / coinData.fullyDilutedValuation, 2),
     }
   })
+
+  console.log(tableData.marketCapFDV)
 
   let columns = [
     {
@@ -350,6 +362,16 @@ const CoinTable = ({
             })}
           </span>;
         }
+      }
+    )
+  }
+  if (showMarketCapFDV) {
+    columns.push(
+      {
+        title: 'Market cap / FDV',
+        dataIndex: 'marketCapFDV',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
       }
     )
   }

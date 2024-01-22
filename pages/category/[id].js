@@ -102,18 +102,8 @@ export default function Category({ coinsData, appData, exchangeData, category, c
           <CoinTable
             coinsData={coinsData}
             exchangeData={exchangeData}
-            marketCapMax={formState.marketCapMax}
-            marketCapMin={formState.marketCapMin}
-            trendLengthMin={formState.trendLengthMin}
-            trendLengthMax={formState.trendLengthMax}
-            portfolio={formState.portfolio}
-            category={formState.category}
-            trendType={formState.trendType}
-            defaultCategory={defaultFormState.category}
-            exchanges={formState.exchanges}
-            derivatives={formState.derivatives}
-            showDerivatives={formState.showDerivatives}
-            superTrendFlavor={formState.superTrendFlavor}
+            formState={formState}
+            defaultFormState={defaultFormState}
             passTrends={setTrends}
           />
         </Row>
@@ -144,6 +134,7 @@ export async function getStaticProps({ params }) {
       images: true,
       marketCap: true,
       marketCapRank: true,
+      fullyDilutedValuation: true,
       categories: true,
       tickers: true,
       derivatives: true,
@@ -166,6 +157,8 @@ export async function getStaticProps({ params }) {
 
     coinData.imageSlug = getImageSlug(coinData.images.large)
     delete coinData.images
+
+    coinData.fullyDilutedValuation = Number(coinData.fullyDilutedValuation)
 
     return coinData
   })
