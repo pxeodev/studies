@@ -97,6 +97,18 @@ const TableFiltersAdvancedTab = ({
                 />
               </Col>
             </Row>
+            <Row className={indexStyles.modalRow}>
+              <Col span={22}>
+                <span>Show Market Cap #</span>
+              </Col>
+              <Col span={2}>
+                <Switch
+                  className={indexStyles.modalSwitch}
+                  checked={formState.marketCapRank}
+                  onChange={(checked) => { formDispatch({ type: 'SET_SHOW_MARKET_CAP_RANK', payload: checked }) }}
+                />
+              </Col>
+            </Row>
           </>
         ) : <></>
       }

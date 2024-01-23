@@ -48,6 +48,7 @@ const CoinTable = ({
     showCirculatingSupplyPercentage,
     showPercentageFromATH,
     showPercentageFromATL,
+    showMarketCapRank,
   } = formState
   const {
     category: defaultCategory,
@@ -256,6 +257,7 @@ const CoinTable = ({
       exchanges: shownExchanges,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
+      marketCapRank: coinData.marketCapRank,
       dailySuperSuperTrend: coinData.dailySuperSuperTrend,
       dailySuperSuperTrendStreak: coinData.dailySuperSuperTrendStreak,
       weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
@@ -381,6 +383,16 @@ const CoinTable = ({
       {
         title: 'Percentage from ATL',
         dataIndex: 'percentageFromATL',
+        width: 120,
+        className: coinTableStyles.unclickableCell,
+      }
+    )
+  }
+  if (showMarketCapRank) {
+    columns.push(
+      {
+        title: 'Market Cap #',
+        dataIndex: 'marketCapRank',
         width: 120,
         className: coinTableStyles.unclickableCell,
       }
