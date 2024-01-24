@@ -7,6 +7,7 @@ import { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { signals, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
+import { gql } from '@urql/core'
 
 import baseStyles from '../styles/base.module.less'
 import indexStyles from '../styles/index.module.less'
@@ -17,11 +18,12 @@ import useVirtualTable from '../hooks/useVirtualTable';
 import { dailySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrend } from '../utils/sharedColumns';
 import useIsHoverable from '../hooks/useIsHoverable';
 import useSocketStore from '../hooks/useSocketStore';
+import strapi from '../utils/strapi';
 
 import tableStyles from '../styles/table.module.less'
 import coinTableStyles from '../styles/table.module.less';
 
-export default function FourHourAlerts({ alerts, appData }) {
+export default function FourHourAlerts({ alerts, appData, pageData }) {
   const router = useRouter()
   const hydrated = useHydrated()
   const isHoverable = useIsHoverable()
@@ -132,10 +134,10 @@ export default function FourHourAlerts({ alerts, appData }) {
   return (
     <>
       <Head>
-        <title key="title">4h Alerts</title>
-        <meta name="description" key="description" content="4h Alerts as seen on our Discord"/>
+        <title key="title">{pageData.metaTitle || pageData.title}</title>
+        <meta name="description" key="description" content={pageData.metaDescription}/>
       </Head>
-      <PageHeader lastUpdated={appData.lastUpdated} title="4h Discord Alerts" />
+      <PageHeader lastUpdated={appData.lastUpdated} title={pageData.title} explainer={pageData.content}/>
       <Layout.Content className={baseStyles.container}>
         <Row className={indexStyles.tableRow}>
           <Table
@@ -208,6 +210,26 @@ export async function getServerSideProps(ctx) {
   for (const i of alertsToDelete.reverse()) {
     alerts.splice(i, 1)
   }
+  let { data } = await strapi.query(
+    gql`
+      query Pages($slug: String) {
+        pages(filters: {slug: {eq: $slug}}) {
+          data {
+            attributes {
+              title
+              metaTitle
+              metaDescription
+              content
+            }
+          }
+        }
+      }
+    `,
+    {
+      slug: '4h-alerts',
+    }
+  )
+  data = data.pages.data[0].attributes
 
   ctx.res.setHeader(
     'Cache-Control',
@@ -216,7 +238,8 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       alerts,
-      appData
+      appData,
+      pageData: data,
     }
   }
 }
