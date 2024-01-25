@@ -77,7 +77,6 @@ export default function Coin(coin) {
   const notification = useContext(NotificationContext)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
-  const coinPriceRef = useRef(null)
   const socket = useSocketStore(state => state.socket)
 
   const fetchTrends = useCallback(() => {
@@ -88,6 +87,7 @@ export default function Coin(coin) {
       }, (trends) => setTrends(trends))
     }
   }, [socket, coin.id])
+  const [price, setPrice] = useState(null)
   useEffect(() => {
     console.log('useeffect fetch trends')
     fetchTrends()
@@ -96,8 +96,8 @@ export default function Coin(coin) {
     const localPrices = JSON.parse(localStorage.getItem("prices"))
     if (localPrices) {
       const price = localPrices[coin.symbol]
-      if (price && coinPriceRef.current) {
-        coinPriceRef.current.innerText = currencyFormatter.format(price)
+      if (price) {
+        setPrice(price)
       }
     }
   }, [coin.symbol, currencyFormatter])
@@ -105,16 +105,16 @@ export default function Coin(coin) {
     if (socket) {
       socket.on("i", (prices) => {
         const price = prices[coin.symbol]
-        if (price && coinPriceRef.current) {
-          coinPriceRef.current.innerText = currencyFormatter.format(price)
+        if (price) {
+          setPrice(price)
         }
         console.debug("Received initial prices", prices);
       });
 
       socket.on('p', (priceUpdates) => {
         const priceUpdate = priceUpdates[coin.symbol]
-        if (priceUpdate && coinPriceRef.current) {
-          coinPriceRef.current.innerText = currencyFormatter.format(priceUpdate)
+        if (priceUpdate) {
+          setPrice(priceUpdate)
         }
       })
 
@@ -235,7 +235,7 @@ export default function Coin(coin) {
       postfix={
         <>
           <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
-          <span ref={coinPriceRef} />
+          <span>{currencyFormatter.format(price)}</span>
         </>
       }
     />
@@ -321,7 +321,7 @@ export default function Coin(coin) {
             </Card.Grid>
           );
         })}
-        <ActiveTabComponent coin={coin} screens={screens} liveCoinData={liveCoinData} />
+        <ActiveTabComponent coin={coin} screens={screens} liveCoinData={liveCoinData} price={price} />
       </Card>
     </Content>
   </>;
@@ -389,7 +389,6 @@ export async function getStaticProps({ params }) {
     'launch_roi_usd',
     'launch_roi_eth',
     'launch_roi_btc',
-    'currentPrice'
   ])
   return {
     props: {
@@ -404,7 +403,6 @@ export async function getStaticProps({ params }) {
       launch_roi_usd: Number(coinData.launch_roi_usd),
       launch_roi_eth: Number(coinData.launch_roi_eth),
       launch_roi_btc: Number(coinData.launch_roi_btc),
-      currentPrice: Number(coinData.currentPrice),
       platforms,
       chainsData,
       description,

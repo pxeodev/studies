@@ -1,6 +1,6 @@
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { TwitterOutlined, GlobalOutlined } from '@ant-design/icons';
-import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
+import { useContext, useEffect, useState, useMemo, useCallback, memo } from 'react';
 import { Card, Space, Table, Tag, Typography } from 'antd';
 import Link from 'next/link'
 import classnames from 'classnames';
@@ -17,7 +17,27 @@ import { getImageURL } from "../utils/minifyImageURL.js";
 
 const { Title } = Typography;
 
-const PriceDataTab = ({ coin, screens, liveCoinData }) => {
+const Chart = memo(function ChartFunc({ symbol, hideToolbar, darkMode }) {
+  return (
+    <AdvancedRealTimeChart
+      autosize
+      interval="D"
+      symbol={symbol}
+      hide_side_toolbar={hideToolbar}
+      container_id={coinStyles.chart}
+      theme={darkMode ? "dark" : "light"}
+      calendar
+      details
+    />
+  )
+})
+
+const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
+  let percentageFromATH, percentageFromATL
+  if (price) {
+    percentageFromATH = round((price / coin.ath) * 100, 2)
+    percentageFromATL = round((price / coin.atl) * 100, 2)
+  }
   const [darkMode] = useContext(DarkModeContext);
   const hydrated = useHydrated();
   const [showChart, setShowChart] = useState(false)
@@ -93,11 +113,27 @@ const PriceDataTab = ({ coin, screens, liveCoinData }) => {
       ) : <></>}
       <div className={coinStyles.data}>
         <Title level={3} className={coinStyles.label}>All-Time High</Title>
-        <div className={coinStyles.value}>{hydrated ? preciseCurrencyFormatter.format(coin.ath) : coin.ath}</div>
+        <div className={coinStyles.value}>
+          {hydrated ? preciseCurrencyFormatter.format(coin.ath) : coin.ath}
+          { percentageFromATH ? (
+            <span className={coinStyles.valueAnnotation}>
+              &nbsp;({percentageFromATH}%)
+            </span>
+            ) : <></>
+          }
+        </div>
       </div>
       <div className={coinStyles.data}>
         <Title level={3} className={coinStyles.label}>All-Time Low</Title>
-        <div className={coinStyles.value}>{hydrated ? preciseCurrencyFormatter.format(coin.atl) : coin.atl}</div>
+        <div className={coinStyles.value}>
+          {hydrated ? preciseCurrencyFormatter.format(coin.atl) : coin.atl}
+          { percentageFromATL ? (
+            <span className={coinStyles.valueAnnotation}>
+              &nbsp;({percentageFromATL}%)
+            </span>
+            ) : <></>
+          }
+        </div>
       </div>
     </Card.Grid>
     { (coin.fullyDilutedValuation || coin.circulatingSupply || coin.totalSupply || coin.maxSupply ) ? (
@@ -113,7 +149,12 @@ const PriceDataTab = ({ coin, screens, liveCoinData }) => {
             <Title level={3} className={coinStyles.label}>Circulating Supply</Title>
             <div className={coinStyles.value}>
               {hydrated ? numberFormatter.format(coin.circulatingSupply) : coin.circulatingSupply}
-              { circulatingSupplyPercentage ? ` / ${circulatingSupplyPercentage}%` : <></>}
+              { circulatingSupplyPercentage ? (
+                <span className={coinStyles.valueAnnotation}>
+                  &nbsp;({circulatingSupplyPercentage}%)
+                </span>
+                ) : <></>
+              }
             </div>
           </div>
         ) : <></>}
@@ -271,19 +312,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData }) => {
       ) : <></>
     }
     <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart">
-      { showChart ?
-        <AdvancedRealTimeChart
-          autosize
-          interval="D"
-          symbol={`${coin.symbol.toUpperCase()}USDT`}
-          hide_side_toolbar={!screens.sm}
-          container_id={coinStyles.chart}
-          theme={darkMode ? "dark" : "light"}
-          calendar
-          details
-        /> :
-        <></>
-      }
+      { showChart ? <Chart symbol={`${coin.symbol.toUpperCase()}USDT`} hideToolbar={!screens.sm} darkMode={darkMode} /> : <></> }
     </Card.Grid>
   </>;
 }

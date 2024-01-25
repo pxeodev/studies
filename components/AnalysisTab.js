@@ -8,11 +8,14 @@ import { useEffect } from 'react';
 import coinStyles from '../styles/coin.module.less'
 import ChatGPTSource from './ChatGPTSource';
 
-const AnalysisTab = ({ coin, screens }) => {
+const AnalysisTab = ({ coin, screens, price }) => {
   const notation = screens.sm ? 'standard' : 'compact'
-  const percentageFromAth = (coin.ath - coin.currentPrice) / coin.ath * 100
-  const percentageFromAtl = (coin.atl - coin.currentPrice) / coin.atl * 100
-  const priceAppreciationToAthPercentage = (coin.ath / coin.currentPrice) * 100
+  let percentageFromAth, percentageFromAtl, priceAppreciationToAthPercentage
+  if (price) {
+    percentageFromAth = (coin.ath - price) / coin.ath * 100
+    percentageFromAtl = (coin.atl - price) / coin.atl * 100
+    priceAppreciationToAthPercentage = (coin.ath / price) * 100
+  }
   const today = new Date()
   let circulatingSupplyPercentage
   let outstandingSuppplyPercentage
@@ -23,26 +26,35 @@ const AnalysisTab = ({ coin, screens }) => {
   const numberFormatter = new Intl.NumberFormat([], { notation })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
-  const interpolatedCoinDescription = (coin.description || '')
+  let interpolatedCoinDescription = (coin.description || '')
     .replaceAll('{{ath}}', preciseCurrencyFormatter.format(coin.ath))
     .replaceAll('{{atl}}', preciseCurrencyFormatter.format(coin.atl))
     .replaceAll('{{marketcap}}', currencyFormatter.format(coin.marketCap))
     .replaceAll('{{fdv}}', currencyFormatter.format(coin.fullyDilutedValuation))
     .replaceAll('{{launchprice}}', currencyFormatter.format(coin.launch_price))
-    .replaceAll('{{currentprice}}', currencyFormatter.format(coin.currentPrice))
-    .replaceAll('{{percentagefromath}}', `${numberFormatter.format(percentageFromAth)}%`)
-    .replaceAll('{{percentagefromatl}}', `${numberFormatter.format(percentageFromAtl)}%`)
     .replaceAll('{{circulatingsupply}}', numberFormatter.format(coin.circulatingSupply))
     .replaceAll('{{percentagecirculatingsupply}}', `${numberFormatter.format(circulatingSupplyPercentage)}%`)
     .replaceAll('{{percentageoutstandingsupply}}', `${numberFormatter.format(outstandingSuppplyPercentage)}%`)
     .replaceAll('{{totalsupply}}', numberFormatter.format(coin.totalSupply))
     .replaceAll('{{maxsupply}}', numberFormatter.format(coin.maxSupply))
-    .replaceAll('{{percentageappreciationtoath}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
     .replaceAll('{{ranking}}', coin.marketCapRank)
     .replaceAll('{{day}}', today.getDate())
     .replaceAll('{{month}}', new Intl.DateTimeFormat([], { month: 'long' }).format(today))
     .replaceAll('{{year}}', today.getFullYear())
     .replaceAll('{{name}}', coin.name)
+
+    if (percentageFromAth) {
+      interpolatedCoinDescription = interpolatedCoinDescription.replaceAll('{{percentagefromath}}', `${numberFormatter.format(percentageFromAth)}%`)
+    }
+    if (percentageFromAtl) {
+      interpolatedCoinDescription = interpolatedCoinDescription.replaceAll('{{percentagefromatl}}', `${numberFormatter.format(percentageFromAtl)}%`)
+    }
+    if (priceAppreciationToAthPercentage) {
+      interpolatedCoinDescription = interpolatedCoinDescription.replaceAll('{{priceappreciationtoathpercentage}}', `${numberFormatter.format(priceAppreciationToAthPercentage)}%`)
+    }
+    if (price) {
+      interpolatedCoinDescription = interpolatedCoinDescription.replaceAll('{{currentprice}}', currencyFormatter.format(price))
+    }
 
     const preventCopy = (event) => {
       let selection = window.getSelection().toString();
