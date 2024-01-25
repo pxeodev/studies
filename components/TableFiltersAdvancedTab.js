@@ -27,7 +27,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.marketCapRank}
+            checked={formState.showMarketCapRank}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_MARKET_CAP_RANK', payload: checked }) }}
           />
         </Col>
@@ -51,7 +51,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.ath}
+            checked={formState.showATH}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_ATH', payload: checked }) }}
           />
         </Col>
@@ -63,7 +63,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.percentageFromATH}
+            checked={formState.showPercentageFromATH}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_PERCENTAGE_FROM_ATH', payload: checked }) }}
           />
         </Col>
@@ -75,7 +75,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.atl}
+            checked={formState.showATL}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_ATL', payload: checked }) }}
           />
         </Col>
@@ -87,7 +87,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.percentageFromATL}
+            checked={formState.showPercentageFromATL}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_PERCENTAGE_FROM_ATL', payload: checked }) }}
           />
         </Col>
@@ -99,7 +99,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.openInterest}
+            checked={formState.showOpenInterest}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_OPEN_INTEREST', payload: checked }) }}
           />
         </Col>
@@ -111,7 +111,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.fundingRate}
+            checked={formState.showFundingRate}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_FUNDING_RATE', payload: checked }) }}
           />
         </Col>
@@ -123,7 +123,7 @@ const TableFiltersAdvancedTab = ({
         <Col span={2}>
           <Switch
             className={indexStyles.modalSwitch}
-            checked={formState.futuresVolume}
+            checked={formState.showFuturesVolume}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_FUTURES_VOLUME', payload: checked }) }}
           />
         </Col>
