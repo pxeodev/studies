@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { QuestionCircleFilled } from '@ant-design/icons'
-import { Row, Col, Input, Button, Select, Divider, Tooltip, Radio, Typography } from 'antd'
+import { Row, Col, Input, Button, Select, Divider, Tooltip, Radio, Typography, Checkbox } from 'antd'
 import { useCallback } from 'react'
 
 import indexStyles from '../styles/index.module.less'
@@ -288,6 +288,23 @@ const TableFiltersFiltersTab = ({
           </>
         ) : <></>
       }
+      <Divider className={indexStyles.divider} />
+      <Row className={indexStyles.modalRow}>
+        <Col span={16}>
+          <span>Show CEX / DEX</span>
+        </Col>
+        <Col span={8}>
+          <Checkbox.Group
+            options={[
+              { label: 'CEX', value: 'cex' },
+              { label: 'DEX', value: 'dex' },
+            ]}
+            name="cexdex"
+            value={formState.cexdex}
+            onChange={(checked) => { formDispatch({ type: 'SET_CEX_DEX', payload: checked }) }}
+          />
+        </Col>
+      </Row>
     </>
   );
 }

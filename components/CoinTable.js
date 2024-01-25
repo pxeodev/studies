@@ -44,6 +44,7 @@ const CoinTable = ({
     trendType,
     exchanges,
     derivatives,
+    cexdex,
     superTrendFlavor,
     showMarketCapFDV,
     showCirculatingSupplyPercentage,
@@ -217,12 +218,28 @@ const CoinTable = ({
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
     const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
     const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
+    const matchesCexDex = coinData.exchanges.some((exchange) => {
+      if (cexdex.length === 2 || cexdex.length === 0) {
+        return true
+      } else {
+        const matchingExchange = exchangeData.find(exchangeData => exchangeData.name === exchange[0])
+        if (!matchingExchange) {
+          return false
+        }
+        if (cexdex[0] === 'cex') {
+          return matchingExchange.centralized
+        } else if (cexdex[0] === 'dex') {
+          return !matchingExchange.centralized
+        }
+      }
+    })
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
            matchesPortfolio &&
            matchesCategory &&
            matchesExchanges &&
-           matchesDerivatives
+           matchesDerivatives &&
+           matchesCexDex
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
     let min = parseInt(trendLengthMin)

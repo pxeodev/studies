@@ -25,6 +25,7 @@ const useTableFilters = (coinsData) => {
       showOpenInterest: false,
       showFundingRate: false,
       showFuturesVolume: false,
+      cexdex: ['cex', 'dex'],
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -108,6 +109,11 @@ const useTableFilters = (coinsData) => {
         return {
           ...state,
           showFuturesVolume: action.payload
+        }
+      case 'SET_CEX_DEX':
+        return {
+          ...state,
+          cexdex: action.payload
         }
       case 'SET_SUPERTREND_FLAVOR':
         return {
