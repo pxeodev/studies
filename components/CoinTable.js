@@ -54,6 +54,8 @@ const CoinTable = ({
     showOpenInterest,
     showFundingRate,
     showFuturesVolume,
+    showATH,
+    showATL,
   } = formState
   const {
     category: defaultCategory,
@@ -324,6 +326,8 @@ const CoinTable = ({
       dailySuperSuperTrendStreak: coinData.dailySuperSuperTrendStreak,
       weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
       weeklySuperSuperTrendStreak: coinData.weeklySuperSuperTrendStreak,
+      ath: coinData.ath,
+      atl: coinData.atl,
       marketCapFDV: round(Number(coinData.marketCap) / coinData.fullyDilutedValuation, 2),
       circulatingSupplyPercentage: `${round(Number(coinData.circulatingSupply) / Number(coinData.totalSupply), 2) * 100}%`,
       percentageFromATH,
@@ -517,6 +521,28 @@ const CoinTable = ({
             return null
           }
         }
+      }
+    )
+  }
+  if (showATH) {
+    columns.push(
+      {
+        title: 'ATH',
+        dataIndex: 'ath',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
+        render: (ath) => ath ? currencyFormatter.format(ath) : null
+      }
+    )
+  }
+  if (showATL) {
+    columns.push(
+      {
+        title: 'ATL',
+        dataIndex: 'atl',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
+        render: (atl) => atl ? currencyFormatter.format(atl) : null
       }
     )
   }

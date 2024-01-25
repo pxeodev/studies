@@ -145,6 +145,30 @@ const TableFiltersAdvancedTab = ({
                 />
               </Col>
             </Row>
+            <Row className={indexStyles.modalRow}>
+              <Col span={22}>
+                <span>Show ATH</span>
+              </Col>
+              <Col span={2}>
+                <Switch
+                  className={indexStyles.modalSwitch}
+                  checked={formState.ath}
+                  onChange={(checked) => { formDispatch({ type: 'SET_SHOW_ATH', payload: checked }) }}
+                />
+              </Col>
+            </Row>
+            <Row className={indexStyles.modalRow}>
+              <Col span={22}>
+                <span>Show ATL</span>
+              </Col>
+              <Col span={2}>
+                <Switch
+                  className={indexStyles.modalSwitch}
+                  checked={formState.atl}
+                  onChange={(checked) => { formDispatch({ type: 'SET_SHOW_ATL', payload: checked }) }}
+                />
+              </Col>
+            </Row>
           </>
         ) : <></>
       }
