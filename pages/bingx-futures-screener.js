@@ -42,7 +42,6 @@ export default function BingxFuturesScreener({ coinsData, appData, exchangeData,
             exchangeData={exchangeData}
             formState={formState}
             defaultFormState={defaultFormState}
-            showExchanges={false}
           />
         </Row>
       </Layout.Content>

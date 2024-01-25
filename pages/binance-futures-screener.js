@@ -42,7 +42,6 @@ export default function BinanceFuturesScreener({ coinsData, appData, exchangeDat
             exchangeData={exchangeData}
             formState={formState}
             defaultFormState={defaultFormState}
-            showExchanges={false}
           />
         </Row>
       </Layout.Content>

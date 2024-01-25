@@ -42,7 +42,6 @@ export default function MexcFuturesScreener({ coinsData, appData, exchangeData, 
             exchangeData={exchangeData}
             formState={formState}
             defaultFormState={defaultFormState}
-            showExchanges={false}
           />
         </Row>
       </Layout.Content>

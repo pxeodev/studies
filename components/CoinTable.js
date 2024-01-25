@@ -16,7 +16,7 @@ import useSocketStore from '../hooks/useSocketStore';
 import { signals, preferredExchanges } from 'coinrotator-utils/variables.mjs'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { getImageURL } from '../utils/minifyImageURL';
-import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
+import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns';
 import { NotificationContext } from '../layouts/screener.js';
 
 import coinTableStyles from '../styles/table.module.less';
@@ -28,7 +28,6 @@ const CoinTable = ({
     defaultFormState,
     reverseMarketCapSort = false,
     showTrendStreak = true,
-    showExchanges = true,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
     passTrends,
@@ -279,20 +278,6 @@ const CoinTable = ({
     shownDerivatives = shownDerivatives.sort((derivativeA, derivativeB) => {
       return preferredExchanges.includes(derivativeA.market) ? 1 : derivativeA.market.localeCompare(derivativeB.market)
     })
-    let shownExchanges = coinData.exchanges.sort((exchangeA, exchangeB) => {
-      if (preferredExchanges.includes(exchangeA[0])) {
-        if (preferredExchanges.includes(exchangeB[0])) {
-          return exchangeB[1] - exchangeA[1]
-        } else {
-          return -1
-        }
-      } else if (preferredExchanges.includes(exchangeB[0])) {
-        return 1;
-      } else {
-        return exchangeB[1] - exchangeA[1]
-      }
-    })
-    shownExchanges = shownExchanges.slice(0, 5)
     let percentageFromATH, percentageFromATL
     const livePrice = prices[coinData.symbol]
     if (livePrice) {
@@ -318,7 +303,6 @@ const CoinTable = ({
         imageSlug: coinData.imageSlug,
         name: coinData.name
       },
-      exchanges: shownExchanges,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
       marketCapRank: coinData.marketCapRank,
@@ -408,14 +392,6 @@ const CoinTable = ({
     ...marketCap(router, hydrated)
   }
   )
-  if (showExchanges) {
-    columns.push(
-      {
-        width: 120,
-        ...exchangesCol(router, isHoverable, exchangeData)
-      }
-    )
-  }
   if (showMarketCapFDV) {
     columns.push(
       {

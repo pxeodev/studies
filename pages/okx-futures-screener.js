@@ -42,7 +42,6 @@ export default function OkxFuturesScreener({ coinsData, appData, exchangeData, p
             exchangeData={exchangeData}
             formState={formState}
             defaultFormState={defaultFormState}
-            showExchanges={false}
           />
         </Row>
       </Layout.Content>
