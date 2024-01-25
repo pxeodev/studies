@@ -41,24 +41,20 @@ const TABS = {
 }
 
 export default function Coin(coin) {
-  let dailySignal
   let dailySignalTag
   const [trends, setTrends] = useState(null)
+  const [liveCoinData, setLiveCoinData] = useState([])
   switch (trends?.daily?.supersuperTrend?.trend) {
     case signals.buy:
-      dailySignal = 'UP'
       dailySignalTag = <a href="#markets"><UpTag /></a>
       break;
     case signals.sell:
-      dailySignal = 'DOWN'
       dailySignalTag = <a href="#markets"><DownTag /></a>
       break;
     case signals.hodl:
-      dailySignal = 'HODL'
       dailySignalTag = <a href="#markets"><HodlTag /></a>
       break;
     default:
-      dailySignal = '      '
       dailySignalTag = <a href="#markets"><LoadingTag /></a>
   }
   let weeklySignalTag
@@ -132,6 +128,27 @@ export default function Coin(coin) {
       }
     }
   }, [socket, coin.symbol, currencyFormatter, fetchTrends])
+  const fetchLiveCoinData = useCallback(() => {
+    socket.emit('get_live_coin_data', (liveCoinData) => {
+      const data = liveCoinData.data
+      sessionStorage.setItem(`live_coin_data`, JSON.stringify(data))
+      setLiveCoinData(data)
+    })
+  }, [socket])
+  useEffect(() => {
+    const cache = JSON.parse(sessionStorage.getItem('live_coin_data'))
+    if (cache) {
+      setLiveCoinData(cache)
+    } else if (socket) {
+      fetchLiveCoinData()
+      socket.on('new_live_coin_data', fetchLiveCoinData)
+    }
+    return () => {
+      if (socket) {
+        socket.off('new_live_coin_data')
+      }
+    }
+  }, [socket, fetchLiveCoinData])
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | Daily Crypto Trend Screener`
   const metaDescription = `Daily insights on ${coin.name} (${coin.symbol.toUpperCase()})! Discover Coinrotator's comprehensive trend analysis for multiple timeframes.`
@@ -304,7 +321,7 @@ export default function Coin(coin) {
             </Card.Grid>
           );
         })}
-        <ActiveTabComponent coin={coin} screens={screens} />
+        <ActiveTabComponent coin={coin} screens={screens} liveCoinData={liveCoinData} />
       </Card>
     </Content>
   </>;

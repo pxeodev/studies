@@ -17,7 +17,7 @@ import { getImageURL } from "../utils/minifyImageURL.js";
 
 const { Title } = Typography;
 
-const PriceDataTab = ({ coin, screens }) => {
+const PriceDataTab = ({ coin, screens, liveCoinData }) => {
   const [darkMode] = useContext(DarkModeContext);
   const hydrated = useHydrated();
   const [showChart, setShowChart] = useState(false)
@@ -29,11 +29,21 @@ const PriceDataTab = ({ coin, screens }) => {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
+  let openInterest, openInterestChangePercent, fundingRate, futuresVolume24h
+  if (liveCoinData) {
+    const matchingCoin = liveCoinData.find((liveCoin) => liveCoin.id === coin.id)
+    if (matchingCoin) {
+      openInterest = matchingCoin.openInterest
+      openInterestChangePercent = round(matchingCoin.openInterestChangePercent, 2)
+      fundingRate = matchingCoin.fundingRate
+      futuresVolume24h = matchingCoin.futuresVolume24h
+    }
+  }
   const url = cleanupCoinLink(coin.homepage, coin.symbol)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
-  const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation }), [notation])
+  const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation, maximumFractionDigits: 3 }), [notation])
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
 
@@ -123,43 +133,77 @@ const PriceDataTab = ({ coin, screens }) => {
     ) : <></>}
     <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
       <Title level={3} className={coinStyles.label}>Categories</Title>
+      <div className={coinStyles.data}>
+        {
+          coin.categories.map((tag) => {
+            const categorySlug = slugify(tag);
+            return (
+              <Link href={`/category/${categorySlug}`} key={tag} prefetch={false}>
+                <Tag>{tag}</Tag>
+              </Link>
+            );
+          })
+        }
+      </div>
       {
-        coin.categories.map((tag) => {
-          const categorySlug = slugify(tag);
-          return (
-            <Link href={`/category/${categorySlug}`} key={tag} prefetch={false}>
-              <Tag>{tag}</Tag>
-            </Link>
-          );
-        })
+        coin.similarCoins.length ? (
+          <div className={coinStyles.data}>
+            <Title level={3} className={coinStyles.label}>Similar Coins</Title>
+            {
+              // eslint-disable-next-line @next/next/no-img-element
+              coin.similarCoins.map(coin =>
+                (
+                  (<a href={`/coin/${coin.id}`} key={coin.id}>
+
+                    <Tag
+                      className={coinStyles.similarCoin}
+                      // eslint-disable-next-line @next/next/no-img-element
+                      icon={<img className={coinStyles.similarCoin} width={14} height={14} src={getImageURL(coin.imageSlug, 'thumb')} alt={coin.name} />}
+                      key={coin.name}
+                    >
+                      {coin.name}
+                    </Tag>
+
+                  </a>)
+                )
+              )
+            }
+          </div>
+        ) : <></>
       }
     </Card.Grid>
-    {
-      coin.similarCoins.length ? (
-        <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionSimilarCoins)}>
-          <Title level={3} className={coinStyles.label}>Similar Coins</Title>
-          {
-            // eslint-disable-next-line @next/next/no-img-element
-            coin.similarCoins.map(coin =>
-              (
-                (<a href={`/coin/${coin.id}`} key={coin.id}>
-
-                  <Tag
-                    className={coinStyles.similarCoin}
-                    // eslint-disable-next-line @next/next/no-img-element
-                    icon={<img className={coinStyles.similarCoin} width={14} height={14} src={getImageURL(coin.imageSlug, 'thumb')} alt={coin.name} />}
-                    key={coin.name}
-                  >
-                    {coin.name}
-                  </Tag>
-
-                </a>)
+    { openInterest ? (
+      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
+          <div className={coinStyles.data}>
+            <Title level={3} className={coinStyles.label}>Open Interest (4h)</Title>
+            <span className={coinStyles.value}>{numberFormatter.format(openInterest)}</span>
+            <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent < 0})}>
+              &nbsp;(
+              {openInterestChangePercent > 0 ? '+' : ''}
+              {openInterestChangePercent}%
               )
-            )
+            </span>
+          </div>
+          {
+            fundingRate ? (
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Funding Rate (4h)</Title>
+                <span className={coinStyles.value}>{numberFormatter.format(fundingRate)}</span>
+              </div>
+            ) : <></>
           }
-        </Card.Grid>
-      ) : <></>
-    }
+          {
+            futuresVolume24h ? (
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>Futures Volume (24h)</Title>
+                <span className={coinStyles.value}>
+                  {numberFormatter.format(futuresVolume24h)}
+                </span>
+              </div>
+            ) : <></>
+          }
+      </Card.Grid>
+    ) : <></> }
     {
       (coin.launch_price || coin.launch_date_start || coin.launch_roi_usd) ? (
         <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionIco)}>
