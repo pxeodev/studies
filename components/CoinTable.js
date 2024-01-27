@@ -328,7 +328,7 @@ const CoinTable = ({
   let columns = [
     {
       title: () => `Coin (${tableData.length})`,
-      width: 200,
+      width: isHoverable ? 140 : 200,
       dataIndex: 'coinData',
       onCell: ({ id }) => {
         return {
@@ -345,16 +345,18 @@ const CoinTable = ({
             <Link href={`/coin/${data.id}`} className={coinTableStyles.coin}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={getImageURL(coinData.imageSlug, 'small')} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
-              <span className={coinTableStyles.name}>{coinData.name}</span>
+              {isHoverable ? null : <span className={coinTableStyles.name}>{coinData.name}</span>}
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
-            <Link href={`/coin/${data.id}#chart`} onClick={(e) => e.stopPropagation()}>
-              <BarChartOutlined
-                className={coinTableStyles.chart}
-                alt="Real time chart"
-                title="Real time chart"
-              />
-            </Link>
+            { isHoverable ? null : (
+              <Link href={`/coin/${data.id}#chart`} onClick={(e) => e.stopPropagation()}>
+                <BarChartOutlined
+                  className={coinTableStyles.chart}
+                  alt="Real time chart"
+                  title="Real time chart"
+                />
+              </Link>
+            ) }
           </>
         );
       }
