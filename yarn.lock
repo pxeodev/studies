@@ -1837,8 +1837,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#main":
-  version "1.0.1"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#0f66ca81f68075c082c12be4f56ac8f2b4a6a73f"
+  version "1.1.0"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#ba20c4bef923d6f26ca93741029b9041cafb519e"
   dependencies:
     lodash "^4.17.21"
 

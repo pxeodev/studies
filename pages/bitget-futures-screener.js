@@ -10,7 +10,7 @@ import PageHeader from '../components/PageHeader'
 import TableFilters from '../components/TableFilters'
 import CoinTable from '../components/CoinTable';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
-import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
