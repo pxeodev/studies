@@ -12,6 +12,7 @@ import uniqBy from 'lodash/uniqBy.js'
 import { quoteSymbols } from 'coinrotator-utils/variables.mjs'
 import prisma from '../lib/prisma.mjs'
 import coinGecko, { getOhlc, getCoin, getMarket } from '../lib/coinGecko.mjs'
+import { createJob } from '../lib/render.mjs'
 import cryptowatch from '../lib/cryptowatch.mjs'
 import { getAllCoins } from '../lib/lunr.mjs'
 import { Prisma } from '@prisma/client'
@@ -392,6 +393,7 @@ setTimeout(async () => {
     await axios.post('https://coinrotator-realtime-2.onrender.com/new-trends')
     setTimeout(async () => {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
+      await createJob({ serviceId: 'crn-c8q7r2pg7hp6tkba3sj0', startCommand: 'node dist/bot.mjs' })
     }, 1000 * 60 * 5) // Wait 5 minutes so the realtime server can start
   }
 }, 99);
