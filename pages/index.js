@@ -9,7 +9,7 @@ import TableFilters from '../components/TableFilters'
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import prisma from '../lib/prisma.mjs'
 import globalData from '../lib/globalData';
-import chunkedPromiseAll from '../utils/chunkedPromiseAll.mjs'
+import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import strapi from '../utils/strapi';

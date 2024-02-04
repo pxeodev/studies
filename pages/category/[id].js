@@ -19,7 +19,7 @@ import convertTickersToExchanges from '../../utils/convertTickersToExchanges';
 import useTableFilters from '../../hooks/useTableFilters';
 import prisma from "../../lib/prisma.mjs";
 import { getCategories } from '../../utils/categories.mjs'
-import chunkedPromiseAll from '../../utils/chunkedPromiseAll.mjs'
+import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../../utils/minifyImageURL';
 import useSocketStore from '../../hooks/useSocketStore';
 

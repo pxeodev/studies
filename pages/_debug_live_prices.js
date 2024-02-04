@@ -43,6 +43,7 @@ export default function LivePriceDebugger({ coins, appData }) {
 
   const socket = useSocketStore(state => state.socket)
   const [prices, setPrices] = useState({})
+  console.log(`We have ${Object.keys(prices).length} prices of ${coins.length} coins`)
 
   const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
   useEffect(() => {
@@ -118,7 +119,8 @@ export default function LivePriceDebugger({ coins, appData }) {
       width: 125,
       title: 'Live Price',
       dataIndex: 'price',
-      render: (price) => price ? currencyFormatter.format(price) : null
+      render: (price) => price ? currencyFormatter.format(price) : null,
+      sorter: (a, b) => (b.price || -1) - (a.price || -1),
     },
     {
       width: 125,
@@ -131,7 +133,8 @@ export default function LivePriceDebugger({ coins, appData }) {
       dataIndex: 'lastUpdated',
       render: (timestamp) => {
         return timestamp ? `${formatDistanceToNowStrict(new Date(timestamp))} ago` : null
-      }
+      },
+      sorter: (a, b) => a.lastUpdated - b.lastUpdated,
     }
   ]
 
