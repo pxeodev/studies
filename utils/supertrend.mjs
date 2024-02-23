@@ -16,19 +16,17 @@ const supertrend = (data = [], options = { atrPeriods: 10, multiplier: 1.5 }) =>
   .map((entry, index, array) => {
     if (index < options.atrPeriods) { return entry; }
 
-    // Calc ATR(SMA)
-    const atrSMA = array
-      .slice(index + 1 - options.atrPeriods, index + 1)
-      .map(atrEntry => atrEntry[atrEntry.length - 1])
-      .reduce((previous, next) => previous + next, 0) / options.atrPeriods
-    const roundedAtrSMA = round(atrSMA, 10)
+    const alpha = 1 / options.atrPeriods
+    const rma = alpha * entry[entry.length - 1] + (1 - alpha) * (array[index - 1][5] || 0)
+    const roundedRMA = round(rma, 10)
+    entry.push(roundedRMA)
 
-    const basicUpperband = (entry[1] + entry[2]) / 2 + options.multiplier * atrSMA
+    const basicUpperband = (entry[1] + entry[2]) / 2 + options.multiplier * roundedRMA
     const roundedBasicUpperband = round(basicUpperband, 10)
-    const basicLowerband = (entry[1] + entry[2]) / 2 - options.multiplier * atrSMA
+    const basicLowerband = (entry[1] + entry[2]) / 2 - options.multiplier * roundedRMA
     const roundedBasicLowerband = round(basicLowerband, 10)
 
-    let newEntry = [...entry, roundedAtrSMA, roundedBasicUpperband, roundedBasicLowerband]
+    let newEntry = [...entry, roundedBasicUpperband, roundedBasicLowerband]
     // The final upperband and the final lowerband equal the basic upperband and the basic lowerband for the first entry in the ATR period
     if (index === options.atrPeriods) {
       newEntry.push(roundedBasicUpperband, roundedBasicLowerband)
