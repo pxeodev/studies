@@ -14,6 +14,12 @@ const ohlcToSupertrendMigration = async () => {
   })
   allCoinIds = allCoinIds.map(coin => coin.id)
   for (const coinId of allCoinIds) {
+    // if (coinId.localeCompare('zcoin') < 0) {
+    //   continue;
+    // }
+    // if (coinId !== 'ethereum') {
+    //   continue;
+    // }
     let ohlcs = await prisma.ohlc.findMany({
       select: {
         closeTime: true,

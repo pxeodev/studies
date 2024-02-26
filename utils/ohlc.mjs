@@ -48,6 +48,7 @@ export async function saveDailyOhlcsToSupertrends (ohlcs, coinId) {
       }
     })
     weeklyCoinOhlcs = convertToDailySignals(weeklyCoinOhlcs, true)[quoteSymbol] || []
+
     const weeklyCrTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, true)
     await prisma.superTrend.createMany({ data: weeklyCrTrends, skipDuplicates: true })
     const weeklyClassicTrends = convertOhlcsToSuperTrends(weeklyCoinOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, true)

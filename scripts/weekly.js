@@ -9,7 +9,7 @@ import retry from '../utils/retry.mjs';
 puppeteer.use(StealthPlugin())
 
 const fetchCoinData = async (url, coin, page) => {
-  console.log('Fetch dropstab data for', coin.symbol);
+  console.log('Fetch dropstab data for', coin.symbol, 'from', url);
   await retry(
     () => page.goto(url, {waitUntil: 'domcontentloaded'}),
     3
