@@ -80,7 +80,7 @@ export default function Coin(coin) {
   const isHoverable = useIsHoverable();
   const notification = useContext(NotificationContext)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
-  const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
+  const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 15 }), [])
   const coinPriceRef = useRef(null)
   const socket = useSocketStore(state => state.socket)
 
