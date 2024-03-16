@@ -22,9 +22,11 @@ import slugify from 'slugify'
 
 import styles from "../styles/navigationmenu.module.less"
 import { currentNarratives } from 'coinrotator-utils/variables.mjs'
+import useBreakPoint from '../hooks/useBreakPoint'
 
 const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected }) => {
   const router = useRouter()
+  const screens = useBreakPoint()
   let menuItems = [
     {
       label: 'Screener Tools',
@@ -271,16 +273,19 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
     }
   }
 
+  let props = {}
+  if (!screens.lg) {
+    props.openKeys = ['screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about']
+  }
   return (
     <Menu
       mode="inline"
       motion={{}}
-      openKeys={['screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about']}
       items={menuItems}
       className={styles.menu}
-      inlineIndent={0}
       selectedKeys={[selectedKey]}
       onClick={onMenuItemSelected}
+      {...props}
     />
   );
 }

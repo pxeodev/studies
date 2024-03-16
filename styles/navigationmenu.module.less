@@ -19,6 +19,7 @@
       font-size: 12px !important;
       line-height: 22px !important;
       color: #8C8C8C;
+      cursor: pointer;
     }
   }
 
@@ -27,7 +28,7 @@
   }
 
   :global(.ant-menu-submenu-arrow) {
-    display: none;
+    color: @cr-gray-7 !important;
   }
 
   :global([role=menuitem]) {
@@ -118,12 +119,16 @@
   }
 }
 
-@media (max-width: @screen-md) {
+@media (max-width: @screen-lg) {
   .menu {
     max-height: unset;
 
     :global(.ant-menu-submenu-title) {
       text-align: center;
+    }
+
+    :global(.ant-menu-submenu-arrow) {
+      display: none;
     }
   }
 }
