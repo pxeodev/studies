@@ -11,6 +11,7 @@ import UpTag from '../components/UpTag';
 import DownTag from '../components/DownTag';
 import HodlTag from '../components/HodlTag';
 import prisma from '../lib/prisma.mjs'
+import statusStyles from '../styles/status.module.less'
 
 const { Content } = Layout;
 
@@ -49,6 +50,7 @@ export default function Status({ dataSource }) {
       <Content>
         <Table
           rowKey="title"
+          className={statusStyles.table}
           columns={[
             {
               'title': 'Service name',
@@ -121,7 +123,9 @@ export async function getServerSideProps() {
 
   const dataSource = [
     {
-      name: 'Websocket'
+      name: 'Websocket',
+      status: 0,
+      label: 'Connected & Updated'
     },
     {
       name: 'Database',
