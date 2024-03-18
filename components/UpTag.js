@@ -6,9 +6,9 @@ import signalStyles from '../styles/signalTag.module.less'
 import { useContext } from 'react'
 import { DarkModeContext } from '../layouts/screener.js'
 
-const UpTag = ({ className = '' }) => {
+const UpTag = ({ className = '', label = 'UP' }) => {
   const [darkMode] = useContext(DarkModeContext);
-  return <Tag className={classnames(signalStyles.tag, className)} color={variableStyles.successColor} style={{ color: darkMode ? variableStyles.black : variableStyles.white }}>UP</Tag>
+  return <Tag className={classnames(signalStyles.tag, className)} color={variableStyles.successColor} style={{ color: darkMode ? variableStyles.black : variableStyles.white }}>{label}</Tag>
 }
 
 export default UpTag
