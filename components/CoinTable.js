@@ -189,7 +189,7 @@ const CoinTable = ({
     let max = parseInt(trendLengthMax)
     max = isFinite(max) ? max : Number.POSITIVE_INFINITY
 
-    if (coinData.dailySuperSuperTrendStreak) {
+    if (coinData.dailySuperSuperTrendStreak !== undefined) {
       return coinData.dailySuperSuperTrendStreak >= min && coinData.dailySuperSuperTrendStreak <= max
     } else {
       return true
