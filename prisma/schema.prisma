@@ -14,6 +14,7 @@ model Coin {
   symbol                       String
   name                         String
   categories                   String[]
+  coingeckoCategories          String[]
   ath                          Decimal
   atl                          Decimal
   description                  String?

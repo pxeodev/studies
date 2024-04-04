@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 import prisma from '../lib/prisma.mjs'
+import { overrideCoinCategories } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
 import retry from '../utils/retry.mjs';
 
@@ -17,6 +18,7 @@ const fetchCoinData = async (url, coin, page) => {
   let launch_date_start
   let [
     is404,
+    categories,
     launch_roi_usd,
     launch_roi_btc,
     launch_roi_eth,
@@ -26,6 +28,14 @@ const fetchCoinData = async (url, coin, page) => {
     data.push(is404)
 
     if (!is404) {
+      const tagsList = Array.from(document.querySelectorAll('h4'))?.find(node => node.innerText === 'Tags')?.nextSibling
+      if (tagsList) {
+        const tags = Array.from(tagsList.querySelectorAll('li') || []).map(x => x.innerText)
+        data.push(tags)
+      } else {
+        data.push([])
+      }
+
       const roiSection = Array.from(document.querySelectorAll('span'))?.find((span => span.innerText.includes("ROI since ICO")))?.nextSibling
       if (roiSection) {
         const currencySections = Array.from(roiSection.querySelectorAll('div'))
@@ -41,6 +51,8 @@ const fetchCoinData = async (url, coin, page) => {
     }
     return data
   });
+
+  categories = await overrideCoinCategories(coin.name, coin.symbol, categories)
 
   if (is404) {
     console.log(coin, 'not found on dropstab')
@@ -70,6 +82,7 @@ const fetchCoinData = async (url, coin, page) => {
       launch_roi_usd,
       launch_roi_btc,
       launch_roi_eth,
+      categories
     }
   })
 }

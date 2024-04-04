@@ -8,12 +8,18 @@ import { gql } from '@urql/core'
 import prisma from '../lib/prisma.mjs'
 import strapi from './strapi.js'
 
-let overrides
+let overrides, aliases
 
 export async function getCategoryOverrides() {
   overrides ||= await csv().fromFile('lib/CategoryOverride.csv');
 
   return overrides
+}
+
+export async function getCategoryAliases() {
+  aliases ||= await csv().fromFile('lib/CategoryAliases.csv');
+
+  return aliases
 }
 
 export async function overrideCoinCategories(name, symbol, categories) {
@@ -35,6 +41,17 @@ export async function overrideCoinCategories(name, symbol, categories) {
   return categories
 }
 
+export async function aliasCoinCategories(categories) {
+  await getCategoryAliases();
+
+  const aliasedCategories = categories.map((category) => {
+    const matchingAlias = aliases.find(alias => alias.CategoryNameCoingecko === category)
+    return matchingAlias ? matchingAlias.CategoryNameDropstab : category
+  })
+
+  return aliasedCategories
+}
+
 export async function getCategories() {
   const { data } = await strapi.query(
     gql`
@@ -54,9 +71,16 @@ export async function getCategories() {
   const categoryDescriptions = data.categories.data
   let categories = await prisma.coin.findMany({
     select: {
-      categories: true
+      categories: true,
+      coingeckoCategories: true,
     }
   })
+  for (const coin of categories) {
+    const allCategories = [...coin.categories, ...coin.coingeckoCategories]
+    delete coin.coingeckoCategories
+    coin.categories = allCategories
+  }
+
   categories = flow(
     flatMap('categories'),
     uniq
