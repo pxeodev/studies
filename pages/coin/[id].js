@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Prisma } from '@prisma/client'
 import pick from 'lodash/pick';
+import uniq from 'lodash/uniq';
 import { useCallback, useEffect, useState, useContext, useRef, useMemo } from 'react';
 import classnames from 'classnames';
 
@@ -372,11 +373,14 @@ export async function getStaticProps({ params }) {
     'launch_roi_usd',
     'launch_roi_eth',
     'launch_roi_btc',
-    'currentPrice'
+    'currentPrice',
+    'coingeckoCategories',
   ])
+  const categories = uniq([...coinData.categories, ...coinData.coingeckoCategories])
   return {
     props: {
       ...coinData,
+      categories,
       ath: Number(coinData.ath),
       atl: Number(coinData.atl),
       fullyDilutedValuation: Number(coinData.fullyDilutedValuation),

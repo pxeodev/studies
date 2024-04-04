@@ -149,9 +149,18 @@ export async function getStaticProps({ params }) {
       derivatives: true,
     },
     where: {
-      categories: {
-        hasSome: [category.name]
-      }
+      OR: [
+        {
+          categories: {
+            hasSome: [category.name]
+          }
+        },
+        {
+          coingeckoCategories: {
+            hasSome: [category.name]
+          }
+        }
+      ]
     }
   }
   let coinsData
