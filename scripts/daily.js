@@ -319,7 +319,7 @@ setTimeout(async () => {
   await fetchDerivativesData();
   // await fetchLunrData();
   if (process.env.NODE_ENV === 'production') {
-    await axios.post('https://coinrotator-realtime-2.onrender.com/new-trends')
+    await axios.post('https://coinrotator-realtime-fra.onrender.com/new-trends')
     setTimeout(async () => {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
       await createJob({ serviceId: 'crn-c8q7r2pg7hp6tkba3sj0', startCommand: 'node dist/bot.mjs' })
