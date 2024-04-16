@@ -155,6 +155,7 @@ export async function getStaticProps() {
       marketCap: true,
       marketCapRank: true,
       categories: true,
+      coingeckoCategories: true,
     }
   }
   let { data } = await strapi.query(
@@ -188,6 +189,18 @@ export async function getStaticProps() {
     coin.image = coin.images.small
     delete coin.images
     for (const category of coin.categories) {
+      const categoryIndex = categoryData.findIndex(cat => cat.name === category)
+      if (categoryIndex === -1) {
+        categoryData.push({
+          name: category,
+          slug: slugify(category),
+          coins: [coin]
+        })
+      } else {
+        categoryData[categoryIndex].coins.push(coin)
+      }
+    }
+    for (const category of coin.coingeckoCategories) {
       const categoryIndex = categoryData.findIndex(cat => cat.name === category)
       if (categoryIndex === -1) {
         categoryData.push({
