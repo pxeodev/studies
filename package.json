@@ -19,7 +19,7 @@
     "bot": "swc scripts/bot.js -o dist/bot.mjs",
     "trendHistory": "swc scripts/trendHistory.js -o dist/trendHistory.mjs",
     "ohlcToSupertrendMigration": "swc scripts/ohlcToSupertrendMigration.js -o dist/ohlcToSupertrendMigration.mjs",
-    "fixWeeklyTrends": "swc scripts/fixWeeklyTrends.js -o dist/fixWeeklyTrends.mjs",
+    "fixTrends": "swc scripts/fixTrends.js -o dist/fixTrends.mjs",
     "start": "next start",
     "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs",
     "debbb": "node dist/daily.mjs"
