@@ -179,7 +179,7 @@ export async function getServerSideProps(ctx) {
       categories: true,
       images: true,
       marketCap: true,
-      categories: true
+      coingeckoCategories: true
     }
   })
   const alertsToDelete = []
@@ -190,7 +190,7 @@ export async function getServerSideProps(ctx) {
       continue;
     }
     alert.name = coin.name
-    alert.categories = coin.categories
+    alert.categories = [...coin.categories, ...coin.coingeckoCategories]
     alert.image = coin.images.small
     alert.id = coin.id
     alert.marketCap = coin.marketCap

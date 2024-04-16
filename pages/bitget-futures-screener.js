@@ -72,6 +72,7 @@ export async function getStaticProps() {
       marketCap: true,
       marketCapRank: true,
       categories: true,
+      coingeckoCategories: true,
       tickers: true,
       derivatives: true,
     }
@@ -121,6 +122,7 @@ export async function getStaticProps() {
       'marketCapRank',
       'derivatives',
       'categories',
+      'coingeckoCategories',
       'exchanges'
     ])
 
