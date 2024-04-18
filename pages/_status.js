@@ -3,7 +3,6 @@ import io from 'socket.io-client'
 import { useState } from 'react'
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 import isToday from 'date-fns/isToday/index.js'
-import isYesterday from 'date-fns/isYesterday/index.js'
 
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
@@ -101,7 +100,7 @@ export async function getServerSideProps() {
       take: 1
     })
     if (isToday(lastCandle.closeTime)) {
-      if (isYesterday(lastTrend.date)) {
+      if (isToday(lastTrend.date)) {
         databaseLabel = 'Connected & Updated'
         databaseStatus = 0
       } else {
