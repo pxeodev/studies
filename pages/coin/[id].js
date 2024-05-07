@@ -330,12 +330,15 @@ export async function getStaticProps({ params }) {
     }
   })
   let similarCoins = []
-  if (coinData.categories.length) {
+  if (coinData.categories.length || coinData.coingeckoCategories.length) {
+    const safeCategories = coinData.categories.length ? coinData.categories : ['xxxxxxxxxxxxx']
+    const safeCoingeckoCategories = coinData.coingeckoCategories.length ? coinData.coingeckoCategories : ['xxxxxxxxxxxxx']
     similarCoins = await prisma.$queryRaw`
       SELECT id, images, name, count(*)
       FROM "Coin",
-      unnest(array[${Prisma.join(coinData.categories)}]) unnested_categories
-      WHERE categories @> array[unnested_categories]
+      unnest(array[${Prisma.join(safeCategories)}]) unnested_categories,
+      unnest(array[${Prisma.join(safeCoingeckoCategories)}]) unnested_coingecko_categories
+      WHERE (categories @> array[unnested_categories] OR "coingeckoCategories" @> array[unnested_coingecko_categories])
       AND id != ${coinData.id}
       GROUP BY id
       ORDER BY 4 desc, 1
