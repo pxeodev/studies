@@ -498,7 +498,7 @@ const CoinTable = ({
   if (showOpenInterest) {
     columns.push(
       {
-        title: 'Open Interest (4h)',
+        title: 'Open Interest (1h)',
         dataIndex: 'openInterest',
         width: 170,
         className: coinTableStyles.unclickableCell,
@@ -528,7 +528,7 @@ const CoinTable = ({
   if (showFundingRate) {
     columns.push(
       {
-        title: 'Funding Rate (4h)',
+        title: 'Funding Rate (1h)',
         dataIndex: 'fundingRate',
         width: 120,
         sorter: (a, b) => Number(a.fundingRate) - Number(b.fundingRate),

@@ -16,10 +16,11 @@ const fetchCoinalyze = async () => {
   const databaseExchangeNames = databaseExchanges.map(exchange => exchange.name);
   let supportedExchanges = await getSupportedExchanges()
   supportedExchanges = supportedExchanges.data.filter(exchange => databaseExchangeNames.includes(exchange.name));
-  const supporteExchangeCodes = supportedExchanges.map(exchange => exchange.code);
+  const supportedExchangeCodes = supportedExchanges.map(exchange => exchange.code);
 
   let supportedFutureMarkets = await getSupportedFutureMarkets();
-  supportedFutureMarkets = supportedFutureMarkets.data.filter(market => market.is_perpetual && supporteExchangeCodes.includes(market.exchange));
+  supportedFutureMarkets = supportedFutureMarkets.data.filter(market => market.is_perpetual && supportedExchangeCodes.includes(market.exchange));
+  const supportedFutureSymbols = supportedFutureMarkets.map(market => market.base_asset.toLowerCase());
 
   const databaseCoins = await prisma.coin.findMany({
     select: {
@@ -28,7 +29,7 @@ const fetchCoinalyze = async () => {
     },
     where: {
       symbol: {
-        in: supportedFutureMarkets.map(market => market.base_asset.toLowerCase())
+        in: supportedFutureSymbols
       }
     }
   });
@@ -60,7 +61,7 @@ const fetchCoinalyze = async () => {
         coinId: coin.id,
         date: now,
         time: now,
-        timeframe: '4h',
+        timeframe: '1h',
         openInterest,
         fundingRate,
         futuresVolume24h,
