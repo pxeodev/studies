@@ -49,12 +49,12 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
-  let openInterest, openInterestChangePercent, fundingRate, futuresVolume24h
+  let openInterest, openInterestChangePercent1h, fundingRate, futuresVolume24h
   if (liveCoinData) {
     const matchingCoin = liveCoinData.find((liveCoin) => liveCoin.id === coin.id)
     if (matchingCoin) {
       openInterest = matchingCoin.openInterest
-      openInterestChangePercent = round(matchingCoin.openInterestChangePercent, 2)
+      openInterestChangePercent1h = round(matchingCoin.openInterestChangePercent1h, 2)
       fundingRate = matchingCoin.fundingRate
       futuresVolume24h = matchingCoin.futuresVolume24h
     }
@@ -216,19 +216,19 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
     { openInterest ? (
       <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
           <div className={coinStyles.data}>
-            <Title level={3} className={coinStyles.label}>Open Interest (4h)</Title>
+            <Title level={3} className={coinStyles.label}>Open Interest (1h)</Title>
             <span className={coinStyles.value}>{numberFormatter.format(openInterest)}</span>
-            <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent < 0})}>
+            <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent1h < 0})}>
               &nbsp;(
-              {openInterestChangePercent > 0 ? '+' : ''}
-              {openInterestChangePercent}%
+              {openInterestChangePercent1h > 0 ? '+' : ''}
+              {openInterestChangePercent1h}%
               )
             </span>
           </div>
           {
             fundingRate ? (
               <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Funding Rate (4h)</Title>
+                <Title level={3} className={coinStyles.label}>Funding Rate (1h)</Title>
                 <span className={coinStyles.value}>{numberFormatter.format(fundingRate)}</span>
               </div>
             ) : <></>

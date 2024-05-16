@@ -285,7 +285,7 @@ const CoinTable = ({
       percentageFromATH = round((livePrice / coinData.ath) * 100, 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
-    let openInterest, fundingRate, futuresExchange, futuresVolume, openInterestChangePercent
+    let openInterest, fundingRate, futuresExchange, futuresVolume, openInterestChangePercent1h, openInterestChangePercent24h
     if (liveCoinData) {
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
@@ -293,7 +293,8 @@ const CoinTable = ({
         fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 4) : null
         futuresExchange = exchangeData.find(exchange => exchange.id === matchingCoinData.futuresExchangeId)
         futuresVolume = matchingCoinData.futuresVolume24h
-        openInterestChangePercent = round(matchingCoinData.openInterestChangePercent, 2)
+        openInterestChangePercent1h = round(matchingCoinData.openInterestChangePercent1h, 2)
+        openInterestChangePercent24h = round(matchingCoinData.openInterestChangePercent24h, 2)
       }
     }
     return {
@@ -321,7 +322,8 @@ const CoinTable = ({
       fundingRate,
       futuresExchange,
       futuresVolume,
-      openInterestChangePercent,
+      openInterestChangePercent1h,
+      openInterestChangePercent24h,
     }
   })
 
@@ -508,11 +510,19 @@ const CoinTable = ({
             return (
               <>
                 {numberFormatter.format(openInterest)}
-                {!isNaN(data.openInterestChangePercent) ? (
+                {!isNaN(data.openInterestChangePercent1h) ? (
                   <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestChangePercent < 0 })}>
                     &nbsp;(
-                    {data.openInterestChangePercent > 0 ? '+' : ''}
-                    {data.openInterestChangePercent}%
+                    {data.openInterestChangePercent1h > 0 ? '+' : ''}
+                    {data.openInterestChangePercent1h}%
+                    )
+                  </span>
+                ) : null}
+                {!isNaN(data.openInterestChangePercent24h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestChangePercent24h < 0 })}>
+                    &nbsp;(
+                    {data.openInterestChangePercent24h > 0 ? '+' : ''}
+                    {data.openInterestChangePercent24h}%
                     )
                   </span>
                 ) : null}
