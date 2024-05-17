@@ -53,6 +53,7 @@ const ConnectButton = () => {
 
     addAccount()
   }, [provider, walletAddress])
+  const shortenedWalletAddress = walletAddress && `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
 
   return (
     <Button
@@ -61,7 +62,7 @@ const ConnectButton = () => {
       onClick={connect}
       disabled={disabled}
     >
-      {walletAddress ?? 'Connect'}
+      {walletAddress ? shortenedWalletAddress : 'Connect'}
     </Button>
   )
 }
