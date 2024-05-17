@@ -542,11 +542,11 @@ const CoinTable = ({
           if (openInterestChangePercent1h) {
             return (
               <>
-                {!isNaN(data.openInterestChangePercent1h) ? (
-                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestChangePercent < 0 })}>
+                {!isNaN(openInterestChangePercent1h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestChangePercent1h < 0 })}>
                     &nbsp;(
-                    {data.openInterestChangePercent1h > 0 ? '+' : ''}
-                    {data.openInterestChangePercent1h}%
+                    {openInterestChangePercent1h > 0 ? '+' : ''}
+                    {openInterestChangePercent1h}%
                     )
                   </span>
                 ) : null}
@@ -569,11 +569,11 @@ const CoinTable = ({
           if (openInterestChangePercent24h) {
             return (
               <>
-                {!isNaN(data.openInterestChangePercent24h) ? (
-                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestChangePercent < 0 })}>
+                {!isNaN(openInterestChangePercent24h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: openInterestChangePercent24h < 0 })}>
                     &nbsp;(
-                    {data.openInterestChangePercent24h > 0 ? '+' : ''}
-                    {data.openInterestChangePercent24h}%
+                    {openInterestChangePercent24h > 0 ? '+' : ''}
+                    {openInterestChangePercent24h}%
                     )
                   </span>
                 ) : null}
