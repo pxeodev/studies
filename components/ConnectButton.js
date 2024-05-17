@@ -1,8 +1,8 @@
 import { Button, notification } from 'antd'
 import { useState, useCallback, useContext } from 'react';
 
-import variableStyles from '../styles/variables.module.less'
 import { WalletContext } from '../layouts/screener';
+import connectButtonStyles from '../styles/connectButton.module.less';
 
 const ConnectButton = () => {
   const [walletAddress, setWalletAddress, provider] = useContext(WalletContext)
@@ -45,9 +45,9 @@ const ConnectButton = () => {
   return (
     <Button
       type="primary"
-      style={{ backgroundColor: variableStyles.primaryColor }}
       onClick={connect}
       disabled={disabled}
+      className={connectButtonStyles.button}
     >
       {walletAddress ? shortenedWalletAddress : 'Connect'}
     </Button>
