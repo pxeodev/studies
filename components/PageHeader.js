@@ -1,6 +1,5 @@
 import styles from "../styles/pageheader.module.less"
 import ExplainerModal from './ExplainerModal';
-import ConnectButton from './ConnectButton';
 
 const PageHeader = ({ title, explainer, showSource, prefix, postfix, lastUpdated }) => {
   return (
@@ -16,7 +15,6 @@ const PageHeader = ({ title, explainer, showSource, prefix, postfix, lastUpdated
         />
       )}
       {postfix}
-      <ConnectButton />
     </div>
   );
 }
