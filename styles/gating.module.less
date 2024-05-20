@@ -15,6 +15,16 @@
   }
 }
 
+:root[data-theme="theme-dark"] {
+  .link {
+    color: @white;
+
+    &:hover, &:focus {
+      color: var(--cr-primary-color);
+    }
+  }
+}
+
 .buttonWrapper {
   display: flex;
   justify-content: center;

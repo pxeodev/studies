@@ -6,7 +6,7 @@ import { WalletContext } from '../layouts/screener';
 import connectButtonStyles from '../styles/connectButton.module.less';
 
 const ConnectButton = ({ collapsed }) => {
-  const [walletAddress, setWalletAddress, provider] = useContext(WalletContext)
+  const [walletAddress, , provider] = useContext(WalletContext)
   const [disabled, setDisabled] = useState(false)
 
   const connect = useCallback(async () => {
@@ -34,7 +34,6 @@ const ConnectButton = ({ collapsed }) => {
       try {
         const accounts = await provider.request({ method: 'eth_requestAccounts' })
         wallet = accounts[0]
-        setWalletAddress(wallet)
       } catch(e) {
         notification.error({
           description: "Failed to connect",
@@ -90,7 +89,7 @@ const ConnectButton = ({ collapsed }) => {
     }
 
     await addAccount()
-  }, [provider, walletAddress, setWalletAddress])
+  }, [provider, walletAddress])
   let text
   if (collapsed) {
     if (walletAddress) {
