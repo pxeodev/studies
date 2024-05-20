@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd'
 import Logo from './Logo'
 import Search from './Search'
 import NavigationModal from './NavigationModal'
+import ConnectButton from './ConnectButton'
 
 import headerStyles from '../styles/header.module.less'
 
@@ -17,6 +18,11 @@ const Header = ({ categories, screens, topCategories }) => {
       className: headerStyles.logo,
       key: 'logo',
       'data-id': 'logo'
+    },
+    {
+      key: 'connect',
+      className: headerStyles.connect,
+      label: <ConnectButton collapsed />
     },
     {
       key: 'search',

@@ -6,23 +6,21 @@
   position: static;
   width: 100%;
   z-index: 1;
-  height: 60px !important;
+  height: 52px !important;
 
   ul {
     background: var(--cr-primary-bg);
     color: var(--cr-primary-text);
     border-bottom: 1px solid var(--cr-primary-border) !important;
-    height: 60px;
+    height: 52px;
+    display: flex;
     li:first-child {
       flex-grow: 1;
-      width: calc(100% - 80px);
     }
     li:nth-child(2) {
       padding-left: 0 !important;
-      width: 28px;
     }
     li:nth-child(3) {
-      width: 50px;
       vertical-align: 1px !important;
     }
   }
@@ -31,6 +29,7 @@
 .logo {
   padding: 0 24px !important;
   flex-grow: 1;
+  position: relative;
 
   &:hover {
     text-decoration: none;
@@ -45,18 +44,19 @@
 .search {
   margin-left: auto;
   padding-right: 0 !important;
-
-  @media (max-width: @screen-sm) {
-    padding-left: 0 !important;
-  }
+  padding-left: 8px !important;
 }
 
-.search, .navigation {
+.search, .navigation, .connect {
   display: inline-flex !important;
   align-items: center !important;
   user-select: none;
   vertical-align: inherit !important;
-  height: 60px !important;
+  height: 52px !important;
+}
+
+.connect {
+  padding-right: 0 !important;
 }
 
 .navigation {
@@ -64,7 +64,7 @@
   padding-right: 12px !important;
 }
 
-.navigation::after, .search::after {
+.navigation::after, .search::after, .connect::after {
   display: none;
 }
 
@@ -101,8 +101,7 @@
   img[alt="moon"] {
     background-color: @geekblue-1;
   }
- }
-
+}
 
 @media (max-width: @screen-md) {
   .darkModeSwitch {

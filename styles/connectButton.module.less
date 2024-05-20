@@ -1,7 +1,7 @@
 .button {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  justify-content: space-between !important;
   height: 40px !important;
   width: 210px !important;
   padding: 0 !important;
@@ -11,11 +11,29 @@
   &.connected {
     pointer-events: none;
   }
+
+  &.collapsed {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px;
+    padding: 4px !important;
+
+    .iconWrapper {
+      border-left: 0 !important;
+      width: 20px !important;
+      height: 20px;
+    }
+
+    &.connected {
+      width: unset !important;
+    }
+  }
 }
 
 .text {
   width: 100%;
   text-align: center;
+  flex-grow: 1;
 }
 
 .button:hover {

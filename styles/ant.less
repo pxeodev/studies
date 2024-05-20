@@ -75,10 +75,17 @@ body {
 
 [data-id="logo"] .ant-menu-title-content {
   display: inline-block;
-  line-height: 64px;
+  line-height: 60px;
 
   span:first-child {
     top: 4px;
+  }
+}
+
+@media (max-width: @screen-lg) {
+  [data-id="logo"] .ant-menu-title-content {
+    line-height: 52px;
+    position: absolute;
   }
 }
 
