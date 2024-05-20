@@ -20,26 +20,75 @@ const ConnectButton = ({ collapsed }) => {
       return
     }
     setDisabled(true)
+
     const addAccount = async () => {
       try {
         const accounts = await provider.request({ method: 'eth_requestAccounts' })
-        if (accounts) {
-          notification.success({
-            description: "Connected",
-          })
-        }
-        setWalletAddress(accounts[0])
+        const walletAddress = accounts[0]
+        setWalletAddress(walletAddress)
       } catch(e) {
         notification.error({
           description: "Failed to connect",
         })
         throw(e)
       } finally {
-        setDisabled(false)
+        try {
+          await window.ethereum.request({
+            "method": "wallet_switchEthereumChain",
+            "params": [
+              {
+                "chainId": "0x2105"
+              }
+            ]
+          })
+          if (walletAddress) {
+            notification.success({
+              description: "Connected",
+            })
+          }
+        } catch(e) {
+          if (e.code === 4902) {
+            try {
+              await window.ethereum.request({
+                "method": "wallet_addEthereumChain",
+                "params": [
+                  {
+                    "chainId": "0x2105",
+                    "rpcUrls": ["https://mainnet.base.org"],
+                    "chainName": "Base",
+                    "blockExplorerUrls": ["https://explorer.base.org"],
+                    "nativeCurrency": {
+                      "name": "Ethereum",
+                      "symbol": "ETH",
+                      "decimals": 18
+                    }
+                  }
+                ]
+              })
+              if (walletAddress) {
+                notification.success({
+                  description: "Connected",
+                })
+              }
+            } catch(e) {
+              console.error(e)
+              notification.error({
+                description: "Failed to add Base chain, please switch manually: https://docs.base.org/docs/using-base/",
+              })
+            }
+          } else {
+            console.error(e)
+            notification.error({
+              description: "Failed to switch to Base chain, please switch manually",
+            })
+          }
+        } finally {
+          setDisabled(false)
+        }
       }
     }
 
-    addAccount()
+    await addAccount()
   }, [provider, walletAddress, setWalletAddress])
   let text
   if (collapsed) {
