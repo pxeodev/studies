@@ -24,9 +24,13 @@ export const NotificationContext = createContext(null);
 
 const queryClient = new QueryClient()
 const projectId = '6789ab4356c448d7b46d927fc92f6a96'
+let url = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL
+if (process.env.VERCEL_ENV === 'preview') {
+  url = `https://${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}`
+}
 const metadata = {
   name: 'CoinRotator',
-  url: 'https://coinrotator.app', // origin must match your domain & subdomain
+  url,
   icons: ['https://coinrotator.app/coin.svg']
 }
 const chains = [mainnet, base]
