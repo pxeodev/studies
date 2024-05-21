@@ -20,17 +20,16 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import slugify from 'slugify'
-import { useContext } from 'react'
 
 import styles from "../styles/navigationmenu.module.less"
 import { currentNarratives } from 'coinrotator-utils/variables.mjs'
 import useBreakPoint from '../hooks/useBreakPoint'
-import { WalletContext } from '../layouts/screener'
+import useKeyPass from '../hooks/useKeyPass'
 
 const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected }) => {
   const router = useRouter()
   const screens = useBreakPoint()
-  const [, , , hasKeyPass] = useContext(WalletContext)
+  let hasKeyPass = useKeyPass()
   let menuItems = [
     {
       label: 'Screener Tools',

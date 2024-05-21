@@ -146,6 +146,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
       </Card>
       <Modal
         open={filterModalVisible}
+        zIndex={900}
         title={<>
           <span>Customize</span>
           <ExplainerModal
