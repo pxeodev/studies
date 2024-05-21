@@ -214,7 +214,7 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
   ]
   if (hasKeyPass) {
     menuItems.unshift({
-      label: `🏆 KEY PASS 🏆`,
+      label: `🍄 KEY PASS 🍄`,
       key: 'keypass',
       children: [
         {
