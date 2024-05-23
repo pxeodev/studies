@@ -2,7 +2,7 @@ import axios from 'axios';
 import axiosRetry, { exponentialDelay } from 'axios-retry';
 import * as AxiosLogger from 'axios-logger'
 
-const KEY_PASS_CONTRACT = '0x486bda3013ff013c0dae9abb2c8d234cad9c5f7b';
+const KEY_PASS_CONTRACT = '0xdb20e21c95f9b3b1ffb98e765b6664aaf4d6aef6';
 
 const alchemy = axios.create({
   baseURL: 'https://base-mainnet.g.alchemy.com/v2/TbFuq5tQAa5kedmODXaxUO0diDWcPDgf/',
