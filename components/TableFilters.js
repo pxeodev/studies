@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import compact from 'lodash/compact'
+import { useRouter } from 'next/router'
 
 import indexStyles from '../styles/index.module.less'
 import coinStyles from '../styles/coin.module.less'
@@ -25,6 +26,17 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
   const screens = useBreakPoint();
   const [filterModalVisible, setFilterModalVisible] = useState(false)
   const [activeTab, setActiveTab] = useState('Filters')
+  const router = useRouter()
+  useEffect(() => {
+    const path = router.asPath
+    const afterHash = path.split('#')[1]
+    if (afterHash.startsWith('customize')) {
+      setFilterModalVisible(true)
+    }
+    if (afterHash === 'customize-advanced-filters') {
+      setActiveTab(TABS.advanced)
+    }
+  }, [router.asPath])
 
   const isHoverable = useIsHoverable();
   const inputRef = useRef(null)
