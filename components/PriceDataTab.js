@@ -14,6 +14,7 @@ import variableStyles from '../styles/variables.module.less'
 import { DarkModeContext } from '../layouts/screener.js';
 import { cleanupCoinLink } from "../utils/cleanupLinks";
 import { getImageURL } from "../utils/minifyImageURL.js";
+import useKeyPass from "../hooks/useKeyPass.js";
 
 const { Title } = Typography;
 
@@ -44,13 +45,14 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
   useEffect(() => {
     setShowChart(true)
   }, [])
+  const hasKeyPass = useKeyPass()
   const notation = screens.sm ? 'standard' : 'compact'
   let circulatingSupplyPercentage
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
   let openInterest, openInterestChangePercent1h, fundingRate, futuresVolume24h
-  if (liveCoinData) {
+  if (hasKeyPass && liveCoinData) {
     const matchingCoin = liveCoinData.find((liveCoin) => liveCoin.id === coin.id)
     if (matchingCoin) {
       openInterest = matchingCoin.openInterest
