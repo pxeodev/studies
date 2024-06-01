@@ -155,17 +155,22 @@ export default function FourHourAlerts({ alerts, appData, pageData }) {
 }
 
 export async function getServerSideProps(ctx) {
+  console.time('1')
   const appData = await globalData();
+  console.timeEnd('1')
+  console.time('2')
   const alerts = await prisma.FourHourTrends.findMany({
     take: 1000,
     orderBy: {
       timestamp: 'desc'
     },
   });
+  console.timeEnd('2')
   let coinSymbols = new Set()
   for (const alert of alerts) {
     coinSymbols.add(alert.coinsymbol.toLowerCase())
   }
+  console.time('3')
   let coins = await prisma.Coin.findMany({
     where: {
       symbol: {
@@ -182,6 +187,7 @@ export async function getServerSideProps(ctx) {
       coingeckoCategories: true
     }
   })
+  console.timeEnd('3')
   const alertsToDelete = []
   for (const [i, alert] of alerts.entries()) {
     const coin = coins.find(coin => coin.symbol.toLowerCase() === alert.coinsymbol.toLowerCase())
@@ -210,6 +216,7 @@ export async function getServerSideProps(ctx) {
   for (const i of alertsToDelete.reverse()) {
     alerts.splice(i, 1)
   }
+  console.time('4')
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {
@@ -229,6 +236,7 @@ export async function getServerSideProps(ctx) {
       slug: '4h-alerts',
     }
   )
+  console.timeEnd('4')
   data = data.pages.data[0].attributes
 
   ctx.res.setHeader(
