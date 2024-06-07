@@ -21,6 +21,7 @@ import coinTableStyles from '../styles/table.module.less';
 
 const CoinTable = ({
     coinsData,
+    hiddenCoins,
     exchangeData,
     marketCapMin,
     marketCapMax,
@@ -181,7 +182,8 @@ const CoinTable = ({
            matchesPortfolio &&
            matchesCategory &&
            matchesExchanges &&
-           matchesDerivatives
+           matchesDerivatives &&
+           !hiddenCoins.includes(coinData.slug)
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
     let min = parseInt(trendLengthMin)

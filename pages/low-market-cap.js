@@ -16,7 +16,7 @@ import useTableFilters from '../hooks/useTableFilters';
 import prisma from "../lib/prisma.mjs";
 import strapi from '../utils/strapi';
 
-export default function LowMarketCap({ coinsData, appData, exchangeData, pageData }) {
+export default function LowMarketCap({ coinsData, hiddenCoins, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   return (
     <>
@@ -39,6 +39,7 @@ export default function LowMarketCap({ coinsData, appData, exchangeData, pageDat
         <Row className={indexStyles.tableRow}>
           <CoinTable
             coinsData={coinsData}
+            hiddenCoins={hiddenCoins}
             exchangeData={exchangeData}
             marketCapMax={formState.marketCapMax}
             marketCapMin={formState.marketCapMin}
@@ -102,6 +103,20 @@ export async function getStaticProps() {
     }
   )
   data = data.pages.data[0].attributes
+  let hiddenCoins = await strapi.query(
+    gql`
+      query Coin {
+        coins(filters: {hideOnTables: {eq: true}}) {
+          data {
+            attributes {
+              slug
+            }
+          }
+        }
+      }
+    `,
+  )
+  hiddenCoins = data.coins.data.map(coin => coin.attributes.slug)
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
@@ -132,6 +147,7 @@ export async function getStaticProps() {
   return {
     props: {
       coinsData,
+      hiddenCoins,
       exchangeData,
       appData,
       pageData: data
