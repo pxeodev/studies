@@ -66,7 +66,7 @@ export async function getStaticProps() {
       }
     `,
   )
-  hiddenCoins = data.coins.data.map(coin => coin.attributes.slug)
+  hiddenCoins = hiddenCoins.data.coins.data.map(coin => coin.attributes.slug)
   let coinsData
   if (process.env.NODE_ENV === 'development') {
     coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
