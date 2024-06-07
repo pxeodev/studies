@@ -2,6 +2,7 @@ import { Layout, Row } from 'antd';
 import Head from 'next/head'
 import { useState, useCallback, useEffect } from 'react';
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
+import { gql } from '@urql/core'
 
 import baseStyles from '../../styles/base.module.less'
 import indexStyles from '../../styles/index.module.less'
@@ -22,8 +23,9 @@ import { getCategories } from '../../utils/categories.mjs'
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../../utils/minifyImageURL';
 import useSocketStore from '../../hooks/useSocketStore';
+import strapi from '../../utils/strapi';
 
-export default function Category({ coinsData, appData, exchangeData, category, currentUrl }) {
+export default function Category({ coinsData, hiddenCoins, appData, exchangeData, category, currentUrl }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)
   const socket = useSocketStore(state => state.socket)
   const [trends, setTrends] = useState(null)
@@ -101,6 +103,7 @@ export default function Category({ coinsData, appData, exchangeData, category, c
         <Row className={indexStyles.tableRow}>
           <CoinTable
             coinsData={coinsData}
+            hiddenCoins={hiddenCoins}
             exchangeData={exchangeData}
             marketCapMax={formState.marketCapMax}
             marketCapMin={formState.marketCapMin}
@@ -178,10 +181,25 @@ export async function getStaticProps({ params }) {
 
     return coinData
   })
+  let hiddenCoins = await strapi.query(
+    gql`
+      query Coin {
+        coins(filters: {hideOnTables: {eq: true}}) {
+          data {
+            attributes {
+              slug
+            }
+          }
+        }
+      }
+    `,
+  )
+  hiddenCoins = hiddenCoins.data.coins.data.map(coin => coin.attributes.slug)
   const exchangeData = await prisma.exchange.findMany()
   return {
     props: {
       coinsData,
+      hiddenCoins,
       exchangeData,
       appData,
       category
