@@ -596,6 +596,17 @@ const CoinTable = ({
         width: 120,
         sorter: (a, b) => Number(a.fundingRate) - Number(b.fundingRate),
         className: coinTableStyles.unclickableCell,
+        render: (fundingRate) => {
+          if (fundingRate) {
+            return (
+              <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: fundingRate > 0 })}>
+                {fundingRate > 0 ? '+' : ''}
+              </span>
+            )
+          } else {
+            return null
+          }
+        }
       }
     )
   }
