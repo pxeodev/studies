@@ -285,7 +285,7 @@ const CoinTable = ({
     let percentageFromATH, percentageFromATL
     const livePrice = prices[coinData.symbol]
     if (livePrice) {
-      percentageFromATH = round((livePrice / coinData.ath) * 100, 2) + '%'
+      percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
     let openInterest, fundingRate, futuresExchange, futuresVolume, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap

@@ -36,7 +36,7 @@ const Chart = memo(function ChartFunc({ symbol, hideToolbar, darkMode }) {
 const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
   let percentageFromATH, percentageFromATL
   if (price) {
-    percentageFromATH = round((price / coin.ath) * 100, 2)
+    percentageFromATH = round(((coin.ath - price) / coin.ath) * 100, 2)
     percentageFromATL = round((price / coin.atl) * 100, 2)
   }
   const [darkMode] = useContext(DarkModeContext);
