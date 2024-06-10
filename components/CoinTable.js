@@ -197,16 +197,16 @@ const CoinTable = ({
 
   let displayedCoinData = coinsData.map((coinData) => {
     if (trends) {
-      const dailyTrend = trends.daily[coinData.id]?.supersuperTrend
-      if (dailyTrend) {
-        coinData.dailySuperSuperTrend = dailyTrend.trend
-        coinData.dailySuperSuperTrendStreak = dailyTrend.streak
-      }
-      const weeklyTrend = trends.weekly[coinData.id]?.supersuperTrend
-      if (weeklyTrend) {
-        coinData.weeklySuperSuperTrend = weeklyTrend.trend
-        coinData.weeklySuperSuperTrendStreak = weeklyTrend.streak
-      }
+      // const dailyTrend = trends.daily[coinData.id]?.supersuperTrend
+      // if (dailyTrend) {
+        coinData.dailySuperSuperTrend = 'UP'
+        coinData.dailySuperSuperTrendStreak = 2
+      // }
+      // const weeklyTrend = trends.weekly[coinData.id]?.supersuperTrend
+      // if (weeklyTrend) {
+        coinData.weeklySuperSuperTrend = 'UP'
+        coinData.weeklySuperSuperTrendStreak = 2
+      // }
     }
     return coinData
   })
@@ -601,6 +601,7 @@ const CoinTable = ({
             return (
               <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: fundingRate > 0 })}>
                 {fundingRate > 0 ? '+' : ''}
+                {fundingRate}
               </span>
             )
           } else {
