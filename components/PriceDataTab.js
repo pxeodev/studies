@@ -231,7 +231,7 @@ const PriceDataTab = ({ coin, screens }) => {
         <AdvancedRealTimeChart
           autosize
           interval="D"
-          symbol={`${coin.symbol.toUpperCase()}USDT`}
+          symbol={coin.chart}
           hide_side_toolbar={!screens.sm}
           container_id={coinStyles.chart}
           theme={darkMode ? "dark" : "light"}

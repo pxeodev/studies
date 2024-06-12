@@ -26,6 +26,7 @@ export async function getDescriptionByCoin(coin) {
               symbol
               description
               isArticle
+              TVChart
             }
           }
         }
@@ -46,5 +47,5 @@ export async function getDescriptionByCoin(coin) {
   } else {
     description = addTemplateDescription(coin.description, coin)
   }
-  return description;
+  return [description, coinData?.attributes?.TVChart];
 }
