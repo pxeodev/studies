@@ -15,14 +15,11 @@
     height: 60px;
     li:first-child {
       flex-grow: 1;
-      width: calc(100% - 80px);
     }
     li:nth-child(2) {
       padding-left: 0 !important;
-      width: 28px;
     }
     li:nth-child(3) {
-      width: 50px;
       vertical-align: 1px !important;
     }
   }
@@ -51,7 +48,7 @@
   }
 }
 
-.search, .navigation {
+.search, .navigation, .connect {
   display: inline-flex !important;
   align-items: center !important;
   user-select: none;
@@ -59,12 +56,16 @@
   height: 60px !important;
 }
 
+.connect {
+  padding-right: 8px !important;
+}
+
 .navigation {
   padding-left: 8px !important;
   padding-right: 12px !important;
 }
 
-.navigation::after, .search::after {
+.navigation::after, .search::after, .connect::after {
   display: none;
 }
 
