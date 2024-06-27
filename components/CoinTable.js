@@ -618,7 +618,7 @@ const CoinTable = ({
       {
         title: 'OI / 24h Volume',
         dataIndex: 'openInterestByFuturesVolume24h',
-        width: 120,
+        width: 160,
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.openInterestByFuturesVolume24h) - Number(b.openInterestByFuturesVolume24h),
         render: (openInterestByFuturesVolume24h, data) => {
@@ -628,9 +628,9 @@ const CoinTable = ({
                 <>{numberFormatter.format(openInterestByFuturesVolume24h)}</>
                 {data.openInterestByfuturesVolume24hChangePercent24h ? (
                   <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestByfuturesVolume24hChangePercent24h < 0 })}>
-                    (
+                    &nbsp;(
                       {data.openInterestByfuturesVolume24hChangePercent24h > 0 ? '+' : ''}
-                      {data.openInterestByfuturesVolume24hChangePercent24h}%
+                      {round(data.openInterestByfuturesVolume24hChangePercent24h, 2)}%
                     )
                   </span>
                 ) : null}
