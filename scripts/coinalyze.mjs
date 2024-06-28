@@ -2,14 +2,38 @@ import dotenv from 'dotenv';
 import axios from 'axios'
 import startofHour from 'date-fns/startOfHour/index.js';
 import sum from 'lodash/sum.js';
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 import prisma from '../lib/prisma.mjs';
 
 import { getSupportedExchanges, getSupportedFutureMarkets, getOpenInterest, getFundingRate, getVolume24h } from '../lib/coinalyze.mjs';
 
 dotenv.config();
+puppeteer.use(StealthPlugin())
+const CME_SCRAPING_COINS = ['bitcoin', 'ethereum']
+
+let browser, page
+const initializeScraping = async () => {
+  browser = await puppeteer.launch({
+    headless: false,
+    devtools: true,
+    timeout: 1000000
+  })
+  page = await browser.newPage()
+  await page.setViewport({ width: 1200, height: 100080 })
+  await page.setDefaultNavigationTimeout(0);
+}
+
+const scrapeCoinData = async (coinSymbol) => {
+  let openInterest = 0
+  let fundingRate = 0
+  let futuresVolume24h = 0
+  return [openInterest, fundingRate, futuresVolume24h]
+}
 
 const fetchCoinalyze = async () => {
+  await initializeScraping()
   const now = startofHour(new Date());
   const databaseExchanges = await prisma.exchange.findMany({ select: { id: true, name: true } })
   const databaseExchangeNames = databaseExchanges.map(exchange => exchange.name);
@@ -52,6 +76,12 @@ const fetchCoinalyze = async () => {
     fundingRate = sum(fundingRate.map(data => data.fundingRate))
     let futuresVolume24h = data.filter(data => data.futuresVolume24h)
     futuresVolume24h = sum(futuresVolume24h.map(data => data.futuresVolume24h))
+    if (CME_SCRAPING_COINS.includes(coin.id)) {
+      const [scrapedOpenInterest, scrapedFundingRate, scrapedFuturesVolume24h] = await scrapeCoinData(coin.symbol)
+      openInterest += scrapedOpenInterest
+      fundingRate += scrapedFundingRate
+      futuresVolume24h += scrapedFuturesVolume24h
+    }
     await prisma.coin.update({
       where: {
         id: coin.id
