@@ -288,13 +288,12 @@ const CoinTable = ({
       percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
-    let openInterest, fundingRate, futuresExchange, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap
+    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap
     if (liveCoinData) {
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
         openInterest = matchingCoinData.openInterest
         fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 4) : null
-        futuresExchange = exchangeData.find(exchange => exchange.id === matchingCoinData.futuresExchangeId)
         openInterestByFuturesVolume24h = matchingCoinData.openInterestByfuturesVolume24h
         openInterestByfuturesVolume24hChangePercent24h = matchingCoinData.openInterestByfuturesVolume24hChangePercent24h
         if (matchingCoinData.volume24h && coinData.marketCap) {
@@ -332,7 +331,6 @@ const CoinTable = ({
       percentageFromATL,
       openInterest,
       fundingRate,
-      futuresExchange,
       openInterestByFuturesVolume24h,
       openInterestByfuturesVolume24hChangePercent24h,
       openInterestChangePercent1h,
@@ -488,37 +486,6 @@ const CoinTable = ({
         width: 150,
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.percentageFromATL?.slice(0, -1)) - Number(b.percentageFromATL?.slice(0, -1))
-      }
-    )
-  }
-  if (showOpenInterest || showFundingRate || showFuturesVolume) {
-    columns.push(
-      {
-        title: 'Futures Data Source',
-        dataIndex: 'futuresExchange',
-        width: 150,
-        className: coinTableStyles.unclickableCell,
-        render: (futuresExchange, data) => {
-          if (futuresExchange) {
-            return (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={data.futuresExchange.image}
-                  alt={data.futuresExchange.name}
-                  title={data.futuresExchange.name}
-                  loading="lazy"
-                  key={data.futuresExchange.name}
-                  onClick={() => router.push(`/coin/${data.id}?tab=Trade`)}
-                  className={classnames(coinTableStyles.clickableTag, coinTableStyles.image)}
-                />
-                {futuresExchange.name}
-              </>
-            )
-          } else {
-            return null
-          }
-        }
       }
     )
   }
