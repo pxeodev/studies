@@ -153,12 +153,14 @@ const CoinTable = ({
   }, [socket])
   useEffect(() => {
     if (showOpenInterest || showFundingRate || showFuturesVolume || show24hVolumeByMarketCap) {
+      if (socket) {
+        socket.on('new_live_coin_data', fetchLiveCoinData)
+      }
       const cache = JSON.parse(sessionStorage.getItem('live_coin_data'))
       if (cache) {
         setLiveCoinData(cache)
       } else if (socket) {
         fetchLiveCoinData()
-        socket.on('new_live_coin_data', fetchLiveCoinData)
       }
     }
     return () => {
