@@ -68,6 +68,7 @@ const ConnectButton = ({ collapsed }) => {
         title="Connect"
         zIndex={10}
         className={connectButtonStyles.modal}
+        centered
       >
         <p className={connectButtonStyles.modalDescription}>Connect your wallet or login with Telegram in order to access advanced features and/or use your Key Pass.</p>
         <div className={connectButtonStyles.modalButtons}>
