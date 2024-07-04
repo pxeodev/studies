@@ -1,27 +1,21 @@
 import subMinutes from 'date-fns/subMinutes';
 import crypto from 'crypto'
+import pick from 'lodash/pick'
 
 import prisma from '../../lib/prisma.mjs'
 
 const TELEGRAM_LOGIN_SECRET_KEY = Buffer.from(process.env.TELEGRAM_LOGIN_SECRET_KEY, 'utf8')
 const TELEGRAM_LOGIN_IV = Buffer.from(process.env.TELEGRAM_LOGIN_IV, 'utf8')
 
-const onSuccess = (req, res, user) => {
-  // TODO: Set the cookies and redirect to the dashboard
+const onSuccess = (res, user) => {
+  const relevantUserData = pick(user, ['telegramId', 'telegramUserName', 'walletAddress'])
+  const twentyYearsFromNow = new Date();
+  twentyYearsFromNow.setFullYear(twentyYearsFromNow.getFullYear() + 20);
+  res.setHeader('Set-Cookie', `user=${JSON.stringify(relevantUserData)};Expires=${twentyYearsFromNow.toUTCString()};Secure;SameSite=Strict;Path=/;`);
 
-  // Hard to prevent session hijacking, let's not prevent that
-  // But we need to prevent XSS
-  // So perhaps we do need to call a login api every time
-  // is that scalable within Vercel though? -> Check usage
-  // If that's not scalable, we should just store this tg login in session storage and call it a day?
-  // Or should we setup another service for this?
+  res.writeHead(307, { Location: new URL('/', process.env.NEXT_PUBLIC_SITE_URL) });
 
-  // Perhaps this also combines with the scalability of the websocket server
-
-  // Perhaps this is the same research at the end of the day...
-
-  // TODO: Oh yeah, and redirect the user properly. Do this AFTER the research above
-  res.status(200).json({ user })
+  res.end();
 }
 
 const handler = async (req, res) => {
@@ -49,7 +43,7 @@ const handler = async (req, res) => {
     return
   }
 
-  if (Number(dateTime) * 1000 < subMinutes(new Date(), 10).getTime()) {
+  if (Number(dateTime) * 1000 < subMinutes(new Date(), 1).getTime()) {
     res.status(400).send("Bad request")
     return
   }
@@ -61,8 +55,7 @@ const handler = async (req, res) => {
   })
   if (existingUser) {
     if (existingUser.telegramId === telegramId) {
-      onSuccess(req, res, existingUser)
-      return
+      onSuccess(res, existingUser)
     } else {
       res.status(403).json({ ok: false })
       return
@@ -75,8 +68,7 @@ const handler = async (req, res) => {
         telegramUserName
       }
     })
-    onSuccess(req, res, newUser)
-    return
+    onSuccess(res, newUser)
   }
 }
 
