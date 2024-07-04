@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import round from 'lodash/round'
+import isFinite from 'lodash/isFinite'
 import { useHydrated } from "react-hydration-provider";
 import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
 import classnames from 'classnames';
@@ -516,7 +517,7 @@ const CoinTable = ({
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.openInterestChangePercent1h) - Number(b.openInterestChangePercent1h),
         render: (openInterestChangePercent1h) => {
-          if (openInterestChangePercent1h) {
+          if (isFinite(openInterestChangePercent1h)) {
             return (
               <>
                 {!isNaN(openInterestChangePercent1h) ? (
@@ -541,7 +542,7 @@ const CoinTable = ({
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.openInterestChangePercent24h) - Number(b.openInterestChangePercent24h),
         render: (openInterestChangePercent24h) => {
-          if (openInterestChangePercent24h) {
+          if (isFinite(openInterestChangePercent24h)) {
             return (
               <>
                 {!isNaN(openInterestChangePercent24h) ? (
@@ -568,7 +569,7 @@ const CoinTable = ({
         sorter: (a, b) => Number(a.fundingRate) - Number(b.fundingRate),
         className: coinTableStyles.unclickableCell,
         render: (fundingRate) => {
-          if (fundingRate) {
+          if (isFinite(fundingRate)) {
             return (
               <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: fundingRate > 0 })}>
                 {fundingRate > 0 ? '+' : ''}
@@ -591,7 +592,7 @@ const CoinTable = ({
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.openInterestByFuturesVolume24h) - Number(b.openInterestByFuturesVolume24h),
         render: (openInterestByFuturesVolume24h, data) => {
-          if (openInterestByFuturesVolume24h) {
+          if (isFinite(openInterestByFuturesVolume24h)) {
             return (
               <>
                 <>{numberFormatter.format(openInterestByFuturesVolume24h)}</>
