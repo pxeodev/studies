@@ -25,7 +25,8 @@ const handler = async (req, res) => {
   }
   let signature, decryptedData, telegramId, telegramUserName, walletAddress, dateTime
   try {
-    const signature = req.url.split('signature=')[1]
+    signature = req.url.split('signature=')[1]
+    signature = signature.replace(/%20/g, '+').replace(/%3D/g, '=')
     const encryptedData = Buffer.from(signature, 'base64');
     const decipher = crypto.createDecipheriv('aes-256-cbc', TELEGRAM_LOGIN_SECRET_KEY, TELEGRAM_LOGIN_IV)
     decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
