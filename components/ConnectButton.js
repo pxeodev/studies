@@ -74,19 +74,23 @@ const ConnectButton = ({ collapsed }) => {
         className={connectButtonStyles.modal}
         centered
       >
-        <p className={connectButtonStyles.modalDescription}>Connect your wallet or login with Telegram in order to access advanced features and/or use your Key Pass.</p>
+        {finalWalletAddress ? null : (<p className={connectButtonStyles.modalDescription}>Connect your wallet or login with Telegram in order to access advanced features and/or use your Key Pass.</p>)}
         <div className={connectButtonStyles.modalButtons}>
-          <Button
-            type="primary"
-            onClick={nativeConnectOrDisconnect}
-          >
-            {nativeWalletAddress ? `Disconnect Wallet` : `Connect Wallet`}
-          </Button>
-          <Button
-            onClick={telegramConnectOrDisconnect}
-          >
-            {telegramId ? `Disconnect from Telegram` : `Connect Telegram`}
-          </Button>
+          {!telegramWalletAddress && (
+            <Button
+              type="primary"
+              onClick={nativeConnectOrDisconnect}
+            >
+              {nativeWalletAddress ? `Disconnect Wallet` : `Connect Wallet`}
+            </Button>
+          )}
+          {!nativeWalletAddress && (
+            <Button
+              onClick={telegramConnectOrDisconnect}
+            >
+              {telegramId ? `Disconnect from Telegram` : `Connect Telegram`}
+            </Button>
+          )}
         </div>
       </Modal>
     </>
