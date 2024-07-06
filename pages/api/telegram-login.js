@@ -1,11 +1,8 @@
 import subMinutes from 'date-fns/subMinutes';
-import crypto from 'crypto'
 import pick from 'lodash/pick'
 
 import prisma from '../../lib/prisma.mjs'
-
-const TELEGRAM_LOGIN_SECRET_KEY = Buffer.from(process.env.TELEGRAM_LOGIN_SECRET_KEY, 'utf8')
-const TELEGRAM_LOGIN_IV = Buffer.from(process.env.TELEGRAM_LOGIN_IV, 'utf8')
+import decrypt from '../../utils/decrypt.js'
 
 const onSuccess = (res, user) => {
   const relevantUserData = pick(user, ['telegramId', 'telegramUserName', 'walletAddress'])
@@ -27,10 +24,8 @@ const handler = async (req, res) => {
   try {
     signature = req.url.split('signature=')[1]
     signature = signature.replace(/%20/g, '+').replace(/%3D/g, '=')
-    const encryptedData = Buffer.from(signature, 'base64');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', TELEGRAM_LOGIN_SECRET_KEY, TELEGRAM_LOGIN_IV)
-    decryptedData = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
-    decryptedData = decryptedData.toString('utf8')
+    signature = Buffer.from(signature, 'base64').toString()
+    decryptedData = decrypt(signature, process.env.TELEGRAM_LOGIN_SECRET_KEY, process.env.TELEGRAM_LOGIN_IV)
 
     ;([telegramId, telegramUserName, walletAddress, dateTime] = decryptedData.split(':'))
     telegramId = telegramId.split('?')[1]
