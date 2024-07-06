@@ -15,7 +15,7 @@ const ConnectButton = ({ collapsed }) => {
   const [cookies, , removeCookie] = useCookies(['user']);
   let telegramUserName, telegramId, telegramWalletAddress
   if (cookies.user) {
-    telegramUserName = cookies.user.telegramcookies.userName
+    telegramUserName = cookies.user.userName
     telegramId = cookies.user.telegramId
     telegramWalletAddress = cookies.user.walletAddress
   }
