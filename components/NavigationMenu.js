@@ -227,6 +227,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           icon: <a target="_blank" href="https://coinrotator-git-more-data-points-my-team-49a155bf.vercel.app#customize-advanced-filters"><LinkOutlined className={styles.daybreakBlue} /></a>,
           key: 'moredatapoints'
         },
+        {
+          label: 'Telegram Login',
+          icon: <a target="_blank" href="https://coinrotator-git-telegram-login-my-team-49a155bf.vercel.app"><LinkOutlined className={styles.daybreakBlue} /></a>,
+          key: 'telegramlogin'
+        },
       ]
     })
   }
