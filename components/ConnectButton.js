@@ -25,6 +25,7 @@ const ConnectButton = ({ collapsed }) => {
   const nativeConnectOrDisconnect = useCallback(() => {
     if (nativeWalletAddress) {
       nativeDisconnect()
+      setLoginModalVisible(false)
     } else {
       openNativeWalletConnect()
     }
@@ -32,6 +33,7 @@ const ConnectButton = ({ collapsed }) => {
   const telegramConnectOrDisconnect = useCallback(() => {
     if (telegramId) {
       removeCookie('user', { path: '/' })
+      setLoginModalVisible(false)
     } else {
       // TODO: Correct tg bot link
       window.open('https://t.me/CRtesting_bot?start=_','_blank');
