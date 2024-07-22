@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Layout, notification } from 'antd'
 import { createContext, useEffect } from "react"
 import { HydrationProvider, Client } from "react-hydration-provider";
+import { CookiesProvider } from 'react-cookie';
 import io from 'socket.io-client'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
@@ -92,31 +93,33 @@ export default function ScreenerLayout(page, pageProps) {
     <HydrationProvider>
       <DarkModeContext.Provider value={darkMode}>
         <WagmiProvider config={config}>
-          <QueryClientProvider client={queryClient}>
-            <NotificationContext.Provider value={api}>
-              {contextHolder}
-              <Layout className={baseStyles.outerLayout}>
-                <SharedLayout pageProps={pageProps} />
-                <Head>
-                  <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
-                  <meta name="description" key="description" content="A crypto screener spotting high momentum trades using the popular Supertrend. Check CoinRotator each day to ensure you are trading with the trend."/>
-                </Head>
-                <Client>
-                  { screens.lg && <Sider topCategories={topCategories} categories={categories} /> }
-                </Client>
-                <Layout className={baseStyles.innerLayout}>
+          <CookiesProvider defaultSetOptions={{ path: '/' }}>
+            <QueryClientProvider client={queryClient}>
+              <NotificationContext.Provider value={api}>
+                {contextHolder}
+                <Layout className={baseStyles.outerLayout}>
+                  <SharedLayout pageProps={pageProps} />
+                  <Head>
+                    <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
+                    <meta name="description" key="description" content="A crypto screener spotting high momentum trades using the popular Supertrend. Check CoinRotator each day to ensure you are trading with the trend."/>
+                  </Head>
                   <Client>
-                    <Header
-                      categories={categories}
-                      screens={screens}
-                      topCategories={topCategories}
-                    />
+                    { screens.lg && <Sider topCategories={topCategories} categories={categories} /> }
                   </Client>
-                  {page}
+                  <Layout className={baseStyles.innerLayout}>
+                    <Client>
+                      <Header
+                        categories={categories}
+                        screens={screens}
+                        topCategories={topCategories}
+                      />
+                    </Client>
+                    {page}
+                  </Layout>
                 </Layout>
-              </Layout>
-            </NotificationContext.Provider>
-          </QueryClientProvider>
+              </NotificationContext.Provider>
+            </QueryClientProvider>
+          </CookiesProvider>
         </WagmiProvider>
       </DarkModeContext.Provider>
     </HydrationProvider>

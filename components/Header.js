@@ -5,6 +5,7 @@ import Search from './Search'
 import NavigationModal from './NavigationModal'
 
 import headerStyles from '../styles/header.module.less'
+import ConnectButton from './ConnectButton'
 
 const Header = ({ categories, screens, topCategories }) => {
   const { Header: AntHeader } = Layout;
@@ -17,6 +18,11 @@ const Header = ({ categories, screens, topCategories }) => {
       className: headerStyles.logo,
       key: 'logo',
       'data-id': 'logo'
+    },
+    {
+      key: 'connect',
+      className: headerStyles.connect,
+      label: <ConnectButton collapsed />
     },
     {
       key: 'search',
@@ -32,7 +38,7 @@ const Header = ({ categories, screens, topCategories }) => {
 
   return (
     <AntHeader className={headerStyles.header}>
-      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px' }} disabledOverflow />
+      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px', display: 'flex' }} disabledOverflow />
     </AntHeader>
   );
 }
