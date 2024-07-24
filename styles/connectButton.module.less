@@ -1,3 +1,5 @@
+@import './variables.module.less';
+
 .button {
   display: flex !important;
   align-items: center !important;
@@ -64,4 +66,44 @@
   width: 40px !important;
   transition: all 0.3s;
   border-left: 1px solid var(--cr-secondary-border);
+}
+
+.modal {
+  :global(.ant-modal-body) {
+    padding: 16px;
+  }
+
+  .modalDescription {
+    color: @cr-gray-7;
+    margin-bottom: 16px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .modalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    button {
+      height: 40px;
+      font-size: 16px;
+
+      &.connected {
+        background-color: var(--cr-error-color) !important;
+        color: white !important;
+
+        &:hover {
+          background-color: var(--cr-error-color) !important;
+          border-color: var(--cr-primary-border) !important;
+        }
+      }
+    }
+  }
+
+  @media (max-width: @screen-md) {
+    .modalButtons {
+      flex-direction: column;
+    }
+  }
 }

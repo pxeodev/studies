@@ -3,7 +3,6 @@ import isMonday from 'date-fns/isMonday/index.js'
 import groupBy from 'lodash/groupBy.js';
 import { Readable } from 'stream';
 
-import { tweet } from '../lib/twitter.mjs'
 import { channelCreateMessage } from '../lib/discord.mjs'
 import { postMessage, sendDocument } from '../lib/telegram.mjs'
 import getFreshSignals from '../utils/getFreshSignals.mjs';
@@ -14,14 +13,8 @@ const bot = async () => {
   const trimmedDailyFreshSignals = dailyFreshSignals.slice(0, 20)
   for (const coin of trimmedDailyFreshSignals) {
     const symbol = coin.symbol.toUpperCase()
-    const tweetPost = `${coin.name} (${symbol}) changed from ${coin.yesterdaySuperSuperTrend} to ${coin.todaySuperSuperTrend} today! Find out more at coinrotator.app/coin/${coin.id} #CoinRotator $${symbol} @${coin.twitter}`
     const channelPost = `${coin.name} (${symbol}) changed from ${coin.yesterdaySuperSuperTrend} to ${coin.todaySuperSuperTrend} today! Find out more at https://coinrotator.app/coin/${coin.id}`
-    console.log(tweetPost, channelPost)
-    try {
-      await tweet(tweetPost)
-    } catch {
-      console.log('Tweet failed')
-    }
+    console.log(channelPost)
     try {
       await channelCreateMessage(channelPost)
     } catch (e) {

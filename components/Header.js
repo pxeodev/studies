@@ -6,6 +6,7 @@ import NavigationModal from './NavigationModal'
 import ConnectButton from './ConnectButton'
 
 import headerStyles from '../styles/header.module.less'
+import ConnectButton from './ConnectButton'
 
 const Header = ({ categories, screens, topCategories }) => {
   const { Header: AntHeader } = Layout;
@@ -38,7 +39,7 @@ const Header = ({ categories, screens, topCategories }) => {
 
   return (
     <AntHeader className={headerStyles.header}>
-      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px' }} disabledOverflow />
+      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px', display: 'flex' }} disabledOverflow />
     </AntHeader>
   );
 }
