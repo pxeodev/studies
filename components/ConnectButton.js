@@ -35,7 +35,7 @@ const ConnectButton = ({ collapsed }) => {
       removeCookie('user', { path: '/' })
       setLoginModalVisible(false)
     } else {
-      const domain = process.env.NEXT_PUBLIC_SITE_URL
+      let domain = process.env.NEXT_PUBLIC_SITE_URL
       domain = domain?.replace('https://', '')?.replace('http://', '')
       domain = domain?.replace(/\./g, '_') // TG URL encoding
       window.open(`https://t.me/CoinRotator_bot?start=${domain}`, '_blank');
