@@ -17,7 +17,19 @@ const fetchExchanges = async () => {
     if (excludedExchanges.includes(exchange.id)) {
       continue;
     }
-    const exchangeDetailData = (await getExchange(exchange.id)).data
+    let exchangeDetailData
+    try {
+      exchangeDetailData = (await getExchange(exchange.id)).data
+    } catch(e) {
+      // CoinGecko sometimes has no exchange details for some exchanges
+      if (e.response?.status === 404) {
+        console.dir(e.response?.headers, { depth: null });
+        console.dir(e.response?.data, { depth: null });
+        continue;
+      } else {
+        throw(e);
+      }
+    }
 
     let dbExchangeData = pick(exchangeDetailData, ['name', 'image', 'url', 'centralized'])
     dbExchangeData.centralized = Boolean(dbExchangeData.centralized)
