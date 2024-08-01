@@ -87,7 +87,9 @@ const fetchCoinalyze = async () => {
         )
       }
     }
-    const data = await Promise.all(requests)
+    let data = await Promise.allSettled(requests)
+    data = data.filter(data => data.status === 'fulfilled')
+    data = data.map(data => data.value)
     let openInterest = data.filter(data => data.openInterest)
     openInterest = sum(openInterest.map(data => data.openInterest))
     let fundingRate = data.filter(data => data.fundingRate)
