@@ -42,6 +42,26 @@ const scrapeCoinData = async (coinId, coinSymbol) => {
   return [openInterest, futuresVolume24h]
 }
 
+const getOpenInterestPriceFactorUSD = (market, databaseCoins, coin) => {
+  const openInterestDenomination = market.oi_lq_vol_denominated_in === 'QUOTE_ASSET' ? market.quote_asset : market.base_asset
+  if (openInterestDenomination === 'EUR' || openInterestDenomination === 'USD') {
+    return 1 // EUR is always very close to USD and we don't have the price for EUR...
+  }
+  let openInterestDenominationPriceFactor = 1
+  if (coin.symbol.toUpperCase() === openInterestDenomination) {
+    openInterestDenominationPriceFactor = coin.currentPrice
+  } else {
+    const openInterestDenominationCoin = databaseCoins.find(coin => coin.symbol.toUpperCase() === openInterestDenomination)
+    if (openInterestDenominationCoin) {
+      openInterestDenominationPriceFactor = openInterestDenominationCoin.currentPrice
+    } else {
+      console.log('No price for', openInterestDenomination)
+      throw(new Error('No price for ' + openInterestDenomination))
+    }
+  }
+  return openInterestDenominationPriceFactor
+}
+
 const fetchCoinalyze = async () => {
   await initializeScraping()
   const now = startofHour(new Date());
@@ -59,6 +79,7 @@ const fetchCoinalyze = async () => {
     select: {
       symbol: true,
       id: true,
+      currentPrice: true,
     },
     where: {
       symbol: {
@@ -77,8 +98,9 @@ const fetchCoinalyze = async () => {
     }
     const requests = []
     for (const market of supportedMarketsForCoin) {
+      const openInterestDenominationPriceFactor = getOpenInterestPriceFactorUSD(market, databaseCoins, coin)
       requests.push(
-        getOpenInterest(market.symbol, market.exchange),
+        getOpenInterest(market.symbol, market.exchange, openInterestDenominationPriceFactor),
         getVolume24h(market.symbol, market.exchange)
       )
       if (market.exchange === preferredFundingRateMarket.exchange) {
