@@ -11,7 +11,7 @@ import CoinTable from '../components/CoinTable';
 import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
-import prisma from "../lib/prisma.mjs";
+import sql from "../lib/database.mjs";
 import strapi from '../utils/strapi';
 import { getImageSlug } from '../utils/minifyImageURL';
 import pick from 'lodash/pick';
@@ -63,21 +63,6 @@ export default function BinanceFuturesScreener({ coinsData, hiddenCoins, appData
 
 export async function getStaticProps() {
   const appData = await globalData();
-  const coinQuery = {
-    orderBy: { marketCapRank: 'asc' },
-    select: {
-      id: true,
-      symbol: true,
-      name: true,
-      images: true,
-      marketCap: true,
-      marketCapRank: true,
-      categories: true,
-      coingeckoCategories: true,
-      tickers: true,
-      derivatives: true,
-    }
-  }
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {
@@ -112,12 +97,12 @@ export async function getStaticProps() {
     `,
   )
   hiddenCoins = hiddenCoins.data.coins.data.map(coin => coin.attributes.slug)
-  let coinsData
-  if (process.env.NODE_ENV === 'development') {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
-  } else {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
-  }
+  let coinsData = await sql`
+    SELECT id, symbol, name, images, "marketCap", "marketCapRank", categories, "coingeckoCategories", tickers, derivatives
+    FROM "Coin"
+    ORDER BY "marketCapRank" ASC
+    LIMIT ${process.env.NODE_ENV === 'development' ? 20 : 1000}
+  `
   coinsData = coinsData.filter((coinData) => {
     return coinData.derivatives?.some((derivative) => {
       return derivative.market === 'Binance'
@@ -143,7 +128,7 @@ export async function getStaticProps() {
 
     return coinData
   })
-  const exchangeData = await prisma.exchange.findMany()
+  const exchangeData = await sql`SELECT * FROM "Exchange"`
   return {
     props: {
       coinsData,

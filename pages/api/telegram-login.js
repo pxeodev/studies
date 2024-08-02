@@ -1,7 +1,7 @@
 import subMinutes from 'date-fns/subMinutes';
 import pick from 'lodash/pick'
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 import decrypt from '../../utils/decrypt.js'
 
 const onSuccess = (res, user) => {
@@ -50,11 +50,7 @@ const handler = async (req, res) => {
     return
   }
 
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      walletAddress
-    }
-  })
+  const existingUser = await sql`SELECT * FROM "User" WHERE "walletAddress" = ${walletAddress}`[0]
   if (existingUser) {
     if (existingUser.telegramId === telegramId) {
       onSuccess(res, existingUser)
@@ -63,13 +59,7 @@ const handler = async (req, res) => {
       return
     }
   } else {
-    const newUser = await prisma.user.create({
-      data: {
-        walletAddress,
-        telegramId,
-        telegramUserName
-      }
-    })
+    await sql`INSERT INTO "User" ("walletAddress", "telegramId", "telegramUserName") VALUES (${newUser.walletAddress}, ${newUser.telegramId}, ${newUser.telegramUserName})`
     onSuccess(res, newUser)
   }
 }

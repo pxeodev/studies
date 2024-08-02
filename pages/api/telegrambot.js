@@ -5,7 +5,7 @@ import mapValues from 'lodash/mapValues';
 import pick from 'lodash/pick';
 import reduce from 'lodash/reduce';
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 import supersupertrend from 'coinrotator-utils/supersupertrend.mjs';
 
 const handler = async (req, res) => {
@@ -15,7 +15,7 @@ const handler = async (req, res) => {
     res.status(400).send("Bad request")
   } else {
     let twoDaysAgo = subDays(new Date(), 2)
-    let coins = await prisma.$queryRaw`
+    let coins = await sql`
       SELECT "Coin"."id", "symbol", "name", "SuperTrend"."date", "SuperTrend"."trend", "SuperTrend"."quoteSymbol"
       FROM "Coin"
       LEFT JOIN "SuperTrend" ON "SuperTrend"."coinId" = "Coin"."id"

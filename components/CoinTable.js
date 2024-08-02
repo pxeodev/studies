@@ -177,8 +177,9 @@ const CoinTable = ({
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
     const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
     const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
-    return coinData.marketCap <= max &&
-           coinData.marketCap >= min &&
+    const marketCapNumber = Number(coinData.marketCap)
+    return marketCapNumber <= max &&
+           marketCapNumber >= min &&
            matchesPortfolio &&
            matchesCategory &&
            matchesExchanges &&

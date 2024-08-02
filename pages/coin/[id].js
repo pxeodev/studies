@@ -2,13 +2,12 @@ import { InfoCircleFilled } from '@ant-design/icons';
 import { Card, Layout, Space, Tag, Tooltip, Typography } from 'antd';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Prisma } from '@prisma/client'
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
 import { useCallback, useEffect, useState, useContext, useRef, useMemo } from 'react';
 import classnames from 'classnames';
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 import UpTag from '../../components/UpTag';
 import DownTag from '../../components/DownTag';
 import HodlTag from '../../components/HodlTag';
@@ -312,9 +311,7 @@ export default function Coin(coin) {
 }
 
 export async function getStaticPaths() {
-  const coinsData = await prisma.coin.findMany({
-    select: { id: true }
-  })
+  const coinsData = await sql`SELECT id FROM "Coin"`
 
   return {
     paths: coinsData.map(coin => ({ params: { ...coin }}) ),
@@ -324,20 +321,16 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const appData = await globalData();
-  let coinData = await prisma.coin.findUnique({
-    where: {
-      id: params.id
-    }
-  })
+  let coinData = await sql`SELECT * FROM "Coin" WHERE id = ${params.id}`[0]
   let similarCoins = []
   if (coinData.categories.length || coinData.coingeckoCategories.length) {
     const safeCategories = coinData.categories.length ? coinData.categories : ['xxxxxxxxxxxxx']
     const safeCoingeckoCategories = coinData.coingeckoCategories.length ? coinData.coingeckoCategories : ['xxxxxxxxxxxxx']
-    similarCoins = await prisma.$queryRaw`
+    similarCoins = await sql`
       SELECT id, images, name, count(*)
       FROM "Coin",
-      unnest(array[${Prisma.join(safeCategories)}]) unnested_categories,
-      unnest(array[${Prisma.join(safeCoingeckoCategories)}]) unnested_coingecko_categories
+      unnest(array[${sql([...safeCategories])}]) unnested_categories,
+      unnest(array[${sql([...safeCoingeckoCategories])}]) unnested_coingecko_categories
       WHERE (categories @> array[unnested_categories] OR "coingeckoCategories" @> array[unnested_coingecko_categories])
       AND id != ${coinData.id}
       GROUP BY id

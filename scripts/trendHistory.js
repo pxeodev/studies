@@ -6,7 +6,7 @@ import startOfDay from 'date-fns/startOfDay/index.js'
 import mapValues from 'lodash/mapValues.js'
 import { promises as fs } from 'fs';
 
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import supertrend from '../utils/supertrend.mjs'
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { defaultAtrPeriods, defaultMultiplier } from 'coinrotator-utils/variables.mjs'
@@ -16,33 +16,11 @@ import { signals } from 'coinrotator-utils/variables.mjs';
 dotenv.config();
 
 const compileTrendHistory = async () => {
-  const coinsData = await prisma.coin.findMany({
-    select: {
-      id: true,
-      symbol: true,
-      name: true,
-    }
-  })
+  const coinsData = await sql`SELECT id, symbol, name FROM "Coin"`
   const trendDays = [];
   for (const coinData of coinsData) {
-    console.log(`Fetching ${coinData.name} (${coinData.symbol.toUpperCase()}) data`)
-    let ohlcs = await prisma.ohlc.findMany({
-      select: {
-        closeTime: true,
-        open: true,
-        high: true,
-        low: true,
-        close: true,
-        quoteSymbol: true
-      },
-      where: {
-        coinId: coinData.id,
-        closeTime: {
-          lte: endOfYesterday(),
-        }
-      },
-      orderBy: { closeTime: 'asc' }
-    })
+    console.log(`Fetching ${coinData.name} (${coinData.symbol.toUpperCase()}) data`);
+    let ohlcs = await sql`SELECT "closeTime", "open", "high", "low", "close", "quoteSymbol" FROM "Ohlc" WHERE "coinId" = ${coinData.id} AND "closeTime" < ${endOfYesterday()} ORDER BY "closeTime" ASC`
     ohlcs = convertToDailySignals(ohlcs)
     const trends = mapValues(ohlcs, (ohlcs) => {
       return supertrend(ohlcs, {

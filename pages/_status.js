@@ -9,7 +9,7 @@ import PageHeader from '../components/PageHeader'
 import UpTag from '../components/UpTag';
 import DownTag from '../components/DownTag';
 import HodlTag from '../components/HodlTag';
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import statusStyles from '../styles/status.module.less'
 
 const { Content } = Layout;
@@ -87,18 +87,8 @@ export async function getServerSideProps() {
   }
   try {
     appData = await globalData();
-    lastCandle = await prisma.ohlc.findFirst({
-      orderBy: {
-        closeTime: 'desc'
-      },
-      take: 1
-    })
-    lastTrend = await prisma.superTrend.findFirst({
-      orderBy: {
-        date: 'desc'
-      },
-      take: 1
-    })
+    const lastCandle = await sql`SELECT * FROM "Ohlc" ORDER BY "closeTime" DESC LIMIT 1`[0]
+    const lastTrend = await sql`SELECT * FROM "SuperTrend" ORDER BY date DESC LIMIT 1`[0]
     if (isToday(lastCandle.closeTime)) {
       if (isToday(lastTrend.date)) {
         databaseLabel = 'Connected & Updated'

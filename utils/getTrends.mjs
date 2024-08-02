@@ -4,24 +4,17 @@ import groupBy from 'lodash/groupBy.js';
 import supersupertrend from 'coinrotator-utils/supersupertrend.mjs';
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
 import { getTrendStreak, superSupertrendStreak } from 'coinrotator-utils/gettrends.mjs';
-import prisma from '../lib/prisma.mjs';
+import sql from '../lib/database.mjs';
 
 export async function getSuperTrends(coinId, { flavor = SUPERTREND_FLAVOR.coinrotator, weekly = false, skipLast = false } = {}) {
-  let trends = await prisma.superTrend.findMany({
-    select: {
-      quoteSymbol: true,
-      trend: true,
-      date: true
-    },
-    where: {
-      coinId,
-      flavor,
-      weekly
-    },
-    orderBy: {
-      date: 'asc'
-    }
-  })
+  let trends = await sql`
+    SELECT "quoteSymbol", trend, date
+    FROM "SuperTrend"
+    WHERE "coinId" = ${coinId}
+      AND flavor = ${flavor}
+      AND weekly = ${weekly}
+    ORDER BY date ASC
+  `;
   trends = groupBy(trends, 'quoteSymbol')
   trends = mapValues(trends, (trend) => {
     if (skipLast) {

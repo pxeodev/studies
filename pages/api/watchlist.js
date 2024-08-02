@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 import convertTickersToExchanges from '../../utils/convertTickersToExchanges.js'
 
 const handler = async (req, res) => {
@@ -11,21 +11,11 @@ const handler = async (req, res) => {
   if (req.method !== 'GET' || !requestedCoins instanceof Array) {
     res.status(400)
   } else {
-    let coins = await prisma.coin.findMany({
-      where: {
-        id: {
-          in: requestedCoins
-        }
-      },
-      select: {
-        id: true,
-        name: true,
-        images: true,
-        symbol: true,
-        marketCap: true,
-        tickers: true,
-      }
-    })
+    let coins = await sql`
+      SELECT id, name, images, symbol, "marketCap", tickers
+      FROM "Coin"
+      WHERE id IN (${sql([...requestedCoins])})
+    `
     coins = await Promise.all(
       coins.map(async (coin) => {
         const exchanges = convertTickersToExchanges(coin.tickers)

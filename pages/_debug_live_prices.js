@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
 
 import globalData from '../lib/globalData'
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import PageHeader from '../components/PageHeader'
 import TableFilters from '../components/TableFilters'
 import useVirtualTable from '../hooks/useVirtualTable'
@@ -18,17 +18,11 @@ import watchlistStyles from '../styles/watchlist.module.less'
 
 export async function getStaticProps() {
   const appData = await globalData()
-  let coins = await prisma.coin.findMany({
-    select: {
-      id: true,
-      name: true,
-      symbol: true,
-      images: true,
-    },
-    orderBy: {
-      marketCapRank: 'asc',
-    }
-  })
+  const coins = await sql`
+    SELECT id, name, symbol, images
+    FROM "Coin"
+    ORDER BY "marketCapRank" ASC
+  `
   return {
     props: {
       coins,

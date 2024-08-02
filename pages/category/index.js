@@ -13,7 +13,7 @@ import baseStyles from '../../styles/base.module.less'
 import indexStyles from '../../styles/index.module.less'
 import globalData from '../../lib/globalData';
 import PageHeader from '../../components/PageHeader'
-import prisma from "../../lib/prisma.mjs";
+import sql from "../../lib/database.mjs";
 import useVirtualTable from '../../hooks/useVirtualTable';
 import { dailySuperSuperTrend, weeklySuperSuperTrend, marketCap, dailySuperSuperTrendStreak, weeklySuperSuperTrendStreak } from '../../utils/sharedColumns';
 import useIsHoverable from '../../hooks/useIsHoverable';
@@ -146,18 +146,6 @@ export default function Categories({ categoryData, appData, pageData }) {
 
 export async function getStaticProps() {
   const appData = await globalData();
-  const coinQuery = {
-    orderBy: { marketCapRank: 'asc' },
-    select: {
-      id: true,
-      name: true,
-      images: true,
-      marketCap: true,
-      marketCapRank: true,
-      categories: true,
-      coingeckoCategories: true,
-    }
-  }
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {
@@ -178,12 +166,12 @@ export async function getStaticProps() {
     }
   )
   data = data.pages.data[0].attributes
-  let coinsData
-  if (process.env.NODE_ENV === 'development') {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
-  } else {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
-  }
+  let coinsData = await sql`
+    SELECT id, name, images, "marketCap", "marketCapRank", categories, "coingeckoCategories"
+    FROM "Coin"
+    ORDER BY "marketCapRank" ASC
+    LIMIT ${process.env.NODE_ENV === 'development' ? 20 : 1000}
+  `
   const categoryData = []
   for (const coin of coinsData) {
     coin.image = coin.images.small

@@ -11,7 +11,6 @@ import { gql } from '@urql/core'
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 
 import globalData from '../lib/globalData'
-import prisma from '../lib/prisma.mjs'
 import { getWatchListCoins } from '../utils/watchlist'
 import PageHeader from '../components/PageHeader'
 import useIsHoverable from '../hooks/useIsHoverable'
@@ -25,7 +24,7 @@ import watchlistStyles from '../styles/watchlist.module.less'
 
 export async function getStaticProps() {
   const appData = await globalData()
-  const exchangeData = await prisma.exchange.findMany()
+  const exchangeData = await sql`SELECT * FROM "Exchange"`
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {

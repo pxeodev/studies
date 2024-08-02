@@ -10,7 +10,7 @@ import classnames from 'classnames';
 import sitemapStyles from '../styles/sitemap.module.less'
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
-import prisma from "../lib/prisma.mjs";
+import sql from "../lib/database.mjs";
 import strapi from '../utils/strapi';
 
 const { Title } = Typography;
@@ -92,18 +92,16 @@ export async function getStaticProps() {
     }
   )
   data = data.pages.data[0].attributes
-  const coinQuery = {
-    orderBy: { marketCapRank: 'asc' },
-    select: {
-      id: true,
-      name: true,
-    }
-  }
-  let coinsData
+  const coinQuery = `
+    SELECT id, name
+    FROM "Coin"
+    ORDER BY "marketCapRank" ASC
+  `;
+  let coinsData;
   if (process.env.NODE_ENV === 'development') {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
+    coinsData = await sql`${coinQuery} LIMIT 20`;
   } else {
-    coinsData = await prisma.coin.findMany({...coinQuery })
+    coinsData = await sql`${coinQuery}`;
   }
   return {
     props: {

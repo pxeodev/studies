@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import { getCategoryOverrides, overrideCoinCategories } from '../utils/categories.mjs'
 
 dotenv.config();
@@ -8,25 +8,9 @@ dotenv.config();
 const overrideCategories = async () => {
   const overrides = await getCategoryOverrides();
   for (const override of overrides) {
-    const coinData = await prisma.coin.findFirst({
-      where: {
-        name: override.CoinName,
-        symbol: override.CoinSymbol.toLowerCase(),
-      },
-      select: {
-        id: true,
-        categories: true,
-      }
-    })
+    const coinData = await sql`SELECT id, "categories" FROM "Coin" WHERE "name" = ${override.CoinName} AND "symbol" = ${override.CoinSymbol.toLowerCase()}`
     const categories = await overrideCoinCategories(override.CoinName, override.CoinSymbol, coinData.categories)
-    await prisma.coin.update({
-      where: {
-        id: coinData.id,
-      },
-      data: {
-        categories,
-      }
-    })
+    await sql`UPDATE "Coin" SET "categories" = ${categories} WHERE id = ${coinData.id}`
   }
 }
 

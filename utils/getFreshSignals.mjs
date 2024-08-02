@@ -1,19 +1,10 @@
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import { getSuperTrends } from './getTrends.mjs';
 
 const getFreshSignals = async () => {
   const excludedSymbols = ['usdd', 'ustc']
 
-  let coinsData = await prisma.coin.findMany({
-    orderBy: { marketCapRank: 'asc' },
-    select: {
-      id: true,
-      symbol: true,
-      name: true,
-      marketCap: true,
-      twitter: true,
-    }
-  })
+  let coinsData = await sql`SELECT id, symbol, name, "marketCap", twitter FROM "Coin" ORDER BY "marketCapRank" ASC`
   coinsData = coinsData.filter(coin => !excludedSymbols.includes(coin.symbol))
   for (let coin of coinsData) {
     console.log(`Fetching data for ${coin.name} (${coin.symbol})`)

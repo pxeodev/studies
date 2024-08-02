@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import { overrideCoinCategories } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
 import retry from '../utils/retry.mjs';
@@ -73,18 +73,7 @@ const fetchCoinData = async (url, coin, page) => {
   }
 
   launch_date_start = isNaN(Date.parse(launch_date_start)) ? null : new Date(launch_date_start)
-  await prisma.coin.update({
-    where: {
-      id: coin.id
-    },
-    data: {
-      launch_date_start,
-      launch_roi_usd,
-      launch_roi_btc,
-      launch_roi_eth,
-      categories
-    }
-  })
+  await sql`UPDATE "Coin" SET "launch_date_start" = ${launch_date_start}, "launch_roi_usd" = ${launch_roi_usd}, "launch_roi_btc" = ${launch_roi_btc}, "launch_roi_eth" = ${launch_roi_eth}, "categories" = ${categories} WHERE id = ${coin.id}`
 }
 
 const dropsTab = async () => {
@@ -94,13 +83,7 @@ const dropsTab = async () => {
       timeout: 100000,
       headless: 'new'
     });
-    const coins = await prisma.coin.findMany({
-      select: {
-        id: true,
-        name: true,
-        symbol: true,
-      }
-    })
+    const coins = await sql`SELECT id, name, symbol FROM "Coin"`
 
     const page = await browser.newPage();
     for (const coin of coins) {

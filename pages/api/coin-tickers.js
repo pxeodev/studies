@@ -1,21 +1,18 @@
 import minBy from 'lodash/minBy';
 import levenshtein from 'js-levenshtein';
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 
 const handler = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(400)
   } else {
-    const coin = await prisma.coin.findUnique({
-      where: { id: req.query.id },
-      select: {
-        id: true,
-        tickers: true,
-        derivatives: true,
-      },
-    })
-    const exchanges = await prisma.exchange.findMany()
+    const coin = await sql`
+      SELECT id, tickers, derivatives
+      FROM "Coin"
+      WHERE id = ${req.query.id}
+    `[0];
+    const exchanges = await sql`SELECT * FROM "Exchange"`
     let tickers = coin.tickers || []
     tickers = tickers.map((ticker) => {
       const baseSymbol = ticker.base.toUpperCase()
