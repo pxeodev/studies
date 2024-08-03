@@ -50,7 +50,7 @@ const handler = async (req, res) => {
     return
   }
 
-  const existingUser = await sql`SELECT * FROM "User" WHERE "walletAddress" = ${walletAddress}`[0]
+  const existingUser = (await sql`SELECT * FROM "User" WHERE "walletAddress" = ${walletAddress}`)[0]
   if (existingUser) {
     if (existingUser.telegramId === telegramId) {
       onSuccess(res, existingUser)

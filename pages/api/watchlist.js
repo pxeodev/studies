@@ -11,10 +11,13 @@ const handler = async (req, res) => {
   if (req.method !== 'GET' || !requestedCoins instanceof Array) {
     res.status(400)
   } else {
+    if (typeof requestedCoins === 'string') {
+      requestedCoins = [requestedCoins]
+    }
     let coins = await sql`
       SELECT id, name, images, symbol, "marketCap", tickers
       FROM "Coin"
-      WHERE id IN (${sql([...requestedCoins])})
+      WHERE id IN ${sql([...requestedCoins])}
     `
     coins = await Promise.all(
       coins.map(async (coin) => {

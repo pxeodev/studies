@@ -7,11 +7,7 @@ const handler = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(400)
   } else {
-    const coin = await sql`
-      SELECT id, tickers, derivatives
-      FROM "Coin"
-      WHERE id = ${req.query.id}
-    `[0];
+    const coin = (await sql`SELECT id, tickers, derivatives FROM "Coin" WHERE id = ${req.query.id}`)[0];
     const exchanges = await sql`SELECT * FROM "Exchange"`
     let tickers = coin.tickers || []
     tickers = tickers.map((ticker) => {

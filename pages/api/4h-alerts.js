@@ -17,7 +17,7 @@ const handler = async (req, res) => {
     let coins = await sql`
       SELECT id, name, symbol, categories, images, "marketCap", "coingeckoCategories"
       FROM "Coin"
-      WHERE symbol IN (${sql([...coinSymbols])})
+      WHERE symbol IN ${sql([...coinSymbols])}
     `
     const alertsToDelete = []
     for (const [i, alert] of alerts.entries()) {
