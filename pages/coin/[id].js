@@ -323,9 +323,9 @@ export async function getStaticProps({ params }) {
   const appData = await globalData();
   let coinData = (await sql`SELECT * FROM "Coin" WHERE id = ${params.id}`)[0]
   let similarCoins = []
-  if (coinData.categories.length || coinData.coingeckoCategories.length) {
-    const safeCategories = coinData.categories.length ? coinData.categories : ['xxxxxxxxxxxxx']
-    const safeCoingeckoCategories = coinData.coingeckoCategories.length ? coinData.coingeckoCategories : ['xxxxxxxxxxxxx']
+  if (coinData.categories?.length || coinData.coingeckoCategories?.length) {
+    const safeCategories = coinData.categories?.length ? coinData.categories : ['xxxxxxxxxxxxx']
+    const safeCoingeckoCategories = coinData.coingeckoCategories?.length ? coinData.coingeckoCategories : ['xxxxxxxxxxxxx']
     similarCoins = await sql`
       SELECT id, images, name, count(*)
       FROM "Coin",
