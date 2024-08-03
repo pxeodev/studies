@@ -51,7 +51,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
-  let openInterest, openInterestChangePercent1h, fundingRate, futuresVolume24h
+  let openInterest, openInterestChangePercent1h, fundingRate, futuresVolume24h, openInterestByFuturesVolume24h
   if (hasKeyPass && liveCoinData) {
     const matchingCoin = liveCoinData.find((liveCoin) => liveCoin.id === coin.id)
     if (matchingCoin) {
@@ -59,6 +59,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
       openInterestChangePercent1h = round(matchingCoin.openInterestChangePercent1h, 2)
       fundingRate = matchingCoin.fundingRate
       futuresVolume24h = matchingCoin.futuresVolume24h
+      openInterestByFuturesVolume24h = matchingCoin.openInterestByfuturesVolume24h
     }
   }
   const url = cleanupCoinLink(coin.homepage, coin.symbol)
@@ -241,6 +242,16 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
                 <Title level={3} className={coinStyles.label}>Futures Volume (24h)</Title>
                 <span className={coinStyles.value}>
                   {numberFormatter.format(futuresVolume24h)}
+                </span>
+              </div>
+            ) : <></>
+          }
+          {
+            openInterestByFuturesVolume24h ? (
+              <div className={coinStyles.data}>
+                <Title level={3} className={coinStyles.label}>OI / 24h Volume</Title>
+                <span className={coinStyles.value}>
+                  {numberFormatter.format(openInterestByFuturesVolume24h)}
                 </span>
               </div>
             ) : <></>
