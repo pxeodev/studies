@@ -55,6 +55,7 @@ const CoinTable = ({
     showMarketCapRank,
     showOpenInterest,
     showFundingRate,
+    showVolume24h,
     showFuturesVolume,
     showATH,
     showATL,
@@ -154,7 +155,7 @@ const CoinTable = ({
     })
   }, [socket])
   useEffect(() => {
-    if (showOpenInterest || showFundingRate || showFuturesVolume || show24hVolumeByMarketCap) {
+    if (showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume || show24hVolumeByMarketCap) {
       if (socket) {
         socket.on('new_live_coin_data', fetchLiveCoinData)
       }
@@ -170,7 +171,7 @@ const CoinTable = ({
         socket.off('new_live_coin_data')
       }
     }
-  }, [showOpenInterest, showFundingRate, showFuturesVolume, show24hVolumeByMarketCap, socket, fetchLiveCoinData])
+  }, [showOpenInterest, showFundingRate, showVolume24h,showFuturesVolume, show24hVolumeByMarketCap, socket, fetchLiveCoinData])
   useEffect(() => {
     setWatchlistCoins(getWatchListCoins())
   }, [])
@@ -293,12 +294,13 @@ const CoinTable = ({
       percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
-    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap
+    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h
     if (liveCoinData) {
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
         openInterest = matchingCoinData.openInterest
         fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 4) : null
+        futuresVolume24h = matchingCoinData.futuresVolume24h
         openInterestByFuturesVolume24h = matchingCoinData.openInterestByfuturesVolume24h
         openInterestByfuturesVolume24hChangePercent24h = matchingCoinData.openInterestByfuturesVolume24hChangePercent24h
         if (matchingCoinData.volume24h && coinData.marketCap) {
@@ -336,6 +338,7 @@ const CoinTable = ({
       percentageFromATL,
       openInterest,
       fundingRate,
+      futuresVolume24h,
       openInterestByFuturesVolume24h,
       openInterestByfuturesVolume24hChangePercent24h,
       openInterestChangePercent1h,
@@ -581,6 +584,20 @@ const CoinTable = ({
           } else {
             return null
           }
+        }
+      }
+    )
+  }
+  if (showVolume24h) {
+    columns.push(
+      {
+        title: 'Futures Volume (24h)',
+        dataIndex: 'futuresVolume24h',
+        width: 120,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.futuresVolume24h) - Number(b.futuresVolume24h),
+        render: (futuresVolume24h) => {
+          return futuresVolume24h ? numberFormatter.format(futuresVolume24h) : null
         }
       }
     )

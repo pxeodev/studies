@@ -24,6 +24,7 @@ const useTableFilters = (coinsData) => {
       showMarketCapRank: false,
       showOpenInterest: false,
       showFundingRate: false,
+      showVolume24h: false,
       showFuturesVolume: false,
       showATH: false,
       showATL: false,
@@ -106,6 +107,11 @@ const useTableFilters = (coinsData) => {
         return {
           ...state,
           showFundingRate: action.payload
+        }
+      case 'SET_SHOW_VOLUME_24H':
+        return {
+          ...state,
+          showVolume24h: action.payload
         }
       case 'SET_SHOW_FUTURES_VOLUME':
         return {
@@ -261,6 +267,7 @@ const useTableFilters = (coinsData) => {
         showMarketCapRank: router.query.showMarketCapRank,
         showOpenInterest: router.query.showOpenInterest,
         showFundingRate: router.query.showFundingRate,
+        showVolume24h: router.query.showVolume24h,
         showFuturesVolume: router.query.showFuturesVolume,
         showATH: router.query.showATH,
         showATL: router.query.showATL,
