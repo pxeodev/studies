@@ -92,17 +92,7 @@ export async function getStaticProps() {
     }
   )
   data = data.pages.data[0].attributes
-  const coinQuery = `
-    SELECT id, name
-    FROM "Coin"
-    ORDER BY "marketCapRank" ASC
-  `;
-  let coinsData;
-  if (process.env.NODE_ENV === 'development') {
-    coinsData = await sql`${coinQuery} LIMIT 20`;
-  } else {
-    coinsData = await sql`${coinQuery}`;
-  }
+  const coinsData = await sql`SELECT id, name FROM "Coin" ORDER BY "marketCapRank" ASC LIMIT ${process.env.NODE_ENV === 'development' ? 20 : null}`;
   return {
     props: {
       coinsData,
