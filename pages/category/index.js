@@ -176,6 +176,7 @@ export async function getStaticProps() {
   for (const coin of coinsData) {
     coin.image = coin.images.small
     delete coin.images
+    coin.categories ||= []
     for (const category of coin.categories) {
       const categoryIndex = categoryData.findIndex(cat => cat.name === category)
       if (categoryIndex === -1) {
