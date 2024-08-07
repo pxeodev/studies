@@ -220,7 +220,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
       <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
           <div className={coinStyles.data}>
             <Title level={3} className={coinStyles.label}>Open Interest (1h)</Title>
-            <span className={coinStyles.value}>{numberFormatter.format(openInterest)}</span>
+            <span className={coinStyles.value}>{currencyFormatter.format(openInterest)}</span>
             <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent1h < 0})}>
               &nbsp;(
               {openInterestChangePercent1h > 0 ? '+' : ''}
@@ -241,7 +241,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
               <div className={coinStyles.data}>
                 <Title level={3} className={coinStyles.label}>Futures Volume (24h)</Title>
                 <span className={coinStyles.value}>
-                  {numberFormatter.format(futuresVolume24h)}
+                  {currencyFormatter.format(futuresVolume24h)}
                 </span>
               </div>
             ) : <></>

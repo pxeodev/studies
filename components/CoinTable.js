@@ -507,7 +507,7 @@ const CoinTable = ({
         sorter: (a, b) => Number(a.openInterest) - Number(b.openInterest),
         render: (openInterest) => {
           if (openInterest) {
-            return numberFormatter.format(openInterest)
+            return currencyFormatter.format(openInterest)
           } else {
             return null
           }
@@ -597,7 +597,7 @@ const CoinTable = ({
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.futuresVolume24h) - Number(b.futuresVolume24h),
         render: (futuresVolume24h) => {
-          return futuresVolume24h ? numberFormatter.format(futuresVolume24h) : null
+          return futuresVolume24h ? currencyFormatter.format(futuresVolume24h) : null
         }
       }
     )
