@@ -30,9 +30,13 @@ export async function saveDailyOhlcsToSupertrends (ohlcs, coinId) {
   for (const [quoteSymbol, quoteOhlcs] of Object.entries(ohlcs)) {
     console.log(`Saving ${coinId}(${quoteSymbol}) to supertrends`)
     const crTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator)
-    await sql`INSERT INTO "SuperTrend" ${sql(crTrends)} ON CONFLICT DO NOTHING`
+    if (crTrends.length) {
+      await sql`INSERT INTO "SuperTrend" ${sql(crTrends)} ON CONFLICT DO NOTHING`
+    }
     const classicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic)
-    await sql`INSERT INTO "SuperTrend" ${sql(classicTrends)} ON CONFLICT DO NOTHING`
+    if (classicTrends.length) {
+      await sql`INSERT INTO "SuperTrend" ${sql(classicTrends)} ON CONFLICT DO NOTHING`
+    }
 
     const today = new Date()
     let weeklyCoinOhlcs = await sql`SELECT * FROM "Ohlc" WHERE "coinId" = ${coinId} AND "quoteSymbol" = ${quoteSymbol} AND "closeTime" >= ${subDays(today, 13 * 7)} ORDER BY "closeTime" ASC`
