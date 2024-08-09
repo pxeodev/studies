@@ -14,6 +14,7 @@ import WatchlistStar from './WatchlistStar';
 import useIsHoverable from '../hooks/useIsHoverable';
 import useVirtualTable from '../hooks/useVirtualTable';
 import useSocketStore from '../hooks/useSocketStore';
+import useBreakPoint from '../hooks/useBreakPoint.js';
 import { signals, preferredExchanges } from 'coinrotator-utils/variables.mjs'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { getImageURL } from '../utils/minifyImageURL';
@@ -68,6 +69,7 @@ const CoinTable = ({
   const isHoverable = useIsHoverable()
   const screens = useBreakPoint()
   const hydrated = useHydrated()
+  const screens = useBreakPoint();
   const notification = useContext(NotificationContext)
   const [watchlistCoins, setWatchlistCoins] = useState([])
   const socket = useSocketStore(state => state.socket)
@@ -366,7 +368,7 @@ const CoinTable = ({
             <Link href={`/coin/${data.id}`} className={coinTableStyles.coin}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={getImageURL(coinData.imageSlug, 'small')} alt={coinData.name} className={coinTableStyles.image} loading="lazy"/>
-              {screens.sm ? <span className={coinTableStyles.name}>{coinData.name}</span> : null}
+              {screens.sm && <span className={coinTableStyles.name}>{coinData.name}</span>}
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
             { screens.sm ? (
