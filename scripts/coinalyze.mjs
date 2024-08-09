@@ -22,7 +22,7 @@ const initializeScraping = async () => {
   browser = await puppeteer.launch({
     // headless: false,
     // devtools: true,
-    timeout: 1000000
+    timeout: 100000
   })
   page = await browser.newPage()
   await page.setViewport({ width: 1200, height: 100080 })
@@ -121,7 +121,7 @@ const fetchCoinalyze = async () => {
     futuresVolume24h = sum(futuresVolume24h.map(data => data.futuresVolume24h))
     if (CME_SCRAPING_COINS.includes(coin.id)) {
       const [scrapedOpenInterest, scrapedFuturesVolume24h] = await retry(() => scrapeCoinData(coin.id, coin.symbol.toUpperCase()), {
-        factor: 3,
+        factor: 2,
         maxAttempts: 6,
         jitter: true
       });
