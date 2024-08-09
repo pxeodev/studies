@@ -63,8 +63,6 @@ const fetchCoinDataCoingecko = async (coinId) => {
     platforms = null
   }
 
-  const dailyChange = coinData.market_data.price_change_percentage_24h || undefined
-  const weeklyChange = coinData.market_data.price_change_percentage_7d || undefined
   const marketCap = Math.ceil(coinData.market_data.market_cap.usd)
   const volume = Math.ceil(coinData.market_data.total_volume.usd)
   const tickers = uniqBy(coinData.tickers, ticker => `${ticker.base}${ticker.target}${ticker.market.name}`)
@@ -84,27 +82,25 @@ const fetchCoinDataCoingecko = async (coinId) => {
     atl: coinData.market_data.atl.usd,
     marketCap,
     marketCapRank: coinData.market_data.market_cap_rank,
-    fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd,
+    fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd ?? null,
     currentPrice: coinData.market_data.current_price?.usd,
     circulatingSupply: coinData.market_data.circulating_supply,
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
     tickers: tickers,
-    dailyChange: dailyChange,
-    weeklyChange: weeklyChange,
     coingeckoCategories: categories,
   }
 
   await sql`
-    INSERT INTO Coin (
+    INSERT INTO "Coin" (
       id, symbol, name, "defaultPlatform", platforms, images, description, homepage, twitter, "twitterFollowers",
       ath, atl, "marketCap", "marketCapRank", "fullyDilutedValuation", "currentPrice", "circulatingSupply", "totalSupply",
-      "maxSupply", tickers, "dailyChange", "weeklyChange", "coingeckoCategories"
+      "maxSupply", tickers, "coingeckoCategories"
     ) VALUES (
       ${coinId}, ${dbCoinData.symbol}, ${dbCoinData.name}, ${dbCoinData.defaultPlatform}, ${dbCoinData.platforms}, ${dbCoinData.images},
       ${dbCoinData.description}, ${dbCoinData.homepage}, ${dbCoinData.twitter}, ${dbCoinData.twitterFollowers}, ${dbCoinData.ath}, ${dbCoinData.atl},
       ${dbCoinData.marketCap}, ${dbCoinData.marketCapRank}, ${dbCoinData.fullyDilutedValuation}, ${dbCoinData.currentPrice}, ${dbCoinData.circulatingSupply},
-      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.dailyChange}, ${dbCoinData.weeklyChange}, ${dbCoinData.coingeckoCategories}
+      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}
     ) ON CONFLICT (id) DO UPDATE SET
       symbol = EXCLUDED.symbol,
       name = EXCLUDED.name,
@@ -125,8 +121,6 @@ const fetchCoinDataCoingecko = async (coinId) => {
       "totalSupply" = EXCLUDED."totalSupply",
       "maxSupply" = EXCLUDED."maxSupply",
       tickers = EXCLUDED.tickers,
-      "dailyChange" = EXCLUDED."dailyChange",
-      "weeklyChange" = EXCLUDED."weeklyChange",
       "coingeckoCategories" = EXCLUDED."coingeckoCategories"
   `
 
@@ -178,7 +172,7 @@ const fetchOhlcData = async (coinId, symbol) => {
     }
   }
 
-  await sql`INSERT INTO "Ohlc" ("coinId", "quoteSymbol", "closeTime", "open", "high", "low", "close") VALUES ${sql(ohlcs)} ON CONFLICT DO NOTHING`
+  await sql`INSERT INTO "Ohlc" ${sql(ohlcs)} ON CONFLICT DO NOTHING`
   const dailyOhlcs = convertToDailySignals(ohlcs, true)
   await saveDailyOhlcsToSupertrends(dailyOhlcs, coinId)
 }

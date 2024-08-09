@@ -22,14 +22,14 @@ const fixTrends = async () => {
     ohlcs = convertToDailySignals(ohlcs, true)
     for (const [quoteSymbol, quoteOhlcs] of Object.entries(ohlcs)) {
       const weeklyCrTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, true)
-      await sql`INSERT INTO "SuperTrend" ("coinId", "quoteSymbol", "trend", "flavor", "weekly", "date") VALUES ${sql(weeklyCrTrends)} ON CONFLICT DO NOTHING`
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(weeklyCrTrends)} ON CONFLICT DO NOTHING`
       const weeklyClassicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, true)
-      await sql`INSERT INTO "SuperTrend" ("coinId", "quoteSymbol", "trend", "flavor", "weekly", "date") VALUES ${sql(weeklyClassicTrends)} ON CONFLICT DO NOTHING`
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(weeklyClassicTrends)} ON CONFLICT DO NOTHING`
 
       const dailyCrTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, false)
-      await sql`INSERT INTO "SuperTrend" ("coinId", "quoteSymbol", "trend", "flavor", "weekly", "date") VALUES ${sql(dailyCrTrends)} ON CONFLICT DO NOTHING`
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(dailyCrTrends)} ON CONFLICT DO NOTHING`
       const dailyClassicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, false)
-      await sql`INSERT INTO "SuperTrend" ("coinId", "quoteSymbol", "trend", "flavor", "weekly", "date") VALUES ${sql(dailyClassicTrends)} ON CONFLICT DO NOTHING`
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(dailyClassicTrends)} ON CONFLICT DO NOTHING`
     }
   }
   axios.post('https://coinrotator-realtime-fra.onrender.com/new-trends')
