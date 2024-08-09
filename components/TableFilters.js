@@ -1,60 +1,43 @@
 import classnames from 'classnames';
-import { SlidersOutlined, QuestionCircleFilled } from '@ant-design/icons'
-import { Space, Card, Row, Col, Input, Button, Select, Modal, Divider, Tooltip, Radio, Typography, Tag, Switch } from 'antd'
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { SlidersOutlined } from '@ant-design/icons'
+import { Space, Card, Row, Col, Input, Button, Modal, Divider, Typography, Tag } from 'antd'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import compact from 'lodash/compact'
+import { useRouter } from 'next/router'
 
 import indexStyles from '../styles/index.module.less'
-import baseStyles from '../styles/base.module.less'
+import coinStyles from '../styles/coin.module.less'
 import useBreakPoint from '../hooks/useBreakPoint';
 import useIsHoverable from '../hooks/useIsHoverable';
-import { signals, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 import ExplainerModal from './ExplainerModal';
+import TableFiltersFiltersTab from './TableFiltersFiltersTab';
+import TableFiltersAdvancedTab from './TableFiltersAdvancedTab';
 
-const { Text } = Typography;
-const { Option, OptGroup } = Select;
+const { Title } = Typography;
+const TABS = {
+  filters: 'Filters',
+  advanced: 'Advanced data',
+}
 
 const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolioInputValue, formState, formDispatch, defaultFormState, hiddenFilters }) => {
   const screens = useBreakPoint();
   const [filterModalVisible, setFilterModalVisible] = useState(false)
-  const setPredefinedMarketCap1 = useCallback(() => {
-    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 0 })
-    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 100000000 })
-  }, [formDispatch])
-  const setPredefinedMarketCap2 = useCallback(() => {
-    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 100000000 })
-    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 1000000000 })
-  }, [formDispatch])
-  const setPredefinedMarketCap3 = useCallback(() => {
-    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 1000000000 })
-    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: 10000000000 })
-  }, [formDispatch])
-  const setPredefinedMarketCap4 = useCallback(() => {
-    formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: 10000000000 })
-    formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: coinsData[0].marketCap })
-  }, [formDispatch, coinsData])
+  const [activeTab, setActiveTab] = useState('Filters')
+  const router = useRouter()
+  useEffect(() => {
+    const path = router.asPath
+    const afterHash = path.split('#')[1]
+    if (afterHash?.startsWith('customize')) {
+      setFilterModalVisible(true)
+    }
+    if (afterHash === 'customize-advanced-filters') {
+      setActiveTab(TABS.advanced)
+    }
+  }, [router.asPath])
 
-  const setPredefinedTrendLength1 = useCallback(() => {
-    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 1})
-    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 5})
-  }, [formDispatch])
-  const setPredefinedTrendLength2 = useCallback(() => {
-    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 5})
-    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 10})
-  }, [formDispatch])
-  const setPredefinedTrendLength3 = useCallback(() => {
-    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 10})
-    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: 20})
-  }, [formDispatch])
-  const setPredefinedTrendLength4 = useCallback(() => {
-    formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: 20})
-    formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: ''})
-  }, [formDispatch])
-
-  const buttonSize = screens.xl ? 'large' : screens.sm ? 'medium' : 'small'
   const isHoverable = useIsHoverable();
   const inputRef = useRef(null)
   useEffect(() => {
@@ -68,20 +51,6 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
 
     return derivativeExchangeNames.sort()
   }, [coinsData])
-  const priorityCategories = categories.filter((category) => {
-    return [
-      'Avalanche Ecosystem',
-      'Cosmos Ecosystem',
-      'Solana Ecosystem',
-      'Near Ecosystem',
-      'Play to Earn',
-      'Metaverse',
-      'Meme',
-      'Terra Ecosystem',
-      'Web 3.0'
-    ].includes(category)
-  })
-  const restCategories = categories.filter(category => !priorityCategories.includes(category))
   const allExchangeNames = useMemo(() => {
     const exchangeData = compact(coinsData.flatMap((coin) => coin.exchanges))
     const exchangeNames = uniq(exchangeData.map(exchange => exchange[0]))
@@ -189,6 +158,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
       </Card>
       <Modal
         open={filterModalVisible}
+        zIndex={300}
         title={<>
           <span>Customize</span>
           <ExplainerModal
@@ -228,268 +198,57 @@ If you're using the CoinRotator screener, you have the ability to customize many
           </Space>
         }
       >
-        <Row>
-          <Col className={indexStyles.modalHeaderRow}>
-            <span>SuperTrend Flavor</span>
-            <Tooltip
-              placement={'right'}
-              trigger={isHoverable ? 'hover' : 'click'}
-              title="CoinRotator: ATR=5 Multiplier=1.5. Classic: ATR=10 Multiplier=3."
-            >
-              <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
-            </Tooltip>
-          </Col>
-          <Col className={indexStyles.modalInput}>
-            <Radio.Group
-              optionType="button"
-              onChange={(e) => formDispatch({ type: 'SET_SUPERTREND_FLAVOR', payload: e.target.value })}
-              value={formState.superTrendFlavor}
-            >
-              <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.coinrotator}>CoinRotator</Radio>
-              <Radio className={indexStyles.flavorRadio} value={SUPERTREND_FLAVOR.classic}>Classic</Radio>
-            </Radio.Group>
-          </Col>
-        </Row>
-        <Divider className={indexStyles.divider} />
-        <Row gutter={{ xs: 2, md: 16 }} className={indexStyles.modalHeaderRow}>
-          <Col className="gutter-row" span={12}>
-            <span>Trend</span>
-          </Col>
-          {
-            showCategory ? (
-              <Col className="gutter-row" span={12}>
-                <span>Category</span>
-              </Col>
-            ) : <></>
-          }
-        </Row>
-        <Row className={indexStyles.modalRow} align="middle" gutter={{ xs: 2, md: 16 }}>
-          <Col className="gutter-row" span={12} >
-            <Select
-              size="large"
-              value={formState.trendType}
-              onChange={(newTrendType) => { formDispatch({ type: 'SET_TREND_TYPE', payload: newTrendType }) }}
-              className={indexStyles.select}
-            >
-              <Option value={signals.all}>All</Option>
-              <Option value={signals.buy}>UP</Option>
-              <Option value={signals.hodl}>HODL</Option>
-              <Option value={signals.sell}>DOWN</Option>
-            </Select>
-          </Col>
-          {
-            showCategory ? (
-              <Col className="gutter-row" span={12}>
-                <Select
-                  showSearch
-                  size="large"
-                  value={formState.category}
-                  onChange={(newCategory) => formDispatch({ type: 'SET_CATEGORY', payload: newCategory })}
-                  className={indexStyles.select}
+        <div className={indexStyles.configModalHeader}>
+          {Object.values(TABS).map((tab) => {
+            return (
+              <Card.Grid
+                hoverable={false}
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={classnames(coinStyles.tab, indexStyles.tab, {
+                  [coinStyles.active]: tab === activeTab,
+                  [coinStyles.noRightBorder]: tab === TABS.advanced,
+                  [coinStyles.noLeftBorder]: tab === TABS.filters
+                })}
+              >
+                <Title
+                  id={tab}
+                  level={2}
+                  className={classnames(coinStyles.tabTitle, { [coinStyles.activeTitle]: tab === activeTab })}
                 >
-                  <Option value={defaultFormState.category} key="all">All</Option>
-                  <OptGroup label="Popular categories">
-                    {
-                      priorityCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
-                    }
-                  </OptGroup>
-                  <OptGroup label="Other categories">
-                    {
-                      restCategories.map((category) => <Option value={category} key={category}>{category}</Option>)
-                    }
-                  </OptGroup>
-                </Select>
-              </Col>
-            ) : <></>
-          }
-        </Row>
-        {
-          showMarketCap ? (
-            <>
-              <Divider className={indexStyles.divider} />
-              <Row className={indexStyles.modalHeaderRow}>
-                <Col>
-                  <div>Market Cap</div>
-                </Col>
-              </Row>
-              <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
-                <Col className="gutter-row" xs={10} md={11}>
-                  <Input
-                    className={classnames(indexStyles.modalInput)}
-                    size="large"
-                    onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MIN', payload: e.target.value })}
-                    value={formState.marketCapMin}
-                    placeholder="$1"
-                    aria-label="Market Cap Min"
-                  />
-                </Col>
-                <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
-                  <Text type="secondary">TO</Text>
-                </Col>
-                <Col className="gutter-row" xs={11} md={11}>
-                  <Input
-                    className={classnames(indexStyles.modalInput)}
-                    size="large"
-                    onChange={(e) => formDispatch({ type: 'SET_MARKET_CAP_MAX', payload: e.target.value })}
-                    value={formState.marketCapMax}
-                    placeholder="$100,000"
-                    spellCheck="false"
-                    aria-label="Market Cap Max"
-                  />
-                </Col>
-              </Row>
-              <Row gutter={{xs: 6, sm: 6, md: 6, lg: 12}}>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap1}>-$100M</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap2}>$100M-$1B</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap3}>$1B-$10B</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} size={buttonSize} onClick={setPredefinedMarketCap4}>$10B+</Button>
-                </Col>
-              </Row>
-            </>
-          ) : <></>
-        }
-        {
-          showTrendLength ? (
-            <>
-              <Divider className={indexStyles.divider} />
-              <Row className={indexStyles.modalHeaderRow}>
-                <Col>
-                  <div>Trend Streak</div>
-                </Col>
-              </Row>
-              <Row className={indexStyles.modalRow} justify="center" align="middle" gutter={{ xs: 2, md: 16 }}>
-                <Col className="gutter-row" xs={10} md={11}>
-                  <Input
-                    className={indexStyles.modalInput}
-                    size="large"
-                    onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MIN', payload: e.target.value }) }}
-                    value={formState.trendLengthMin}
-                    placeholder="1"
-                    aria-label="Trend Length Min"
-                  />
-                </Col>
-                <Col className={classnames('gutter-row', indexStyles.modalRangeLabel)} xs={3} md={2}>
-                  <Text type="secondary">TO</Text>
-                </Col>
-                <Col className="gutter-row" xs={11} md={11}>
-                  <Input
-                    className={indexStyles.modalInput}
-                    size="large"
-                    onChange={(e) => { formDispatch({ type: 'SET_TREND_LENGTH_MAX', payload: e.target.value }) }}
-                    value={formState.trendLengthMax}
-                    placeholder="50"
-                    aria-label="Trend Length Max"
-                  />
-                </Col>
-              </Row>
-              <Row gutter={{xs: 6, sm: 6, md: 6, lg: 12}}>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength1}>1-5</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength2}>5-10</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength3}>10-20</Button>
-                </Col>
-                <Col>
-                  <Button className={indexStyles.modalInputButton} onClick={setPredefinedTrendLength4}>20+</Button>
-                </Col>
-              </Row>
-            </>
-          ) : <></>
-        }
-        {
-          showExchanges ? (
-            <>
-              <Divider className={indexStyles.divider} />
-              <Row className={indexStyles.modalHeaderRow}>
-                <Col>
-                  <span>
-                    <span>Exchanges</span>
-                    <Tooltip
-                      placement={'right'}
-                      trigger={isHoverable ? 'hover' : 'click'}
-                      title="Select your exchanges to see a complete list of coins for each trend condition."
-                    >
-                      <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
-                    </Tooltip>
-                  </span>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Select exchanges"
-                    className={indexStyles.modalSelect}
-                    size="large"
-                    value={formState.exchanges}
-                    onChange={(exchanges) => { formDispatch({ type: 'SET_EXCHANGES', payload: exchanges }) }}
-                  >
-                    {allExchangeNames.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
-                  </Select>
-                </Col>
-              </Row>
-            </>
-          ) : <></>
-        }
-        {
-          showDerivativesOptions ? (
-            <>
-              <Divider className={indexStyles.divider} />
-              <Row className={indexStyles.modalRow}>
-                <Col span={22}>
-                  <span>Show Derivatives</span>
-                </Col>
-                <Col span={2}>
-                  <Switch
-                    className={indexStyles.modalSwitch}
-                    checked={formState.showDerivatives}
-                    onChange={(checked) => { formDispatch({ type: 'SET_SHOW_DERIVATIVES', payload: checked }) }}
-                  />
-                </Col>
-              </Row>
-              <Row className={indexStyles.modalHeaderRow}>
-                <Col>
-                  <span>
-                    <span>Derivative markets</span>
-                    <Tooltip
-                      placement={'right'}
-                      trigger={isHoverable ? 'hover' : 'click'}
-                      title="Select your derivatives markets to see their trend condition."
-                    >
-                      <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.tooltipIconBig, baseStyles.icon)} />
-                    </Tooltip>
-                  </span>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Select derivative exchanges"
-                    className={indexStyles.modalSelect}
-                    size="large"
-                    value={formState.derivatives}
-                    onChange={(exchanges) => { formDispatch({ type: 'SET_DERIVATIVES', payload: exchanges }) }}
-                  >
-                    {allDerivativeExchanges.map(exchangeName => <Option key={exchangeName}>{exchangeName}</Option>)}
-                  </Select>
-                </Col>
-              </Row>
-            </>
-          ) : <></>
-        }
+                  {tab}
+                </Title>
+              </Card.Grid>
+            );
+          })}
+        </div>
+        <div className={indexStyles.configModalBody}>
+          {activeTab === TABS.filters ? (
+            <TableFiltersFiltersTab
+              formState={formState}
+              formDispatch={formDispatch}
+              defaultFormState={defaultFormState}
+              showCategory={showCategory}
+              showMarketCap={showMarketCap}
+              showTrendLength={showTrendLength}
+              showExchanges={showExchanges}
+              showDerivativesOptions={showDerivativesOptions}
+              allDerivativeExchanges={allDerivativeExchanges}
+              allExchangeNames={allExchangeNames}
+              isHoverable={isHoverable}
+              categories={categories}
+              marketCapMax={coinsData[0].marketCap}
+              buttonSize={screens.xl ? 'large' : screens.sm ? 'medium' : 'small'}
+            />
+          ) : (
+            <TableFiltersAdvancedTab
+              formState={formState}
+              formDispatch={formDispatch}
+              defaultFormState={defaultFormState}
+              isHoverable={isHoverable}
+            />
+          )}
+        </div>
       </Modal>
     </>
   );

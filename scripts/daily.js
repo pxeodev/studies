@@ -328,10 +328,7 @@ setTimeout(async () => {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
       await createJob({ serviceId: 'crn-c8q7r2pg7hp6tkba3sj0', startCommand: 'node dist/bot.mjs' })
       try {
-        await axios.post('https://websocket-pr-8.onrender.com/new-trends')
-        setTimeout(async () => {
-          await axios.post('https://websocket-pr-6.onrender.com/new-trends')
-        }, 1000 * 60 * 10)
+        await axios.post('https://websocket-pr-6.onrender.com/new-trends')
       } catch(e) {}
     }, 1000 * 60 * 5) // Wait 5 minutes so the realtime server can start
   }

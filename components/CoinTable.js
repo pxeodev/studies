@@ -1,11 +1,14 @@
-import { Table, Tag } from 'antd'
+import { Table } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
+import round from 'lodash/round'
+import isFinite from 'lodash/isFinite'
 import { useHydrated } from "react-hydration-provider";
 import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
+import classnames from 'classnames';
 
 import WatchlistStar from './WatchlistStar';
 import useIsHoverable from '../hooks/useIsHoverable';
@@ -15,7 +18,7 @@ import useBreakPoint from '../hooks/useBreakPoint.js';
 import { signals, preferredExchanges } from 'coinrotator-utils/variables.mjs'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { getImageURL } from '../utils/minifyImageURL';
-import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges as exchangesCol } from '../utils/sharedColumns';
+import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns';
 import { NotificationContext } from '../layouts/screener.js';
 
 import coinTableStyles from '../styles/table.module.less';
@@ -24,35 +27,53 @@ const CoinTable = ({
     coinsData,
     hiddenCoins,
     exchangeData,
-    marketCapMin,
-    marketCapMax,
-    trendLengthMin,
-    trendLengthMax,
-    trendType,
-    portfolio,
-    category,
-    defaultCategory,
-    exchanges,
-    derivatives,
-    showDerivatives,
-    superTrendFlavor,
+    formState,
+    defaultFormState,
     reverseMarketCapSort = false,
     showTrendStreak = true,
-    showExchanges = true,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
     passTrends,
   }) => {
 
+  const {
+    marketCapMax,
+    marketCapMin,
+    trendLengthMin,
+    trendLengthMax,
+    portfolio,
+    category,
+    trendType,
+    exchanges,
+    derivatives,
+    cexdex,
+    superTrendFlavor,
+    showCirculatingSupplyPercentage,
+    show24hVolumeByMarketCap,
+    showPercentageFromATH,
+    showPercentageFromATL,
+    showMarketCapRank,
+    showOpenInterest,
+    showFundingRate,
+    showVolume24h,
+    showFuturesVolume,
+    showATH,
+    showATL,
+  } = formState
+  const {
+    category: defaultCategory,
+  } = defaultFormState
+
   const router = useRouter()
   const isHoverable = useIsHoverable()
+  const screens = useBreakPoint()
   const hydrated = useHydrated()
-  const screens = useBreakPoint();
   const notification = useContext(NotificationContext)
   const [watchlistCoins, setWatchlistCoins] = useState([])
   const socket = useSocketStore(state => state.socket)
   const [prices, setPrices] = useState({})
   const [trends, setTrends] = useState(null)
+  const [liveCoinData, setLiveCoinData] = useState([])
   const updateTrends = useCallback((trends) => {
     setTrends(trends)
     if (passTrends) {
@@ -61,6 +82,7 @@ const CoinTable = ({
   }, [passTrends])
 
   const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 9 }), [])
+  const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation: 'compact', compactDisplay: 'short', maximumFractionDigits: 3 }), [])
   useEffect(() => {
     const prices = JSON.parse(localStorage.getItem("prices"))
     if (prices) {
@@ -125,6 +147,31 @@ const CoinTable = ({
       }
     }
   }, [socket, fetchTrends, updateTrends, superTrendFlavor])
+  const fetchLiveCoinData = useCallback(() => {
+    socket.emit('get_live_coin_data', (liveCoinData) => {
+      const data = liveCoinData.data
+      sessionStorage.setItem(`live_coin_data`, JSON.stringify(data))
+      setLiveCoinData(data)
+    })
+  }, [socket])
+  useEffect(() => {
+    if (showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume || show24hVolumeByMarketCap) {
+      if (socket) {
+        socket.on('new_live_coin_data', fetchLiveCoinData)
+      }
+      const cache = JSON.parse(sessionStorage.getItem('live_coin_data'))
+      if (cache) {
+        setLiveCoinData(cache)
+      } else if (socket) {
+        fetchLiveCoinData()
+      }
+    }
+    return () => {
+      if (socket) {
+        socket.off('new_live_coin_data')
+      }
+    }
+  }, [showOpenInterest, showFundingRate, showVolume24h,showFuturesVolume, show24hVolumeByMarketCap, socket, fetchLiveCoinData])
   useEffect(() => {
     setWatchlistCoins(getWatchListCoins())
   }, [])
@@ -157,13 +204,13 @@ const CoinTable = ({
     if (trends) {
       const dailyTrend = trends.daily[coinData.id]?.supersuperTrend
       if (dailyTrend) {
-        coinData.dailySuperSuperTrend = dailyTrend.trend
-        coinData.dailySuperSuperTrendStreak = dailyTrend.streak
+        coinData.dailySuperSuperTrend = 'UP'
+        coinData.dailySuperSuperTrendStreak = 2
       }
       const weeklyTrend = trends.weekly[coinData.id]?.supersuperTrend
       if (weeklyTrend) {
-        coinData.weeklySuperSuperTrend = weeklyTrend.trend
-        coinData.weeklySuperSuperTrendStreak = weeklyTrend.streak
+        coinData.weeklySuperSuperTrend = 'UP'
+        coinData.weeklySuperSuperTrendStreak = 2
       }
     }
     return coinData
@@ -179,12 +226,30 @@ const CoinTable = ({
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
     const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
     const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
+    const matchesCexDex = coinData.exchanges.some((exchange) => {
+      if (cexdex.length === 2 || cexdex.length === 0) {
+        return true
+      } else {
+        const matchingExchange = exchangeData.find(exchangeData => exchangeData.name === exchange[0])
+        if (!matchingExchange) {
+          return false
+        }
+        if (cexdex[0] === 'cex') {
+          return matchingExchange.centralized
+        } else if (cexdex[0] === 'dex') {
+          return !matchingExchange.centralized
+        }
+      }
+    })
+    const hasDailyOrWeekly = trends ? (coinData.dailySuperSuperTrend !== undefined || coinData.weeklySuperSuperTrend !== undefined) : true
     return coinData.marketCap <= max &&
            coinData.marketCap >= min &&
            matchesPortfolio &&
            matchesCategory &&
            matchesExchanges &&
            matchesDerivatives &&
+           matchesCexDex &&
+           hasDailyOrWeekly &&
            !hiddenCoins.includes(coinData.slug)
   })
   displayedCoinData = displayedCoinData.filter((coinData) => {
@@ -223,20 +288,32 @@ const CoinTable = ({
     shownDerivatives = shownDerivatives.sort((derivativeA, derivativeB) => {
       return preferredExchanges.includes(derivativeA.market) ? 1 : derivativeA.market.localeCompare(derivativeB.market)
     })
-    let shownExchanges = coinData.exchanges.sort((exchangeA, exchangeB) => {
-      if (preferredExchanges.includes(exchangeA[0])) {
-        if (preferredExchanges.includes(exchangeB[0])) {
-          return exchangeB[1] - exchangeA[1]
-        } else {
-          return -1
+    let percentageFromATH, percentageFromATL
+    const livePrice = prices[coinData.symbol]
+    if (livePrice) {
+      percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
+      percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
+    }
+    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h
+    if (liveCoinData) {
+      const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
+      if (matchingCoinData) {
+        openInterest = matchingCoinData.openInterest
+        fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 4) : null
+        futuresVolume24h = matchingCoinData.futuresVolume24h
+        openInterestByFuturesVolume24h = matchingCoinData.openInterestByfuturesVolume24h
+        openInterestByfuturesVolume24hChangePercent24h = matchingCoinData.openInterestByfuturesVolume24hChangePercent24h
+        if (matchingCoinData.volume24h && coinData.marketCap) {
+          twentyFourHourVolumeByMarketCap = matchingCoinData.volume24h / parseFloat(coinData.marketCap)
         }
-      } else if (preferredExchanges.includes(exchangeB[0])) {
-        return 1;
-      } else {
-        return exchangeB[1] - exchangeA[1]
+        openInterestChangePercent1h = round(matchingCoinData.openInterestChangePercent1h, 2)
+        openInterestChangePercent24h = round(matchingCoinData.openInterestChangePercent24h, 2)
       }
-    })
-    shownExchanges = shownExchanges.slice(0, 5)
+    }
+    let circulatingSupplyPercentage
+    if (coinData.totalSupply) { // Some coins have infinite supply and totalSupply is NULL for them
+      circulatingSupplyPercentage = `${round((Number(coinData.circulatingSupply) / Number(coinData.totalSupply) * 100), 2)}%`
+    }
     return {
       key: `${coinData.id}-${coinData.name}`,
       id: coinData.id,
@@ -246,20 +323,33 @@ const CoinTable = ({
         imageSlug: coinData.imageSlug,
         name: coinData.name
       },
-      exchanges: shownExchanges,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
+      marketCapRank: coinData.marketCapRank,
       dailySuperSuperTrend: coinData.dailySuperSuperTrend,
       dailySuperSuperTrendStreak: coinData.dailySuperSuperTrendStreak,
       weeklySuperSuperTrend: coinData.weeklySuperSuperTrend,
       weeklySuperSuperTrendStreak: coinData.weeklySuperSuperTrendStreak,
+      ath: coinData.ath,
+      atl: coinData.atl,
+      circulatingSupplyPercentage,
+      twentyFourHourVolumeByMarketCap,
+      percentageFromATH,
+      percentageFromATL,
+      openInterest,
+      fundingRate,
+      futuresVolume24h,
+      openInterestByFuturesVolume24h,
+      openInterestByfuturesVolume24hChangePercent24h,
+      openInterestChangePercent1h,
+      openInterestChangePercent24h,
     }
   })
 
   let columns = [
     {
       title: () => `Coin (${tableData.length})`,
-      width: 200,
+      width: screens.sm ? 200 : 140,
       dataIndex: 'coinData',
       onCell: ({ id }) => {
         return {
@@ -279,13 +369,15 @@ const CoinTable = ({
               {screens.sm && <span className={coinTableStyles.name}>{coinData.name}</span>}
               <span className={coinTableStyles.symbol}>{coinData.symbol}</span>
             </Link>
-            <Link href={`/coin/${data.id}#chart`} onClick={(e) => e.stopPropagation()}>
-              <BarChartOutlined
-                className={coinTableStyles.chart}
-                alt="Real time chart"
-                title="Real time chart"
-              />
-            </Link>
+            { screens.sm ? (
+              <Link href={`/coin/${data.id}#chart`} onClick={(e) => e.stopPropagation()}>
+                <BarChartOutlined
+                  className={coinTableStyles.chart}
+                  alt="Real time chart"
+                  title="Real time chart"
+                />
+              </Link>
+            ) : null}
           </>
         );
       }
@@ -321,38 +413,221 @@ const CoinTable = ({
 
   columns.push(
   {
-    width: 90,
+    width: 100,
     ...marketCap(router, hydrated)
   }
   )
-  if (showExchanges) {
+  if (showMarketCapRank) {
     columns.push(
       {
-        width: 120,
-        ...exchangesCol(router, isHoverable, exchangeData)
+        title: 'Market Cap #',
+        dataIndex: 'marketCapRank',
+        width: 100,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.marketCapRank) - Number(b.marketCapRank)
       }
     )
   }
-  if (showDerivatives) {
+  if (showCirculatingSupplyPercentage) {
     columns.push(
       {
-        title: 'Derivatives',
-        dataIndex: 'derivatives',
-        width: 250,
+        title: 'Circulating supply',
+        dataIndex: 'circulatingSupplyPercentage',
+        width: 120,
         className: coinTableStyles.unclickableCell,
-        render: (derivatives, data) => {
-          return <span title="Top derivatives. Click to see more.">
-            {derivatives.map((derivative) => {
-              const onTagClick = () => {
-                router.push(`/coin/${data.id}?tab=Trade&filter=Derivatives`)
-              }
-              return <Tag
-                key={`${derivative.market}${derivative.symbol}`}
-                onClick={onTagClick}
-                className={coinTableStyles.clickableTag}
-              >{derivative.symbol}</Tag>
-            })}
-          </span>;
+        sorter: (a, b) => Number(a.circulatingSupplyPercentage?.slice(0, -1)) - Number(b.circulatingSupplyPercentage?.slice(0, -1))
+      }
+    )
+  }
+  if (show24hVolumeByMarketCap) {
+    columns.push(
+      {
+        title: '24h Volume / Market Cap',
+        dataIndex: 'twentyFourHourVolumeByMarketCap',
+        width: 120,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.twentyFourHourVolumeByMarketCap) - Number(b.twentyFourHourVolumeByMarketCap),
+        render: (twentyFourHourVolumeByMarketCap) => twentyFourHourVolumeByMarketCap ? round(twentyFourHourVolumeByMarketCap * 100, 2) + '%' : null
+      }
+    )
+  }
+  if (showATH) {
+    columns.push(
+      {
+        title: 'ATH',
+        dataIndex: 'ath',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
+        render: (ath) => ath ? currencyFormatter.format(ath) : null,
+        sorter: (a, b) => Number(a.ath) - Number(b.ath)
+      }
+    )
+  }
+  if (showPercentageFromATH) {
+    columns.push(
+      {
+        title: 'Percentage from ATH',
+        dataIndex: 'percentageFromATH',
+        width: 120,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.percentageFromATH?.slice(0, -1)) - Number(b.percentageFromATH?.slice(0, -1))
+      }
+    )
+  }
+  if (showATL) {
+    columns.push(
+      {
+        title: 'ATL',
+        dataIndex: 'atl',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
+        render: (atl) => atl ? currencyFormatter.format(atl) : null,
+        sorter: (a, b) => Number(a.atl) - Number(b.atl)
+      }
+    )
+  }
+  if (showPercentageFromATL) {
+    columns.push(
+      {
+        title: 'Percentage from ATL',
+        dataIndex: 'percentageFromATL',
+        width: 150,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.percentageFromATL?.slice(0, -1)) - Number(b.percentageFromATL?.slice(0, -1))
+      }
+    )
+  }
+  if (showOpenInterest) {
+    columns.push(
+      {
+        title: 'Open Interest',
+        dataIndex: 'openInterest',
+        width: 170,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterest) - Number(b.openInterest),
+        render: (openInterest) => {
+          if (openInterest) {
+            return currencyFormatter.format(openInterest)
+          } else {
+            return null
+          }
+        }
+      }
+    )
+    columns.push(
+      {
+        title: 'Open Interest (1h%)',
+        dataIndex: 'openInterestChangePercent1h',
+        width: 170,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterestChangePercent1h) - Number(b.openInterestChangePercent1h),
+        render: (openInterestChangePercent1h) => {
+          if (isFinite(openInterestChangePercent1h)) {
+            return (
+              <>
+                {!isNaN(openInterestChangePercent1h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: openInterestChangePercent1h < 0 })}>
+                    {openInterestChangePercent1h > 0 ? '+' : ''}
+                    {openInterestChangePercent1h}%
+                  </span>
+                ) : null}
+              </>
+            )
+          } else {
+            return null
+          }
+        }
+      }
+    )
+    columns.push(
+      {
+        title: 'Open Interest (24h%)',
+        dataIndex: 'openInterestChangePercent24h',
+        width: 170,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterestChangePercent24h) - Number(b.openInterestChangePercent24h),
+        render: (openInterestChangePercent24h) => {
+          if (isFinite(openInterestChangePercent24h)) {
+            return (
+              <>
+                {!isNaN(openInterestChangePercent24h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: openInterestChangePercent24h < 0 })}>
+                    {openInterestChangePercent24h > 0 ? '+' : ''}
+                    {openInterestChangePercent24h}%
+                  </span>
+                ) : null}
+              </>
+            )
+          } else {
+            return null
+          }
+        }
+      }
+    )
+  }
+  if (showFundingRate) {
+    columns.push(
+      {
+        title: 'Funding Rate',
+        dataIndex: 'fundingRate',
+        width: 120,
+        sorter: (a, b) => Number(a.fundingRate) - Number(b.fundingRate),
+        className: coinTableStyles.unclickableCell,
+        render: (fundingRate) => {
+          if (isFinite(fundingRate)) {
+            return (
+              <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: fundingRate > 0 })}>
+                {fundingRate > 0 ? '+' : ''}
+                {fundingRate}
+              </span>
+            )
+          } else {
+            return null
+          }
+        }
+      }
+    )
+  }
+  if (showVolume24h) {
+    columns.push(
+      {
+        title: 'Futures Volume (24h)',
+        dataIndex: 'futuresVolume24h',
+        width: 120,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.futuresVolume24h) - Number(b.futuresVolume24h),
+        render: (futuresVolume24h) => {
+          return futuresVolume24h ? currencyFormatter.format(futuresVolume24h) : null
+        }
+      }
+    )
+  }
+  if (showFuturesVolume) {
+    columns.push(
+      {
+        title: 'OI / 24h Volume',
+        dataIndex: 'openInterestByFuturesVolume24h',
+        width: 160,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterestByFuturesVolume24h) - Number(b.openInterestByFuturesVolume24h),
+        render: (openInterestByFuturesVolume24h, data) => {
+          if (isFinite(openInterestByFuturesVolume24h)) {
+            return (
+              <>
+                <>{numberFormatter.format(openInterestByFuturesVolume24h)}</>
+                {data.openInterestByfuturesVolume24hChangePercent24h ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestByfuturesVolume24hChangePercent24h < 0 })}>
+                    &nbsp;(
+                      {data.openInterestByfuturesVolume24hChangePercent24h > 0 ? '+' : ''}
+                      {round(data.openInterestByfuturesVolume24hChangePercent24h, 2)}%
+                    )
+                  </span>
+                ) : null}
+              </>
+            )
+          } else {
+            return null
+          }
         }
       }
     )

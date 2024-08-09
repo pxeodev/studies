@@ -1,19 +1,25 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { notification } from 'antd'
 
 import useChainId from '../hooks/useChainId';
 
 const MetaMaskButtonWithEthereum = ({ symbol, address, chainId, decimals=18, image, className }) => {
-  const currentChainId = useChainId()
+  const [provider, setProvider] = useState(null)
+  const currentChainId = useChainId(provider)
+  useEffect(() => {
+    detectEthereumProvider().then(setProvider)
+  }, [])
+
   const addCoin = useCallback((e) => {
     e.stopPropagation();
-    const switchNetwork = async (provider) => {
+    const switchNetwork = async (currentChainId) => {
       if (currentChainId === chainId) { return; }
+      const prefixedChainId = `0x${chainId.toString(16)}`
       try {
         await provider.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${Number(chainId).toString(16)}` }]
+          params: [{ chainId: prefixedChainId }]
         })
       } catch (e) {
         notification.error({
@@ -23,14 +29,13 @@ const MetaMaskButtonWithEthereum = ({ symbol, address, chainId, decimals=18, ima
       }
     }
     const addMetamaskCoin = async () => {
-      const provider = await detectEthereumProvider()
       if (!provider) {
         notification.error({
           description: "Please install MetaMask",
         })
         return
       }
-      await switchNetwork(provider);
+      await switchNetwork(currentChainId);
       let wasAdded;
       try {
         wasAdded = await provider.request({
@@ -55,7 +60,7 @@ const MetaMaskButtonWithEthereum = ({ symbol, address, chainId, decimals=18, ima
     }
 
     addMetamaskCoin();
-  }, [image, symbol, address, decimals, chainId, currentChainId]);
+  }, [image, symbol, address, decimals, chainId, currentChainId, provider]);
 
   if (!chainId) { return null; }
   // eslint-disable-next-line @next/next/no-img-element

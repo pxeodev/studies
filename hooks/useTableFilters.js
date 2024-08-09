@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
 
 import { signals, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 
-const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
+const useTableFilters = (coinsData) => {
   const router = useRouter()
   const defaultFormState = useMemo(() =>
   ({
@@ -17,7 +17,18 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
       trendType: signals.all,
       exchanges: [],
       derivatives: [],
-      showDerivatives: showDerivativesByDefault,
+      showCirculatingSupplyPercentage: false,
+      show24VolumeByMarketCap: false,
+      showPercentageFromATH: false,
+      showPercentageFromATL: false,
+      showMarketCapRank: false,
+      showOpenInterest: false,
+      showFundingRate: false,
+      showVolume24h: false,
+      showFuturesVolume: false,
+      showATH: false,
+      showATL: false,
+      cexdex: ['cex', 'dex'],
       marketCapMin: coinsData[coinsData.length - 1].marketCap,
       marketCapMax: coinsData[0].marketCap,
       trendLengthMin: '',
@@ -62,10 +73,65 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
           ...state,
           derivatives: action.payload
         }
-      case 'SET_SHOW_DERIVATIVES':
+      case 'SET_SHOW_CIRCULATING_SUPPLY_PERCENTAGE':
         return {
           ...state,
-          showDerivatives: action.payload
+          showCirculatingSupplyPercentage: action.payload
+        }
+      case 'SET_SHOW_24H_VOLUME_BY_MARKET_CAP':
+        return {
+          ...state,
+          show24hVolumeByMarketCap: action.payload
+        }
+      case 'SET_SHOW_PERCENTAGE_FROM_ATH':
+        return {
+          ...state,
+          showPercentageFromATH: action.payload
+        }
+      case 'SET_SHOW_PERCENTAGE_FROM_ATL':
+        return {
+          ...state,
+          showPercentageFromATL: action.payload
+        }
+      case 'SET_SHOW_MARKET_CAP_RANK':
+        return {
+          ...state,
+          showMarketCapRank: action.payload
+        }
+      case 'SET_SHOW_OPEN_INTEREST':
+        return {
+          ...state,
+          showOpenInterest: action.payload
+        }
+      case 'SET_SHOW_FUNDING_RATE':
+        return {
+          ...state,
+          showFundingRate: action.payload
+        }
+      case 'SET_SHOW_VOLUME_24H':
+        return {
+          ...state,
+          showVolume24h: action.payload
+        }
+      case 'SET_SHOW_FUTURES_VOLUME':
+        return {
+          ...state,
+          showFuturesVolume: action.payload
+        }
+      case 'SET_SHOW_ATH':
+        return {
+          ...state,
+          showATH: action.payload
+        }
+      case 'SET_SHOW_ATL':
+        return {
+          ...state,
+          showATL: action.payload
+        }
+      case 'SET_CEX_DEX':
+        return {
+          ...state,
+          cexdex: action.payload
         }
       case 'SET_SUPERTREND_FLAVOR':
         return {
@@ -189,12 +255,22 @@ const useTableFilters = (coinsData, showDerivativesByDefault = false) => {
         trendType: router.query.trendType,
         exchanges,
         derivatives,
-        showDerivatives: router.query.showDerivatives,
         marketCapMin: router.query.marketCapMin,
         marketCapMax: router.query.marketCapMax,
         trendLengthMin: router.query.trendLengthMin,
         trendLengthMax: router.query.trendLengthMax,
         superTrendFlavor: router.query.superTrendFlavor,
+        showCirculatingSupplyPercentage: router.query.showCirculatingSupplyPercentage,
+        show24hVolumeByMarketCap: router.query.show24hVolumeByMarketCap,
+        showPercentageFromATH: router.query.showPercentageFromATH,
+        showPercentageFromATL: router.query.showPercentageFromATL,
+        showMarketCapRank: router.query.showMarketCapRank,
+        showOpenInterest: router.query.showOpenInterest,
+        showFundingRate: router.query.showFundingRate,
+        showVolume24h: router.query.showVolume24h,
+        showFuturesVolume: router.query.showFuturesVolume,
+        showATH: router.query.showATH,
+        showATL: router.query.showATL,
       }
     })
   }, [router.isReady, router.query])

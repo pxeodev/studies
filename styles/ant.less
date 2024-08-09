@@ -39,6 +39,15 @@ body {
   }
 }
 
+.ant-checkbox-group-item {
+  color: var(--cr-primary-text);
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--cr-primary-color);
+  border-color: var(--cr-primary-color);
+}
+
 .ant-menu-item a {
   color: var(--cr-primary-text);
 }
@@ -73,6 +82,13 @@ body {
     span:first-child {
       top: 4px;
     }
+  }
+}
+
+@media (max-width: @screen-lg) {
+  [data-id="logo"] .ant-menu-title-content {
+    line-height: 52px;
+    position: absolute;
   }
 }
 
@@ -224,6 +240,10 @@ body {
 
 .ant-select-selector {
   border: 1px solid var(--cr-secondary-border) !important;
+}
+
+.ant-modal-mask, .ant-modal-wrap {
+  background-color: transparent !important;
 }
 
 .ant-modal {

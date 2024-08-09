@@ -3,9 +3,9 @@ import { Layout, Menu } from 'antd'
 import Logo from './Logo'
 import Search from './Search'
 import NavigationModal from './NavigationModal'
+import ConnectButton from './ConnectButton'
 
 import headerStyles from '../styles/header.module.less'
-import ConnectButton from './ConnectButton'
 
 const Header = ({ categories, screens, topCategories }) => {
   const { Header: AntHeader } = Layout;

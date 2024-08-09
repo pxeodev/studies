@@ -77,7 +77,7 @@ const ConnectButton = ({ collapsed }) => {
         onCancel={() => setLoginModalVisible(false)}
         footer={null}
         title={finalWalletAddress ? "Disconnect" : "Connect"}
-        zIndex={10}
+        zIndex={500}
         className={connectButtonStyles.modal}
         centered
       >

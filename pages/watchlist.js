@@ -11,12 +11,11 @@ import { gql } from '@urql/core'
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs'
 
 import globalData from '../lib/globalData'
-import prisma from '../lib/prisma.mjs'
 import { getWatchListCoins } from '../utils/watchlist'
 import PageHeader from '../components/PageHeader'
 import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
-import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap, exchanges } from '../utils/sharedColumns'
+import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns'
 import strapi from '../utils/strapi';
 import useSocketStore from '../hooks/useSocketStore'
 
@@ -25,7 +24,6 @@ import watchlistStyles from '../styles/watchlist.module.less'
 
 export async function getStaticProps() {
   const appData = await globalData()
-  const exchangeData = await prisma.exchange.findMany()
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {
@@ -49,7 +47,6 @@ export async function getStaticProps() {
   return {
     props: {
       appData,
-      exchangeData,
       pageData: data
     }
   }
@@ -60,7 +57,7 @@ const getWatchListFromUrl = (urlPath) => {
   return new URLSearchParams(urlPath.split('?')[1]).getAll('watchlist')
 }
 
-export default function WatchList({ exchangeData, appData, pageData }) {
+export default function WatchList({ appData, pageData }) {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const socket = useSocketStore(state => state.socket)
@@ -160,10 +157,6 @@ export default function WatchList({ exchangeData, appData, pageData }) {
       width: 100,
       ...marketCap(router, hydrated),
     },
-    {
-      width: 120,
-      ...exchanges(router, isHoverable, exchangeData),
-    }
   ]
   const tableData = watchlist.map(coin => {
     const dailyTrend = trends?.daily?.[coin.id]

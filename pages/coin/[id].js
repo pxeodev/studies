@@ -42,24 +42,20 @@ const TABS = {
 }
 
 export default function Coin(coin) {
-  let dailySignal
   let dailySignalTag
   const [trends, setTrends] = useState(null)
+  const [liveCoinData, setLiveCoinData] = useState([])
   switch (trends?.daily?.supersuperTrend?.trend) {
     case signals.buy:
-      dailySignal = 'UP'
       dailySignalTag = <a href="#markets"><UpTag /></a>
       break;
     case signals.sell:
-      dailySignal = 'DOWN'
       dailySignalTag = <a href="#markets"><DownTag /></a>
       break;
     case signals.hodl:
-      dailySignal = 'HODL'
       dailySignalTag = <a href="#markets"><HodlTag /></a>
       break;
     default:
-      dailySignal = '      '
       dailySignalTag = <a href="#markets"><LoadingTag /></a>
   }
   let weeklySignalTag
@@ -82,7 +78,6 @@ export default function Coin(coin) {
   const notification = useContext(NotificationContext)
   const dateFormatter = new Intl.DateTimeFormat([], { dateStyle: 'medium' })
   const currencyFormatter = useMemo(() => new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 15 }), [])
-  const coinPriceRef = useRef(null)
   const socket = useSocketStore(state => state.socket)
 
   const fetchTrends = useCallback(() => {
@@ -93,6 +88,7 @@ export default function Coin(coin) {
       }, (trends) => setTrends(trends))
     }
   }, [socket, coin.id])
+  const [price, setPrice] = useState(null)
   useEffect(() => {
     console.log('useeffect fetch trends')
     fetchTrends()
@@ -101,8 +97,8 @@ export default function Coin(coin) {
     const localPrices = JSON.parse(localStorage.getItem("prices"))
     if (localPrices) {
       const price = localPrices[coin.symbol]
-      if (price && coinPriceRef.current) {
-        coinPriceRef.current.innerText = currencyFormatter.format(price)
+      if (price) {
+        setPrice(price)
       }
     }
   }, [coin.symbol, currencyFormatter])
@@ -110,16 +106,16 @@ export default function Coin(coin) {
     if (socket) {
       socket.on("i", (prices) => {
         const price = prices[coin.symbol]
-        if (price && coinPriceRef.current) {
-          coinPriceRef.current.innerText = currencyFormatter.format(price)
+        if (price) {
+          setPrice(price)
         }
         console.debug("Received initial prices", prices);
       });
 
       socket.on('p', (priceUpdates) => {
         const priceUpdate = priceUpdates[coin.symbol]
-        if (priceUpdate && coinPriceRef.current) {
-          coinPriceRef.current.innerText = currencyFormatter.format(priceUpdate)
+        if (priceUpdate) {
+          setPrice(priceUpdate)
         }
       })
 
@@ -133,6 +129,27 @@ export default function Coin(coin) {
       }
     }
   }, [socket, coin.symbol, currencyFormatter, fetchTrends])
+  const fetchLiveCoinData = useCallback(() => {
+    socket.emit('get_live_coin_data', (liveCoinData) => {
+      const data = liveCoinData.data
+      sessionStorage.setItem(`live_coin_data`, JSON.stringify(data))
+      setLiveCoinData(data)
+    })
+  }, [socket])
+  useEffect(() => {
+    const cache = JSON.parse(sessionStorage.getItem('live_coin_data'))
+    if (cache) {
+      setLiveCoinData(cache)
+    } else if (socket) {
+      fetchLiveCoinData()
+      socket.on('new_live_coin_data', fetchLiveCoinData)
+    }
+    return () => {
+      if (socket) {
+        socket.off('new_live_coin_data')
+      }
+    }
+  }, [socket, fetchLiveCoinData])
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | Daily Crypto Trend Screener`
   const metaDescription = `Daily insights on ${coin.name} (${coin.symbol.toUpperCase()})! Discover Coinrotator's comprehensive trend analysis for multiple timeframes.`
@@ -219,7 +236,7 @@ export default function Coin(coin) {
       postfix={
         <>
           <Tag className={coinStyles.coinTag}>{coin.symbol.toUpperCase()}</Tag>
-          <span ref={coinPriceRef} />
+          <span>{currencyFormatter.format(price)}</span>
         </>
       }
     />
@@ -305,7 +322,7 @@ export default function Coin(coin) {
             </Card.Grid>
           );
         })}
-        <ActiveTabComponent coin={coin} screens={screens} />
+        <ActiveTabComponent coin={coin} screens={screens} liveCoinData={liveCoinData} price={price} />
       </Card>
     </Content>
   </>;
@@ -376,7 +393,6 @@ export async function getStaticProps({ params }) {
     'launch_roi_usd',
     'launch_roi_eth',
     'launch_roi_btc',
-    'currentPrice',
     'coingeckoCategories',
   ])
   const categories = uniq([...coinData.categories, ...coinData.coingeckoCategories])
@@ -395,7 +411,6 @@ export async function getStaticProps({ params }) {
       launch_roi_usd: Number(coinData.launch_roi_usd),
       launch_roi_eth: Number(coinData.launch_roi_eth),
       launch_roi_btc: Number(coinData.launch_roi_btc),
-      currentPrice: Number(coinData.currentPrice),
       platforms,
       chainsData,
       description,

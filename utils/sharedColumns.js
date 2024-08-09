@@ -53,6 +53,7 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, 
 
 export function dailySuperSuperTrendStreak(router, isHoverable) {
   return {
+    width: 150,
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
     title: <span className={coinTableStyles.columnTitle}>
       <span>Streak</span>
@@ -169,43 +170,6 @@ export function marketCap(router, hydrated) {
           {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
         </div>
       )
-    }
-  }
-}
-
-export function exchanges(router, isHoverable, exchangeData) {
-  return {
-    title: <span className={coinTableStyles.columnTitle}>
-      <span>Exchanges</span>
-      <Tooltip
-          placement={'right'}
-          trigger={isHoverable ? 'hover' : 'click'}
-          title="All the exchanges this coin is traded on"
-      >
-        <QuestionCircleFilled className={classnames(baseStyles.tooltipIcon, baseStyles.icon)}  />
-      </Tooltip>
-    </span>,
-    dataIndex: 'exchanges',
-    className: coinTableStyles.unclickableCell,
-    render: (exchanges, data) => {
-      return <span title="Top 5 exchanges. Click to see more.">
-        {exchanges.map((exchange) => {
-          let matchingExchange = exchangeData.find(ex => ex.name === exchange[0])
-          const matchingExchangeImage = matchingExchange?.image || "/favicon-16x16.png"
-          const onTagClick = () =>
-            router.push(`/coin/${data.id}?tab=Trade`)
-          // eslint-disable-next-line @next/next/no-img-element
-          return <img
-            src={matchingExchangeImage}
-            alt={exchange[0]}
-            title={exchange[0]}
-            loading="lazy"
-            key={exchange[0]}
-            onClick={onTagClick}
-            className={classnames(coinTableStyles.clickableTag, coinTableStyles.image)}
-          />
-        })}
-      </span>;
     }
   }
 }

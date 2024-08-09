@@ -13,7 +13,7 @@
 .text {
   color: var(--cr-primary-text);
   font-size: 20px;
-  line-height: 28px;
+  line-height: 52px;
   margin-left: 6px;
 }
 
@@ -21,6 +21,10 @@
   display: inline-block;
   width: 100%;
   user-select: none;
+
+  a::before {
+    display: none;
+  }
 
   &:hover {
     color: var(--cr-primary-text) !important;

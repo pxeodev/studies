@@ -34,7 +34,7 @@ const ExplainerModal = ({ title, explainer, showSource, lastUpdated }) => {
     getContainer: () => modalRef.current,
   }
   return (
-    <div ref={modalRef}>
+    <div ref={modalRef} style={{ background: 'transparent', display: 'inline-block' }}>
       <a href="#description">
         <InfoCircleFilled className={styles.explainer} onClick={() => setModalVisible(true)} />
       </a>

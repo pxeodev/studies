@@ -1,7 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 
 import prisma from '../../lib/prisma.mjs'
-import convertTickersToExchanges from '../../utils/convertTickersToExchanges.js'
 
 const handler = async (req, res) => {
   let requestedCoins = req.query['coins[]']
@@ -23,16 +22,12 @@ const handler = async (req, res) => {
         images: true,
         symbol: true,
         marketCap: true,
-        tickers: true,
       }
     })
     coins = await Promise.all(
       coins.map(async (coin) => {
-        const exchanges = convertTickersToExchanges(coin.tickers)
-        delete coin.tickers
         return {
           ...coin,
-          exchanges,
           marketCap: Number(coin.marketCap),
         }
       })

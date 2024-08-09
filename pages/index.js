@@ -27,6 +27,11 @@ export async function getStaticProps() {
       images: true,
       marketCap: true,
       marketCapRank: true,
+      fullyDilutedValuation: true,
+      circulatingSupply: true,
+      totalSupply: true,
+      ath: true,
+      atl: true,
       categories: true,
       coingeckoCategories: true,
       tickers: true,
@@ -77,6 +82,11 @@ export async function getStaticProps() {
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     coinData.imageSlug = getImageSlug(coinData.images.large)
     coinData.derivatives = coinData.derivatives?.slice(0, 5)
+    coinData.fullyDilutedValuation = Number(coinData.fullyDilutedValuation)
+    coinData.circulatingSupply = Number(coinData.circulatingSupply)
+    coinData.totalSupply = Number(coinData.totalSupply)
+    coinData.ath = Number(coinData.ath)
+    coinData.atl = Number(coinData.atl)
 
     coinData = pick(coinData, [
       'id',
@@ -84,6 +94,11 @@ export async function getStaticProps() {
       'name',
       'marketCap',
       'marketCapRank',
+      'fullyDilutedValuation',
+      'circulatingSupply',
+      'totalSupply',
+      'ath',
+      'atl',
       'categories',
       'coingeckoCategories',
       'imageSlug',
@@ -136,18 +151,8 @@ export default function Home({ coinsData, hiddenCoins, appData, exchangeData, pa
             coinsData={coinsData}
             hiddenCoins={hiddenCoins}
             exchangeData={exchangeData}
-            marketCapMax={formState.marketCapMax}
-            marketCapMin={formState.marketCapMin}
-            trendLengthMin={formState.trendLengthMin}
-            trendLengthMax={formState.trendLengthMax}
-            portfolio={formState.portfolio}
-            category={formState.category}
-            trendType={formState.trendType}
-            defaultCategory={defaultFormState.category}
-            exchanges={formState.exchanges}
-            derivatives={formState.derivatives}
-            showDerivatives={formState.showDerivatives}
-            superTrendFlavor={formState.superTrendFlavor}
+            formState={formState}
+            defaultFormState={defaultFormState}
           />
         </Row>
       </Layout.Content>

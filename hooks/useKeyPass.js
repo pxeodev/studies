@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi'
-import { useCookies } from 'react-cookie';
+
+import useAccount from './useAccount.js';
 
 const useKeyPass = () => {
-  const { address: walletAddress } = useAccount()
-  const [cookies] = useCookies(['user']);
-  const telegramWalletAddress = cookies?.user?.walletAddress
-  const finalWalletAddress = walletAddress || telegramWalletAddress
+  const finalWalletAddress = useAccount()
   const [hasKeyPass, setHasKeyPass] = useState(false)
 
   useEffect(() => {
