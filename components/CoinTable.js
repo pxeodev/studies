@@ -20,7 +20,6 @@ import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils
 import { getImageURL } from '../utils/minifyImageURL';
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns';
 import { NotificationContext } from '../layouts/screener.js';
-import useBreakPoint from '../hooks/useBreakPoint.js';
 
 import coinTableStyles from '../styles/table.module.less';
 
@@ -69,7 +68,6 @@ const CoinTable = ({
   const isHoverable = useIsHoverable()
   const screens = useBreakPoint()
   const hydrated = useHydrated()
-  const screens = useBreakPoint();
   const notification = useContext(NotificationContext)
   const [watchlistCoins, setWatchlistCoins] = useState([])
   const socket = useSocketStore(state => state.socket)
