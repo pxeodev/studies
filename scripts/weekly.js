@@ -73,7 +73,7 @@ const fetchCoinData = async (url, coin, page) => {
   }
 
   launch_date_start = isNaN(Date.parse(launch_date_start)) ? null : new Date(launch_date_start)
-  await sql`UPDATE "Coin" SET "launch_date_start" = ${launch_date_start}, "launch_roi_usd" = ${launch_roi_usd}, "launch_roi_btc" = ${launch_roi_btc}, "launch_roi_eth" = ${launch_roi_eth}, "categories" = ${categories} WHERE id = ${coin.id}`
+  await sql`UPDATE "Coin" SET "launch_date_start" = ${launch_date_start ?? null}, "launch_roi_usd" = ${launch_roi_usd ?? null}, "launch_roi_btc" = ${launch_roi_btc ?? null}, "launch_roi_eth" = ${launch_roi_eth ?? null}, "categories" = ${categories ?? null} WHERE id = ${coin.id}`
 }
 
 const dropsTab = async () => {
