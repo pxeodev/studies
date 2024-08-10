@@ -226,6 +226,7 @@ const CoinTable = ({
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
     const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
     const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
+    const marketCapNumber = Number(coinData.marketCap)
     const matchesCexDex = coinData.exchanges.some((exchange) => {
       if (cexdex.length === 2 || cexdex.length === 0) {
         return true
@@ -242,8 +243,8 @@ const CoinTable = ({
       }
     })
     const hasDailyOrWeekly = trends ? (coinData.dailySuperSuperTrend !== undefined || coinData.weeklySuperSuperTrend !== undefined) : true
-    return coinData.marketCap <= max &&
-           coinData.marketCap >= min &&
+    return marketCapNumber <= max &&
+           marketCapNumber >= min &&
            matchesPortfolio &&
            matchesCategory &&
            matchesExchanges &&

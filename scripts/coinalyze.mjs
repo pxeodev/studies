@@ -7,10 +7,9 @@ import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { retry } from '@lifeomic/attempt'
 
-import prisma from '../lib/prisma.mjs';
-
 import { getSupportedExchanges, getSupportedFutureMarkets, getOpenInterest, getFundingRate, getVolume24h } from '../lib/coinalyze.mjs';
 import { deformat } from '../utils/number.mjs';
+import sql from '../lib/database.mjs';
 
 dotenv.config();
 puppeteer.use(StealthPlugin())
@@ -66,7 +65,7 @@ const getOpenInterestPriceFactorUSD = (market, databaseCoins, coin) => {
 const fetchCoinalyze = async () => {
   await initializeScraping()
   const now = startofHour(new Date());
-  const databaseExchanges = await prisma.exchange.findMany({ select: { id: true, name: true } })
+  const databaseExchanges = await sql`SELECT id, name FROM "Exchange"`
   const databaseExchangeNames = databaseExchanges.map(exchange => exchange.name);
   let supportedExchanges = await getSupportedExchanges()
   supportedExchanges = supportedExchanges.data.filter(exchange => databaseExchangeNames.includes(exchange.name));
@@ -76,21 +75,7 @@ const fetchCoinalyze = async () => {
   supportedFutureMarkets = supportedFutureMarkets.data.filter(market => market.is_perpetual && supportedExchangeCodes.includes(market.exchange));
   const supportedFutureSymbols = supportedFutureMarkets.map(market => market.base_asset.toLowerCase());
 
-  const databaseCoins = await prisma.coin.findMany({
-    select: {
-      symbol: true,
-      id: true,
-      currentPrice: true,
-    },
-    where: {
-      symbol: {
-        in: supportedFutureSymbols
-      }
-    },
-    orderBy: {
-      marketCapRank: 'asc'
-    }
-  });
+  const databaseCoins = await sql`SELECT id, symbol, "currentPrice" FROM "Coin" WHERE symbol IN ${sql([...supportedFutureSymbols])} ORDER BY "marketCapRank" ASC`
   for (const coin of databaseCoins) {
     let supportedMarketsForCoin = supportedFutureMarkets.filter(market => market.base_asset.toLowerCase() === coin.symbol);
     let preferredFundingRateMarket = supportedMarketsForCoin.find(market => preferredFundingRateMarkets.includes(market.exchange))
@@ -131,27 +116,8 @@ const fetchCoinalyze = async () => {
     if (coin.id === CME_SCRAPING_COINS[CME_SCRAPING_COINS.length - 1]) {
       await browser.close()
     }
-    await prisma.coin.update({
-      where: {
-        id: coin.id
-      },
-      data: {
-        openInterest,
-        fundingRate,
-        futuresVolume24h,
-      }
-    });
-    await prisma.coinTime.create({
-      data: {
-        coinId: coin.id,
-        date: now,
-        time: now,
-        timeframe: '1h',
-        openInterest,
-        fundingRate,
-        futuresVolume24h,
-      }
-    })
+    await sql`UPDATE "Coin" SET "openInterest" = ${openInterest}, "fundingRate" = ${fundingRate}, "futuresVolume24h" = ${futuresVolume24h} WHERE id = ${coin.id}`
+    await sql`INSERT INTO "CoinTime" ("coinId", "date", "time", "timeframe", "openInterest", "fundingRate", "futuresVolume24h") VALUES (${coin.id}, ${now}, ${now}, '1h', ${openInterest}, ${fundingRate}, ${futuresVolume24h})`
   }
 }
 

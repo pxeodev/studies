@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
 
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { convertOhlcsToSuperTrends } from '../utils/ohlc.mjs';
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
@@ -9,43 +9,27 @@ import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
 dotenv.config();
 
 const fixTrends = async () => {
-  await prisma.superTrend.deleteMany()
-  let allCoinIds = await prisma.coin.findMany({
-    select: {
-      id: true,
-    },
-    orderBy: {
-      id: 'asc'
-    }
-  })
+  await sql`DELETE FROM "SuperTrend"`
+  let allCoinIds = await sql`
+    SELECT id
+    FROM "Coin"
+    ORDER BY id ASC
+  `;
   allCoinIds = allCoinIds.map(coin => coin.id)
   for (const coinId of allCoinIds) {
     console.log(coinId)
-    let ohlcs = await prisma.ohlc.findMany({
-      select: {
-        closeTime: true,
-        open: true,
-        high: true,
-        low: true,
-        close: true,
-        quoteSymbol: true
-      },
-      where: {
-        coinId
-      },
-      orderBy: { closeTime: 'asc' },
-    })
+    let ohlcs = await sql`SELECT "closeTime", "open", "high", "low", "close", "quoteSymbol" FROM "Ohlc" WHERE "coinId" = ${coinId} ORDER BY "closeTime" ASC`
     ohlcs = convertToDailySignals(ohlcs, true)
     for (const [quoteSymbol, quoteOhlcs] of Object.entries(ohlcs)) {
       const weeklyCrTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, true)
-      await prisma.superTrend.createMany({ data: weeklyCrTrends, skipDuplicates: true })
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(weeklyCrTrends)} ON CONFLICT DO NOTHING`
       const weeklyClassicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, true)
-      await prisma.superTrend.createMany({ data: weeklyClassicTrends, skipDuplicates: true })
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(weeklyClassicTrends)} ON CONFLICT DO NOTHING`
 
       const dailyCrTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.coinrotator, false)
-      await prisma.superTrend.createMany({ data: dailyCrTrends, skipDuplicates: true })
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(dailyCrTrends)} ON CONFLICT DO NOTHING`
       const dailyClassicTrends = convertOhlcsToSuperTrends(quoteOhlcs, coinId, quoteSymbol, SUPERTREND_FLAVOR.classic, false)
-      await prisma.superTrend.createMany({ data: dailyClassicTrends, skipDuplicates: true })
+      await sql`INSERT INTO "SuperTrend" VALUES ${sql(dailyClassicTrends)} ON CONFLICT DO NOTHING`
     }
   }
   axios.post('https://coinrotator-realtime-fra.onrender.com/new-trends')

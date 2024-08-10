@@ -10,11 +10,10 @@ import union from 'lodash/union.js'
 import uniqBy from 'lodash/uniqBy.js'
 
 import { quoteSymbols } from 'coinrotator-utils/variables.mjs'
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import coinGecko, { getOhlc, getCoin, getMarket } from '../lib/coinGecko.mjs'
 import { createJob } from '../lib/render.mjs'
 import { getAllCoins } from '../lib/lunr.mjs'
-import { Prisma } from '@prisma/client'
 import { hasPlatforms } from '../utils/coingecko.mjs';
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
@@ -40,26 +39,10 @@ const fetchCoinDataCoingecko = async (coinId) => {
   } catch (e) {
     if (e === noRankError || e.response?.status === 404) {
       // CoinGecko doesn't know this coin, so we assume it got delisted
-      await prisma.ohlc.deleteMany({
-        where: {
-          coinId,
-        },
-      })
-      await prisma.superTrend.deleteMany({
-        where: {
-          coinId,
-        },
-      })
-      await prisma.coinTime.deleteMany({
-        where: {
-          coinId,
-        },
-      })
-      await prisma.coin.delete({
-        where: {
-          id: coinId,
-        },
-      })
+      await sql`DELETE FROM "Ohlc" WHERE "coinId" = ${coinId}`
+      await sql`DELETE FROM "SuperTrend" WHERE "coinId" = ${coinId}`
+      await sql`DELETE FROM "CoinTime" WHERE "coinId" = ${coinId}`
+      await sql`DELETE FROM "Coin" WHERE id = ${coinId}`
       return [false, null, coinId]
     } else {
       console.log(e.response?.status);
@@ -74,14 +57,12 @@ const fetchCoinDataCoingecko = async (coinId) => {
   if (hasPlatforms(coinData.platforms)) {
     platforms = pickBy(coinData.platforms, contract => contract.length)
     if (!Object.keys(platforms).length) {
-      platforms = Prisma.DbNull
+      platforms = null
     }
   } else {
-    platforms = Prisma.DbNull
+    platforms = null
   }
 
-  const dailyChange = coinData.market_data.price_change_percentage_24h || undefined
-  const weeklyChange = coinData.market_data.price_change_percentage_7d || undefined
   const marketCap = Math.ceil(coinData.market_data.market_cap.usd)
   const volume = Math.ceil(coinData.market_data.total_volume.usd)
   const tickers = uniqBy(coinData.tickers, ticker => `${ticker.base}${ticker.target}${ticker.market.name}`)
@@ -101,34 +82,49 @@ const fetchCoinDataCoingecko = async (coinId) => {
     atl: coinData.market_data.atl.usd,
     marketCap,
     marketCapRank: coinData.market_data.market_cap_rank,
-    fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd,
+    fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd ?? null,
     currentPrice: coinData.market_data.current_price?.usd,
     circulatingSupply: coinData.market_data.circulating_supply,
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
     tickers: tickers,
-    dailyChange: dailyChange,
-    weeklyChange: weeklyChange,
     coingeckoCategories: categories,
   }
 
-  await prisma.coin.upsert({
-    where: { id: coinId },
-    create: {
-      id: coinId,
-      ...dbCoinData
-    },
-    update: dbCoinData,
-  })
+  await sql`
+    INSERT INTO "Coin" (
+      id, symbol, name, "defaultPlatform", platforms, images, description, homepage, twitter, "twitterFollowers",
+      ath, atl, "marketCap", "marketCapRank", "fullyDilutedValuation", "currentPrice", "circulatingSupply", "totalSupply",
+      "maxSupply", tickers, "coingeckoCategories"
+    ) VALUES (
+      ${coinId}, ${dbCoinData.symbol}, ${dbCoinData.name}, ${dbCoinData.defaultPlatform}, ${dbCoinData.platforms}, ${dbCoinData.images},
+      ${dbCoinData.description}, ${dbCoinData.homepage}, ${dbCoinData.twitter}, ${dbCoinData.twitterFollowers}, ${dbCoinData.ath}, ${dbCoinData.atl},
+      ${dbCoinData.marketCap}, ${dbCoinData.marketCapRank}, ${dbCoinData.fullyDilutedValuation}, ${dbCoinData.currentPrice}, ${dbCoinData.circulatingSupply},
+      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}
+    ) ON CONFLICT (id) DO UPDATE SET
+      symbol = EXCLUDED.symbol,
+      name = EXCLUDED.name,
+      "defaultPlatform" = EXCLUDED."defaultPlatform",
+      platforms = EXCLUDED.platforms,
+      images = EXCLUDED.images,
+      description = EXCLUDED.description,
+      homepage = EXCLUDED.homepage,
+      twitter = EXCLUDED.twitter,
+      "twitterFollowers" = EXCLUDED."twitterFollowers",
+      ath = EXCLUDED.ath,
+      atl = EXCLUDED.atl,
+      "marketCap" = EXCLUDED."marketCap",
+      "marketCapRank" = EXCLUDED."marketCapRank",
+      "fullyDilutedValuation" = EXCLUDED."fullyDilutedValuation",
+      "currentPrice" = EXCLUDED."currentPrice",
+      "circulatingSupply" = EXCLUDED."circulatingSupply",
+      "totalSupply" = EXCLUDED."totalSupply",
+      "maxSupply" = EXCLUDED."maxSupply",
+      tickers = EXCLUDED.tickers,
+      "coingeckoCategories" = EXCLUDED."coingeckoCategories"
+  `
 
-  await prisma.coinTime.create({
-    data: {
-      coinId,
-      date: new Date(),
-      marketCap,
-      volume,
-    }
-  })
+  await sql`INSERT INTO "CoinTime" ("coinId", "date", "marketCap", "volume") VALUES (${coinId}, ${new Date()}, ${marketCap}, ${volume})`
 
   return [true, symbol, coinId]
 }
@@ -176,7 +172,7 @@ const fetchOhlcData = async (coinId, symbol) => {
     }
   }
 
-  await prisma.ohlc.createMany({ data: ohlcs, skipDuplicates: true })
+  await sql`INSERT INTO "Ohlc" ${sql(ohlcs)} ON CONFLICT DO NOTHING`
   const dailyOhlcs = convertToDailySignals(ohlcs, true)
   await saveDailyOhlcsToSupertrends(dailyOhlcs, coinId)
 }
@@ -190,11 +186,7 @@ const fetchCoinDataAndOhlcs = async () => {
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
   let coinIds = coinsMarketData.map(({ id }) => id)
-  let databaseCoinIds = await prisma.coin.findMany({
-    select: {
-      id: true
-    }
-  })
+  let databaseCoinIds = await sql`SELECT id FROM "Coin"`
   databaseCoinIds = databaseCoinIds.map(({ id }) => id)
   coinIds = union(coinIds, databaseCoinIds)
   unrankedCoins.forEach((unrankedCoin) => {
@@ -254,18 +246,9 @@ const fetchDerivativesData = async() => {
       }
     })
 
-    const coinToUpdate = await prisma.coin.findFirst({
-      where : {
-        symbol: coinId.toLowerCase()
-      }
-    })
+    const coinToUpdate = await sql`SELECT * FROM "Coin" WHERE "symbol" = ${coinId.toLowerCase()}`[0]
     if (coinToUpdate) {
-      await prisma.coin.update({
-        where: { id: coinToUpdate.id },
-        data: {
-          derivatives: derivativesCoinData
-        },
-      })
+      await sql`UPDATE "Coin" SET "derivatives" = ${sql(derivativesCoinData)} WHERE id = ${coinToUpdate.id}`
     }
   }
 }
@@ -274,11 +257,7 @@ const fetchLunrData = async() => {
   const lunrCoins = (await getAllCoins()).data?.data || []
   for (const lunrCoin of lunrCoins) {
     let matchingCoin
-    const matchingCoins = await prisma.coin.findMany({
-      where : {
-        symbol: lunrCoin.s.toLowerCase()
-      }
-    })
+    const matchingCoins = await sql`SELECT * FROM "Coin" WHERE "symbol" = ${lunrCoin.s.toLowerCase()}`
     if (matchingCoins.length === 1) {
       matchingCoin = matchingCoins[0]
     } else if (matchingCoins.length > 1) {
@@ -290,30 +269,28 @@ const fetchLunrData = async() => {
       console.log('No matching db coin found for ', lunrCoin.s, lunrCoin.n)
     }
     if (matchingCoin) {
-      await prisma.coin.update({
-        where: { id: matchingCoin.id },
-        data: {
-          lunrInternalId: lunrCoin.id,
-          lunrSymbol: lunrCoin.s,
-          lunrName: lunrCoin.n,
-          lunrCurrentPrice: lunrCoin.p,
-          lunrVolume: lunrCoin.v,
-          lunrPercentageChange24h: lunrCoin.pc,
-          lunrPercentageChange1h: lunrCoin.pch,
-          lunrMarketCap: lunrCoin.mc,
-          lunrGalaxyScore: lunrCoin.gs,
-          lunrGalaxyScorePrevious: lunrCoin.gs_p,
-          lunrSocialScore: lunrCoin.ss,
-          lunrAverageSentiment: lunrCoin.as,
-          lunrSocialVolume: lunrCoin.sv,
-          lunrSocialContributors: lunrCoin.c,
-          lunrSocialDominance: lunrCoin.sd,
-          lunrMarketDominance: lunrCoin.d,
-          lunrAltRank: lunrCoin.acr,
-          lunrAltRankPrevious: lunrCoin.acr_p,
-          lunrCategories: lunrCoin.categories?.split(',')
-        },
-      })
+      await sql`UPDATE "Coin" SET
+        "lunrInternalId" = ${lunrCoin.id},
+        "lunrSymbol" = ${lunrCoin.s},
+        "lunrName" = ${lunrCoin.n},
+        "lunrCurrentPrice" = ${lunrCoin.p},
+        "lunrVolume" = ${lunrCoin.v},
+        "lunrPercentageChange24h" = ${lunrCoin.pc},
+        "lunrPercentageChange1h" = ${lunrCoin.pch},
+        "lunrMarketCap" = ${lunrCoin.mc},
+        "lunrGalaxyScore" = ${lunrCoin.gs},
+        "lunrGalaxyScorePrevious" = ${lunrCoin.gs_p},
+        "lunrSocialScore" = ${lunrCoin.ss},
+        "lunrAverageSentiment" = ${lunrCoin.as},
+        "lunrSocialVolume" = ${lunrCoin.sv},
+        "lunrSocialContributors" = ${lunrCoin.c},
+        "lunrSocialDominance" = ${lunrCoin.sd},
+        "lunrMarketDominance" = ${lunrCoin.d},
+        "lunrAltRank" = ${lunrCoin.acr},
+        "lunrAltRankPrevious" = ${lunrCoin.acr_p},
+        "lunrCategories" = ${lunrCoin.categories?.split(',')}
+        WHERE id = ${matchingCoin.id}
+      `
     }
   }
 }

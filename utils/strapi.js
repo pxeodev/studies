@@ -1,5 +1,8 @@
 import { Client, cacheExchange, fetchExchange } from '@urql/core';
 import { retryExchange } from '@urql/exchange-retry';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const strapi = new Client({
   url: process.env.STRAPI_URL,

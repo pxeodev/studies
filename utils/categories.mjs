@@ -5,7 +5,7 @@ import flatMap from 'lodash/fp/flatMap.js'
 import slugify from 'slugify'
 import { gql } from '@urql/core'
 
-import prisma from '../lib/prisma.mjs'
+import sql from '../lib/database.mjs'
 import strapi from './strapi.js'
 
 let overrides, aliases
@@ -69,13 +69,10 @@ export async function getCategories() {
     `,
   )
   const categoryDescriptions = data.categories.data
-  let categories = await prisma.coin.findMany({
-    select: {
-      categories: true,
-      coingeckoCategories: true,
-    }
-  })
-  for (const coin of categories) {
+  let categories = await sql`SELECT "categories", "coingeckoCategories" FROM "Coin"`
+  for (const coin of Array.from(categories)) {
+    coin.categories ||= []
+    coin.coingeckoCategories ||= []
     const allCategories = [...coin.categories, ...coin.coingeckoCategories]
     delete coin.coingeckoCategories
     coin.categories = allCategories

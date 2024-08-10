@@ -1,22 +1,18 @@
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 
 const handler = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(400)
   } else {
-    const coins = await prisma.coin.findMany({
-      select: {
-        id: true,
-        name: true,
-        symbol: true,
-        images: true,
-      },
-      orderBy: { marketCapRank: 'asc' },
-    })
-    for (let coin of coins) {
-      coin.image = coin.images.small
-      delete coin.images
-    }
+    const coins = await sql`
+      SELECT
+        id,
+        name,
+        symbol,
+        (images ->> 'small') AS image
+      FROM "Coin"
+      ORDER BY "marketCapRank" ASC
+    `
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
     res.status(200).json({ coins })
   }

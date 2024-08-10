@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 
 const handler = async (req, res) => {
   let requestedCoins = req.query['coins[]']
@@ -10,20 +10,14 @@ const handler = async (req, res) => {
   if (req.method !== 'GET' || !requestedCoins instanceof Array) {
     res.status(400)
   } else {
-    let coins = await prisma.coin.findMany({
-      where: {
-        id: {
-          in: requestedCoins
-        }
-      },
-      select: {
-        id: true,
-        name: true,
-        images: true,
-        symbol: true,
-        marketCap: true,
-      }
-    })
+    if (typeof requestedCoins === 'string') {
+      requestedCoins = [requestedCoins]
+    }
+    let coins = await sql`
+      SELECT id, name, images, symbol, "marketCap"
+      FROM "Coin"
+      WHERE id IN ${sql([...requestedCoins])}
+    `
     coins = await Promise.all(
       coins.map(async (coin) => {
         return {

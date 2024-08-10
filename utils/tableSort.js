@@ -3,7 +3,7 @@ import { signals } from 'coinrotator-utils/variables.mjs'
 export default function tableSort(reverseMarketCapSort) {
   return function(a, b, sortOrder) {
     if (a.dailySuperSuperTrend === b.dailySuperSuperTrend) {
-      let sorting = b.marketCap < a.marketCap ? 1 : -1
+      let sorting = Number(b.marketCap) < Number(a.marketCap) ? 1 : -1
       if (sortOrder === 'ascend') {
         sorting *= -1
       }

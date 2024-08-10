@@ -13,7 +13,7 @@ import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
-import prisma from "../lib/prisma.mjs";
+import sql from "../lib/database.mjs";
 import strapi from '../utils/strapi';
 
 export default function LowMarketCap({ coinsData, hiddenCoins, appData, exchangeData, pageData }) {
@@ -53,31 +53,6 @@ export default function LowMarketCap({ coinsData, hiddenCoins, appData, exchange
 
 export async function getStaticProps() {
   const appData = await globalData();
-  const coinQuery = {
-    orderBy: { marketCapRank: 'asc' },
-    select: {
-      id: true,
-      symbol: true,
-      name: true,
-      images: true,
-      marketCap: true,
-      marketCapRank: true,
-      fullyDilutedValuation: true,
-      circulatingSupply: true,
-      totalSupply: true,
-      ath: true,
-      atl: true,
-      categories: true,
-      coingeckoCategories: true,
-      tickers: true,
-      derivatives: true,
-    },
-    where: {
-      marketCap: {
-        lte: 100000000
-      }
-    }
-  }
   let { data } = await strapi.query(
     gql`
       query Pages($slug: String) {
@@ -112,12 +87,13 @@ export async function getStaticProps() {
     `,
   )
   hiddenCoins = hiddenCoins.data.coins.data.map(coin => coin.attributes.slug)
-  let coinsData
-  if (process.env.NODE_ENV === 'development') {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 20})
-  } else {
-    coinsData = await prisma.coin.findMany({...coinQuery, take: 1000})
-  }
+  let coinsData = await sql`
+    SELECT id, symbol, name, images, "marketCap", "marketCapRank", categories, "coingeckoCategories", tickers, derivatives, "fullyDilutedValuation", "circulatingSupply", "totalSupply", "ath", "atl"
+    FROM "Coin"
+    WHERE "marketCap" <= ${100000000}
+    ORDER BY "marketCapRank" ASC
+    LIMIT ${process.env.NODE_ENV === 'development' ? 20 : 1000}
+  `
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     coinData.imageSlug = getImageSlug(coinData.images.large)
@@ -148,7 +124,7 @@ export async function getStaticProps() {
 
     return coinData
   })
-  const exchangeData = await prisma.exchange.findMany()
+  const exchangeData = await sql`SELECT * FROM "Exchange"`
   return {
     props: {
       coinsData,

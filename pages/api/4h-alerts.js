@@ -1,36 +1,24 @@
-import prisma from '../../lib/prisma.mjs'
+import sql from '../../lib/database.mjs'
 import { signals } from 'coinrotator-utils/variables.mjs';
 
 const handler = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(400)
   } else {
-    const alerts = await prisma.FourHourTrends.findMany({
-      take: 1000,
-      orderBy: {
-        timestamp: 'desc'
-      },
-    });
+    const alerts = await sql`
+      SELECT * FROM "FourHourTrends"
+      ORDER BY timestamp DESC
+      LIMIT 1000;
+    `;
     let coinSymbols = new Set()
     for (const alert of alerts) {
       coinSymbols.add(alert.coinsymbol.toLowerCase())
     }
-    let coins = await prisma.Coin.findMany({
-      where: {
-        symbol: {
-          in: [...coinSymbols]
-        }
-      },
-      select: {
-        id: true,
-        name: true,
-        symbol: true,
-        categories: true,
-        images: true,
-        marketCap: true,
-        coingeckoCategories: true
-      }
-    })
+    let coins = await sql`
+      SELECT id, name, symbol, categories, images, "marketCap", "coingeckoCategories"
+      FROM "Coin"
+      WHERE symbol IN ${sql([...coinSymbols])}
+    `
     const alertsToDelete = []
     for (const [i, alert] of alerts.entries()) {
       const coin = coins.find(coin => coin.symbol.toLowerCase() === alert.coinsymbol.toLowerCase())

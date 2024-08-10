@@ -11,9 +11,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 2. Now install the necessary packages with `yarn install`.
 3. Create the PostgreSQL database with `createdb coinrotator`.
 4. Create a file called `.env` in the root folder and ask a dev to give you it's content.
-5. Apply the database migrations with `npx prisma migrate dev`.
-6. Seed your database with this command `pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d coinrotator seed.dump` (replace <username> with your username).
-7. Now you can run the development server with `yarn dev`
+5. Seed your database with this command `pg_restore --verbose --clean --no-acl --no-owner -h localhost -U <username> -d coinrotator seed.dump` (replace <username> with your username).
+6. Now you can run the development server with `yarn dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
