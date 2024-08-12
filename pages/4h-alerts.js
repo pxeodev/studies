@@ -33,6 +33,7 @@ export default function FourHourAlerts({ appData, pageData }) {
     if (socket) {
       socket.emit('get_trends', {
         flavor: SUPERTREND_FLAVOR.coinrotator,
+        intervals: ['1d', '1w']
       }, (trends) => setTrends(trends))
     }
   }, [socket])

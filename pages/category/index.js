@@ -110,8 +110,8 @@ export default function Categories({ categoryData, appData, pageData }) {
   ]
   let tableData = categoryData.map((category) => {
     if (trends) {
-      const matchingDailyCategory = trends.daily[category.name]
-      const matchingWeeklyCategory = trends.weekly[category.name]
+      const matchingDailyCategory = trends.daily[category.name] || trends['1d'][category.name]
+      const matchingWeeklyCategory = trends.weekly[category.name] || trends['1w'][category.name]
       category.dailySuperSuperTrend = matchingDailyCategory?.trend
       category.dailySuperSuperTrendStreak = matchingDailyCategory?.streak
       category.weeklySuperSuperTrend = matchingWeeklyCategory?.trend

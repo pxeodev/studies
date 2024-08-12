@@ -95,19 +95,17 @@ const CoinTable = ({
       cache = JSON.parse(cache)
       if (cache) {
         updateTrends(cache)
-        socket.emit('get_trends_outdated', cache.lastUpdated, (outdated) => {
-          if (outdated) {
-            socket.emit('get_trends', {
-              flavor: superTrendFlavor,
-            }, (trends) => {
-              sessionStorage.setItem(`trends_${superTrendFlavor}`, JSON.stringify(trends))
-              updateTrends(trends)
-            })
-          }
+        socket.emit('get_trends', {
+          flavor: superTrendFlavor,
+          intervals: ['1d', '1w']
+        }, (trends) => {
+          sessionStorage.setItem(`trends_${superTrendFlavor}`, JSON.stringify(trends))
+          updateTrends(trends)
         })
       } else {
         socket.emit('get_trends', {
           flavor: superTrendFlavor,
+          intervals: ['1d', '1w']
         }, (trends) => {
           sessionStorage.setItem(`trends_${superTrendFlavor}`, JSON.stringify(trends))
           updateTrends(trends)
@@ -202,12 +200,12 @@ const CoinTable = ({
 
   let displayedCoinData = coinsData.map((coinData) => {
     if (trends) {
-      const dailyTrend = trends.daily[coinData.id]?.supersuperTrend
+      const dailyTrend = trends.daily?.[coinData.id]?.supersuperTrend || trends['1d']?.[coinData.id]?.supersuperTrend
       if (dailyTrend) {
         coinData.dailySuperSuperTrend = dailyTrend.trend
         coinData.dailySuperSuperTrendStreak = dailyTrend.streak
       }
-      const weeklyTrend = trends.weekly[coinData.id]?.supersuperTrend
+      const weeklyTrend = trends.weekly?.[coinData.id]?.supersuperTrend || trends['1w']?.[coinData.id]?.supersuperTrend
       if (weeklyTrend) {
         coinData.weeklySuperSuperTrend = weeklyTrend.trend
         coinData.weeklySuperSuperTrendStreak = weeklyTrend.streak
@@ -349,7 +347,7 @@ const CoinTable = ({
 
   let columns = [
     {
-      title: () => `Coin (${tableData.length})`,
+      title: () => `Coin`,
       width: screens.sm ? 200 : 140,
       dataIndex: 'coinData',
       onCell: ({ id }) => {

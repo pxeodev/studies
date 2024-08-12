@@ -69,7 +69,8 @@ export default function WatchList({ appData, pageData }) {
   const fetchTrends = useCallback(() => {
     if (socket) {
       socket.emit('get_trends', {
-        flavor: SUPERTREND_FLAVOR.coinrotator
+        flavor: SUPERTREND_FLAVOR.coinrotator,
+        intervals: ['1d', '1w']
       }, (trends) => setTrends(trends))
     }
   }, [socket])
@@ -159,8 +160,8 @@ export default function WatchList({ appData, pageData }) {
     },
   ]
   const tableData = watchlist.map(coin => {
-    const dailyTrend = trends?.daily?.[coin.id]
-    const weeklyTrend = trends?.weekly?.[coin.id]
+    const dailyTrend = trends?.daily?.[coin.id] || trends?.['1d']?.[coin.id]
+    const weeklyTrend = trends?.weekly?.[coin.id] || trends?.['1w']?.[coin.id]
     if (dailyTrend) {
       coin.dailySuperSuperTrend = dailyTrend.supersuperTrend.trend
       coin.dailySuperSuperTrendStreak = dailyTrend.supersuperTrend.streak

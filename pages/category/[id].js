@@ -53,7 +53,7 @@ export default function Category({ coinsData, hiddenCoins, appData, exchangeData
   }, [socket, fetchTrends])
   let categorySuperTrend
   if (trends) {
-    categorySuperTrend = trends.daily?.trend
+    categorySuperTrend = trends.daily?.trend || trends['1d']?.trend
   }
   const metaTitle = `Trend Analysis for ${coinsData.length} ${category.name} coins`
   let dailySignalTag

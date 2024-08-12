@@ -26,7 +26,7 @@ export default function Status({ dataSource }) {
     data[index].label = 'Connected, but outdated data'
     data[index].status = 1
     setData(data)
-    socket.emit('get_trends', { flavor: SUPERTREND_FLAVOR.coinrotator }, (trends) => {
+    socket.emit('get_trends', { flavor: SUPERTREND_FLAVOR.coinrotator, intervals: ['1d', '1w'] }, (trends) => {
       if (isToday(trends.lastUpdated)) {
         data[index].label = 'Connected & Updated'
         data[index].status = 0
