@@ -347,7 +347,7 @@ const CoinTable = ({
 
   let columns = [
     {
-      title: () => `Coin (${tableData.length})`,
+      title: () => `Coin`,
       width: screens.sm ? 200 : 140,
       dataIndex: 'coinData',
       onCell: ({ id }) => {
