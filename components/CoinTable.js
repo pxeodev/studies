@@ -594,7 +594,7 @@ const CoinTable = ({
       {
         title: 'Futures Volume (24h)',
         dataIndex: 'futuresVolume24h',
-        width: 120,
+        width: 150,
         className: coinTableStyles.unclickableCell,
         sorter: (a, b) => Number(a.futuresVolume24h) - Number(b.futuresVolume24h),
         render: (futuresVolume24h) => {
