@@ -64,6 +64,8 @@ const CoinTable = ({
     category: defaultCategory,
   } = defaultFormState
 
+  const FUTURES_COLUMNS_SHOWN = showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume
+
   const router = useRouter()
   const isHoverable = useIsHoverable()
   const screens = useBreakPoint()
@@ -153,7 +155,7 @@ const CoinTable = ({
     })
   }, [socket])
   useEffect(() => {
-    if (showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume || show24hVolumeByMarketCap) {
+    if (FUTURES_COLUMNS_SHOWN) {
       if (socket) {
         socket.on('new_live_coin_data', fetchLiveCoinData)
       }
@@ -169,7 +171,7 @@ const CoinTable = ({
         socket.off('new_live_coin_data')
       }
     }
-  }, [showOpenInterest, showFundingRate, showVolume24h,showFuturesVolume, show24hVolumeByMarketCap, socket, fetchLiveCoinData])
+  }, [FUTURES_COLUMNS_SHOWN, socket, fetchLiveCoinData])
   useEffect(() => {
     setWatchlistCoins(getWatchListCoins())
   }, [])

@@ -130,7 +130,7 @@ export async function getStaticProps({ params }) {
   const appData = await globalData();
   let coinsData = await sql`
     SELECT
-      "id", "symbol", "name", "images", "marketCap", "marketCapRank", "categories", "tickers", "derivatives", "fullyDilutedValuation", "circulatingSupply", "totalSupply"
+      "id", "symbol", "name", "images", "marketCap", "marketCapRank", "categories", "tickers", "derivatives", "fullyDilutedValuation", "circulatingSupply", "totalSupply", "ath", "atl"
     FROM "Coin"
     WHERE
     ("categories" @> ${sql.array([category.name])}::text[]) OR
