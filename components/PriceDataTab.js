@@ -67,6 +67,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
   const currencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', notation })
   const preciseCurrencyFormatter = new Intl.NumberFormat([], { style: 'currency', currency: 'usd', currencyDisplay: 'symbol', maximumFractionDigits: 20, notation })
   const numberFormatter = useMemo(() => new Intl.NumberFormat([], { notation, maximumFractionDigits: 3 }), [notation])
+  const preciseNumberFormatter = useMemo(() => new Intl.NumberFormat([], { notation, maximumFractionDigits: 5 }), [notation])
   const renderRoi = useCallback((multiple) => {
     if (multiple === null || multiple === 1 ) { return null }
 
@@ -231,8 +232,8 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
           {
             fundingRate ? (
               <div className={coinStyles.data}>
-                <Title level={3} className={coinStyles.label}>Funding Rate (1h)</Title>
-                <span className={coinStyles.value}>{numberFormatter.format(fundingRate)}</span>
+                <Title level={3} className={coinStyles.label}>Funding Rate</Title>
+                <span className={coinStyles.value}>{preciseNumberFormatter.format(fundingRate)}</span>
               </div>
             ) : <></>
           }

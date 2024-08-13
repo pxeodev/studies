@@ -300,7 +300,7 @@ const CoinTable = ({
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
         openInterest = matchingCoinData.openInterest
-        fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 4) : null
+        fundingRate = matchingCoinData.fundingRate ? round(matchingCoinData.fundingRate, 5) : null
         futuresVolume24h = matchingCoinData.futuresVolume24h
         openInterestByFuturesVolume24h = matchingCoinData.openInterestByfuturesVolume24h
         openInterestByfuturesVolume24hChangePercent24h = matchingCoinData.openInterestByfuturesVolume24hChangePercent24h
