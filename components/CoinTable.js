@@ -221,7 +221,7 @@ const CoinTable = ({
     const coinSymbolLower = coinData.symbol.toLowerCase()
     const coinNameLower = coinData.name.toLowerCase()
     const matchesPortfolio = portfolio === '' || portfolioFilter.some((coinName) => coinNameLower.includes(coinName) || coinSymbolLower.includes(coinName))
-    const matchesCategory = category === defaultCategory || coinData.categories.includes(category) || coinData.coingeckoCategories.includes(category)
+    const matchesCategory = category === defaultCategory || coinData.categories?.includes(category) || coinData.coingeckoCategories?.includes(category)
     const exchangeNames = coinData.exchanges.map(exchangeData => exchangeData[0])
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
     const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
