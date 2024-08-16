@@ -76,9 +76,13 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
     return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{formattedNumber}%</span>
   }, [numberFormatter, hydrated])
 
-  return <div style={{ display: shown ? 'block' : 'none' }}>
+  return <>
     {coin.platforms.length ? (
-      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
+      <Card.Grid
+        hoverable={false}
+        className={classnames(coinStyles.section, coinStyles.sectionContract)}
+        style={{ display: shown ? 'block' : 'none' }}
+      >
         <PlatformSelect
           imageSlug={coin.imageSlug}
           platforms={coin.platforms}
@@ -87,7 +91,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
         />
       </Card.Grid>
     ) : <></>}
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionOnline, coinStyles.sectionFlex, { [coinStyles.sectionOnlineFW]: !coin.platforms.length })}>
+    <Card.Grid
+      hoverable={false}
+      className={classnames(coinStyles.section, coinStyles.sectionOnline, coinStyles.sectionFlex, { [coinStyles.sectionOnlineFW]: !coin.platforms.length })}
+      style={{ display: shown ? 'block' : 'none' }}
+    >
       <Space wrap>
         { coin.twitter ? (
           <a href={`https://x.com/${coin.twitter}`} target="_blank" rel="noreferrer">
@@ -105,7 +113,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
         ) : <></>}
       </Space>
     </Card.Grid>
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC1)}>
+    <Card.Grid
+      hoverable={false}
+      className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC1)}
+      style={{ display: shown ? 'block' : 'none' }}
+    >
       { coin.marketCap ? (
         <div className={coinStyles.data}>
           <Title level={3} className={coinStyles.label}>Market Cap</Title>
@@ -141,7 +153,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
       </div>
     </Card.Grid>
     { (coin.fullyDilutedValuation || coin.circulatingSupply || coin.totalSupply || coin.maxSupply ) ? (
-      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}>
+      <Card.Grid
+        hoverable={false}
+        className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionDataC2)}
+        style={{ display: shown ? 'block' : 'none' }}
+      >
         { coin.fullyDilutedValuation ? (
           <div className={coinStyles.data}>
             <Title level={3} className={coinStyles.label}>Fully Diluted Valuation</Title>
@@ -176,7 +192,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
         ) : <></>}
       </Card.Grid>
     ) : <></>}
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
+    <Card.Grid
+      hoverable={false}
+      className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}
+      style={{ display: shown ? 'block' : 'none' }}
+    >
       <Title level={3} className={coinStyles.label}>Categories</Title>
       <div className={coinStyles.data}>
         {
@@ -218,7 +238,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
       }
     </Card.Grid>
     { openInterest ? (
-      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}>
+      <Card.Grid
+        hoverable={false}
+        className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}
+        style={{ display: shown ? 'block' : 'none' }}
+      >
           <div className={coinStyles.data}>
             <Title level={3} className={coinStyles.label}>Open Interest (1h)</Title>
             <span className={coinStyles.value}>{currencyFormatter.format(openInterest)}</span>
@@ -261,7 +285,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
     ) : <></> }
     {
       (coin.launch_price || coin.launch_date_start || coin.launch_roi_usd) ? (
-        <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionIco)}>
+        <Card.Grid
+          hoverable={false}
+          className={classnames(coinStyles.section, coinStyles.sectionIco)}
+          style={{ display: shown ? 'block' : 'none' }}
+        >
           {
             coin.launch_price ? (
               <div className={coinStyles.data}>
@@ -325,10 +353,14 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
         </Card.Grid>
       ) : <></>
     }
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart">
+    <Card.Grid
+      hoverable={false}
+      className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart"
+      style={{ display: shown ? 'block' : 'none' }}
+    >
       { showChart ? <Chart symbol={coin.chart} hideToolbar={!screens.sm} darkMode={darkMode} /> : <></> }
     </Card.Grid>
-  </div>;
+  </>
 }
 
 export default PriceDataTab;

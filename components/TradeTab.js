@@ -106,41 +106,43 @@ const TradeTab = ({ coin, screens, shown }) => {
   }
 
   return (
-    <div style={{ display: shown ? 'block' : 'none' }}>
-      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionTrade)}>
-        <Title
-          level={3}
-          id="markets"
-          className={classnames(coinStyles.title, coinStyles.marketTitle)}
-        >
-          {coin.symbol.toUpperCase()} Markets
-        </Title>
-        <Radio.Group
-          optionType="button"
-          onChange={(e) => clickFilter(e.target.value) }
-          value={exchangeFilter}
-          className={coinStyles.marketFilter}
-        >
-          {Object.keys(EXCHANGE_FILTER).map((filterKey) => {
-            const value = EXCHANGE_FILTER[filterKey]
-            return (
-              <Radio.Button
-                key={filterKey}
-                value={value}
-              >{value}</Radio.Button>
-            )
-          })}
-        </Radio.Group>
-        <Table
-          isLoading={isLoading}
-          columns={columns}
-          dataSource={tableData}
-          pagination={{ position: ['none', 'none'], pageSize: 1000 }}
-          bordered
-          className={coinStyles.marketTable}
-        />
-      </Card.Grid>
-    </div>
+    <Card.Grid
+      hoverable={false}
+      className={classnames(coinStyles.section, coinStyles.sectionTrade)}
+      style={{ display: shown ? 'block' : 'none' }}
+    >
+      <Title
+        level={3}
+        id="markets"
+        className={classnames(coinStyles.title, coinStyles.marketTitle)}
+      >
+        {coin.symbol.toUpperCase()} Markets
+      </Title>
+      <Radio.Group
+        optionType="button"
+        onChange={(e) => clickFilter(e.target.value) }
+        value={exchangeFilter}
+        className={coinStyles.marketFilter}
+      >
+        {Object.keys(EXCHANGE_FILTER).map((filterKey) => {
+          const value = EXCHANGE_FILTER[filterKey]
+          return (
+            <Radio.Button
+              key={filterKey}
+              value={value}
+            >{value}</Radio.Button>
+          )
+        })}
+      </Radio.Group>
+      <Table
+        isLoading={isLoading}
+        columns={columns}
+        dataSource={tableData}
+        pagination={{ position: ['none', 'none'], pageSize: 1000 }}
+        bordered
+        className={coinStyles.marketTable}
+      />
+    </Card.Grid>
   )
 }
 
