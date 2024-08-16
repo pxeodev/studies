@@ -33,7 +33,7 @@ const Chart = memo(function ChartFunc({ symbol, hideToolbar, darkMode }) {
   )
 })
 
-const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
+const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
   let percentageFromATH, percentageFromATL
   if (price) {
     percentageFromATH = round(((coin.ath - price) / coin.ath) * 100, 2)
@@ -76,7 +76,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
     return <span className={roi > 0 ? coinStyles.greenRoi : coinStyles.redRoi}>{formattedNumber}%</span>
   }, [numberFormatter, hydrated])
 
-  return <>
+  return <div style={{ display: shown ? 'block' : 'none' }}>
     {coin.platforms.length ? (
       <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionContract)}>
         <PlatformSelect
@@ -328,7 +328,7 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price }) => {
     <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionChart)} id="chart">
       { showChart ? <Chart symbol={coin.chart} hideToolbar={!screens.sm} darkMode={darkMode} /> : <></> }
     </Card.Grid>
-  </>;
+  </div>;
 }
 
 export default PriceDataTab;

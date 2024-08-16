@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import coinStyles from '../styles/coin.module.less'
 import ChatGPTSource from './ChatGPTSource';
 
-const AnalysisTab = ({ coin, screens, price }) => {
+const AnalysisTab = ({ coin, screens, price, shown }) => {
   const notation = screens.sm ? 'standard' : 'compact'
   let percentageFromAth, percentageFromAtl, priceAppreciationToAthPercentage
   if (price) {
@@ -85,14 +85,14 @@ const AnalysisTab = ({ coin, screens, price }) => {
       }
     }, [])
 
-  return (<>
+  return (<div style={{ display: shown ? 'block' : 'none' }}>
       {coin.description ? (
         <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionDescription)}>
             <ReactMarkdown>{interpolatedCoinDescription}</ReactMarkdown>
             <ChatGPTSource />
         </Card.Grid>
       ) : <></>}
-    </>
+    </div>
   )
 }
 

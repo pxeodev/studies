@@ -201,18 +201,6 @@ export default function Coin(coin) {
       }
     }, null, { shallow: true })
   }, [router])
-  let ActiveTabComponent;
-  switch (activeTab) {
-    case TABS.pricedata:
-      ActiveTabComponent = PriceDataTab;
-      break;
-    case TABS.analysis:
-      ActiveTabComponent = AnalyticsTab;
-      break;
-    case TABS.trade:
-      ActiveTabComponent = TradeTab;
-      break;
-  }
 
   return <>
     <Head>
@@ -324,7 +312,9 @@ export default function Coin(coin) {
             </Card.Grid>
           );
         })}
-        <ActiveTabComponent coin={coin} screens={screens} liveCoinData={liveCoinData} price={price} />
+        <PriceDataTab coin={coin} screens={screens} liveCoinData={liveCoinData} price={price} shown={activeTab === TABS.pricedata} />
+        <AnalyticsTab coin={coin} screens={screens} price={price} shown={activeTab === TABS.analysis} />
+        <TradeTab coin={coin} screens={screens} shown={activeTab === TABS.trade} />
       </Card>
     </Content>
   </>;

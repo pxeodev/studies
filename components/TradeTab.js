@@ -15,7 +15,7 @@ const EXCHANGE_FILTER = {
   'derivatives': 'Derivatives'
 }
 
-const TradeTab = ({ coin, screens }) => {
+const TradeTab = ({ coin, screens, shown }) => {
   const router = useRouter();
   const [exchangeFilter, setExchangeFilter] = useState(EXCHANGE_FILTER.all)
   const [isLoading, setLoading] = useState(true)
@@ -106,39 +106,41 @@ const TradeTab = ({ coin, screens }) => {
   }
 
   return (
-    <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionTrade)}>
-      <Title
-        level={3}
-        id="markets"
-        className={classnames(coinStyles.title, coinStyles.marketTitle)}
-      >
-        {coin.symbol.toUpperCase()} Markets
-      </Title>
-      <Radio.Group
-        optionType="button"
-        onChange={(e) => clickFilter(e.target.value) }
-        value={exchangeFilter}
-        className={coinStyles.marketFilter}
-      >
-        {Object.keys(EXCHANGE_FILTER).map((filterKey) => {
-          const value = EXCHANGE_FILTER[filterKey]
-          return (
-            <Radio.Button
-              key={filterKey}
-              value={value}
-            >{value}</Radio.Button>
-          )
-        })}
-      </Radio.Group>
-      <Table
-        isLoading={isLoading}
-        columns={columns}
-        dataSource={tableData}
-        pagination={{ position: ['none', 'none'], pageSize: 1000 }}
-        bordered
-        className={coinStyles.marketTable}
-      />
-    </Card.Grid>
+    <div style={{ display: shown ? 'block' : 'none' }}>
+      <Card.Grid hoverable={false} className={classnames(coinStyles.section, coinStyles.sectionTrade)}>
+        <Title
+          level={3}
+          id="markets"
+          className={classnames(coinStyles.title, coinStyles.marketTitle)}
+        >
+          {coin.symbol.toUpperCase()} Markets
+        </Title>
+        <Radio.Group
+          optionType="button"
+          onChange={(e) => clickFilter(e.target.value) }
+          value={exchangeFilter}
+          className={coinStyles.marketFilter}
+        >
+          {Object.keys(EXCHANGE_FILTER).map((filterKey) => {
+            const value = EXCHANGE_FILTER[filterKey]
+            return (
+              <Radio.Button
+                key={filterKey}
+                value={value}
+              >{value}</Radio.Button>
+            )
+          })}
+        </Radio.Group>
+        <Table
+          isLoading={isLoading}
+          columns={columns}
+          dataSource={tableData}
+          pagination={{ position: ['none', 'none'], pageSize: 1000 }}
+          bordered
+          className={coinStyles.marketTable}
+        />
+      </Card.Grid>
+    </div>
   )
 }
 
