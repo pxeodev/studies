@@ -114,7 +114,9 @@ const fetchCoinalyze = async () => {
       futuresVolume24h = scrapedFuturesVolume24h
     }
     if (coin.id === CME_SCRAPING_COINS[CME_SCRAPING_COINS.length - 1]) {
+      console.log('Closing browser')
       await browser.close()
+      console.log('Closed browser')
     }
     await sql`UPDATE "Coin" SET "openInterest" = ${openInterest}, "fundingRate" = ${fundingRate}, "futuresVolume24h" = ${futuresVolume24h} WHERE id = ${coin.id}`
     await sql`INSERT INTO "CoinTime" ("coinId", "date", "time", "timeframe", "openInterest", "fundingRate", "futuresVolume24h") VALUES (${coin.id}, ${now}, ${now}, '1h', ${openInterest}, ${fundingRate}, ${futuresVolume24h})`
@@ -122,8 +124,11 @@ const fetchCoinalyze = async () => {
 }
 
 setTimeout(async () => {
+  console.log('Fetching Coin Analyze data')
   await fetchCoinalyze()
+  console.log('Coin Analyze data fetched')
   if (process.env.NODE_ENV === 'production') {
     await axios.post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/new-coinalyze-data`)
   }
+  console.log('Coin Analyze data posted')
 }, 99);
