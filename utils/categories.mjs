@@ -32,8 +32,9 @@ export async function overrideCoinCategories(name, symbol, categories) {
   for (const override of matchingOverrides) {
     const overrideCategory = override.Category
     if (override.addORremove === 'remove') {
-      categories = categories.filter((category) => category !== overrideCategory)
-    } else if (override.addORremove === 'add' && !categories.includes(overrideCategory)) {
+      categories = categories?.filter((category) => category !== overrideCategory)
+    } else if (override.addORremove === 'add' && !categories?.includes(overrideCategory)) {
+      categories ||= []
       categories.push(overrideCategory)
     }
   }
