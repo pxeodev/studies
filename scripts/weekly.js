@@ -77,7 +77,7 @@ const fetchCoinData = async (url, coin, page) => {
 }
 
 const dropsTab = async () => {
-  let browser
+  let browser, page
   try {
     browser = await puppeteer.launch({
       timeout: 100000,
@@ -85,7 +85,7 @@ const dropsTab = async () => {
     });
     const coins = await sql`SELECT id, name, symbol FROM "Coin"`
 
-    const page = await browser.newPage();
+    page = await browser.newPage();
     console.log('Opened browser')
     for (const coin of coins) {
       const url = await findMatchingDropstabUrl(coin);
@@ -96,8 +96,10 @@ const dropsTab = async () => {
     throw(e)
   } finally {
     console.log('Closing browser')
-    browser?.close();
+    await page?.close();
+    await browser?.close();
     console.log('Closed browser')
+    process.exit(0)
   }
 }
 

@@ -115,7 +115,8 @@ const fetchCoinalyze = async () => {
     }
     if (coin.id === CME_SCRAPING_COINS[CME_SCRAPING_COINS.length - 1]) {
       console.log('Closing browser')
-      await browser.close()
+      await page?.close()
+      await browser?.close()
       console.log('Closed browser')
     }
     await sql`UPDATE "Coin" SET "openInterest" = ${openInterest}, "fundingRate" = ${fundingRate}, "futuresVolume24h" = ${futuresVolume24h} WHERE id = ${coin.id}`
@@ -131,4 +132,5 @@ setTimeout(async () => {
     await axios.post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/new-coinalyze-data`)
   }
   console.log('Coin Analyze data posted')
+  process.exit(0)
 }, 99);
