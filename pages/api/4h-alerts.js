@@ -27,6 +27,8 @@ const handler = async (req, res) => {
         continue;
       }
       alert.name = coin.name
+      coin.categories ||= []
+      coin.coingeckoCategories ||= []
       alert.categories = [...coin.categories, ...coin.coingeckoCategories]
       alert.image = coin.images.small
       alert.id = coin.id
