@@ -59,7 +59,7 @@ const handler = async (req, res) => {
       return
     }
   } else {
-    await sql`INSERT INTO "User" ("walletAddress", "telegramId", "telegramUserName") VALUES (${newUser.walletAddress}, ${newUser.telegramId}, ${newUser.telegramUserName})`
+    const newUser = (await sql`INSERT INTO "User" ("walletAddress", "telegramId", "telegramUserName") VALUES (${walletAddress}, ${telegramId}, ${telegramUserName}) RETURNING *`)[0]
     onSuccess(res, newUser)
   }
 }
