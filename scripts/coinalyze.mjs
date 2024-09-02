@@ -33,15 +33,17 @@ const scrapeCoinData = async (coinId, coinSymbol) => {
   console.log(`Scraping ${coinSymbol}`)
   let openInterest = 0
   let futuresVolume24h = 0
-  await page.goto(`https://coinalyze.net/${coinId}/open-interest/`)
+  await page.goto(`https://coinalyze.net/${coinId}/open-interest/`, { waitUntil: 'domcontentloaded' })
   console.log('Went to ', `https://coinalyze.net/${coinId}/open-interest/`)
   openInterest = await page.$eval('.stats .box:nth-child(2) .box-row:first-child', node => node.innerText)
   console.log('Got open interest', openInterest)
   openInterest = deformat(openInterest)
   console.log('Deformatted open interest', openInterest)
 
-  await page.goto(`https://www.coinglass.com/currencies/${coinSymbol}`)
+  await page.goto(`https://www.coinglass.com/currencies/${coinSymbol}`, { waitUntil: 'domcontentloaded' })
   console.log('Went to ', `https://www.coinglass.com/currencies/${coinSymbol}`)
+  futuresVolume24h = await page.waitForSelector('.ant-row:nth-child(2) > div:first-child .MuiBox-root:first-child .Number:nth-child(2)', { visible: true })
+  console.log('Futures volume selector appeared')
   futuresVolume24h = await page.$eval('.ant-row:nth-child(2) > div:first-child .MuiBox-root:first-child .Number:nth-child(2)', node => node.ariaLabel)
   console.log('Got futures volume', futuresVolume24h)
   futuresVolume24h = deformat(futuresVolume24h)
