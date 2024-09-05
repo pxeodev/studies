@@ -1,24 +1,17 @@
-import Head from 'next/head'
-import { Layout, notification } from 'antd'
+import { notification } from 'antd'
 import { createContext, useEffect } from "react"
-import { HydrationProvider, Client } from "react-hydration-provider";
+import { HydrationProvider } from "react-hydration-provider";
 import { CookiesProvider } from 'react-cookie';
 import io from 'socket.io-client'
-import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 
 import { WagmiProvider } from 'wagmi'
 import { base } from 'wagmi/chains'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import Header from '../components/Header'
-import Sider from '../components/Sider'
 import useDarkMode from "../hooks/usedarkmode"
-import useBreakPoint from "../hooks/useBreakPoint"
 import useSocketStore from "../hooks/useSocketStore"
-import baseStyles from "../styles/base.module.less"
-import SharedLayout from "../layouts/shared"
-import variableStyles from '../styles/variables.module.less'
+import ScreenerChild from './screenerChild'
 
 export const DarkModeContext = createContext(null);
 export const NotificationContext = createContext(null);
@@ -45,21 +38,6 @@ const config = defaultWagmiConfig({
 export default function ScreenerLayout(page, pageProps) {
   const darkMode = useDarkMode();
   const isDark = darkMode[0]
-  createWeb3Modal({
-    defaultChain: base,
-    wagmiConfig: config,
-    projectId,
-    featuredWalletIds: [
-      'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
-      '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
-      '18388be9ac2d02726dbac9777c96efaac06d744b2f6d580fccdd4127a6d01fd1'
-    ],
-    enableAnalytics: true,
-    themeMode: isDark ? 'dark' : 'light',
-    themeVariables: {
-      '--w3m-font-family': variableStyles.fontFamily,
-    },
-  })
   const setSocket = useSocketStore(state => state.setSocket)
   useEffect(() => {
     const date = new Date();
@@ -84,10 +62,7 @@ export default function ScreenerLayout(page, pageProps) {
     const html = document.querySelector('html');
     html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
   }, [isDark])
-  const screens = useBreakPoint();
   const [api, contextHolder] = notification.useNotification();
-
-  const {topCategories,categories} = pageProps.appData
 
   return (
     <HydrationProvider>
@@ -97,26 +72,7 @@ export default function ScreenerLayout(page, pageProps) {
             <QueryClientProvider client={queryClient}>
               <NotificationContext.Provider value={api}>
                 {contextHolder}
-                <Layout className={baseStyles.outerLayout}>
-                  <SharedLayout pageProps={pageProps} />
-                  <Head>
-                    <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
-                    <meta name="description" key="description" content="A crypto screener spotting high momentum trades using the popular Supertrend. Check CoinRotator each day to ensure you are trading with the trend."/>
-                  </Head>
-                  <Client>
-                    { screens.lg && <Sider topCategories={topCategories} categories={categories} /> }
-                  </Client>
-                  <Layout className={baseStyles.innerLayout}>
-                    <Client>
-                      <Header
-                        categories={categories}
-                        screens={screens}
-                        topCategories={topCategories}
-                      />
-                    </Client>
-                    {page}
-                  </Layout>
-                </Layout>
+                <ScreenerChild pageProps={pageProps} page={page} />
               </NotificationContext.Provider>
             </QueryClientProvider>
           </CookiesProvider>
