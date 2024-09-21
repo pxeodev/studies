@@ -120,11 +120,17 @@ const fetchCoinalyze = async () => {
       try {
         console.time(`Scraping ${coin.symbol}`)
         const [scrapedOpenInterest, scrapedFuturesVolume24h] = await retry(async () => {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 60000);
-          const result = await scrapeCoinData(coin.id, coin.symbol.toUpperCase());
-          clearTimeout(timeout);
-          return result;
+          return new Promise(async (resolve, reject) => {
+            const timeout = setTimeout(() => reject(new Error("Operation timed out")), 60000); // Reject after 60 seconds
+            try {
+              const result = await scrapeCoinData(coin.id, coin.symbol.toUpperCase());
+              clearTimeout(timeout); // Clear the timeout once the result is received
+              resolve(result);
+            } catch (err) {
+              clearTimeout(timeout); // Clear the timeout in case of error
+              reject(err);
+            }
+          });
         }, {
           factor: 2,
           maxAttempts: 6,
