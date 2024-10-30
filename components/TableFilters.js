@@ -47,7 +47,7 @@ const TableFilters = ({ coinsData, categories, portfolioInputValue, setPortfolio
   }, [isHoverable])
   const allDerivativeExchanges = useMemo(() => {
     const derivativesData = coinsData.flatMap((coin) => coin.derivatives)
-    const derivativeExchangeNames = uniq(derivativesData.filter(Boolean).map(derivative => derivative.market))
+    const derivativeExchangeNames = uniq(derivativesData.filter(Boolean))
 
     return derivativeExchangeNames.sort()
   }, [coinsData])

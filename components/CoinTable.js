@@ -224,8 +224,7 @@ const CoinTable = ({
     const matchesCategory = category === defaultCategory || coinData.categories?.includes(category) || coinData.coingeckoCategories?.includes(category)
     const exchangeNames = coinData.exchanges.map(exchangeData => exchangeData[0])
     const matchesExchanges = isEmpty(exchanges) || Boolean(intersection(exchanges, exchangeNames).length)
-    const derivativeNames = coinData.derivatives?.map(derivative => derivative.market) || []
-    const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, derivativeNames).length)
+    const matchesDerivatives = isEmpty(derivatives) || Boolean(intersection(derivatives, coinData.derivatives || []).length)
     const marketCapNumber = Number(coinData.marketCap)
     const matchesCexDex = coinData.exchanges.some((exchange) => {
       if (cexdex.length === 2 || cexdex.length === 0) {
@@ -284,10 +283,10 @@ const CoinTable = ({
   const tableData = displayedCoinData.map((coinData) => {
     let shownDerivatives = coinData.derivatives || []
     if (!isEmpty(derivatives)) {
-      shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative.market))
+      shownDerivatives = coinData.derivatives.filter(derivative => derivatives.includes(derivative))
     }
     shownDerivatives = shownDerivatives.sort((derivativeA, derivativeB) => {
-      return preferredExchanges.includes(derivativeA.market) ? 1 : derivativeA.market.localeCompare(derivativeB.market)
+      return preferredExchanges.includes(derivativeA) ? 1 : derivativeA.localeCompare(derivativeB)
     })
     let percentageFromATH, percentageFromATL
     const livePrice = prices[coinData.symbol]

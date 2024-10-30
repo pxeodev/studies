@@ -100,7 +100,7 @@ export async function getStaticProps() {
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     coinData.imageSlug = getImageSlug(coinData.images.large)
-    coinData.derivatives = coinData.derivatives?.slice(0, 5)
+    coinData.derivatives = coinData.derivatives?.map(derivative => derivative.market)
     coinData.fullyDilutedValuation = Number(coinData.fullyDilutedValuation)
     coinData.circulatingSupply = Number(coinData.circulatingSupply)
     coinData.totalSupply = Number(coinData.totalSupply)
