@@ -142,6 +142,8 @@ export async function getStaticProps({ params }) {
     coinData.exchanges = convertTickersToExchanges(coinData.tickers)
     delete coinData.tickers
 
+    coinData.derivatives = coinData.derivatives?.map(derivative => derivative.market)
+
     coinData.imageSlug = getImageSlug(coinData.images.large)
     delete coinData.images
 
