@@ -21,7 +21,7 @@ const Search = ({ categories, collapsed }) => {
       const res = await fetch('/api/search')
       const { coins } = await res.json()
       setCoins(coins)
-      setFuseCoinIndex(Fuse.createIndex(['name', 'symbol'], coins))
+      setFuseCoinIndex(Fuse.createIndex(['name', 'symbol', 'contract'], coins))
     }
     fetchCoins()
     const eventRef = document.addEventListener('keydown', (e) => {
@@ -77,6 +77,7 @@ const Search = ({ categories, collapsed }) => {
     coins,
     {
       keys: [
+        { name: 'contract', weight: 0.1 },
         { name: 'symbol', weight: 0.9 },
         { name: 'name', weight: 0.1 }
       ],
