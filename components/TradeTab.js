@@ -94,6 +94,13 @@ const TradeTab = ({ coin, screens, shown }) => {
   columns.push({
     title: 'Pair',
     dataIndex: 'pair',
+    render: (pair) => {
+      if (!pair.includes('/')) {
+        return pair
+      }
+      const [base, quote] = pair.split('/')
+      return <span>{base}&nbsp;&nbsp;<b>/</b>&nbsp;&nbsp;{quote}</span>
+    }
   })
   if (screens.md || isServer) {
     columns.push({
