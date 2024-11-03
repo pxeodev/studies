@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
-import Fuse from 'fuse.js/dist/fuse.basic'
+import Fuse from 'fuse.js'
 
 import searchStyles from '../styles/search.module.less'
 
@@ -21,7 +21,7 @@ const Search = ({ categories, collapsed }) => {
       const res = await fetch('/api/search')
       const { coins } = await res.json()
       setCoins(coins)
-      setFuseCoinIndex(Fuse.createIndex(['name', 'symbol'], coins))
+      setFuseCoinIndex(Fuse.createIndex(['name', 'symbol', 'contract'], coins))
     }
     fetchCoins()
     const eventRef = document.addEventListener('keydown', (e) => {
@@ -76,8 +76,14 @@ const Search = ({ categories, collapsed }) => {
   const filteredCoins = new Fuse(
     coins,
     {
-      keys: ['name', 'symbol'],
-      threshold: 0.2,
+      keys: [
+        { name: 'contract', weight: 0.1 },
+        { name: 'symbol', weight: 0.9 },
+        { name: 'name', weight: 0.1 }
+      ],
+      minMatchCharLength: 2,
+      threshold: 0.3,
+      distance: 0
     },
     fuseCoinIndex
   ).search(query).map((result) => result.item)
