@@ -10,70 +10,91 @@ import retry from '../utils/retry.mjs';
 puppeteer.use(StealthPlugin())
 
 const fetchCoinData = async (url, coin, page) => {
-  console.log('Fetch dropstab data for', coin.symbol, 'from', url);
-  await retry(
-    () => page.goto(url, {waitUntil: 'domcontentloaded'}),
-    5
-  )
-
-  let launch_date_start
-  let [
-    is404,
-    categories,
-    launch_roi_usd,
-    launch_roi_btc,
-    launch_roi_eth,
-  ] = await page.evaluate(() => {
-    let data = []
-    const is404 = window.find('Error 404')
-    data.push(is404)
-
-    if (!is404) {
-      const tagsList = Array.from(document.querySelectorAll('h4'))?.find(node => node.innerText === 'Tags')?.nextSibling
-      if (tagsList) {
-        const tags = Array.from(tagsList.querySelectorAll('li') || []).map(x => x.innerText)
-        data.push(tags)
-      } else {
-        data.push([])
-      }
-
-      const roiSection = Array.from(document.querySelectorAll('span'))?.find((span => span.innerText.includes("ROI since ICO")))?.nextSibling
-      if (roiSection) {
-        const currencySections = Array.from(roiSection.querySelectorAll('div'))
-        const rois = currencySections.map((currencySection) => {
-          const roi = Number(currencySection.firstChild.innerText.replace('x', ''))
-          return isNaN(roi) ? null : roi
-        })
-        const usdRoi = rois[0]
-        const btcRoi = rois[1]
-        const ethRoi = rois[2]
-        data.push(usdRoi, btcRoi, ethRoi)
-      }
-    }
-    return data
-  });
-
-  categories = await overrideCoinCategories(coin.name, coin.symbol, categories)
-
+  console.log('Fetch dropstab data for', coin.symbol, 'from', `${url}`);
+  await retry(() => page.goto(`${url}`, { waitUntil: 'domcontentloaded' }), 5)
+  const is404 = await page.evaluate(() => window.find('Error 404'))
   if (is404) {
     console.log(coin, 'not found on dropstab')
     return
-  } else {
-    await retry(
-      () => page.goto(`${url}/fundraising`, {waitUntil: 'domcontentloaded'}),
-      5
-    )
-    launch_date_start = await page.evaluate(() => {
-      const launchDateSection = Array.from(document.querySelectorAll('dt')).find(node => node.innerText === 'Trade Launch Date')
-      if (launchDateSection) {
-        return launchDateSection.nextSibling.innerText
+  }
+
+  let categories = [];
+  let launch_date_start, launch_roi_usd, launch_roi_btc, launch_roi_eth;
+
+  try {
+    await page.waitForSelector('ul[aria-label="Tags"]', { timeout: 3000 })
+  } catch(e) {}
+  const hasTags = await page.evaluate(() => {
+    const tagsList = Array.from(document.querySelectorAll('ul'))?.find(node => node.ariaLabel === 'Tags')
+    tagsList?.lastChild?.firstChild?.click()
+    return Boolean(tagsList)
+  })
+
+  if (hasTags) {
+    await page.waitForSelector('section[aria-modal="true"]')
+
+    categories = await page.evaluate(() => {
+      const tagsList = document.querySelectorAll('section[aria-modal="true"] a')
+      if (tagsList?.length) {
+        return Array.from(tagsList || []).map(x => x.innerText)
       } else {
         return null
       }
     })
   }
 
-  launch_date_start = isNaN(Date.parse(launch_date_start)) ? null : new Date(launch_date_start)
+  categories = await overrideCoinCategories(coin.name, coin.symbol, categories)
+
+  const hasRoiSection = await page.evaluate(() => {
+    let roiSection = Array.from(document.querySelectorAll('h3'))?.find((title => title.innerText.includes("Fundraising")))
+    roiSection = roiSection?.parentElement?.nextElementSibling
+    return Boolean(roiSection)
+  })
+
+  if (hasRoiSection) {
+    const result = await page.evaluate(() => {
+      const data = {};
+      let roiSection = Array.from(document.querySelectorAll('h3'))?.find((title => title.innerText.includes("Fundraising")))
+      roiSection = roiSection?.parentElement?.nextElementSibling
+      const currencySections = Array.from(roiSection.firstChild.firstChild.children)
+      const rois = currencySections.map((currencySection) => {
+        const roi = Number(currencySection.firstChild.innerText.replace('x', ''))
+        return isNaN(roi) ? null : roi
+      })
+      data.usdRoi = rois[0]
+      data.btcRoi = rois[1]
+      data.ethRoi = rois[2]
+      return data
+    })
+    launch_roi_usd = result.usdRoi
+    launch_roi_btc = result.btcRoi
+    launch_roi_eth = result.ethRoi
+
+    // Unclear which date to use for the correct ROI
+    // await retry(() => page.goto(`${url}/fundraising`), 5)
+
+    // const hasIcoSection = await page.evaluate(() => {
+    //   const icoSection = Array.from(document.querySelectorAll('h2'))?.find((title => title.innerText.includes("Fundraising")))?.nextSibling
+    //   icoSection?.querySelector('button')?.click()
+    //   return Boolean(icoSection)
+    // })
+
+    // if (hasIcoSection) {
+    //   launch_date_start = await page.evaluate(() => {
+    //     const icoTitle = Array.from(document.querySelectorAll('h2')).find(title => title.innerText.includes("ICO"));
+    //     const icoMetaSection = icoTitle?.parentElement?.nextElementSibling;
+    //     if (icoMetaSection) {
+    //       return icoMetaSection.firstChild?.innerText;
+    //     }
+
+    //     return null;
+    //   });
+    // }
+
+    // launch_date_start = isNaN(Date.parse(launch_date_start)) ? null : new Date(launch_date_start)
+  }
+
+  console.log(coin.id, coin.name, coin.symbol, launch_date_start, launch_roi_usd, launch_roi_btc, launch_roi_eth, categories)
   await sql`UPDATE "Coin" SET "launch_date_start" = ${launch_date_start ?? null}, "launch_roi_usd" = ${launch_roi_usd ?? null}, "launch_roi_btc" = ${launch_roi_btc ?? null}, "launch_roi_eth" = ${launch_roi_eth ?? null}, "categories" = ${categories ?? null} WHERE id = ${coin.id}`
 }
 
@@ -94,6 +115,7 @@ const dropsTab = async () => {
     }
     console.log('Done')
   } catch(e) {
+    console.error(e)
     throw(e)
   } finally {
     console.log('Closing browser')
