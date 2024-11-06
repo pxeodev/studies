@@ -18,9 +18,9 @@ const Socials = ({ collapsed }) => {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/x3.svg" alt="X Logo" />
       </a>
-      <a href="https://coinrotator.medium.com/" target="_blank" rel="noreferrer">
+      <a href="https://www.tiktok.com/@coinrotator" target="_blank" rel="noreferrer">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/medium.svg" alt="Medium Logo" />
+        <img src="/tiktok.svg" alt="TikTok Logo" />
       </a>
       <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank" rel="noreferrer">
         {/* eslint-disable-next-line @next/next/no-img-element */}
