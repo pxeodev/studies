@@ -16,7 +16,6 @@ import sql from '../lib/database.mjs';
 dotenv.config();
 puppeteer.use(StealthPlugin())
 const CME_SCRAPING_COINS = ['bitcoin', 'ethereum']
-const preferredFundingRateMarkets = ['A', '6', '3']
 
 let browser, page
 const initializeScraping = async () => {
@@ -88,10 +87,6 @@ const fetchCoinalyze = async () => {
   const databaseCoins = await sql`SELECT id, symbol, "currentPrice" FROM "Coin" WHERE symbol IN ${sql([...supportedFutureSymbols])} ORDER BY "marketCapRank" ASC`
   for (const coin of databaseCoins) {
     let supportedMarketsForCoin = supportedFutureMarkets.filter(market => market.base_asset.toLowerCase() === coin.symbol);
-    let preferredFundingRateMarket = supportedMarketsForCoin.find(market => preferredFundingRateMarkets.includes(market.exchange))
-    if (!preferredFundingRateMarket) {
-      preferredFundingRateMarket = supportedMarketsForCoin[0]
-    }
     const requests = []
     for (const market of supportedMarketsForCoin) {
       const openInterestDenominationPriceFactor = getOpenInterestPriceFactorUSD(market, databaseCoins, coin)
@@ -99,11 +94,6 @@ const fetchCoinalyze = async () => {
         getOpenInterest(market.symbol, market.exchange, openInterestDenominationPriceFactor),
         getVolume24h(market.symbol, market.exchange, coin.currentPrice)
       )
-      if (market.exchange === preferredFundingRateMarket.exchange) {
-        requests.push(
-          getFundingRate(market.symbol, market.exchange)
-        )
-      }
     }
     console.time(`Fetching ${coin.symbol}`)
     let data = await Promise.allSettled(requests)
@@ -111,9 +101,10 @@ const fetchCoinalyze = async () => {
     data = data.filter(data => data.status === 'fulfilled')
     data = data.map(data => data.value)
     let openInterest = data.filter(data => data.openInterest)
+    const largestExchangeByOpenInterest = openInterest.reduce((acc, cur) => acc.openInterest > cur.openInterest ? acc : cur)
     openInterest = sum(openInterest.map(data => data.openInterest))
-    let fundingRate = data.filter(data => data.fundingRate)
-    fundingRate = mean(fundingRate.map(data => data.fundingRate))
+    let fundingRate = await getFundingRate(largestExchangeByOpenInterest.symbol, largestExchangeByOpenInterest.market)
+    fundingRate = fundingRate.fundingRate
     let futuresVolume24h = data.filter(data => data.futuresVolume24h)
     futuresVolume24h = sum(futuresVolume24h.map(data => data.futuresVolume24h))
     if (CME_SCRAPING_COINS.includes(coin.id)) {
