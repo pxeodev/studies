@@ -89,7 +89,7 @@ export async function getStaticProps() {
   let coinsData = await sql`
     SELECT id, symbol, name, images, "marketCap", "marketCapRank", categories, "coingeckoCategories", tickers, derivatives, "fullyDilutedValuation", "circulatingSupply", "totalSupply", "ath", "atl"
     FROM "Coin"
-    ORDER BY "createdAt" ASC
+    ORDER BY "createdAt" ASC, "marketCapRank" ASC
     LIMIT ${process.env.NODE_ENV === 'development' ? 20 : 1000}
   `
   coinsData = await chunkedPromiseAll(coinsData, 5, async (coinData) => {
