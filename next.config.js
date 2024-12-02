@@ -39,6 +39,86 @@ let moduleExports = {
         destination: '/category',
         permanent: true,
       },
+      {
+        source: '/category/Finance',
+        destination: '/category/Finance-Banking',
+        permanent: true,
+      },
+      {
+        source: '/category/DAO-Maker-IDO',
+        destination: '/category/DaoMaker-Launchpad',
+        permanent: true,
+      },
+      {
+        source: '/category/DeFi',
+        destination: '/category/Decentralized-Finance-(DeFi)',
+        permanent: true,
+      },
+      {
+        source: '/category/Technology',
+        destination: '/category/Technology-and-Science',
+        permanent: true,
+      },
+      {
+        source: '/category/Gold',
+        destination: '/category/Tokenized-Gold',
+        permanent: true,
+      },
+      {
+        source: '/category/Identity',
+        destination: '/category/Decentralized-Identifier-(DID)',
+        permanent: true,
+      },
+      {
+        source: '/category/Animoca-Brands',
+        destination: '/category/nimoca-Brands-Portfolio',
+        permanent: true,
+      },
+      {
+        source: '/category/BRC-20-Token',
+        destination: '/category/BRC-20',
+        permanent: true,
+      },
+      {
+        source: '/category/PAAL-AI',
+        destination: '/category/PAAL-AI-Launchpad',
+        permanent: true,
+      },
+      {
+        source: '/category/TokenSets',
+        destination: '/category/TokenSets-Ecosystem',
+        permanent: true,
+      },
+      {
+        source: '/category/TON-Meme-Coins',
+        destination: '/category/TON-Meme',
+        permanent: true,
+      },
+      {
+        source: '/category/Elon-Musk-Inspired-Coins',
+        destination: '/category/Elon-Musk-Inspired',
+        permanent: true,
+      },
+      {
+        source: '/category/Frog-Themed-Coins',
+        destination: '/category/Frog-Themed',
+        permanent: true,
+      },
+      {
+        source: '/category/Cat-Themed-Coins',
+        destination: '/category/Cat-Themed',
+        permanent: true,
+      },
+      {
+        source: '/category/Parody-Themed-Coins',
+        destination: '/category/Parody-Themed',
+        permanent: true,
+      },
+      {
+        source: '/category/Solana-Themed-Coins',
+        destination: '/category/Solana-Themed',
+        permanent: true,
+      },
     ]
   },
 }
