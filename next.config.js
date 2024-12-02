@@ -71,7 +71,7 @@ let moduleExports = {
       },
       {
         source: '/category/Animoca-Brands',
-        destination: '/category/nimoca-Brands-Portfolio',
+        destination: '/category/Animoca-Brands-Portfolio',
         permanent: true,
       },
       {
@@ -121,7 +121,7 @@ let moduleExports = {
       },
       {
         source: '/category/IOT',
-        destination: 'category/Internet-of-Things-(IOT)',
+        destination: '/category/Internet-of-Things-%28IOT%29',
         permanent: true,
       },
     ]
