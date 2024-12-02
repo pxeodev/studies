@@ -363,8 +363,11 @@ Category,CoinSymbol,CoinName,addORremove
 "Murad Memes","POPCAT","Popcat",add
 "Murad Memes","SPX","SPX6900",add
 "Murad Memes","RETARDIO","RETARDIO",add
-
-
+"Dino Coins",XRP,XRP,add
+"Dino Coins",ALGO,Algorand,add
+"Dino Coins",HBAR,Hedera,add
+"Dino Coins",BCH,Bitcoin Cash,add
+"Dino Coins",BSV,Bitcoin SV,add
 
 
 
