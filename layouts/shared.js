@@ -35,6 +35,14 @@ export default function SharedLayout({ pageProps }) {
       }}
     />
   ) : <></>
+  const aHrefs = process.env.NODE_ENV === 'production' ? (
+    <Script
+      id="ahrefs"
+      strategy="afterInteractive"
+      data-key="EQB/VHQb/38ssQGnNnPkMQ"
+      src="https://analytics.ahrefs.com/analytics.js"
+    />
+  ) : <></>
   const hotjar = process.env.NODE_ENV === 'production' ? (
     <Script
       id="hotjar"
@@ -60,6 +68,7 @@ export default function SharedLayout({ pageProps }) {
         <link rel="canonical" href={pageProps.currentUrl} />
       </Head>
       {googleAnalytics}
+      {aHrefs}
       {mixPanel}
       {hotjar}
     </>
