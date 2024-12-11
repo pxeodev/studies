@@ -32,6 +32,7 @@ const CoinTable = ({
     defaultFormState,
     reverseMarketCapSort = false,
     showTrendStreak = true,
+    showWeeklySuperSuperTrend = true,
     showCreatedAt = false,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
@@ -400,12 +401,14 @@ const CoinTable = ({
     )
   }
 
-  columns.push(
-    {
-      width: 100,
-      ...weeklySuperSuperTrend(router, isHoverable),
-    }
-  )
+  if (showWeeklySuperSuperTrend) {
+    columns.push(
+      {
+        width: 100,
+        ...weeklySuperSuperTrend(router, isHoverable),
+      }
+    )
+  }
 
   columns.push({
     width: 125,
