@@ -29,8 +29,8 @@ const useTableFilters = (coinsData) => {
       showATH: false,
       showATL: false,
       cexdex: ['cex', 'dex'],
-      marketCapMin: coinsData[coinsData.length - 1].marketCap,
-      marketCapMax: coinsData[0].marketCap,
+      marketCapMin: 0,
+      marketCapMax: Number.POSITIVE_INFINITY,
       trendLengthMin: '',
       trendLengthMax: '',
       superTrendFlavor: SUPERTREND_FLAVOR.coinrotator

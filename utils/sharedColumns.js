@@ -30,7 +30,10 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, 
       compare: tableSort(reverseMarketCapSort),
       multiple: 1,
     },
-    render: (dailySuperSupertrend) => {
+    render: (dailySuperSupertrend, data) => {
+      if (!data?.dailySuperSuperTrendStreak) {
+        return null
+      }
       let tag;
       switch (dailySuperSupertrend) {
         case signals.buy:
@@ -68,7 +71,7 @@ export function dailySuperSuperTrendStreak(router, isHoverable) {
     dataIndex: 'dailySuperSuperTrendStreak',
     sorter: (a, b) => Number(a.dailySuperSuperTrendStreak) - Number(b.dailySuperSuperTrendStreak),
     render: (dailySuperSuperTrendStreak) => {
-      return dailySuperSuperTrendStreak
+      return dailySuperSuperTrendStreak ? dailySuperSuperTrendStreak : null
     }
   }
 }
@@ -126,7 +129,10 @@ export function weeklySuperSuperTrend(router, isHoverable) {
       },
       multiple: 2,
     },
-    render: (weeklySuperSuperTrend) => {
+    render: (weeklySuperSuperTrend, data) => {
+      if (!data?.weeklySuperSuperTrendStreak) {
+        return null
+      }
       let tag;
       switch (weeklySuperSuperTrend) {
         case signals.buy:

@@ -44,8 +44,8 @@ export default function Coin(coin) {
   let dailySignalTag
   const [trends, setTrends] = useState(null)
   const [liveCoinData, setLiveCoinData] = useState([])
-  const dailyData = trends?.daily?.supersuperTrend?.trend || trends?.['1d']?.supersuperTrend?.trend
-  switch (dailyData) {
+  const dailyData = trends?.daily?.supersuperTrend || trends?.['1d']?.supersuperTrend
+  switch (dailyData?.trend) {
     case signals.buy:
       dailySignalTag = <a href="#markets"><UpTag /></a>
       break;
@@ -58,9 +58,12 @@ export default function Coin(coin) {
     default:
       dailySignalTag = <a href="#markets"><LoadingTag /></a>
   }
+  if (!dailyData?.streak) {
+    dailySignalTag = null
+  }
   let weeklySignalTag
-  const weeklyData = trends?.weekly?.supersuperTrend?.trend || trends?.['1w']?.supersuperTrend?.trend
-  switch (weeklyData) {
+  const weeklyData = trends?.weekly?.supersuperTrend || trends?.['1w']?.supersuperTrend
+  switch (weeklyData?.trend) {
     case signals.buy:
       weeklySignalTag = <a href="#markets"><UpTag /></a>
       break;
@@ -72,6 +75,9 @@ export default function Coin(coin) {
       break;
     default:
       weeklySignalTag = <a href="#markets"><LoadingTag /></a>
+  }
+  if (!weeklyData?.streak) {
+    weeklySignalTag = null
   }
 
   const screens = useBreakPoint();

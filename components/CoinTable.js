@@ -9,6 +9,7 @@ import isFinite from 'lodash/isFinite'
 import { useHydrated } from "react-hydration-provider";
 import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
 import classnames from 'classnames';
+import { formatDistanceToNowStrict } from 'date-fns'
 
 import WatchlistStar from './WatchlistStar';
 import useIsHoverable from '../hooks/useIsHoverable';
@@ -31,6 +32,7 @@ const CoinTable = ({
     defaultFormState,
     reverseMarketCapSort = false,
     showTrendStreak = true,
+    showCreatedAt = false,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
     passTrends,
@@ -323,6 +325,7 @@ const CoinTable = ({
         imageSlug: coinData.imageSlug,
         name: coinData.name
       },
+      createdAt: coinData.createdAt,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
       marketCapRank: coinData.marketCapRank,
@@ -631,6 +634,23 @@ const CoinTable = ({
         }
       }
     )
+  }
+  if (showCreatedAt) {
+    columns.push({
+      title: 'Added',
+      dataIndex: 'createdAt',
+      width: 140,
+      className: coinTableStyles.unclickableCell,
+      sorter: (a, b) => Number(a.createdAt) - Number(b.createdAt),
+      render: (createdAt) => {
+        if (!createdAt) { return null }
+        // 1732688654000 is when we added the createdAt column
+        if (createdAt.valueOf() <= 1732688654000) {
+          return `> ${formatDistanceToNowStrict(createdAt)} ago`
+        }
+        return `${formatDistanceToNowStrict(createdAt)} ago`
+      }
+    })
   }
   columns.find(column => column.dataIndex === defaultSort[0]).defaultSortOrder = defaultSort[1]
 
