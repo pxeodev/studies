@@ -46,6 +46,8 @@ export default function NewCoinsScreener({ coinsData, hiddenCoins, appData, exch
             showCreatedAt={true}
             defaultSort={['createdAt', 'descend']}
             showWeeklySuperSuperTrend={false}
+            showLivePrice={false}
+            showCategories={true}
             filter={coinData => coinData.createdAt.valueOf() > 1732688654000}
           />
         </Row>

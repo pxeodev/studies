@@ -1,4 +1,4 @@
-import { Tooltip } from 'antd'
+import { Tooltip, Tag } from 'antd'
 import { QuestionCircleFilled } from '@ant-design/icons'
 import classnames from 'classnames'
 
@@ -56,7 +56,7 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, 
 
 export function dailySuperSuperTrendStreak(router, isHoverable) {
   return {
-    width: 150,
+    width: 80,
     onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
     title: <span className={coinTableStyles.columnTitle}>
       <span>Streak</span>
@@ -176,6 +176,22 @@ export function marketCap(router, hydrated) {
           {hydrated ? numberFormatter.format(Number(marketCap)) : Number(marketCap)}
         </div>
       )
+    }
+  }
+}
+
+export function categories(router) {
+  return {
+    title: 'Categories',
+    dataIndex: 'categories',
+    onCell: (data) => ({ onClick: () => router.push(`/coin/${data.id}`) }),
+    render: (categories) => {
+      if (!categories?.length) { return null }
+      return <>
+        {categories.map((category) => {
+          return <Tag key={category}>{category}</Tag>
+        })}
+      </>
     }
   }
 }

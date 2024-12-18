@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import round from 'lodash/round'
+import uniq from 'lodash/uniq'
 import isFinite from 'lodash/isFinite'
 import { useHydrated } from "react-hydration-provider";
 import BarChartOutlined from '@ant-design/icons/BarChartOutlined';
@@ -19,7 +20,7 @@ import useBreakPoint from '../hooks/useBreakPoint.js';
 import { signals, preferredExchanges } from 'coinrotator-utils/variables.mjs'
 import { getWatchListCoins, addToWatchList, removeFromWatchList } from '../utils/watchlist';
 import { getImageURL } from '../utils/minifyImageURL';
-import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns';
+import { categories, dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns';
 import { NotificationContext } from '../layouts/screener.js';
 
 import coinTableStyles from '../styles/table.module.less';
@@ -33,6 +34,8 @@ const CoinTable = ({
     reverseMarketCapSort = false,
     showTrendStreak = true,
     showWeeklySuperSuperTrend = true,
+    showLivePrice = true,
+    showCategories = false,
     showCreatedAt = false,
     defaultSort = ['dailySuperSuperTrend', 'ascend'],
     filter,
@@ -326,6 +329,7 @@ const CoinTable = ({
         imageSlug: coinData.imageSlug,
         name: coinData.name
       },
+      categories: uniq([...coinData.categories, ...coinData.coingeckoCategories]),
       createdAt: coinData.createdAt,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
@@ -395,7 +399,6 @@ const CoinTable = ({
   if (showTrendStreak) {
     columns.push(
       {
-        width: 90,
         ...dailySuperSuperTrendStreak(router, isHoverable),
       }
     )
@@ -404,18 +407,29 @@ const CoinTable = ({
   if (showWeeklySuperSuperTrend) {
     columns.push(
       {
-        width: 100,
         ...weeklySuperSuperTrend(router, isHoverable),
+        width: 100,
       }
     )
   }
 
-  columns.push({
-    width: 125,
-    title: 'Live Price',
-    dataIndex: 'price',
-    render: (price) => price ? currencyFormatter.format(price) : null
-  })
+  if (showCategories) {
+    columns.push(
+      {
+        width: 300,
+        ...categories(router, isHoverable),
+      }
+    )
+  }
+
+  if (showLivePrice) {
+    columns.push({
+      width: 125,
+      title: 'Live Price',
+      dataIndex: 'price',
+      render: (price) => price ? currencyFormatter.format(price) : null
+    })
+  }
 
   columns.push(
   {
