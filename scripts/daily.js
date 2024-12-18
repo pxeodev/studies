@@ -185,7 +185,35 @@ const fetchCoinDataAndOhlcs = async () => {
   const coinMarketsPage2 = await getMarket(2)
   const coinMarketsPage3 = await getMarket(3)
   const coinMarketsPage4 = await getMarket(4)
+  const coinMarketsPage5 = await getMarket(5)
+  const coinMarketsPage6 = await getMarket(6)
+  const coinMarketsPage7 = await getMarket(7)
+  const coinMarketsPage8 = await getMarket(8)
+  const coinMarketsPage9 = await getMarket(9)
+  const coinMarketsPage10 = await getMarket(10)
+  const coinMarketsPage11 = await getMarket(11)
+  const coinMarketsPage12 = await getMarket(12)
   let coinsMarketData = [...coinMarketsPage1.data, ...coinMarketsPage2.data, ...coinMarketsPage3.data, ...coinMarketsPage4.data]
+
+  const averageVolumeOfTheLowestCoins = coinsMarketData.slice(-10).reduce((sum, coinMarket) => sum + coinMarket.total_volume, 0) / 5
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage5 = coinMarketsPage5.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage6 = coinMarketsPage6.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage7 = coinMarketsPage7.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage8 = coinMarketsPage8.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage9 = coinMarketsPage9.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage10 = coinMarketsPage10.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage11 = coinMarketsPage11.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  const coinsBelowTop1KByMarketCapSurpassingVolumePage12 = coinMarketsPage12.data.filter(coinMarket => coinMarket.total_volume > averageVolumeOfTheLowestCoins)
+  coinsMarketData.push(...[
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage5,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage6,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage7,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage8,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage9,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage10,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage11,
+    ...coinsBelowTop1KByMarketCapSurpassingVolumePage12,
+  ])
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedSymbols.includes(coinMarket.symbol))
   coinsMarketData = coinsMarketData.filter(coinMarket => !excludedTokens.includes(coinMarket.id))
   let coinIds = coinsMarketData.map(({ id }) => id)
