@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import UpTag from '../components/UpTag'
 import DownTag from '../components/DownTag'
 import HodlTag from '../components/HodlTag'
+import UnavailableTag from '../components/UnavailableTag'
 import { signals } from 'coinrotator-utils/variables.mjs'
 import tableSort from '../utils/tableSort'
 
@@ -31,8 +32,8 @@ export function dailySuperSuperTrend(router, isHoverable, reverseMarketCapSort, 
       multiple: 1,
     },
     render: (dailySuperSupertrend, data) => {
-      if (!data?.dailySuperSuperTrendStreak) {
-        return null
+      if (dailySuperSupertrend && !data?.dailySuperSuperTrendStreak) {
+        return <UnavailableTag />
       }
       let tag;
       switch (dailySuperSupertrend) {
