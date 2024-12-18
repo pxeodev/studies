@@ -320,6 +320,9 @@ const CoinTable = ({
     if (coinData.totalSupply) { // Some coins have infinite supply and totalSupply is NULL for them
       circulatingSupplyPercentage = `${round((Number(coinData.circulatingSupply) / Number(coinData.totalSupply) * 100), 2)}%`
     }
+    const cat = coinData.categories || []
+    const cgCat = coinData.coingeckoCategories || []
+    const categories = uniq([...cat, ...cgCat])
     return {
       key: `${coinData.id}-${coinData.name}`,
       id: coinData.id,
@@ -329,7 +332,7 @@ const CoinTable = ({
         imageSlug: coinData.imageSlug,
         name: coinData.name
       },
-      categories: uniq([...coinData.categories, ...coinData.coingeckoCategories]),
+      categories,
       createdAt: coinData.createdAt,
       derivatives: shownDerivatives,
       marketCap: coinData.marketCap,
