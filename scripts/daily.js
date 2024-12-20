@@ -12,7 +12,7 @@ import uniqBy from 'lodash/uniqBy.js'
 import '../lib/sentry.mjs'
 import { quoteSymbols } from 'coinrotator-utils/variables.mjs'
 import sql from '../lib/database.mjs'
-import coinGecko, { getOhlc, getCoin, getMarket } from '../lib/coinGecko.mjs'
+import coinGecko, { getOhlc, getCoin, getMarket } from 'coinrotator-utils/coinGecko.mjs'
 import { createJob } from '../lib/render.mjs'
 import { getAllCoins } from '../lib/lunr.mjs'
 import { hasPlatforms } from '../utils/coingecko.mjs';
