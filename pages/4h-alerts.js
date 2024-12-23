@@ -138,6 +138,7 @@ export default function FourHourAlerts({ appData, pageData }) {
       dailySuperSuperTrend: trends?.daily[alert.id]?.supersuperTrend?.trend,
       dailySuperSuperTrendStreak: trends?.daily[alert.id]?.supersuperTrend?.streak,
       weeklySuperSuperTrend: trends?.weekly[alert.id]?.supersuperTrend?.trend,
+      weeklySuperSuperTrendStreak: trends?.weekly[alert.id]?.supersuperTrend?.streak,
     }
   })
   return (

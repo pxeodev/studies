@@ -1,5 +1,6 @@
 import sql from '../../lib/database.mjs'
 import { signals } from 'coinrotator-utils/variables.mjs';
+import uniq from 'lodash/uniq.js'
 
 const handler = async (req, res) => {
   if (req.method !== 'GET') {
@@ -29,7 +30,7 @@ const handler = async (req, res) => {
       alert.name = coin.name
       coin.categories ||= []
       coin.coingeckoCategories ||= []
-      alert.categories = [...coin.categories, ...coin.coingeckoCategories]
+      alert.categories = uniq([...coin.categories, ...coin.coingeckoCategories])
       alert.image = coin.images.small
       alert.id = coin.id
       alert.marketCap = parseInt(coin.marketCap)
