@@ -22,7 +22,7 @@ const handler = async (req, res) => {
         key: `${baseSymbol}/${quoteSymbol}${exchangeName}`,
         name: exchangeName,
         tradeLink: ticker.trade_url,
-        volume: ticker.volume,
+        volume: ticker.converted_volume.usd,
         baseSymbol: baseSymbol,
         pair: `${baseSymbol}/${quoteSymbol}`,
         centralized: matchingExchange?.centralized
