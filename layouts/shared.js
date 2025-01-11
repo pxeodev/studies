@@ -66,6 +66,7 @@ export default function SharedLayout({ pageProps }) {
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="canonical" href={pageProps.currentUrl} />
+        { process.env.SITE_ENV !== 'production' && <meta name="robots" content="noindex" /> }
       </Head>
       {googleAnalytics}
       {aHrefs}
