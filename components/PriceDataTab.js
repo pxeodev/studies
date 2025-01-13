@@ -51,12 +51,11 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
   if (coin.circulatingSupply && coin.totalSupply) {
     circulatingSupplyPercentage = round(coin.circulatingSupply / coin.totalSupply * 100, 2)
   }
-  let openInterest, openInterestChangePercent1h, fundingRate, futuresVolume24h, openInterestByFuturesVolume24h
+  let openInterest, fundingRate, futuresVolume24h, openInterestByFuturesVolume24h
   if (hasKeyPass && liveCoinData) {
     const matchingCoin = liveCoinData.find((liveCoin) => liveCoin.id === coin.id)
     if (matchingCoin) {
       openInterest = matchingCoin.openInterest
-      openInterestChangePercent1h = round(matchingCoin.openInterestChangePercent1h, 2)
       fundingRate = matchingCoin.fundingRate
       futuresVolume24h = matchingCoin.futuresVolume24h
       openInterestByFuturesVolume24h = matchingCoin.openInterestByfuturesVolume24h
@@ -243,16 +242,6 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
         className={classnames(coinStyles.section, coinStyles.sectionData, coinStyles.sectionTags)}
         style={{ display: shown ? 'block' : 'none' }}
       >
-          <div className={coinStyles.data}>
-            <Title level={3} className={coinStyles.label}>Open Interest (1h)</Title>
-            <span className={coinStyles.value}>{currencyFormatter.format(openInterest)}</span>
-            <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent1h < 0})}>
-              &nbsp;(
-              {openInterestChangePercent1h > 0 ? '+' : ''}
-              {openInterestChangePercent1h}%
-              )
-            </span>
-          </div>
           {
             fundingRate ? (
               <div className={coinStyles.data}>
