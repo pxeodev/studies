@@ -101,6 +101,7 @@ const fetchCoinalyze = async () => {
     data = data.filter(data => data.status === 'fulfilled')
     data = data.map(data => data.value)
     let openInterest = data.filter(data => data.openInterest)
+    if (!openInterest.length) continue // Sometimes Coinalyze claims to have futures data on a coin when it doesn't
     const largestExchangeByOpenInterest = openInterest.reduce((acc, cur) => acc.openInterest > cur.openInterest ? acc : cur)
     openInterest = sum(openInterest.map(data => data.openInterest))
     let fundingRate = await getFundingRate(largestExchangeByOpenInterest.symbol, largestExchangeByOpenInterest.market)
