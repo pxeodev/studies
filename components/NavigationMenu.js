@@ -4,7 +4,6 @@ import {
   UpCircleFilled,
   HeartFilled,
   AlertFilled,
-  TeamOutlined,
   SnippetsOutlined,
   QuestionCircleFilled,
   ContainerFilled,
@@ -15,7 +14,7 @@ import {
   StepBackwardOutlined,
   LineChartOutlined,
   TagsOutlined,
-  LinkOutlined,
+  DoubleRightOutlined,
 } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -200,6 +199,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
           icon: <QuestionCircleFilled className={styles.sunsetOrange} />
         },
         {
+          label: <Link href="/changelog">Changelog</Link>,
+          key: '/changelog',
+          icon: <DoubleRightOutlined className={styles.sunsetOrange} />
+        },
+        {
           label: <Link href="/terms">Terms & Conditions</Link>,
           key: '/terms',
           icon: <ContainerFilled className={styles.polarGreen} />
@@ -261,6 +265,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
         label: 'FAQ',
         icon: <Link href="/faq"><QuestionCircleFilled className={styles.sunsetOrange} /></Link>,
         key: '/faq'
+      },
+      {
+        label: 'Changelog',
+        icon: <Link href="/changelog"><DoubleRightOutlined className={styles.sunsetOrange} /></Link>,
+        key: '/changelog'
       },
       {
         label: 'Terms & Conditions',

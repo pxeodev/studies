@@ -24,7 +24,7 @@ const HUMAN_PAGE_NAMES_EXCEPTIONS = {
   'index': 'Home'
 }
 const HUMANIZE_PAGE_NAMES = page => HUMAN_PAGE_NAMES_EXCEPTIONS[page] || startCase(page)
-const INFOMATION_PAGES = ['terms', 'faq']
+const INFOMATION_PAGES = ['terms', 'faq', 'changelog']
 
 export default function Sitemap({ coinsData, appData, pageData, shallowPages }) {
   const breadCrumbItemClass = classnames('ant-breadcrumb-link', sitemapStyles.breadcrumb)
