@@ -75,7 +75,7 @@ const Search = ({ categories, collapsed }) => {
   let coinOptions = null
   let filteredCoins
   if (query?.length === 2) {
-    filteredCoins = coins.filter(coin => coin.symbol.toLowerCase().startsWith(query.toLowerCase()))
+    filteredCoins = coins.filter(coin => coin.name.toLowerCase().startsWith(query.toLowerCase()) || coin.symbol.toLowerCase().startsWith(query.toLowerCase()))
   } else {
     filteredCoins = new Fuse(
       coins,
