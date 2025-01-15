@@ -26,6 +26,7 @@ const useTableFilters = (coinsData) => {
       showFundingRate: false,
       showVolume24h: false,
       showFuturesVolume: false,
+      showOpenInterestByMarketCap: false,
       showATH: false,
       showATL: false,
       cexdex: ['cex', 'dex'],
@@ -117,6 +118,11 @@ const useTableFilters = (coinsData) => {
         return {
           ...state,
           showFuturesVolume: action.payload
+        }
+      case 'SET_SHOW_OPEN_INTEREST_BY_MARKET_CAP':
+        return {
+          ...state,
+          showOpenInterestByMarketCap: action.payload
         }
       case 'SET_SHOW_ATH':
         return {
@@ -269,6 +275,7 @@ const useTableFilters = (coinsData) => {
         showFundingRate: router.query.showFundingRate,
         showVolume24h: router.query.showVolume24h,
         showFuturesVolume: router.query.showFuturesVolume,
+        showOpenInterestByMarketCap: router.query.showOpenInterestByMarketCap,
         showATH: router.query.showATH,
         showATL: router.query.showATL,
       }

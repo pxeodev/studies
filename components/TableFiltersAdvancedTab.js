@@ -69,7 +69,7 @@ const TableFiltersAdvancedTab = ({
           />
         </Col>
       </Row>
-      <Row className={indexStyles.modalRow}>
+      {/* <Row className={indexStyles.modalRow}>
         <Col span={22}>
           <span>Show OI / 24h Volume</span>
         </Col>
@@ -78,6 +78,18 @@ const TableFiltersAdvancedTab = ({
             className={indexStyles.modalSwitch}
             checked={formState.showFuturesVolume}
             onChange={(checked) => { formDispatch({ type: 'SET_SHOW_FUTURES_VOLUME', payload: checked }) }}
+          />
+        </Col>
+      </Row> */}
+      <Row className={indexStyles.modalRow}>
+        <Col span={22}>
+          <span>Show OI / Market Cap</span>
+        </Col>
+        <Col span={2}>
+          <Switch
+            className={indexStyles.modalSwitch}
+            checked={formState.showOpenInterestByMarketCap}
+            onChange={(checked) => { formDispatch({ type: 'SET_SHOW_OPEN_INTEREST_BY_MARKET_CAP', payload: checked }) }}
           />
         </Col>
       </Row>

@@ -63,6 +63,7 @@ const CoinTable = ({
     showFundingRate,
     showVolume24h,
     showFuturesVolume,
+    showOpenInterestByMarketCap,
     showATH,
     showATL,
   } = formState
@@ -70,7 +71,7 @@ const CoinTable = ({
     category: defaultCategory,
   } = defaultFormState
 
-  const FUTURES_COLUMNS_SHOWN = showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume
+  const FUTURES_COLUMNS_SHOWN = showOpenInterest || showFundingRate || showVolume24h || showFuturesVolume || showOpenInterestByMarketCap
 
   const router = useRouter()
   const isHoverable = useIsHoverable()
@@ -300,7 +301,7 @@ const CoinTable = ({
       percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
-    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h
+    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h, openInterestByMarketCap, openInterestByMarketCapChangePercent24h
     if (liveCoinData) {
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
@@ -309,6 +310,8 @@ const CoinTable = ({
         futuresVolume24h = matchingCoinData.futuresVolume24h
         openInterestByFuturesVolume24h = matchingCoinData.openInterestByfuturesVolume24h
         openInterestByfuturesVolume24hChangePercent24h = matchingCoinData.openInterestByfuturesVolume24hChangePercent24h
+        openInterestByMarketCap = matchingCoinData.openInterestByMarketCap
+        openInterestByMarketCapChangePercent24h = matchingCoinData.openInterestByMarketCapChangePercent24h
         if (matchingCoinData.volume24h && coinData.marketCap) {
           twentyFourHourVolumeByMarketCap = matchingCoinData.volume24h / parseFloat(coinData.marketCap)
         }
@@ -354,6 +357,8 @@ const CoinTable = ({
       openInterestByfuturesVolume24hChangePercent24h,
       openInterestChangePercent1h,
       openInterestChangePercent24h,
+      openInterestByMarketCap,
+      openInterestByMarketCapChangePercent24h,
     }
   })
 
@@ -632,24 +637,54 @@ const CoinTable = ({
       }
     )
   }
-  if (showFuturesVolume) {
+  // if (showFuturesVolume) {
+  //   columns.push(
+  //     {
+  //       title: 'OI / 24h Volume',
+  //       dataIndex: 'openInterestByFuturesVolume24h',
+  //       width: 160,
+  //       className: coinTableStyles.unclickableCell,
+  //       sorter: (a, b) => Number(a.openInterestByFuturesVolume24h) - Number(b.openInterestByFuturesVolume24h),
+  //       render: (openInterestByFuturesVolume24h, data) => {
+  //         if (isFinite(openInterestByFuturesVolume24h)) {
+  //           return (
+  //             <>
+  //               <>{numberFormatter.format(openInterestByFuturesVolume24h)}</>
+  //               {data.openInterestByfuturesVolume24hChangePercent24h ? (
+  //                 <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestByfuturesVolume24hChangePercent24h < 0 })}>
+  //                   &nbsp;(
+  //                     {data.openInterestByfuturesVolume24hChangePercent24h > 0 ? '+' : ''}
+  //                     {round(data.openInterestByfuturesVolume24hChangePercent24h, 2)}%
+  //                   )
+  //                 </span>
+  //               ) : null}
+  //             </>
+  //           )
+  //         } else {
+  //           return null
+  //         }
+  //       }
+  //     }
+  //   )
+  // }
+  if (showOpenInterestByMarketCap) {
     columns.push(
       {
-        title: 'OI / 24h Volume',
-        dataIndex: 'openInterestByFuturesVolume24h',
+        title: 'OI / Market Cap',
+        dataIndex: 'openInterestByMarketCap',
         width: 160,
         className: coinTableStyles.unclickableCell,
-        sorter: (a, b) => Number(a.openInterestByFuturesVolume24h) - Number(b.openInterestByFuturesVolume24h),
-        render: (openInterestByFuturesVolume24h, data) => {
-          if (isFinite(openInterestByFuturesVolume24h)) {
+        sorter: (a, b) => Number(a.openInterestByMarketCap) - Number(b.openInterestByMarketCap),
+        render: (openInterestByMarketCap, data) => {
+          if (isFinite(openInterestByMarketCap)) {
             return (
               <>
-                <>{numberFormatter.format(openInterestByFuturesVolume24h)}</>
-                {data.openInterestByfuturesVolume24hChangePercent24h ? (
-                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestByfuturesVolume24hChangePercent24h < 0 })}>
+                <>{numberFormatter.format(openInterestByMarketCap)}</>
+                {data.openInterestByMarketCapChangePercent24h ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: data.openInterestByMarketCapChangePercent24h < 0 })}>
                     &nbsp;(
-                      {data.openInterestByfuturesVolume24hChangePercent24h > 0 ? '+' : ''}
-                      {round(data.openInterestByfuturesVolume24hChangePercent24h, 2)}%
+                      {data.openInterestByMarketCapChangePercent24h > 0 ? '+' : ''}
+                      {round(data.openInterestByMarketCapChangePercent24h, 2)}%
                     )
                   </span>
                 ) : null}
