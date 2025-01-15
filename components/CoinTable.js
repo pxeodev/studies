@@ -300,7 +300,7 @@ const CoinTable = ({
       percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
     }
-    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h
+    let openInterest, fundingRate, openInterestByFuturesVolume24h, openInterestByfuturesVolume24hChangePercent24h, openInterestChangePercent1h, openInterestChangePercent24h, twentyFourHourVolumeByMarketCap, futuresVolume24h
     if (liveCoinData) {
       const matchingCoinData = liveCoinData.find(coin => coin.id === coinData.id)
       if (matchingCoinData) {
@@ -312,6 +312,8 @@ const CoinTable = ({
         if (matchingCoinData.volume24h && coinData.marketCap) {
           twentyFourHourVolumeByMarketCap = matchingCoinData.volume24h / parseFloat(coinData.marketCap)
         }
+        openInterestChangePercent1h = round(matchingCoinData.openInterestChangePercent1h, 2)
+        openInterestChangePercent24h = round(matchingCoinData.openInterestChangePercent24h, 2)
       }
     }
     let circulatingSupplyPercentage
@@ -350,6 +352,8 @@ const CoinTable = ({
       futuresVolume24h,
       openInterestByFuturesVolume24h,
       openInterestByfuturesVolume24hChangePercent24h,
+      openInterestChangePercent1h,
+      openInterestChangePercent24h,
     }
   })
 
@@ -534,6 +538,56 @@ const CoinTable = ({
         render: (openInterest) => {
           if (openInterest) {
             return currencyFormatter.format(openInterest)
+          } else {
+            return null
+          }
+        }
+      }
+    )
+    columns.push(
+      {
+        title: 'Open Interest (1h%)',
+        dataIndex: 'openInterestChangePercent1h',
+        width: 170,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterestChangePercent1h) - Number(b.openInterestChangePercent1h),
+        render: (openInterestChangePercent1h) => {
+          if (isFinite(openInterestChangePercent1h)) {
+            return (
+              <>
+                {!isNaN(openInterestChangePercent1h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: openInterestChangePercent1h < 0 })}>
+                    {openInterestChangePercent1h > 0 ? '+' : ''}
+                    {openInterestChangePercent1h}%
+                  </span>
+                ) : null}
+              </>
+            )
+          } else {
+            return null
+          }
+        }
+      }
+    )
+    columns.push(
+      {
+        title: 'Open Interest (24h%)',
+        dataIndex: 'openInterestChangePercent24h',
+        width: 170,
+        className: coinTableStyles.unclickableCell,
+        sorter: (a, b) => Number(a.openInterestChangePercent24h) - Number(b.openInterestChangePercent24h),
+        render: (openInterestChangePercent24h) => {
+          if (isFinite(openInterestChangePercent24h)) {
+            return (
+              <>
+                {!isNaN(openInterestChangePercent24h) ? (
+                  <span className={classnames(coinTableStyles.changePercentage, { [coinTableStyles.changePercentageNegative]: openInterestChangePercent24h < 0 })}>
+                    {openInterestChangePercent24h > 0 ? '+' : ''}
+                    {openInterestChangePercent24h}%
+                  </span>
+                ) : null}
+              </>
+            )
           } else {
             return null
           }
