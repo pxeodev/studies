@@ -55,7 +55,7 @@ export default function Category({ coinsData, hiddenCoins, appData, exchangeData
   if (trends) {
     categorySuperTrend = trends.daily?.trend || trends['1d']?.trend
   }
-  const metaTitle = `Trend Analysis for ${coinsData.length} ${category.name} coins`
+  const metaTitle = `Crypto screener for ${coinsData.length} ${category.name} Coins`
   let dailySignalTag
   switch (categorySuperTrend) {
     case signals.buy:
