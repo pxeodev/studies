@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import axios from 'axios'
 import startofHour from 'date-fns/startOfHour/index.js';
 import sum from 'lodash/sum.js';
-import mean from 'lodash/mean.js';
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import { retry } from '@lifeomic/attempt'
@@ -134,6 +133,7 @@ const fetchCoinalyze = async () => {
         futuresVolume24h = scrapedFuturesVolume24h
       } catch(e) {
         console.error(e)
+        Sentry.captureException(e);
         // In error case we don't want to save wrong data
         openInterest = null
         futuresVolume24h = null
@@ -145,8 +145,23 @@ const fetchCoinalyze = async () => {
       await browser?.close()
       console.log('Closed browser')
     }
-    await sql`UPDATE "Coin" SET "openInterest" = ${openInterest}, "fundingRate" = ${fundingRate}, "futuresVolume24h" = ${futuresVolume24h} WHERE id = ${coin.id}`
-    await sql`INSERT INTO "CoinTime" ("coinId", "date", "time", "timeframe", "openInterest", "fundingRate", "futuresVolume24h") VALUES (${coin.id}, ${now}, ${now}, '1h', ${openInterest}, ${fundingRate}, ${futuresVolume24h})`
+    try {
+      await sql.begin(async sql => {
+        await sql`UPDATE "Coin" SET "openInterest" = ${openInterest}, "fundingRate" = ${fundingRate}, "futuresVolume24h" = ${futuresVolume24h} WHERE id = ${coin.id}`
+        await sql`INSERT INTO "CoinTime" ("coinId", "date", "time", "timeframe", "openInterest", "fundingRate", "futuresVolume24h") VALUES (${coin.id}, ${now}, ${now}, '1h', ${openInterest}, ${fundingRate}, ${futuresVolume24h})`
+      });
+    } catch(e) {
+      console.error(e)
+      Sentry.captureException(e, {
+        extra: {
+          coinId: coin.id,
+          openInterest,
+          fundingRate,
+          futuresVolume24h,
+          now,
+        },
+      });
+    }
   }
 }
 
