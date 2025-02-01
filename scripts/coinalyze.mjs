@@ -151,6 +151,7 @@ const fetchCoinalyze = async () => {
         await sql`INSERT INTO "CoinTime" ("coinId", "date", "time", "timeframe", "openInterest", "fundingRate", "futuresVolume24h") VALUES (${coin.id}, ${now}, ${now}, '1h', ${openInterest}, ${fundingRate}, ${futuresVolume24h})`
       });
     } catch(e) {
+      console.log(coin.id, openInterest, fundingRate, futuresVolume24h)
       console.error(e)
       Sentry.captureException(e, {
         extra: {
