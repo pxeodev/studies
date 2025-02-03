@@ -1,4 +1,4 @@
-import { Modal, Input } from 'antd'
+import { Modal, Input, Button } from 'antd'
 import { SearchOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router'
@@ -7,15 +7,21 @@ import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
 
+import useKeyPass from '../hooks/useKeyPass';
+import useAccount from '../hooks/useAccount';
 import searchStyles from '../styles/search.module.less'
 
 const Search = ({ categories, collapsed }) => {
+  const hasKeyPass = useKeyPass()
+  const walletAddress = useAccount()
   const [coins, setCoins] = useState([])
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [query, setQuery] = useState(searchValue);
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
+  const [AIAnswer, setAIAnswer] = useState(null)
+  const [askingAI, setAskingAI] = useState(false)
   useEffect(() => {
     const fetchCoins = async () => {
       const res = await fetch('/api/search')
@@ -47,6 +53,7 @@ const Search = ({ categories, collapsed }) => {
     setSearchModalVisible(true)
   }, []);
   const onSearchValueChange = useCallback((e) => {
+    setAIAnswer(null)
     setSearchValue(e.target.value);
     setQueryDebounced(e.target.value.trim().toLowerCase());
   }, [setSearchValue, setQueryDebounced]);
@@ -55,8 +62,25 @@ const Search = ({ categories, collapsed }) => {
     setSearchValue('')
     setQuery('')
   }, []);
+  const askAi = useCallback(async () => {
+    setAskingAI(true)
+    try {
+      const response = await fetch(`/api/ai?query=${query}&walletAddress=${walletAddress}`)
+      if (!response.ok) { throw new Error(response.status) }
+      const { answer } = await response.json()
+      setAIAnswer(answer)
+    } catch(e) {
+      setAIAnswer('Asking AI failed, try again later')
+    } finally {
+      setAskingAI(false)
+    }
+  }, [query, walletAddress])
   const router = useRouter()
 
+  let aiSearch
+  if (hasKeyPass) {
+    aiSearch = <Button onClick={askAi} loading={askingAI}>Ask AI</Button>
+  }
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
       className={searchStyles.searchBar}
@@ -165,6 +189,8 @@ const Search = ({ categories, collapsed }) => {
       Search for&nbsp;
       <span className={searchStyles.noQueryHighlight}>Coin name, Category, Contract Address</span>
     </div>
+  } else if (AIAnswer) {
+    results = <span className={searchStyles.ai}>{AIAnswer}</span>
   } else if (filteredCoins.length === 0 && filteredCategories.length === 0) {
     results = <div className={searchStyles.empty}>
       No results.
@@ -185,6 +211,7 @@ const Search = ({ categories, collapsed }) => {
           className={searchStyles.searchSelect}
           allowClear
           prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
+          suffix={aiSearch}
           value={searchValue}
           onChange={onSearchValueChange}
           ref={searchInputRef}
