@@ -19,7 +19,7 @@ const handler = async (req, res) => {
   const walletAddress = req.query.walletAddress
   const validWallet = walletAddress?.startsWith('0x')
   const isLocal = req.headers?.referer?.includes('localhost:300')
-  const isPreview = req.headers?.referer?.includes(process.env.VERCEL_BRANCH_URL) || req.headers?.host?.includes(process.env.DEPLOY_URL)
+  const isPreview = req.headers?.referer?.includes(process.env.VERCEL_BRANCH_URL) || req.headers?.host?.includes(process.env.DEPLOY_URL) || process.env.IS_PULL_REQUEST === 'true'
   const isProd = req.headers?.referer?.includes('coinrotator.app') || req.headers?.host?.includes('coinrotator.app')
   const isCoinrotatorReferrer = isLocal || isPreview || isProd
   console.dir(req.headers, { depth: null })
