@@ -104,7 +104,7 @@ const fetchCoinalyze = async () => {
     const largestExchangeByOpenInterest = openInterest.reduce((acc, cur) => acc.openInterest > cur.openInterest ? acc : cur)
     openInterest = sum(openInterest.map(data => data.openInterest))
     let fundingRate = await getFundingRate(largestExchangeByOpenInterest.symbol, largestExchangeByOpenInterest.market)
-    fundingRate = fundingRate.fundingRate
+    fundingRate = fundingRate.fundingRate ?? null
     let futuresVolume24h = data.filter(data => data.futuresVolume24h)
     futuresVolume24h = sum(futuresVolume24h.map(data => data.futuresVolume24h))
     if (CME_SCRAPING_COINS.includes(coin.id)) {
