@@ -5,9 +5,7 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { streamText } from 'ai';
 import auth from '../../../utils/auth.js'
 
-export const config = {
-  runtime: 'edge'
-}
+export const runtime = 'edge';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const systemPrompt = await readFile(path.join(__dirname, 'systemprompt.txt'), 'utf-8');
