@@ -6,22 +6,36 @@ import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
+import { useChat } from 'ai/react'
+import ReactMarkdown from 'react-markdown'
 
 import useKeyPass from '../hooks/useKeyPass';
 import useAccount from '../hooks/useAccount';
 import searchStyles from '../styles/search.module.less'
+import NoKeyPass from './gating/NoKeyPass'
 
 const Search = ({ categories, collapsed }) => {
   const hasKeyPass = useKeyPass()
   const walletAddress = useAccount()
   const [coins, setCoins] = useState([])
+  const [tab, setTab] = useState('search');
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [query, setQuery] = useState(searchValue);
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
-  const [AIAnswer, setAIAnswer] = useState(null)
-  const [askingAI, setAskingAI] = useState(false)
+  const [AIAnswer, setAIAnswer] = useState('')
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
+    api: '/api/ai',
+    body: {
+      walletAddress
+    },
+    query: {
+      walletAddress // Add this to pass wallet address as query param
+    }
+  })
+  const messagesEndRef = useRef(null)
+
   useEffect(() => {
     const fetchCoins = async () => {
       const res = await fetch('/api/search')
@@ -53,7 +67,7 @@ const Search = ({ categories, collapsed }) => {
     setSearchModalVisible(true)
   }, []);
   const onSearchValueChange = useCallback((e) => {
-    setAIAnswer(null)
+    setAIAnswer('')
     setSearchValue(e.target.value);
     setQueryDebounced(e.target.value.trim().toLowerCase());
   }, [setSearchValue, setQueryDebounced]);
@@ -62,25 +76,23 @@ const Search = ({ categories, collapsed }) => {
     setSearchValue('')
     setQuery('')
   }, []);
-  const askAi = useCallback(async () => {
-    setAskingAI(true)
-    try {
-      const response = await fetch(`/api/ai?query=${query}&walletAddress=${walletAddress}`)
-      if (!response.ok) { throw new Error(response.status) }
-      const { answer } = await response.json()
-      setAIAnswer(answer)
-    } catch(e) {
-      setAIAnswer('Asking AI failed, try again later')
-    } finally {
-      setAskingAI(false)
-    }
-  }, [query, walletAddress])
+  const askAi = useCallback((e) => {
+    e.preventDefault(); // Add this to prevent default form submission
+    if (!input.trim()) return; // Don't submit empty queries
+    setMessages([]); // Clear previous messages before submitting new question
+    handleSubmit(e)
+  }, [handleSubmit, setMessages])
   const router = useRouter()
 
-  let aiSearch
-  if (hasKeyPass) {
-    aiSearch = <Button onClick={askAi} loading={askingAI} disabled={askingAI}>Ask AI</Button>
-  }
+  useEffect(() => {
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollTo({
+        top: messagesEndRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [messages]);
+
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
       className={searchStyles.searchBar}
@@ -197,6 +209,66 @@ const Search = ({ categories, collapsed }) => {
     </div>
   }
 
+  const aiTabContent = (
+    <div className={searchStyles.aiTab}>
+      <Input
+        className={searchStyles.searchSelect}
+        allowClear
+        suffix={<Button onClick={askAi} loading={isLoading} disabled={isLoading}>Ask AI</Button>}
+        value={input}
+        onChange={handleInputChange}
+        onPressEnter={askAi}
+        ref={searchInputRef}
+        spellCheck="false"
+      />
+      <div className={classnames(searchStyles.searchResults, searchStyles.aiAnswer)} ref={messagesEndRef}>
+        {messages.length > 0 ? (
+          <span className={searchStyles.ai}>
+            <ReactMarkdown>
+              {messages.filter(msg => msg.role === 'assistant').slice(-1)[0]?.content || (
+                isLoading ? 'Thinking...' : ''
+              )}
+            </ReactMarkdown>
+          </span>
+        ) : (
+          <div className={searchStyles.empty}>
+            Ask AI a question about crypto
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const content = tab === 'search' ? (
+    <>
+      <Input
+        className={searchStyles.searchSelect}
+        allowClear
+        prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
+        value={searchValue}
+        onChange={onSearchValueChange}
+        ref={searchInputRef}
+        spellCheck="false"
+      />
+      <div className={searchStyles.searchResults}>
+        {results}
+      </div>
+    </>
+  ) : aiTabContent;
+
+  const handleTabChange = useCallback((newTab) => {
+    if (newTab === 'ai' && !hasKeyPass) {
+      // Show NoKeyPass modal instead of switching tabs
+      Modal.info({
+        content: <NoKeyPass />,
+        className: searchStyles.modal,
+        footer: null,
+      });
+      return;
+    }
+    setTab(newTab);
+  }, [hasKeyPass]);
+
   return (
     <div>
       {searchTrigger}
@@ -207,19 +279,21 @@ const Search = ({ categories, collapsed }) => {
         footer={null}
         closeIcon={null}
       >
-        <Input
-          className={searchStyles.searchSelect}
-          allowClear
-          prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
-          suffix={aiSearch}
-          value={searchValue}
-          onChange={onSearchValueChange}
-          ref={searchInputRef}
-          spellCheck="false"
-        />
-        <div className={searchStyles.searchResults}>
-          {results}
+        <div className={searchStyles.tabs}>
+          <div
+            className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'search'})}
+            onClick={() => handleTabChange('search')}
+          >
+            Search
+          </div>
+          <div
+            className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
+            onClick={() => handleTabChange('ai')}
+          >
+            AI
+          </div>
         </div>
+        {content}
       </Modal>
     </div>
   );

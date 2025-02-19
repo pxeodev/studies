@@ -15,26 +15,28 @@ const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
-export async function GET(req) {
-  const searchParams = req.nextUrl.searchParams
-  let hasKeyPass = false
+export async function POST(req) {
+  const { messages, walletAddress } = await req.json();
+  let hasKeyPass = false;
+
   try {
-    hasKeyPass = await auth(searchParams.get('walletAddress'))
+    hasKeyPass = await auth(walletAddress);
+    if (!hasKeyPass) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    }
   } catch(e) {
-    console.error(e)
-    res.status(500).json({ ok: false })
+    console.error(e);
+    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
   }
+
   const result = streamText({
     model: openrouter('qwen/qwen-max:online'),
     messages: [
       {
-        "role": "system",
-        "content": systemPrompt
+        role: "system",
+        content: systemPrompt
       },
-      {
-        "role": "user",
-        "content": searchParams.get('query')
-      }
+      ...messages
     ],
   });
 
