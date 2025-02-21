@@ -364,14 +364,20 @@ const functions = [{
 
 export async function POST(req) {
   const { messages, walletAddress } = await req.json();
+  console.dir(messages);
+  console.log(walletAddress)
   let hasKeyPass = false;
 
   try {
+    console.log('auth check')
     hasKeyPass = await auth(walletAddress);
     if (!hasKeyPass) {
+      console.log('auth check failed')
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
+    console.dir(process.env)
+    console.log('streaming in response')
     const result = streamText({
       model: openrouter('qwen/qwen-max:online'),
       tools: functions,
