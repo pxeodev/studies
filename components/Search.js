@@ -13,6 +13,7 @@ import useKeyPass from '../hooks/useKeyPass';
 import useAccount from '../hooks/useAccount';
 import searchStyles from '../styles/search.module.less'
 import NoKeyPass from './gating/NoKeyPass'
+import NotConnected from './gating/NotConnected'
 
 const Search = ({ categories, collapsed }) => {
   const hasKeyPass = useKeyPass()
@@ -257,17 +258,28 @@ const Search = ({ categories, collapsed }) => {
   ) : aiTabContent;
 
   const handleTabChange = useCallback((newTab) => {
-    if (newTab === 'ai' && !hasKeyPass) {
-      // Show NoKeyPass modal instead of switching tabs
-      Modal.info({
-        content: <NoKeyPass />,
-        className: searchStyles.modal,
-        footer: null,
-      });
-      return;
+    if (newTab === 'ai') {
+      if (!walletAddress) {
+        // Show NotConnected modal when no wallet is connected
+        Modal.info({
+          content: <NotConnected />,
+          className: searchStyles.modal,
+          footer: null,
+        });
+        return;
+      }
+      if (!hasKeyPass) {
+        // Show NoKeyPass modal when wallet is connected but has no keypass
+        Modal.info({
+          content: <NoKeyPass />,
+          className: searchStyles.modal,
+          footer: null,
+        });
+        return;
+      }
     }
     setTab(newTab);
-  }, [hasKeyPass]);
+  }, [hasKeyPass, walletAddress]);
 
   return (
     <div>
