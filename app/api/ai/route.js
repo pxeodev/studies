@@ -2,7 +2,6 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { streamText, tool } from 'ai';
 import auth from '../../../utils/auth.js'
 import { sql } from '@vercel/postgres';
-import { z } from 'zod';
 
 export const runtime = 'edge';
 
@@ -185,12 +184,26 @@ const openrouter = createOpenRouter({
 
 const tools = {
   getCoinByContract: tool({
-    description: "When a user asks about a specific contract address (e.g., '0x123...') or mentions a blockchain contract, use this to fetch coin data. Example queries: 'What's the trend for contract 0x123...?' or 'Show me data for BSC contract: 0xabc...'. Returns: { coin: { id, marketCap, categories, coingeckoCategories, ath, atl, circulatingSupply, fullyDilutedValuation, totalSupply }, trends: [{ coinId, date, trend, streak }] }",
-    parameters: z.object({
-      contractAddress: z.string().describe("The contract address as indexed by Coingecko"),
-      chain: z.string().describe("The blockchain network as indexed by Coingecko (e.g., 'ethereum', 'binance-smart-chain')"),
-      interval: z.string().describe("The interval for trend data (e.g., '1d', '4h')").default("1d")
-    }),
+    description: "Use this when a user asks about a specific blockchain contract address. Example: 'Show me trends for ETH contract 0x123...' or 'What's the data for BSC contract 0xabc...'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
+    parameters: {
+      type: "object",
+      properties: {
+        contractAddress: {
+          type: "string",
+          description: "The blockchain contract address to look up"
+        },
+        chain: {
+          type: "string",
+          description: "The blockchain network (ethereum, binance-smart-chain, etc)"
+        },
+        interval: {
+          type: "string",
+          description: "Trend data interval (1d, 4h)",
+          default: "1d"
+        }
+      },
+      required: ["contractAddress", "chain"]
+    },
     execute: async ({ contractAddress, chain, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
@@ -219,11 +232,22 @@ const tools = {
   }),
 
   getCoinBySymbol: tool({
-    description: "When a user mentions a cryptocurrency symbol/ticker (e.g., BTC, ETH, USDT) or asks about a coin using its symbol, use this to fetch coin data. Example queries: 'What's the trend for BTC?' or 'Show me ETH price'. Returns: { coin: { id, marketCap, categories, coingeckoCategories, ath, atl, circulatingSupply, fullyDilutedValuation, totalSupply }, trends: [{ coinId, date, trend, streak }] }",
-    parameters: z.object({
-      symbol: z.string().describe("The trading symbol as indexed by Coingecko (e.g., 'BTC', 'ETH')"),
-      interval: z.string().describe("The interval for trend data (e.g., '1d', '4h')").default("1d")
-    }),
+    description: "Use this when a user mentions a crypto symbol/ticker. Example: 'What's the trend for BTC?' or 'Show ETH analysis'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
+    parameters: {
+      type: "object",
+      properties: {
+        symbol: {
+          type: "string",
+          description: "The cryptocurrency trading symbol (BTC, ETH, etc)"
+        },
+        interval: {
+          type: "string",
+          description: "Trend data interval (1d, 4h)",
+          default: "1d"
+        }
+      },
+      required: ["symbol"]
+    },
     execute: async ({ symbol, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
@@ -252,11 +276,22 @@ const tools = {
   }),
 
   getCoinByName: tool({
-    description: "When a user mentions a cryptocurrency by its full name (e.g., Bitcoin, Ethereum) or asks about a coin using its name, use this to fetch coin data. Example queries: 'What's the trend for Bitcoin?' or 'Show me Ethereum data'. Returns: { coin: { id, marketCap, categories, coingeckoCategories, ath, atl, circulatingSupply, fullyDilutedValuation, totalSupply }, trends: [{ coinId, date, trend, streak }] }",
-    parameters: z.object({
-      name: z.string().describe("The coin name as indexed by Coingecko (e.g., 'Bitcoin', 'Ethereum')"),
-      interval: z.string().describe("The interval for trend data (e.g., '1d', '4h')").default("1d")
-    }),
+    description: "Use this when a user mentions a cryptocurrency's full name. Example: 'Show me Bitcoin trends' or 'What's the analysis for Ethereum?'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
+    parameters: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+          description: "The cryptocurrency's full name (Bitcoin, Ethereum, etc)"
+        },
+        interval: {
+          type: "string",
+          description: "Trend data interval (1d, 4h)",
+          default: "1d"
+        }
+      },
+      required: ["name"]
+    },
     execute: async ({ name, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
