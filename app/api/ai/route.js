@@ -183,7 +183,7 @@ const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
-const functions = {
+const tools = {
   getCoinByContract: tool({
     description: "Retrieve coin and trend data using Coingecko-indexed contract address and chain.",
     parameters: z.object({
@@ -226,16 +226,8 @@ const functions = {
     }),
     execute: async ({ symbol, interval = "1d" }) => {
       const { rows: coin } = await sql`
-        SELECT
-          id,
-          "marketCap",
-          categories,
-          "coingeckoCategories",
-          ath,
-          atl,
-          "circulatingSupply",
-          "fullyDilutedValuation",
-          "totalSupply"
+        SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
+               "circulatingSupply", "fullyDilutedValuation", "totalSupply"
         FROM "Coin"
         WHERE UPPER(symbol) = UPPER(${symbol})
       `;
@@ -245,11 +237,7 @@ const functions = {
       }
 
       const { rows: trends } = await sql`
-        SELECT
-          "coinId",
-          date,
-          trend,
-          streak
+        SELECT "coinId", date, trend, streak
         FROM "SuperTrend"
         WHERE "coinId" = ${coin[0].id}
           AND "quoteSymbol" IS NULL
@@ -271,16 +259,8 @@ const functions = {
     }),
     execute: async ({ name, interval = "1d" }) => {
       const { rows: coin } = await sql`
-        SELECT
-          id,
-          "marketCap",
-          categories,
-          "coingeckoCategories",
-          ath,
-          atl,
-          "circulatingSupply",
-          "fullyDilutedValuation",
-          "totalSupply"
+        SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
+               "circulatingSupply", "fullyDilutedValuation", "totalSupply"
         FROM "Coin"
         WHERE name ILIKE ${`%${name}%`}
       `;
@@ -290,11 +270,7 @@ const functions = {
       }
 
       const { rows: trends } = await sql`
-        SELECT
-          "coinId",
-          date,
-          trend,
-          streak
+        SELECT "coinId", date, trend, streak
         FROM "SuperTrend"
         WHERE "coinId" = ${coin[0].id}
           AND "quoteSymbol" IS NULL
@@ -319,20 +295,18 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
-    console.log(process.env.OPEN_ROUTER_API_KEY)
     const result = streamText({
       model: openrouter('qwen/qwen-max:online'),
-      tools: functions,
-      maxSteps: 3,
       messages: [
         {
           role: "system",
           content: systemPrompt
         },
         ...messages
-      ]
+      ],
+      tools,
+      maxSteps: 3
     });
-    console.dir(result)
 
     return result.toDataStreamResponse();
   } catch(e) {
