@@ -1,5 +1,5 @@
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-import { streamText, tool } from 'ai';
+import { streamText, tool, jsonSchema } from 'ai';
 import auth from '../../../utils/auth.js'
 import { sql } from '@vercel/postgres';
 
@@ -185,25 +185,25 @@ const openrouter = createOpenRouter({
 const tools = {
   getCoinByContract: tool({
     description: "Use this when a user asks about a specific blockchain contract address. Example: 'Show me trends for ETH contract 0x123...' or 'What's the data for BSC contract 0xabc...'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
-    parameters: {
-      type: "object",
+    parameters: jsonSchema({
+      type: 'object',
       properties: {
         contractAddress: {
-          type: "string",
-          description: "The blockchain contract address to look up"
+          type: 'string',
+          description: 'The blockchain contract address to look up'
         },
         chain: {
-          type: "string",
-          description: "The blockchain network (ethereum, binance-smart-chain, etc)"
+          type: 'string',
+          description: 'The blockchain network (ethereum, binance-smart-chain, etc)'
         },
         interval: {
-          type: "string",
-          description: "Trend data interval (1d, 4h)",
-          default: "1d"
+          type: 'string',
+          description: 'Trend data interval (1d, 4h)',
+          default: '1d'
         }
       },
-      required: ["contractAddress", "chain"]
-    },
+      required: ['contractAddress', 'chain']
+    }),
     execute: async ({ contractAddress, chain, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
@@ -233,21 +233,21 @@ const tools = {
 
   getCoinBySymbol: tool({
     description: "Use this when a user mentions a crypto symbol/ticker. Example: 'What's the trend for BTC?' or 'Show ETH analysis'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
-    parameters: {
-      type: "object",
+    parameters: jsonSchema({
+      type: 'object',
       properties: {
         symbol: {
-          type: "string",
-          description: "The cryptocurrency trading symbol (BTC, ETH, etc)"
+          type: 'string',
+          description: 'The cryptocurrency trading symbol (BTC, ETH, etc)'
         },
         interval: {
-          type: "string",
-          description: "Trend data interval (1d, 4h)",
-          default: "1d"
+          type: 'string',
+          description: 'Trend data interval (1d, 4h)',
+          default: '1d'
         }
       },
-      required: ["symbol"]
-    },
+      required: ['symbol']
+    }),
     execute: async ({ symbol, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
@@ -277,27 +277,27 @@ const tools = {
 
   getCoinByName: tool({
     description: "Use this when a user mentions a cryptocurrency's full name. Example: 'Show me Bitcoin trends' or 'What's the analysis for Ethereum?'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
-    parameters: {
-      type: "object",
+    parameters: jsonSchema({
+      type: 'object',
       properties: {
         name: {
-          type: "string",
+          type: 'string',
           description: "The cryptocurrency's full name (Bitcoin, Ethereum, etc)"
         },
         interval: {
-          type: "string",
-          description: "Trend data interval (1d, 4h)",
-          default: "1d"
+          type: 'string',
+          description: 'Trend data interval (1d, 4h)',
+          default: '1d'
         }
       },
-      required: ["name"]
-    },
+      required: ['name']
+    }),
     execute: async ({ name, interval = "1d" }) => {
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
                "circulatingSupply", "fullyDilutedValuation", "totalSupply"
         FROM "Coin"
-        WHERE name ILIKE ${`%${name}%`}
+        WHERE name = ${name.toLowerCase()}
       `;
 
       if (coin.length === 0) {
@@ -327,10 +327,18 @@ export async function POST(req) {
   try {
     hasKeyPass = await auth(walletAddress);
     if (!hasKeyPass) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+      return new Response(JSON.stringify({
+        error: 'Unauthorized',
+        message: 'Invalid wallet address or authentication failed'
+      }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    const result = streamText({
+    console.log(1)
+
+    const response = streamText({
       model: openrouter('qwen/qwen-max:online'),
       messages: [
         {
@@ -343,9 +351,44 @@ export async function POST(req) {
       maxSteps: 3
     });
 
-    return result.toDataStreamResponse();
+
+    // Add error checking for the response
+    if (!response || !response.toDataStreamResponse) {
+      throw new Error('Invalid response from AI model');
+    }
+
+    const streamResponse = response.toDataStreamResponse();
+
+    // Add error checking for the stream response
+    if (!streamResponse || !streamResponse.body) {
+      throw new Error('Invalid stream response');
+    }
+
+    return streamResponse;
+
   } catch(e) {
-    console.error(e);
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+    console.error('API Error:', {
+      name: e.name,
+      message: e.message,
+      stack: e.stack,
+      cause: e.cause
+    });
+
+    // Return a more detailed error response
+    return new Response(JSON.stringify({
+      error: 'Server error',
+      message: e.message,
+      type: e.name,
+      details: process.env.NODE_ENV === 'development' ? {
+        stack: e.stack,
+        cause: e.cause
+      } : undefined
+    }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    });
   }
 }
