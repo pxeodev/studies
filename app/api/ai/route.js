@@ -205,6 +205,8 @@ const tools = {
       required: ['contractAddress', 'chain']
     }),
     execute: async ({ contractAddress, chain, interval = "1d" }) => {
+      console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval });
+
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
                "circulatingSupply", "fullyDilutedValuation", "totalSupply"
@@ -213,6 +215,7 @@ const tools = {
       `;
 
       if (coin.length === 0) {
+        console.log('getCoinByContract: No coin found');
         return { error: "Coin not found" };
       }
 
@@ -227,6 +230,10 @@ const tools = {
         LIMIT 10
       `;
 
+      console.log('getCoinByContract: Success', {
+        coinId: coin[0].id,
+        trendsCount: trends.length
+      });
       return { coin: coin[0], trends };
     }
   }),
@@ -249,6 +256,8 @@ const tools = {
       required: ['symbol']
     }),
     execute: async ({ symbol, interval = "1d" }) => {
+      console.log('Tool executed: getCoinBySymbol', { symbol, interval });
+
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
                "circulatingSupply", "fullyDilutedValuation", "totalSupply"
@@ -257,6 +266,7 @@ const tools = {
       `;
 
       if (coin.length === 0) {
+        console.log('getCoinBySymbol: No coin found');
         return { error: "Coin not found" };
       }
 
@@ -271,6 +281,10 @@ const tools = {
         LIMIT 10
       `;
 
+      console.log('getCoinBySymbol: Success', {
+        coinId: coin[0].id,
+        trendsCount: trends.length
+      });
       return { coin: coin[0], trends };
     }
   }),
@@ -293,6 +307,8 @@ const tools = {
       required: ['name']
     }),
     execute: async ({ name, interval = "1d" }) => {
+      console.log('Tool executed: getCoinByName', { name, interval });
+
       const { rows: coin } = await sql`
         SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
                "circulatingSupply", "fullyDilutedValuation", "totalSupply"
@@ -301,6 +317,7 @@ const tools = {
       `;
 
       if (coin.length === 0) {
+        console.log('getCoinByName: No coin found');
         return { error: "Coin not found" };
       }
 
@@ -315,6 +332,10 @@ const tools = {
         LIMIT 10
       `;
 
+      console.log('getCoinByName: Success', {
+        coinId: coin[0].id,
+        trendsCount: trends.length
+      });
       return { coin: coin[0], trends };
     }
   })
