@@ -201,6 +201,34 @@ const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
+// Add a helper function for database operations
+const withDb = async (operation) => {
+  const client = createClient({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    },
+    options: {
+      connectionTimeoutMillis: 5000, // 5 second connection timeout
+      query_timeout: 10000, // 10 second query timeout
+      statement_timeout: 10000 // 10 second statement timeout
+    }
+  });
+
+  try {
+    await client.connect();
+    return await operation(client);
+  } catch (error) {
+    console.error('Database operation failed:', {
+      message: error.message,
+      stack: error.stack
+    });
+    throw error;
+  } finally {
+    await client.end();
+  }
+};
+
 const tools = {
   getCoinByContract: tool({
     description: "Use this when a user asks about a specific blockchain contract address. Example: 'Show me trends for ETH contract 0x123...' or 'What's the data for BSC contract 0xabc...'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
@@ -227,33 +255,34 @@ const tools = {
       try {
         console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval });
 
-        await client.connect();
-        const coinQuery = await client.sql`
-          SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                 "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-          FROM "Coin"
-          WHERE platforms->>${chain} = ${contractAddress}
-        `;
-        console.log('getCoinByContract - Coin query results:', { rowCount: coinQuery.rows.length });
+        return await withDb(async (client) => {
+          const coinQuery = await client.sql`
+            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
+                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
+            FROM "Coin"
+            WHERE platforms->>${chain} = ${contractAddress}
+          `;
+          console.log('getCoinByContract - Coin query results:', { rowCount: coinQuery.rows.length });
 
-        if (coinQuery.rows.length === 0) {
-          console.log('getCoinByContract: No coin found');
-          return { error: "Coin not found" };
-        }
+          if (coinQuery.rows.length === 0) {
+            console.log('getCoinByContract: No coin found');
+            return { error: "Coin not found" };
+          }
 
-        const trendsQuery = await client.sql`
-          SELECT "coinId", date, trend, streak
-          FROM "SuperTrend"
-          WHERE "coinId" = ${coinQuery.rows[0].id}
-            AND "quoteSymbol" IS NULL
-            AND flavor = 'CoinRotator'
-            AND interval = ${interval}
-          ORDER BY date DESC
-          LIMIT 10
-        `;
-        console.log('getCoinByContract - Trends query results:', { trendsCount: trendsQuery.rows.length });
+          const trendsQuery = await client.sql`
+            SELECT "coinId", date, trend, streak
+            FROM "SuperTrend"
+            WHERE "coinId" = ${coinQuery.rows[0].id}
+              AND "quoteSymbol" IS NULL
+              AND flavor = 'CoinRotator'
+              AND interval = ${interval}
+            ORDER BY date DESC
+            LIMIT 10
+          `;
+          console.log('getCoinByContract - Trends query results:', { trendsCount: trendsQuery.rows.length });
 
-        return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        });
       } catch (error) {
         console.error('getCoinByContract Error:', {
           message: error.message,
@@ -286,39 +315,34 @@ const tools = {
       try {
         console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval });
 
-        await client.connect();
-        console.log('getCoinBySymbol - Connected to database');
+        return await withDb(async (client) => {
+          const coinQuery = await client.sql`
+            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
+                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
+            FROM "Coin"
+            WHERE UPPER(symbol) = UPPER(${symbol})
+          `;
+          console.log('getCoinBySymbol - Coin query results:', { rowCount: coinQuery.rows.length });
 
-        // Add test query to verify connection
-        const testQuery = await client.sql`SELECT COUNT(*) FROM "Coin"`;
-        console.log('getCoinBySymbol - Test query result:', testQuery.rows[0]);
+          if (coinQuery.rows.length === 0) {
+            console.log('getCoinBySymbol: No coin found for symbol:', symbol);
+            return { error: "Coin not found" };
+          }
 
-        const coinQuery = await client.sql`
-          SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                 "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-          FROM "Coin"
-          WHERE UPPER(symbol) = UPPER(${symbol})
-        `;
-        console.log('getCoinBySymbol - Coin query results:', { rowCount: coinQuery.rows.length });
+          const trendsQuery = await client.sql`
+            SELECT "coinId", date, trend, streak
+            FROM "SuperTrend"
+            WHERE "coinId" = ${coinQuery.rows[0].id}
+              AND "quoteSymbol" IS NULL
+              AND flavor = 'CoinRotator'
+              AND interval = ${interval}
+            ORDER BY date DESC
+            LIMIT 10
+          `;
+          console.log('getCoinBySymbol - Trends query results:', { trendsCount: trendsQuery.rows.length });
 
-        if (coinQuery.rows.length === 0) {
-          console.log('getCoinBySymbol: No coin found for symbol:', symbol);
-          return { error: "Coin not found" };
-        }
-
-        const trendsQuery = await client.sql`
-          SELECT "coinId", date, trend, streak
-          FROM "SuperTrend"
-          WHERE "coinId" = ${coinQuery.rows[0].id}
-            AND "quoteSymbol" IS NULL
-            AND flavor = 'CoinRotator'
-            AND interval = ${interval}
-          ORDER BY date DESC
-          LIMIT 10
-        `;
-        console.log('getCoinBySymbol - Trends query results:', { trendsCount: trendsQuery.rows.length });
-
-        return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        });
       } catch (error) {
         console.error('getCoinBySymbol Error:', {
           message: error.message,
@@ -351,35 +375,34 @@ const tools = {
       try {
         console.log('Tool executed: getCoinByName', { name, interval });
 
-        await client.connect();
-        // Somehow the query doesn't run through. Even with a test query, I never get results...
-        // Maybe its the connection configuration or maybe
-        const coinQuery = await client.sql`
-          SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                 "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-          FROM "Coin"
-          WHERE name = ${name.toLowerCase()}
-        `;
-        console.log('getCoinByName - Coin query results:', { rowCount: coinQuery.rows.length });
+        return await withDb(async (client) => {
+          const coinQuery = await client.sql`
+            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
+                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
+            FROM "Coin"
+            WHERE name = ${name.toLowerCase()}
+          `;
+          console.log('getCoinByName - Coin query results:', { rowCount: coinQuery.rows.length });
 
-        if (coinQuery.rows.length === 0) {
-          console.log('getCoinByName: No coin found');
-          return { error: "Coin not found" };
-        }
+          if (coinQuery.rows.length === 0) {
+            console.log('getCoinByName: No coin found');
+            return { error: "Coin not found" };
+          }
 
-        const trendsQuery = await client.sql`
-          SELECT "coinId", date, trend, streak
-          FROM "SuperTrend"
-          WHERE "coinId" = ${coinQuery.rows[0].id}
-            AND "quoteSymbol" IS NULL
-            AND flavor = 'CoinRotator'
-            AND interval = ${interval}
-          ORDER BY date DESC
-          LIMIT 10
-        `;
-        console.log('getCoinByName - Trends query results:', { trendsCount: trendsQuery.rows.length });
+          const trendsQuery = await client.sql`
+            SELECT "coinId", date, trend, streak
+            FROM "SuperTrend"
+            WHERE "coinId" = ${coinQuery.rows[0].id}
+              AND "quoteSymbol" IS NULL
+              AND flavor = 'CoinRotator'
+              AND interval = ${interval}
+            ORDER BY date DESC
+            LIMIT 10
+          `;
+          console.log('getCoinByName - Trends query results:', { trendsCount: trendsQuery.rows.length });
 
-        return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        });
       } catch (error) {
         console.error('getCoinByName Error:', {
           message: error.message,
