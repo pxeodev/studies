@@ -1,5 +1,5 @@
 import { Modal, Input, Button } from 'antd'
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, MessageOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
@@ -36,6 +36,12 @@ const Search = ({ categories, collapsed }) => {
     }
   })
   const messagesEndRef = useRef(null)
+
+  const aiSuggestions = [
+    "What are some of the rising DeFi tokens right now?",
+    "What's ETH price prediction for upcoming years?",
+    "What are memecoins and are they worth it?"
+  ];
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -223,6 +229,7 @@ const Search = ({ categories, collapsed }) => {
           <Input
             className={searchStyles.searchSelect}
             allowClear
+            prefix={<MessageOutlined className={searchStyles.placeholderMagnifier}/>}
             suffix={<Button onClick={askAi} loading={isLoading} disabled={isLoading}>Ask AI</Button>}
             value={input}
             onChange={handleInputChange}
@@ -240,8 +247,16 @@ const Search = ({ categories, collapsed }) => {
                 </ReactMarkdown>
               </span>
             ) : (
-              <div className={searchStyles.empty}>
-                Ask AI a question about crypto
+              <div className={searchStyles.suggestions}>
+                <div className={searchStyles.suggestionTitle}>Suggestions:</div>
+                {aiSuggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className={searchStyles.suggestionButton}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -288,7 +303,7 @@ const Search = ({ categories, collapsed }) => {
             className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
             onClick={() => setTab('ai')}
           >
-            AI
+            Toad AI 🍄
           </div>
         </div>
         {content}

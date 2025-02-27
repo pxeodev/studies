@@ -79,25 +79,6 @@
   color: @cr-gray-7;
 }
 
-.searchSelect {
-  width: 100%;
-  height: 48px !important;
-  font-size: 16px;
-  line-height: 24px;
-  border: 0 !important;
-  border-bottom: 1px solid var(--cr-primary-border) !important;
-  background-color: var(--cr-primary-bg) !important;
-  box-shadow: none !important;
-
-  input {
-    background-color: var(--cr-primary-bg) !important;
-  }
-
-  .placeholderMagnifier {
-    color: #8C8C8C !important;
-  }
-}
-
 .searchResults {
   max-height: 380px;
   overflow: auto;
@@ -107,6 +88,7 @@
 }
 
 .aiAnswer {
+  padding: 16px;
   &:extend(.markdown all);
 
   p {
@@ -118,6 +100,10 @@
 .ai {
   display: block;
   padding: 8px;
+  background-color: var(--cr-primary-bg) !important;
+  border-radius: 4px;
+  border: 1px solid var(--cr-primary-border) !important;
+  padding: 12px;
 }
 
 .empty {
@@ -182,10 +168,29 @@
 
 .tabs {
   width: 100%;
-  height: 36px;
+  height: 52px;
   display: inline-flex;
   align-items: center;
   border-bottom: 1px solid var(--cr-primary-border);
+}
+
+.searchSelect {
+  width: 100%;
+  height: 48px !important;
+  font-size: 16px;
+  line-height: 24px;
+  border: 0 !important;
+  border-bottom: 1px solid var(--cr-primary-border) !important;
+  background-color: var(--cr-primary-bg) !important;
+  box-shadow: none !important;
+
+  input {
+    background-color: var(--cr-primary-bg) !important;
+  }
+
+  .placeholderMagnifier {
+    color: #8C8C8C !important;
+  }
 }
 
 .tab {
@@ -196,6 +201,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 
   &:hover {
     background-color: var(--cr-quintiary-bg);
@@ -203,9 +209,49 @@
 
   &.active {
     background-color: var(--cr-secondary-bg) !important;
+    font-weight: bold;
+  }
+
+  &:first-child:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--cr-primary-border);
   }
 }
 
 .aiTabPadding {
   padding: 16px;
+}
+
+/* Add these new styles for AI suggestions */
+.suggestions {
+  background-color: var(--cr-secondary-bg) !important;
+}
+
+.suggestionTitle {
+  color: #8C8C8C !important;
+  font-size: 16px;
+  margin-bottom: 12px;
+  background-color: var(--cr-secondary-bg) !important;
+}
+
+.suggestionButton {
+  padding: 12px;
+  border: 1px solid var(--cr-primary-border);
+  pointer-events: none;
+  font-size: 16px;
+  color: #8C8C8C !important;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--cr-quintiary-bg);
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
 }
