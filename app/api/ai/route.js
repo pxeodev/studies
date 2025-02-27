@@ -1,7 +1,6 @@
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { streamText, tool, jsonSchema } from 'ai';
 import auth from '../../../utils/auth.js'
-import { createClient } from '@vercel/postgres';
 
 export const runtime = 'edge';
 
@@ -23,7 +22,7 @@ const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis age
    - Never mention specific tools or functions in responses
    - Each analysis returns:
      - Coin metrics: marketCap, ATH/ATL, supply information, categories
-     - Recent trend data: date, trend, and streak information
+     - Recent trend data: date, trend, and streak information (if available)
    - IMPORTANT: Only call each tool ONCE per user query
 
 2. **Trend Analysis**:
@@ -32,6 +31,7 @@ const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis age
      - Trend: The direction of movement
      - Streak: Consecutive days in the current trend
    - Consider market context using the coin's fundamental metrics
+   - If trend data is not available (hasTrendData = false), clearly state this in your response and focus on the available coin metrics instead
 
 3. **Web Search (Secondary Source)**:
    - Use web search only if:
@@ -42,14 +42,18 @@ const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis age
 4. **Response Format**:
    - Present findings in a structured format:
      - Coin Metrics: marketCap, ATH/ATL, supply information
-     - Recent Trends: Latest trend direction and streak
+     - Recent Trends: Latest trend direction and streak (if available)
      - Categories: Both standard and Coingecko categories
    - Provide a concise summary of the analysis
+   - If trend data is not available, clearly state this and focus on the available coin metrics
 
 5. **Error Handling**:
-   - If the dataset does not contain data for a requested coin or time frame:
+   - If the dataset does not contain data for a requested coin:
      - Respond: *"No data available for [coinId] in the dataset."*
      - Offer to refine the query or suggest alternatives based on available data.
+   - If trend data is not available but coin data is:
+     - Respond: *"Coin information found, but no trend data is available for [coinId]."*
+     - Continue to provide the available coin metrics
    - Avoid making assumptions or generating speculative results.
 
 ---
@@ -58,7 +62,7 @@ const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis age
 
 **Query**: "What's the trend for BTC?"
 
-**Response**:
+**Response (with trend data)**:
 1. Coin Metrics:
    - Market Cap: $X
    - ATH: $Y
@@ -68,6 +72,17 @@ const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis age
    - Current Direction: [UP/DOWN]
    - Streak: X days
    - Last Updated: [date]
+
+3. Categories: [list of categories]
+
+**Response (without trend data)**:
+1. Coin Metrics:
+   - Market Cap: $X
+   - ATH: $Y
+   - Circulating Supply: Z
+
+2. Trend Status:
+   - No trend data is currently available for this coin.
 
 3. Categories: [list of categories]
 
@@ -194,31 +209,64 @@ const openrouter = createOpenRouter({
   apiKey: process.env.OPEN_ROUTER_API_KEY,
 });
 
-// Add a helper function for database operations
-const withDb = async (operation) => {
-  const client = createClient({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
-    },
-    options: {
-      connectionTimeoutMillis: 5000, // 5 second connection timeout
-      query_timeout: 10000, // 10 second query timeout
-      statement_timeout: 10000 // 10 second statement timeout
+// Replace the database helper with a function to call the socket server
+const callSocketServer = async (endpoint, params = {}) => {
+  const url = new URL(endpoint, process.env.NEXT_PUBLIC_SOCKET_SERVER_URL);
+
+  // Add query parameters
+  Object.keys(params).forEach(key => {
+    if (params[key] !== undefined) {
+      url.searchParams.append(key, params[key]);
     }
   });
 
   try {
-    await client.connect();
-    return await operation(client);
+    console.log(`Calling socket server: ${url.toString()}`);
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Socket server returned ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+
+    // Process the response to ensure it's in a format the AI can handle
+    if (data && !data.error) {
+      // Ensure trends is always an array
+      data.trends = Array.isArray(data.trends) ? data.trends : [];
+
+      // Add a clear message about trend data status
+      if (data.trends.length === 0 && data.coin) {
+        data.trendStatus = "No trend data available for this coin";
+        data.hasTrendData = false;
+      } else if (data.trends.length > 0) {
+        data.hasTrendData = true;
+        data.trendStatus = `Found ${data.trends.length} trend records`;
+      }
+    }
+
+    console.log('Processed API response:', {
+      hasCoin: !!data.coin,
+      trendsCount: data.trends?.length,
+      trendStatus: data.trendStatus,
+      hasTrendData: data.hasTrendData
+    });
+
+    return data;
   } catch (error) {
-    console.error('Database operation failed:', {
+    console.error('Socket server request failed:', {
+      endpoint,
+      params,
       message: error.message,
       stack: error.stack
     });
     throw error;
-  } finally {
-    await client.end();
   }
 };
 
@@ -248,34 +296,29 @@ const tools = {
       try {
         console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval });
 
-        return await withDb(async (client) => {
-          const coinQuery = await client.sql`
-            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-            FROM "Coin"
-            WHERE platforms->>${chain} = ${contractAddress}
-          `;
-          console.log('getCoinByContract - Coin query results:', { rowCount: coinQuery.rows.length });
-
-          if (coinQuery.rows.length === 0) {
-            console.log('getCoinByContract: No coin found');
-            return { error: "Coin not found" };
-          }
-
-          const trendsQuery = await client.sql`
-            SELECT "coinId", date, trend, streak
-            FROM "SuperTrend"
-            WHERE "coinId" = ${coinQuery.rows[0].id}
-              AND "quoteSymbol" IS NULL
-              AND flavor = 'CoinRotator'
-              AND interval = ${interval}
-            ORDER BY date DESC
-            LIMIT 10
-          `;
-          console.log('getCoinByContract - Trends query results:', { trendsCount: trendsQuery.rows.length });
-
-          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        // Call the socket server API endpoint for contract lookup
+        const result = await callSocketServer('/api/coin/contract', {
+          contractAddress,
+          chain,
+          interval
         });
+
+        console.log('getCoinByContract - Result:', {
+          hasCoin: !!result.coin,
+          trendsCount: result.trends?.length,
+          trendStatus: result.trendStatus
+        });
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        return {
+          coin: result.coin,
+          trends: result.trends,
+          trendStatus: result.trendStatus,
+          hasTrendData: result.hasTrendData
+        };
       } catch (error) {
         console.error('getCoinByContract Error:', {
           message: error.message,
@@ -308,34 +351,28 @@ const tools = {
       try {
         console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval });
 
-        return await withDb(async (client) => {
-          const coinQuery = await client.sql`
-            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-            FROM "Coin"
-            WHERE UPPER(symbol) = UPPER(${symbol})
-          `;
-          console.log('getCoinBySymbol - Coin query results:', { rowCount: coinQuery.rows.length });
-
-          if (coinQuery.rows.length === 0) {
-            console.log('getCoinBySymbol: No coin found for symbol:', symbol);
-            return { error: "Coin not found" };
-          }
-
-          const trendsQuery = await client.sql`
-            SELECT "coinId", date, trend, streak
-            FROM "SuperTrend"
-            WHERE "coinId" = ${coinQuery.rows[0].id}
-              AND "quoteSymbol" IS NULL
-              AND flavor = 'CoinRotator'
-              AND interval = ${interval}
-            ORDER BY date DESC
-            LIMIT 10
-          `;
-          console.log('getCoinBySymbol - Trends query results:', { trendsCount: trendsQuery.rows.length });
-
-          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        // Call the socket server API endpoint for symbol lookup
+        const result = await callSocketServer('/api/coin/symbol', {
+          symbol,
+          interval
         });
+
+        console.log('getCoinBySymbol - Result:', {
+          hasCoin: !!result.coin,
+          trendsCount: result.trends?.length,
+          trendStatus: result.trendStatus
+        });
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        return {
+          coin: result.coin,
+          trends: result.trends,
+          trendStatus: result.trendStatus,
+          hasTrendData: result.hasTrendData
+        };
       } catch (error) {
         console.error('getCoinBySymbol Error:', {
           message: error.message,
@@ -368,34 +405,28 @@ const tools = {
       try {
         console.log('Tool executed: getCoinByName', { name, interval });
 
-        return await withDb(async (client) => {
-          const coinQuery = await client.sql`
-            SELECT id, "marketCap", categories, "coingeckoCategories", ath, atl,
-                   "circulatingSupply", "fullyDilutedValuation", "totalSupply"
-            FROM "Coin"
-            WHERE name = ${name.toLowerCase()}
-          `;
-          console.log('getCoinByName - Coin query results:', { rowCount: coinQuery.rows.length });
-
-          if (coinQuery.rows.length === 0) {
-            console.log('getCoinByName: No coin found');
-            return { error: "Coin not found" };
-          }
-
-          const trendsQuery = await client.sql`
-            SELECT "coinId", date, trend, streak
-            FROM "SuperTrend"
-            WHERE "coinId" = ${coinQuery.rows[0].id}
-              AND "quoteSymbol" IS NULL
-              AND flavor = 'CoinRotator'
-              AND interval = ${interval}
-            ORDER BY date DESC
-            LIMIT 10
-          `;
-          console.log('getCoinByName - Trends query results:', { trendsCount: trendsQuery.rows.length });
-
-          return { coin: coinQuery.rows[0], trends: trendsQuery.rows };
+        // Call the socket server API endpoint for name lookup
+        const result = await callSocketServer('/api/coin/name', {
+          name,
+          interval
         });
+
+        console.log('getCoinByName - Result:', {
+          hasCoin: !!result.coin,
+          trendsCount: result.trends?.length,
+          trendStatus: result.trendStatus
+        });
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        return {
+          coin: result.coin,
+          trends: result.trends,
+          trendStatus: result.trendStatus,
+          hasTrendData: result.hasTrendData
+        };
       } catch (error) {
         console.error('getCoinByName Error:', {
           message: error.message,
@@ -430,8 +461,13 @@ export async function POST(req) {
     }
 
     console.log('Starting AI stream...');
+
+    // Create a collection to store all steps for debugging
+    const allSteps = [];
+
+    // Try a different model from OpenRouter that might have better compatibility
     const response = streamText({
-      model: openrouter('qwen/qwen-max:online'),
+      model: openrouter('openai/gpt-4o'),  // Try GPT-4o instead
       messages: [
         {
           role: "system",
@@ -440,11 +476,122 @@ export async function POST(req) {
         ...messages
       ],
       tools,
-      maxSteps: 3
+      maxSteps: 2,
+
+      // Keep your existing callbacks
+      onFinish(result) {
+        console.log('Stream finished:', {
+          finishReason: result.finishReason,
+          usage: result.usage,
+          messageCount: result.messages?.length || 0,
+          allSteps: allSteps.length
+        });
+
+        // Log any errors
+        if (result.finishReason === 'error') {
+          console.error('Stream error:', result.error);
+        }
+      },
+
+      // Add onStepFinish callback to log each step
+      onStepFinish({ text, toolCalls, toolResults, finishReason, usage }) {
+        const stepInfo = {
+          text,
+          toolCalls: toolCalls.map(call => ({
+            toolName: call.toolName,
+            args: call.args,
+            id: call.toolCallId
+          })),
+          toolResults: toolResults.map(result => ({
+            toolCallId: result.toolCallId,
+            result: typeof result.result === 'object' ?
+              JSON.stringify(result.result).substring(0, 100) + '...' :
+              String(result.result).substring(0, 100) + '...'
+          })),
+          finishReason,
+          usage
+        };
+
+        allSteps.push(stepInfo);
+        console.log('Step finished:', JSON.stringify(stepInfo, null, 2));
+      },
+
+      // Add onToolCall callback for more detailed logging
+      onToolCall({ toolName, toolCallId, args }) {
+        console.log('Tool call initiated:', { toolName, toolCallId, args: JSON.stringify(args) });
+        return { toolCallId };
+      },
+
+      // Add onToolCallResult callback to log results
+      onToolCallResult({ toolName, toolCallId, result }) {
+        // Ensure the result is in the expected format
+        if (toolName.startsWith('getCoinBy') && result) {
+          // Make sure trends is always an array
+          if (!result.trends || !Array.isArray(result.trends)) {
+            result.trends = [];
+          }
+
+          // Ensure all properties have the expected types
+          result.hasTrendData = !!result.trends.length;
+          result.trendStatus = result.trends.length > 0
+            ? `Found ${result.trends.length} trend records`
+            : "No trend data available for this coin";
+
+          console.log('Normalized tool result:', {
+            toolName,
+            toolCallId,
+            resultSummary: {
+              hasCoin: !!result.coin,
+              trendsCount: result.trends.length,
+              hasTrendData: result.hasTrendData,
+              trendStatus: result.trendStatus
+            }
+          });
+        }
+
+        // Add special handling for empty trends
+        if (toolName.startsWith('getCoinBy') &&
+            result &&
+            result.trends &&
+            Array.isArray(result.trends) &&
+            result.trends.length === 0) {
+          console.log('Empty trends detected, adding placeholder data');
+        }
+
+        console.log('Tool call result:', {
+          toolName,
+          toolCallId,
+          result: typeof result === 'object' ?
+            JSON.stringify(result).substring(0, 100) + '...' :
+            String(result).substring(0, 100) + '...'
+        });
+      }
     });
 
     console.log('Stream created, converting to response...');
-    const streamResponse = response.toDataStreamResponse();
+    const streamResponse = response.toDataStreamResponse({
+      getErrorMessage: (error) => {
+        console.error('Stream error in response:', error);
+
+        // Add more specific handling for type validation errors
+        if (error.name === 'AI_TypeValidationError') {
+          console.error('Type validation error details:', error.cause);
+          return "There was an error processing the AI response format. Please try again with a different query.";
+        }
+
+        // Return a user-friendly error message based on error type
+        if (error.name === 'NoSuchToolError') {
+          return "The AI tried to use a tool that doesn't exist. Please try again with a different query.";
+        } else if (error.name === 'InvalidToolArgumentsError') {
+          return "The AI provided invalid arguments to a tool. Please try again with a more specific query.";
+        } else if (error.name === 'ToolExecutionError') {
+          return "There was an error executing the tool. Please try again later.";
+        } else {
+          return "An error occurred while processing your request. Please try again later.";
+        }
+      }
+    });
+
     console.log('Returning stream response...');
     return streamResponse;
 
