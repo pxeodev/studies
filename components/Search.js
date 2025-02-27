@@ -84,11 +84,11 @@ const Search = ({ categories, collapsed }) => {
     setQuery('')
   }, []);
   const askAi = useCallback((e) => {
-    e.preventDefault(); // Add this to prevent default form submission
-    if (!input.trim()) return; // Don't submit empty queries
-    setMessages([]); // Clear previous messages before submitting new question
-    handleSubmit(e)
-  }, [handleSubmit, setMessages])
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    handleSubmit(e);
+  }, [handleSubmit, input]);
   const router = useRouter()
 
   useEffect(() => {
@@ -239,13 +239,27 @@ const Search = ({ categories, collapsed }) => {
           />
           <div className={classnames(searchStyles.searchResults, searchStyles.aiAnswer)} ref={messagesEndRef}>
             {messages.length > 0 ? (
-              <span className={searchStyles.ai}>
-                <ReactMarkdown>
-                  {messages.filter(msg => msg.role === 'assistant').slice(-1)[0]?.content || (
-                    isLoading ? 'Thinking...' : ''
-                  )}
-                </ReactMarkdown>
-              </span>
+              <div className={searchStyles.conversationHistory}>
+                {messages.map((message, index) => (
+                  <div key={index} className={classnames(searchStyles.messageContainer, {
+                    [searchStyles.userMessage]: message.role === 'user',
+                    [searchStyles.assistantMessage]: message.role === 'assistant'
+                  })}>
+                    <div className={searchStyles.messageRole}>
+                      {message.role === 'user' ? 'You' : 'Toad AI 🍄'}:
+                    </div>
+                    <div className={searchStyles.messageContent}>
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                  </div>
+                ))}
+                {isLoading && messages[messages.length - 1]?.role === 'user' && (
+                  <div className={searchStyles.assistantMessage}>
+                    <div className={searchStyles.messageRole}>Toad AI 🍄:</div>
+                    <div className={searchStyles.messageContent}>Thinking...</div>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className={searchStyles.suggestions}>
                 <div className={searchStyles.suggestionTitle}>Suggestions:</div>

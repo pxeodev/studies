@@ -255,3 +255,49 @@
     margin-bottom: 12px;
   }
 }
+
+// Add these new styles for conversation UI
+.conversationHistory {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.userMessage {
+  background-color: var(--cr-quintiary-bg);
+  align-self: flex-end;
+  max-width: 80%;
+}
+
+.assistantMessage {
+  background-color: var(--cr-primary-bg);
+  border: 1px solid var(--cr-primary-border);
+  align-self: flex-start;
+  max-width: 80%;
+}
+
+.messageRole {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.messageContent {
+  font-size: 14px;
+  line-height: 20px;
+
+  p {
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
