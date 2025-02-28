@@ -256,7 +256,7 @@ const Search = ({ categories, collapsed }) => {
                   })}>
                     {message.role === 'assistant' && (
                       <div className={searchStyles.messageRole}>
-                        🍄 Toad AI
+                        <img src="/toad-ai.png" alt="Toad AI" width="18" height="18" />&nbsp;Toad AI
                       </div>
                     )}
                     <div className={searchStyles.messageContent}>
@@ -266,7 +266,7 @@ const Search = ({ categories, collapsed }) => {
                 ))}
                 {isLoading && messages[messages.length - 1]?.role === 'user' && (
                   <div className={searchStyles.assistantMessage}>
-                    <div className={searchStyles.messageRole}>🍄 Toad AI</div>
+                    <div className={searchStyles.messageRole}><img src="/toad-ai.png" alt="Toad AI" width="18" height="18" />&nbsp;Toad AI</div>
                     <div className={searchStyles.messageContent}>Thinking...</div>
                   </div>
                 )}
@@ -328,7 +328,7 @@ const Search = ({ categories, collapsed }) => {
             className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
             onClick={() => setTab('ai')}
           >
-            🍄 Toad AI
+            <img src="/toad-ai.png" alt="Toad AI" width="18" height="18" />&nbsp;Toad AI
           </div>
         </div>
         {content}
