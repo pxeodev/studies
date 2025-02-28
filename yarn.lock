@@ -51,7 +51,7 @@
   dependencies:
     json-schema "^0.4.0"
 
-"@ai-sdk/react@1.1.18":
+"@ai-sdk/react@1.1.18", "@ai-sdk/react@^1.1.18":
   version "1.1.18"
   resolved "https://registry.yarnpkg.com/@ai-sdk/react/-/react-1.1.18.tgz#a7bc11d666cb35640f329bf87481c386664e2075"
   integrity sha512-2wlWug6NVAc8zh3pgqtvwPkSNTdA6Q4x9CmrNXCeHcXfJkJ+MuHFQz/I7Wb7mLRajf0DAxsFLIhHyBCEuTkDNw==

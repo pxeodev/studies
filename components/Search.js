@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
-import { useChat } from 'ai/react'
+import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
 
 import useKeyPass from '../hooks/useKeyPass';
