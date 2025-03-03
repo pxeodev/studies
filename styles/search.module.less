@@ -85,6 +85,7 @@
   padding: 8px;
   background-color: var(--cr-secondary-bg) !important;
   scroll-behavior: smooth;
+  flex: 1;
 }
 
 .aiAnswer {
@@ -175,7 +176,7 @@
   font-size: 16px;
   line-height: 24px;
   border: 0 !important;
-  border-bottom: 1px solid var(--cr-primary-border) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
   background-color: var(--cr-primary-bg) !important;
   box-shadow: none !important;
 
@@ -186,6 +187,12 @@
   .placeholderMagnifier {
     color: #8C8C8C !important;
   }
+}
+
+
+.classicSearchSelect {
+  border-top: 0 !important;
+  border-bottom: 1px solid var(--cr-primary-border) !important;
 }
 
 .tab {
@@ -313,4 +320,10 @@
       margin-bottom: 0;
     }
   }
+}
+
+.aiTab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

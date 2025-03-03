@@ -230,22 +230,6 @@ const Search = ({ categories, collapsed }) => {
         <NoKeyPass />
       ) : (
         <>
-          <Input
-            className={searchStyles.searchSelect}
-            allowClear
-            prefix={<MessageOutlined className={searchStyles.placeholderMagnifier}/>}
-            suffix={
-              <>
-                <Button type="primary" onClick={askAi} loading={isLoading} className={isLoading ? searchStyles.askToadButtonDisabled : ''}>Ask Toad</Button>
-                <Button disabled={isLoading || !messages.length} onClick={clearChat} className={searchStyles.clearChatButton} icon={<PlusSquareOutlined />} />
-              </>
-            }
-            value={input}
-            onChange={handleInputChange}
-            onPressEnter={askAi}
-            ref={searchInputRef}
-            spellCheck="false"
-          />
           <div className={classnames(searchStyles.searchResults, searchStyles.aiAnswer)} ref={messagesEndRef}>
             {messages.length > 0 ? (
               <div className={searchStyles.conversationHistory}>
@@ -285,6 +269,22 @@ const Search = ({ categories, collapsed }) => {
               </div>
             )}
           </div>
+          <Input
+            className={searchStyles.searchSelect}
+            allowClear
+            prefix={<MessageOutlined className={searchStyles.placeholderMagnifier}/>}
+            suffix={
+              <>
+                <Button type="primary" onClick={askAi} loading={isLoading} className={isLoading ? searchStyles.askToadButtonDisabled : ''}>Ask Toad</Button>
+                <Button disabled={isLoading || !messages.length} onClick={clearChat} className={searchStyles.clearChatButton} icon={<PlusSquareOutlined />} />
+              </>
+            }
+            value={input}
+            onChange={handleInputChange}
+            onPressEnter={askAi}
+            ref={searchInputRef}
+            spellCheck="false"
+          />
         </>
       )}
     </div>
@@ -293,7 +293,7 @@ const Search = ({ categories, collapsed }) => {
   const content = tab === 'search' ? (
     <>
       <Input
-        className={searchStyles.searchSelect}
+        className={classnames(searchStyles.searchSelect, searchStyles.classicSearchSelect)}
         allowClear
         prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
         value={searchValue}
