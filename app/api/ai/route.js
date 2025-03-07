@@ -4,6 +4,41 @@ import auth from '../../../utils/auth.js'
 
 export const runtime = 'edge';
 
+// Function to track events in Mixpanel using fetch (Edge runtime compatible)
+const trackMixpanelEvent = async (event, properties) => {
+  try {
+    const token = '743aa6797630eaf251e029aaed46382f';
+    const data = {
+      event,
+      properties: {
+        token,
+        ...properties
+      }
+    };
+
+    // Encode the data for Mixpanel
+    const encodedData = Buffer.from(JSON.stringify(data)).toString('base64');
+
+    // Send the event to Mixpanel
+    const response = await fetch('https://api.mixpanel.com/track', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'text/plain'
+      },
+      body: `data=${encodedData}`
+    });
+
+    if (!response.ok) {
+      console.error('Failed to track event in Mixpanel:', await response.text());
+    } else {
+      console.log(`Successfully tracked "${event}" event in Mixpanel`);
+    }
+  } catch (error) {
+    console.error('Error tracking event in Mixpanel:', error);
+  }
+};
+
 const systemPrompt = `You are CoinRotatorAI, a cryptocurrency trend analysis agent. Your role is to analyze cryptocurrency trends using provided tools. Follow these specific rules:
 
 ---
@@ -442,6 +477,17 @@ const tools = {
 export async function POST(req) {
   const { messages, walletAddress } = await req.json();
   console.log('Received POST request with messages:', JSON.stringify(messages, null, 2));
+
+  // Track the AI prompt in Mixpanel
+  const userMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+  if (userMessage && userMessage.role === 'user') {
+    await trackMixpanelEvent('AI Prompt', {
+      distinct_id: walletAddress || 'anonymous',
+      prompt: userMessage.content,
+      messageCount: messages.length,
+      time: Math.floor(Date.now() / 1000)
+    });
+  }
 
   let hasKeyPass = false;
 
