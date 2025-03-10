@@ -2,11 +2,18 @@
 @import './variables.module.less';
 
 .modal {
+  width: 90% !important;
+  max-height: 50%;
   margin-top: 48px !important;
   top: 0;
 
+  :global(.ant-modal-content) {
+    height: 100%;
+  }
+
   :global(.ant-modal-body) {
     padding: 0;
+    height: 100%;
   }
 
   :global(.ant-modal-close-x) {
@@ -16,6 +23,7 @@
 
 @media screen and (max-width: @screen-sm) {
   .modal {
+    width: 100% !important;
     padding: 0 16px !important;
   }
 }
@@ -53,7 +61,7 @@
   }
 
   @media (max-width: @screen-sm) {
-    width: 100%;
+    width: 100% !important;
   }
 
   :global(.ant-select-selector) {
@@ -80,7 +88,7 @@
 }
 
 .searchResults {
-  max-height: 380px;
+  height: 100%;
   overflow: auto;
   padding: 8px;
   background-color: var(--cr-secondary-bg) !important;
@@ -264,6 +272,7 @@
 
 // Add these new styles for conversation UI
 .conversationHistory {
+  max-height: 400px;
   display: flex;
   flex-direction: column;
   gap: 12px;
