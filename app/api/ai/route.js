@@ -524,6 +524,35 @@ const tools = {
         return { error: "Failed to fetch market health crossing data" };
       }
     }
+  }),
+
+  getCurrentUtcDatetime: tool({
+    description: "Returns the current date and time in UTC in ISO 8601 format. Use this when you need the current date/time in a machine-readable format.",
+    parameters: jsonSchema({
+      type: 'object',
+      properties: {}  // No parameters needed
+    }),
+    execute: async () => {
+      try {
+        console.log('Tool executed: getCurrentUtcDatetime');
+
+        // Get current UTC datetime in ISO format
+        const utcDatetime = new Date().toISOString();
+
+        console.log('getCurrentUtcDatetime - Result:', { utcDatetime });
+
+        return {
+          datetime: utcDatetime,
+          timezone: "UTC"
+        };
+      } catch (error) {
+        console.error('getCurrentUtcDatetime Error:', {
+          message: error.message,
+          stack: error.stack
+        });
+        return { error: "Failed to get current UTC datetime" };
+      }
+    }
   })
 };
 
