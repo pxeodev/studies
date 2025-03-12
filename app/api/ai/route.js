@@ -552,6 +552,56 @@ const tools = {
         return { error: "Failed to get current UTC datetime" };
       }
     }
+  }),
+
+  getCoinById: tool({
+    description: "Use this when you have a specific coinId to look up. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
+    parameters: jsonSchema({
+      type: 'object',
+      properties: {
+        coinId: {
+          type: 'string',
+          description: 'The unique identifier of the coin to look up'
+        },
+        interval: {
+          type: 'string',
+          description: 'Trend data interval (1d, 4h)',
+          default: '1d'
+        }
+      },
+      required: ['coinId']
+    }),
+    execute: async ({ coinId, interval = "1d" }) => {
+      try {
+        console.log('Tool executed: getCoinById', { coinId, interval });
+
+        // Call the socket server API endpoint for coinId lookup
+        const result = await callSocketServer('/api/coin/id', {
+          coinId,
+          interval
+        });
+
+        console.log('getCoinById - Result:', result);
+
+        if (result.error) {
+          return { error: result.error };
+        }
+
+        return {
+          coin: result.coin,
+          trends: result.trends,
+          trendStatus: result.trendStatus,
+          hasTrendData: result.hasTrendData
+        };
+      } catch (error) {
+        console.error('getCoinById Error:', {
+          message: error.message,
+          stack: error.stack,
+          params: { coinId, interval }
+        });
+        return { error: "Failed to fetch coin data" };
+      }
+    }
   })
 };
 
@@ -593,8 +643,9 @@ const getSystemPrompt = async () => {
 }
 
 export async function POST(req) {
-  const { messages, walletAddress } = await req.json();
+  const { messages, walletAddress, data } = await req.json();
   console.log('Received POST request with messages:', JSON.stringify(messages, null, 2));
+  console.log('Request data:', data);
 
   // Track the AI prompt in Mixpanel
   const userMessage = messages.length > 0 ? messages[messages.length - 1] : null;
@@ -612,6 +663,22 @@ export async function POST(req) {
     const systemPrompt = await getSystemPrompt();
     console.log('System prompt:', systemPrompt);
 
+    // Modify the messages array if coinId is present in data
+    let processedMessages = [...messages];
+    if (data?.coinId && userMessage && userMessage.role === 'user') {
+      // Find the last user message
+      const lastUserMessageIndex = processedMessages.findIndex(m => m.role === 'user');
+      if (lastUserMessageIndex !== -1) {
+        // Create a modified copy of the message
+        processedMessages[lastUserMessageIndex] = {
+          ...processedMessages[lastUserMessageIndex],
+          content: `coinid:${data.coinId} ${processedMessages[lastUserMessageIndex].content}`
+        };
+
+        console.log('Modified user message with coinId:', processedMessages[lastUserMessageIndex].content);
+      }
+    }
+
     console.log('Starting AI stream...');
 
     // Create a collection to store all steps for debugging
@@ -624,7 +691,7 @@ export async function POST(req) {
           role: "system",
           content: systemPrompt
         },
-        ...messages
+        ...processedMessages // Use the processed messages instead of original messages
       ],
       tools,
       maxSteps: 10,

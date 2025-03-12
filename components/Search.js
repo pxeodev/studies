@@ -1,4 +1,4 @@
-import { Modal, Input, Button } from 'antd'
+import { Modal, Input, Button, Tag } from 'antd'
 import { SearchOutlined, MessageOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router'
@@ -27,6 +27,7 @@ const Search = ({ categories, collapsed }) => {
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
   const [AIAnswer, setAIAnswer] = useState('')
+  const [coinTag, setCoinTag] = useState(null);
   const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, setInput } = useChat({
     api: '/api/ai',
     body: {
@@ -90,6 +91,7 @@ const Search = ({ categories, collapsed }) => {
     setSearchModalVisible(false)
     setSearchValue('')
     setQuery('')
+    setCoinTag(null)
 
     // Remove the hash from the URL when closing the modal
     if (window.location.hash === '#toady') {
@@ -100,10 +102,18 @@ const Search = ({ categories, collapsed }) => {
   }, [router]);
   const askAi = useCallback((e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() && !coinTag) return;
 
-    handleSubmit(e);
-  }, [handleSubmit, input]);
+    // Use the options parameter of handleSubmit to pass the coinTag
+    handleSubmit(e, {
+      data: coinTag ? { coinId: coinTag } : undefined
+    });
+  }, [handleSubmit, input, coinTag]);
+
+  // Handle removing the coin tag
+  const handleRemoveCoinTag = useCallback(() => {
+    setCoinTag(null);
+  }, []);
 
   useEffect(() => {
     // Only auto-scroll when new messages arrive if autoScroll is true
@@ -157,6 +167,20 @@ const Search = ({ categories, collapsed }) => {
       setTab('ai')
     }
   }, [router.asPath])
+
+  // Check if we're on a coin page and set the coin tag
+  useEffect(() => {
+    if (searchModalVisible && router.asPath) {
+      const path = router.asPath;
+      if (path.includes('/coin/')) {
+        // Extract coinId from URL (part after /coin/ without hash parameters)
+        const coinId = path.split('/coin/')[1].split('#')[0];
+        if (coinId) {
+          setCoinTag(coinId);
+        }
+      }
+    }
+  }, [searchModalVisible, router.asPath]);
 
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
@@ -327,7 +351,18 @@ const Search = ({ categories, collapsed }) => {
           <Input
             className={searchStyles.searchSelect}
             allowClear
-            prefix={<MessageOutlined className={searchStyles.placeholderMagnifier}/>}
+            prefix={<>
+              <MessageOutlined className={searchStyles.placeholderMagnifier}/>
+              {coinTag && (
+                <Tag
+                  className={searchStyles.coinTag}
+                  closable
+                  onClose={handleRemoveCoinTag}
+                >
+                  {coinTag}
+                </Tag>
+              )}
+            </>}
             suffix={
               <>
                 <Button type="primary" onClick={askAi} loading={isLoading} className={isLoading ? searchStyles.askToadButtonDisabled : ''}>Ask Toady</Button>
