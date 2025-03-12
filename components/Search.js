@@ -40,9 +40,9 @@ const Search = ({ categories, collapsed }) => {
   const [autoScroll, setAutoScroll] = useState(true);
 
   const aiSuggestions = [
-    "What are some of the rising DeFi tokens right now?",
-    "What's ETH price prediction for upcoming years?",
-    "What are memecoins and are they worth it?"
+    "What's the market health today?",
+    "Analyze Bitcoin's current trend",
+    "Show me fresh trends in the crypto market"
   ];
 
   useEffect(() => {
@@ -298,6 +298,7 @@ const Search = ({ categories, collapsed }) => {
                   <div
                     key={index}
                     className={searchStyles.suggestionButton}
+                    onClick={() => setInput(suggestion)}
                   >
                     {suggestion}
                   </div>
