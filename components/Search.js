@@ -103,10 +103,11 @@ const Search = ({ categories, collapsed }) => {
   const askAi = useCallback((e) => {
     e.preventDefault();
     if (!input.trim() && !coinTag) return;
+    const coinId = document.querySelector('meta[property="x-cr-coin-id"]');
 
     // Use the options parameter of handleSubmit to pass the coinTag
     handleSubmit(e, {
-      data: coinTag ? { coinId: coinTag } : undefined
+      data: coinTag ? { coinId } : undefined
     });
   }, [handleSubmit, input, coinTag]);
 
