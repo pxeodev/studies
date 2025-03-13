@@ -605,7 +605,7 @@ const tools = {
   })
 };
 
-const getSystemPrompt = async () => {
+const fetchR2FileContents = async (fileName) => {
   const s3Client = new S3Client({
     region: "auto",
     endpoint: process.env.R2_S3_ENDPOINT,
@@ -617,7 +617,7 @@ const getSystemPrompt = async () => {
   const { Body } = await s3Client.send(
     new GetObjectCommand({
       Bucket: process.env.R2_S3_BUCKET,
-      Key: 'toadaiprompt.txt'
+      Key: fileName
     })
   );
 
@@ -639,7 +639,15 @@ const getSystemPrompt = async () => {
     position += chunk.length;
   }
 
-  return new TextDecoder('utf-8').decode(allChunks);
+  return new TextDecoder('utf-8').decode(allChunks).trim();
+}
+
+const getSystemPrompt = async () => {
+  return fetchR2FileContents('toadaiprompt.txt');
+}
+
+const getModelId = async () => {
+  return fetchR2FileContents('toadaimodelid.txt');
 }
 
 export async function POST(req) {
@@ -659,9 +667,13 @@ export async function POST(req) {
   }
 
   try {
-    console.log('Getting system prompt...');
-    const systemPrompt = await getSystemPrompt();
+    console.log('Getting system prompt and model ID...');
+    const [systemPrompt, modelId] = await Promise.all([
+      getSystemPrompt(),
+      getModelId()
+    ]);
     console.log('System prompt:', systemPrompt);
+    console.log('Model ID:', modelId);
 
     // Modify the messages array if coinId is present in data
     let processedMessages = [...messages];
@@ -685,13 +697,13 @@ export async function POST(req) {
     const allSteps = [];
 
     const response = streamText({
-      model: openrouter('anthropic/claude-3.7-sonnet:online'),
+      model: openrouter(modelId),
       messages: [
         {
           role: "system",
           content: systemPrompt
         },
-        ...processedMessages // Use the processed messages instead of original messages
+        ...processedMessages
       ],
       tools,
       maxSteps: 10,
