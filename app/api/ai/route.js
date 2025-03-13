@@ -438,7 +438,7 @@ const tools = {
   }),
 
   getMarketHealth: tool({
-    description: "Use this when a user asks about overall market health or sentiment. Returns data about the distribution of UP, DOWN, and HODL trends across the market.",
+    description: "Use this when a user asks about overall market health or sentiment. Returns data about the distribution of UP, DOWN, and HODL trends across the market. Returns an object with: date (timestamp), trends (object with counts of UP, HODL, and DOWN trends, e.g. { UP: 103, HODL: 462, DOWN: 409 }), hasExtremes (boolean), and extremes (array of extreme values for each trend).",
     parameters: jsonSchema({
       type: 'object',
       properties: {
