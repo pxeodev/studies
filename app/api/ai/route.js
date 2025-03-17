@@ -158,19 +158,25 @@ const tools = {
           type: 'string',
           description: 'Trend data interval (1d, 4h)',
           default: '1d'
+        },
+        trendLimit: {
+          type: 'number',
+          description: 'Maximum number of trend records to return',
+          default: 5
         }
       },
       required: ['contractAddress', 'chain']
     }),
-    execute: async ({ contractAddress, chain, interval = "1d" }) => {
+    execute: async ({ contractAddress, chain, interval = "1d", trendLimit = 5 }) => {
       try {
-        console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval });
+        console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval, trendLimit });
 
         // Call the socket server API endpoint for contract lookup
         const result = await callSocketServer('/api/coin/contract', {
           contractAddress,
           chain,
-          interval
+          interval,
+          trendLimit
         });
 
         console.log('getCoinByContract - Result:', result);
@@ -189,7 +195,7 @@ const tools = {
         console.error('getCoinByContract Error:', {
           message: error.message,
           stack: error.stack,
-          params: { contractAddress, chain, interval }
+          params: { contractAddress, chain, interval, trendLimit }
         });
         return { error: "Failed to fetch coin data" };
       }
@@ -209,18 +215,24 @@ const tools = {
           type: 'string',
           description: 'Trend data interval (1d, 4h)',
           default: '1d'
+        },
+        trendLimit: {
+          type: 'number',
+          description: 'Maximum number of trend records to return',
+          default: 5
         }
       },
       required: ['symbol']
     }),
-    execute: async ({ symbol, interval = "1d" }) => {
+    execute: async ({ symbol, interval = "1d", trendLimit = 5 }) => {
       try {
-        console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval });
+        console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval, trendLimit });
 
         // Call the socket server API endpoint for symbol lookup
         const result = await callSocketServer('/api/coin/symbol', {
           symbol,
-          interval
+          interval,
+          trendLimit
         });
 
         console.log('getCoinBySymbol - Result:', result);
@@ -239,7 +251,7 @@ const tools = {
         console.error('getCoinBySymbol Error:', {
           message: error.message,
           stack: error.stack,
-          params: { symbol, interval }
+          params: { symbol, interval, trendLimit }
         });
         return { error: "Failed to fetch coin data" };
       }
@@ -259,18 +271,24 @@ const tools = {
           type: 'string',
           description: 'Trend data interval (1d, 4h)',
           default: '1d'
+        },
+        trendLimit: {
+          type: 'number',
+          description: 'Maximum number of trend records to return',
+          default: 5
         }
       },
       required: ['name']
     }),
-    execute: async ({ name, interval = "1d" }) => {
+    execute: async ({ name, interval = "1d", trendLimit = 5 }) => {
       try {
-        console.log('Tool executed: getCoinByName', { name, interval });
+        console.log('Tool executed: getCoinByName', { name, interval, trendLimit });
 
         // Call the socket server API endpoint for name lookup
         const result = await callSocketServer('/api/coin/name', {
           name,
-          interval
+          interval,
+          trendLimit
         });
 
         console.log('getCoinByName - Result:', result);
@@ -289,7 +307,7 @@ const tools = {
         console.error('getCoinByName Error:', {
           message: error.message,
           stack: error.stack,
-          params: { name, interval }
+          params: { name, interval, trendLimit }
         });
         return { error: "Failed to fetch coin data" };
       }
@@ -538,18 +556,24 @@ const tools = {
           type: 'string',
           description: 'Trend data interval (1d, 4h)',
           default: '1d'
+        },
+        trendLimit: {
+          type: 'number',
+          description: 'Maximum number of trend records to return',
+          default: 5
         }
       },
       required: ['coinId']
     }),
-    execute: async ({ coinId, interval = "1d" }) => {
+    execute: async ({ coinId, interval = "1d", trendLimit = 5 }) => {
       try {
-        console.log('Tool executed: getCoinById', { coinId, interval });
+        console.log('Tool executed: getCoinById', { coinId, interval, trendLimit });
 
         // Call the socket server API endpoint for coinId lookup
         const result = await callSocketServer('/api/coin/id', {
           coinId,
-          interval
+          interval,
+          trendLimit
         });
 
         console.log('getCoinById - Result:', result);
@@ -568,7 +592,7 @@ const tools = {
         console.error('getCoinById Error:', {
           message: error.message,
           stack: error.stack,
-          params: { coinId, interval }
+          params: { coinId, interval, trendLimit }
         });
         return { error: "Failed to fetch coin data" };
       }
