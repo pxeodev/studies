@@ -525,35 +525,6 @@ const tools = {
     }
   }),
 
-  getCurrentUtcDatetime: tool({
-    description: "Returns the current date and time in UTC in ISO 8601 format. Use this when you need the current date/time in a machine-readable format.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {}  // No parameters needed
-    }),
-    execute: async () => {
-      try {
-        console.log('Tool executed: getCurrentUtcDatetime');
-
-        // Get current UTC datetime in ISO format
-        const utcDatetime = new Date().toISOString();
-
-        console.log('getCurrentUtcDatetime - Result:', { utcDatetime });
-
-        return {
-          datetime: utcDatetime,
-          timezone: "UTC"
-        };
-      } catch (error) {
-        console.error('getCurrentUtcDatetime Error:', {
-          message: error.message,
-          stack: error.stack
-        });
-        return { error: "Failed to get current UTC datetime" };
-      }
-    }
-  }),
-
   getCoinById: tool({
     description: "Use this when you have a specific coinId to look up. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
     parameters: jsonSchema({
@@ -711,19 +682,31 @@ export async function POST(req) {
     console.log('System prompt:', systemPrompt);
     console.log('Model ID:', modelId);
 
-    // Modify the messages array if coinId is present in data
+    // Modify the messages array if coinId is present in data or to add timestamp
     let processedMessages = [...messages];
-    if (data?.coinId && userMessage && userMessage.role === 'user') {
+    if (userMessage && userMessage.role === 'user') {
       // Find the last user message
       const lastUserMessageIndex = processedMessages.findIndex(m => m.role === 'user');
       if (lastUserMessageIndex !== -1) {
+        let modifiedContent = processedMessages[lastUserMessageIndex].content;
+
+        // Add coinId if present
+        if (data?.coinId) {
+          modifiedContent = `coinid:${data.coinId} ${modifiedContent}`;
+        }
+
+        // Add timestamp (always included from frontend)
+        if (data?.timestamp) {
+          modifiedContent = `timestamp:${data.timestamp} ${modifiedContent}`;
+        }
+
         // Create a modified copy of the message
         processedMessages[lastUserMessageIndex] = {
           ...processedMessages[lastUserMessageIndex],
-          content: `coinid:${data.coinId} ${processedMessages[lastUserMessageIndex].content}`
+          content: modifiedContent
         };
 
-        console.log('Modified user message with coinId:', processedMessages[lastUserMessageIndex].content);
+        console.log('Modified user message:', processedMessages[lastUserMessageIndex].content);
       }
     }
 
