@@ -1172,6 +1172,11 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@memochou1993/json2markdown@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@memochou1993/json2markdown/-/json2markdown-0.0.14.tgz#8c6f2356c611d83d660f88246eda2c597e05d349"
+  integrity sha512-a/pmmQ3PklydapxyvDBo3AdTJcp4pBXL1+YfHaeFckqVindo26AnrIaYPWk5r7Lx9VZWeG1RmtlAffIdFAuoLA==
+
 "@metamask/detect-provider@2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-2.0.0.tgz#4bc2795e5e6f7d8b84b2e845058d2f222c99917d"

@@ -1,6 +1,7 @@
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { streamText, tool, jsonSchema } from 'ai';
+import { Converter } from '@memochou1993/json2markdown';
 
 export const runtime = 'edge';
 
@@ -140,6 +141,22 @@ const callSocketServer = async (endpoint, params = {}) => {
   }
 };
 
+// Function to convert JSON data to markdown
+const jsonToMarkdown = (data) => {
+  try {
+    if (!data) return "No data available";
+
+    // If it's an error object, return it as a simple error message
+    if (data.error) return `**Error:** ${data.error}`;
+
+    // Convert to markdown using json2md
+    return Converter.toMarkdown(data);
+  } catch (error) {
+    console.error('Error converting JSON to markdown:', error);
+    return "Error formatting data";
+  }
+};
+
 const tools = {
   getCoinByContract: tool({
     description: "Use this when a user asks about a specific blockchain contract address. Example: 'Show me trends for ETH contract 0x123...' or 'What's the data for BSC contract 0xabc...'. Returns detailed coin info including marketCap, ATH/ATL, supply metrics, and recent trend data with dates and streaks.",
@@ -182,22 +199,24 @@ const tools = {
         console.log('getCoinByContract - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           coin: result.coin,
           trends: result.trends,
           trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
+
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getCoinByContract Error:', {
           message: error.message,
           stack: error.stack,
           params: { contractAddress, chain, interval, trendLimit }
         });
-        return { error: "Failed to fetch coin data" };
+        return jsonToMarkdown({ error: "Failed to fetch coin data" });
       }
     }
   }),
@@ -238,22 +257,23 @@ const tools = {
         console.log('getCoinBySymbol - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           coin: result.coin,
           trends: result.trends,
           trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getCoinBySymbol Error:', {
           message: error.message,
           stack: error.stack,
           params: { symbol, interval, trendLimit }
         });
-        return { error: "Failed to fetch coin data" };
+        return jsonToMarkdown({ error: "Failed to fetch coin data" });
       }
     }
   }),
@@ -294,22 +314,24 @@ const tools = {
         console.log('getCoinByName - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           coin: result.coin,
           trends: result.trends,
           trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
+
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getCoinByName Error:', {
           message: error.message,
           stack: error.stack,
           params: { name, interval, trendLimit }
         });
-        return { error: "Failed to fetch coin data" };
+        return jsonToMarkdown({ error: "Failed to fetch coin data" });
       }
     }
   }),
@@ -332,13 +354,15 @@ const tools = {
 
         console.log('getAllCategories - Result:', result);
 
-        return Array.isArray(result) ? result : [];
+        const categories = Array.isArray(result) ? result : [];
+
+        return jsonToMarkdown({ categories });
       } catch (error) {
         console.error('getAllCategories Error:', {
           message: error.message,
           stack: error.stack
         });
-        return { error: "Failed to fetch categories" };
+        return jsonToMarkdown({ error: "Failed to fetch categories" });
       }
     }
   }),
@@ -373,14 +397,16 @@ const tools = {
 
         console.log('getExtremeTrends - Result:', result);
 
-        return Array.isArray(result) ? result : [];
+        const trends = Array.isArray(result) ? result : [];
+
+        return jsonToMarkdown({ trends });
       } catch (error) {
         console.error('getExtremeTrends Error:', {
           message: error.message,
           stack: error.stack,
           params: { interval, type }
         });
-        return { error: "Failed to fetch extreme trends" };
+        return jsonToMarkdown({ error: "Failed to fetch extreme trends" });
       }
     }
   }),
@@ -408,14 +434,16 @@ const tools = {
 
         console.log('getAlignedTrends - Result:', result);
 
-        return Array.isArray(result) ? result : [];
+        const alignedTrends = Array.isArray(result) ? result : [];
+
+        return jsonToMarkdown({ alignedTrends });
       } catch (error) {
         console.error('getAlignedTrends Error:', {
           message: error.message,
           stack: error.stack,
           params: { flavor }
         });
-        return { error: "Failed to fetch aligned trends" };
+        return jsonToMarkdown({ error: "Failed to fetch aligned trends" });
       }
     }
   }),
@@ -443,14 +471,16 @@ const tools = {
 
         console.log('getCoinsByCategory - Result:', result);
 
-        return Array.isArray(result) ? result : [];
+        const coins = Array.isArray(result) ? result : [];
+
+        return jsonToMarkdown({ categoryName: category, coins });
       } catch (error) {
         console.error('getCoinsByCategory Error:', {
           message: error.message,
           stack: error.stack,
           params: { category }
         });
-        return { error: "Failed to fetch coins by category" };
+        return jsonToMarkdown({ error: "Failed to fetch coins by category" });
       }
     }
   }),
@@ -479,22 +509,24 @@ const tools = {
         console.log('getMarketHealth - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           date: result.date,
           trends: result.trends,
           hasExtremes: result.hasExtremes,
           extremes: result.extremes
         };
+
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getMarketHealth Error:', {
           message: error.message,
           stack: error.stack,
           params: { interval }
         });
-        return { error: "Failed to fetch market health data" };
+        return jsonToMarkdown({ error: "Failed to fetch market health data" });
       }
     }
   }),
@@ -523,22 +555,24 @@ const tools = {
         console.log('getMarketHealthCrossing - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           date: result.date,
           overtaking: result.overtaking,
           overtaken: result.overtaken,
           message: result.message
         };
+
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getMarketHealthCrossing Error:', {
           message: error.message,
           stack: error.stack,
           params: { interval }
         });
-        return { error: "Failed to fetch market health crossing data" };
+        return jsonToMarkdown({ error: "Failed to fetch market health crossing data" });
       }
     }
   }),
@@ -579,22 +613,24 @@ const tools = {
         console.log('getCoinById - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          return jsonToMarkdown({ error: result.error });
         }
 
-        return {
+        const data = {
           coin: result.coin,
           trends: result.trends,
           trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
+
+        return jsonToMarkdown(data);
       } catch (error) {
         console.error('getCoinById Error:', {
           message: error.message,
           stack: error.stack,
           params: { coinId, interval, trendLimit }
         });
-        return { error: "Failed to fetch coin data" };
+        return jsonToMarkdown({ error: "Failed to fetch coin data" });
       }
     }
   }),
@@ -622,15 +658,16 @@ const tools = {
 
         console.log('getRecentTweets - Result:', result);
 
-        // Ensure we always return an array
-        return Array.isArray(result) ? result : [];
+        const tweets = Array.isArray(result) ? result : [];
+
+        return jsonToMarkdown({ handle, tweets });
       } catch (error) {
         console.error('getRecentTweets Error:', {
           message: error.message,
           stack: error.stack,
           params: { handle }
         });
-        return { error: "Failed to fetch tweets" };
+        return jsonToMarkdown({ error: "Failed to fetch tweets" });
       }
     }
   })
@@ -797,77 +834,16 @@ export async function POST(req) {
 
       // Add onToolCallResult callback to log results
       onToolCallResult({ toolName, toolCallId, result }) {
-        // Ensure the result is in the expected format
-        if (toolName.startsWith('getCoinBy') && result) {
-          // Make sure trends is always an array
-          if (!result.trends || !Array.isArray(result.trends)) {
-            result.trends = [];
-          }
+        // Log the result
+        console.log('Tool call result:', {
+          toolName,
+          toolCallId,
+          result: typeof result === 'string'
+            ? (result.length > 100 ? result.substring(0, 100) + '...' : result)
+            : 'Non-string result'
+        });
 
-          // Ensure all properties have the expected types
-          result.hasTrendData = !!result.trends.length;
-          result.trendStatus = result.trends.length > 0
-            ? `Found ${result.trends.length} trend records`
-            : "No trend data available for this coin";
-
-          console.log('Tool call result:', { toolName, toolCallId, result });
-        }
-
-        // Handle array results for list-based tools
-        if (['getAllCategories', 'getExtremeTrends', 'getAlignedTrends', 'getCoinsByCategory'].includes(toolName)) {
-          // Ensure result is always an array
-          if (!Array.isArray(result)) {
-            result = [];
-          }
-
-          console.log('Tool call result:', { toolName, toolCallId, resultCount: result.length });
-        }
-
-        // Handle market health tools
-        if (toolName === 'getMarketHealth' && result && !result.error) {
-          // Ensure trends object exists
-          if (!result.trends) {
-            result.trends = { UP: 0, HODL: 0, DOWN: 0 };
-          }
-
-          // Ensure extremes is an array
-          if (!Array.isArray(result.extremes)) {
-            result.extremes = [];
-          }
-
-          console.log('Tool call result:', { toolName, toolCallId, result });
-        }
-
-        // Handle market health crossing tool
-        if (toolName === 'getMarketHealthCrossing' && result && !result.error) {
-          // Add a formatted message if not present
-          if (!result.message && result.overtaking && result.overtaken) {
-            result.message = `${result.overtaking} trend overtook ${result.overtaken} trend on ${new Date(result.date).toLocaleDateString()}`;
-          }
-
-          console.log('Tool call result:', { toolName, toolCallId, result });
-        }
-
-        // Add special handling for empty trends
-        if (toolName.startsWith('getCoinBy') &&
-            result &&
-            result.trends &&
-            Array.isArray(result.trends) &&
-            result.trends.length === 0) {
-          console.log('Empty trends detected, adding placeholder data');
-        }
-
-        // For any other tools or if not handled above
-        if (!toolName.startsWith('getCoinBy') &&
-            !['getAllCategories', 'getExtremeTrends', 'getAlignedTrends', 'getCoinsByCategory', 'getMarketHealth', 'getMarketHealthCrossing'].includes(toolName)) {
-          console.log('Tool call result:', {
-            toolName,
-            toolCallId,
-            result: typeof result === 'object' ?
-              JSON.stringify(result).substring(0, 100) + '...' :
-              String(result).substring(0, 100) + '...'
-          });
-        }
+        // No need for the tool-specific handling since we're returning markdown strings directly
       }
     });
 
