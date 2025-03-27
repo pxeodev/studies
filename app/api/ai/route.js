@@ -83,11 +83,9 @@ const callSocketServer = async (endpoint, params = {}) => {
 
         // Add a clear message about trend data status
         if (data.trends.length === 0 && data.coin) {
-          data.trendStatus = "No trend data available for this coin";
           data.hasTrendData = false;
         } else if (data.trends.length > 0) {
           data.hasTrendData = true;
-          data.trendStatus = `Found ${data.trends.length} trend records`;
         }
       }
 
@@ -208,7 +206,6 @@ const tools = {
         const data = {
           coin: result.coin,
           trends: result.trends,
-          trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
 
@@ -266,7 +263,6 @@ const tools = {
         const data = {
           coin: result.coin,
           trends: result.trends,
-          trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
         return jsonToMarkdown(data);
@@ -323,7 +319,6 @@ const tools = {
         const data = {
           coin: result.coin,
           trends: result.trends,
-          trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
 
@@ -622,7 +617,6 @@ const tools = {
         const data = {
           coin: result.coin,
           trends: result.trends,
-          trendStatus: result.trendStatus,
           hasTrendData: result.hasTrendData
         };
 
