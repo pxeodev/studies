@@ -735,12 +735,13 @@ const tools = {
         },
         limit: {
           type: 'number',
-          description: 'Maximum number of results to return'
+          description: 'Maximum number of results to return',
+          default: 10
         }
       }
     }),
     execute: async ({ trend, categories, marketCapMin, marketCapMax, streakMin, streakMax,
-                     exchanges, cexOnly, dexOnly, interval = "1d", flavor = "CoinRotator", limit }) => {
+                     exchanges, cexOnly, dexOnly, interval = "1d", flavor = "CoinRotator", limit = 10 }) => {
       try {
         console.log('Tool executed: getFilteredCoins', {
           trend, categories, marketCapMin, marketCapMax, streakMin, streakMax,
