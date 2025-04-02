@@ -876,7 +876,6 @@ export async function POST(req) {
       getModelId(),
       getVertexModelId()
     ]);
-    console.log('System prompt:', systemPrompt);
     console.log('Server Provider:', serverProvider);
     console.log('Model ID:', modelId);
     console.log('Vertex Model ID:', vertexModelId);
