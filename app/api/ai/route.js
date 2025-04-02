@@ -919,7 +919,9 @@ export async function POST(req) {
       model = anthropic(modelId);
     } else if (serverProvider === 'vertex') {
       console.log('Using Vertex model:', vertexModelId);
-      model = vertex(vertexModelId);
+      model = vertex(vertexModelId, {
+        useSearchGrounding: true,
+      });
     } else {
       throw new Error(`Unsupported AI provider: ${serverProvider}`);
     }
