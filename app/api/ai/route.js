@@ -994,6 +994,10 @@ export async function POST(req) {
         });
 
         // No need for the tool-specific handling since we're returning markdown strings directly
+      },
+
+      onError(error) {
+        console.error('Stream error:', error);
       }
     });
 
