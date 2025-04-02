@@ -41,9 +41,9 @@ const Search = ({ categories, collapsed }) => {
   const [autoScroll, setAutoScroll] = useState(true);
 
   const aiSuggestions = [
-    "What's the market health today?",
-    "Analyze Bitcoin's current trend",
-    "Show me fresh trends in the crypto market"
+    "Show coins that just started an uptrend",
+    "Compare AI vs RWA trends today",
+    "Find coins under $100M market cap with a daily (1d) uptrend"
   ];
 
   const router = useRouter()
