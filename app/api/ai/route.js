@@ -63,7 +63,6 @@ const callSocketServer = async (endpoint, params = {}) => {
   });
 
   try {
-    console.log(`Calling socket server: ${url.toString()}`);
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
@@ -123,9 +122,6 @@ const callSocketServer = async (endpoint, params = {}) => {
         }
       }
     }
-
-    // Simple logging of the response data
-    console.log(`API response from ${endpoint}:`, data);
 
     return data;
   } catch (error) {
