@@ -106,7 +106,8 @@ const Search = ({ categories, collapsed }) => {
 
     if (!input.trim() && !coinTag) return;
     const coinId = document.querySelector('meta[property="x-cr-coin-id"]')?.content;
-    const currentDateTime = new Date().toString();
+    // Get current date in ISO 8601 format (UTC-based)
+    const currentDateTime = new Date().toISOString();
 
     handleSubmit(e, {
       data: {

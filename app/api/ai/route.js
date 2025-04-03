@@ -1309,12 +1309,12 @@ export async function POST(req) {
 
         // Add coinId if present
         if (data?.coinId) {
-          modifiedContent = `coinid:${data.coinId} ${modifiedContent}`;
+          modifiedContent = `coinid:${data.coinId} | ${modifiedContent}`;
         }
 
         // Add timestamp (always included from frontend)
         if (data?.timestamp) {
-          modifiedContent = `timestamp:${data.timestamp} ${modifiedContent}`;
+          modifiedContent = `Current date and time (ISO 8601 format, UTC-based): ${data.timestamp} | ${modifiedContent}`;
         }
 
         // Create a modified copy of the message
