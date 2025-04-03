@@ -13,6 +13,8 @@ import { deformat } from '../utils/number.mjs';
 import sql from '../lib/database.mjs';
 
 dotenv.config();
+
+import { getGlobalData } from 'coinrotator-utils/coinGecko.mjs'
 puppeteer.use(StealthPlugin())
 const CME_SCRAPING_COINS = ['bitcoin', 'ethereum']
 
@@ -170,6 +172,35 @@ setTimeout(async () => {
   console.log('Fetching Coin Analyze data')
   await fetchCoinalyze()
   console.log('Coin Analyze data fetched')
+
+  try {
+    console.log('Fetching global data from CoinGecko')
+    const globalData = await getGlobalData()
+    const now = startofHour(new Date())
+
+    await sql`
+      INSERT INTO "Global" (
+        "totalMarketCap",
+        "totalMarketVolume",
+        "marketCapPercentage",
+        "date"
+      ) VALUES (
+        ${globalData.total_market_cap_usd},
+        ${globalData.total_volume_usd},
+        ${globalData.market_cap_percentage},
+        ${now}
+      )
+    `
+    console.log('Global data stored in database')
+  } catch (e) {
+    console.error('Error fetching or storing global data:', e)
+    Sentry.captureException(e, {
+      extra: {
+        context: 'Global data fetch and storage',
+      },
+    });
+  }
+
   if (process.env.NODE_ENV === 'production') {
     await axios.post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/new-coinalyze-data`)
   }
