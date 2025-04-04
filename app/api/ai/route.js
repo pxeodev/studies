@@ -1280,14 +1280,14 @@ export async function POST(req) {
 
   // Track the AI prompt in Mixpanel
   const userMessage = messages.length > 0 ? messages[messages.length - 1] : null;
-  if (userMessage && userMessage.role === 'user') {
-    trackMixpanelEvent('AI Prompt', {
-      distinct_id: walletAddress || 'anonymous',
-      prompt: userMessage.content,
-      messageCount: messages.length,
-      time: Math.floor(Date.now() / 1000)
-    }).catch(err => console.error('Mixpanel tracking error:', err));
-  }
+  // if (userMessage && userMessage.role === 'user') {
+  //   trackMixpanelEvent('AI Prompt', {
+  //     distinct_id: walletAddress || 'anonymous',
+  //     prompt: userMessage.content,
+  //     messageCount: messages.length,
+  //     time: Math.floor(Date.now() / 1000)
+  //   }).catch(err => console.error('Mixpanel tracking error:', err));
+  // }
 
   try {
     console.log('Getting system prompt and model ID...');
