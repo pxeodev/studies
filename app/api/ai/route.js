@@ -590,12 +590,7 @@ const tools = {
           return jsonToMarkdown({ error: result.error });
         }
 
-        const data = {
-          coin: result.coin,
-          trends: result.trends
-        };
-
-        return jsonToMarkdown(data);
+        return jsonToMarkdown(result);
       } catch (error) {
         console.error('getCoinByContract Error:', {
           message: error.message,
@@ -646,11 +641,7 @@ const tools = {
           return jsonToMarkdown({ error: result.error });
         }
 
-        const data = {
-          coin: result.coin,
-          trends: result.trends
-        };
-        return jsonToMarkdown(data);
+        return jsonToMarkdown(result);
       } catch (error) {
         console.error('getCoinBySymbol Error:', {
           message: error.message,
@@ -701,12 +692,7 @@ const tools = {
           return jsonToMarkdown({ error: result.error });
         }
 
-        const data = {
-          coin: result.coin,
-          trends: result.trends
-        };
-
-        return jsonToMarkdown(data);
+        return jsonToMarkdown(result);
       } catch (error) {
         console.error('getCoinByName Error:', {
           message: error.message,
@@ -997,12 +983,7 @@ const tools = {
           return jsonToMarkdown({ error: result.error });
         }
 
-        const data = {
-          coin: result.coin,
-          trends: result.trends
-        };
-
-        return jsonToMarkdown(data);
+        return jsonToMarkdown(result);
       } catch (error) {
         console.error('getCoinById Error:', {
           message: error.message,
