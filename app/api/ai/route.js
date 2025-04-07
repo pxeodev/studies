@@ -788,16 +788,24 @@ const tools = {
           type: 'string',
           description: 'The trend algorithm flavor to use',
           default: 'CoinRotator'
+        },
+        intervals: {
+          type: 'array',
+          description: 'Array of intervals to check for trend alignment. If omitted, all intervals will be checked.',
+          items: {
+            type: 'string'
+          }
         }
       }
     }),
-    execute: async ({ flavor = "CoinRotator" }) => {
+    execute: async ({ flavor = "CoinRotator", intervals }) => {
       try {
-        console.log('Tool executed: getAlignedTrends', { flavor });
+        console.log('Tool executed: getAlignedTrends', { flavor, intervals });
 
         // Call the socket server API endpoint for aligned trends
         const result = await callSocketServer('/api/trends/aligned', {
-          flavor
+          flavor,
+          intervals
         });
 
         console.log('getAlignedTrends - Result:', result);
@@ -809,7 +817,7 @@ const tools = {
         console.error('getAlignedTrends Error:', {
           message: error.message,
           stack: error.stack,
-          params: { flavor }
+          params: { flavor, intervals }
         });
         return jsonToMarkdown({ error: "Failed to fetch aligned trends" });
       }
