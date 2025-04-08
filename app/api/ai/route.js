@@ -750,17 +750,23 @@ const tools = {
           description: "Type of extreme trends to fetch ('fresh' or 'stale')",
           enum: ['fresh', 'stale'],
           default: 'fresh'
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results to return',
+          default: 10
         }
       }
     }),
-    execute: async ({ interval = "1d", type = "fresh" }) => {
+    execute: async ({ interval = "1d", type = "fresh", limit = 10 }) => {
       try {
-        console.log('Tool executed: getExtremeTrends', { interval, type });
+        console.log('Tool executed: getExtremeTrends', { interval, type, limit });
 
         // Call the socket server API endpoint for extreme trends
         const result = await callSocketServer('/api/trends/extreme', {
           interval,
-          type
+          type,
+          limit
         });
 
         console.log('getExtremeTrends - Result:', result);
@@ -772,7 +778,7 @@ const tools = {
         console.error('getExtremeTrends Error:', {
           message: error.message,
           stack: error.stack,
-          params: { interval, type }
+          params: { interval, type, limit }
         });
         return jsonToMarkdown({ error: "Failed to fetch extreme trends" });
       }
@@ -795,17 +801,23 @@ const tools = {
           items: {
             type: 'string'
           }
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results to return',
+          default: 10
         }
       }
     }),
-    execute: async ({ flavor = "CoinRotator", intervals }) => {
+    execute: async ({ flavor = "CoinRotator", intervals, limit = 10 }) => {
       try {
-        console.log('Tool executed: getAlignedTrends', { flavor, intervals });
+        console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit });
 
         // Call the socket server API endpoint for aligned trends
         const result = await callSocketServer('/api/trends/aligned', {
           flavor,
-          intervals
+          intervals,
+          limit
         });
 
         console.log('getAlignedTrends - Result:', result);
@@ -817,7 +829,7 @@ const tools = {
         console.error('getAlignedTrends Error:', {
           message: error.message,
           stack: error.stack,
-          params: { flavor, intervals }
+          params: { flavor, intervals, limit }
         });
         return jsonToMarkdown({ error: "Failed to fetch aligned trends" });
       }
