@@ -755,18 +755,26 @@ const tools = {
           type: 'number',
           description: 'Maximum number of results to return',
           default: 10
+        },
+        coinNames: {
+          type: 'array',
+          description: 'Filter results to only include these specific coins',
+          items: {
+            type: 'string'
+          }
         }
       }
     }),
-    execute: async ({ interval = "1d", type = "fresh", limit = 10 }) => {
+    execute: async ({ interval = "1d", type = "fresh", limit = 10, coinNames }) => {
       try {
-        console.log('Tool executed: getExtremeTrends', { interval, type, limit });
+        console.log('Tool executed: getExtremeTrends', { interval, type, limit, coinNames });
 
         // Call the socket server API endpoint for extreme trends
         const result = await callSocketServer('/api/trends/extreme', {
           interval,
           type,
-          limit
+          limit,
+          coinNames
         });
 
         console.log('getExtremeTrends - Result:', result);
@@ -778,7 +786,7 @@ const tools = {
         console.error('getExtremeTrends Error:', {
           message: error.message,
           stack: error.stack,
-          params: { interval, type, limit }
+          params: { interval, type, limit, coinNames }
         });
         return jsonToMarkdown({ error: "Failed to fetch extreme trends" });
       }
@@ -806,18 +814,26 @@ const tools = {
           type: 'number',
           description: 'Maximum number of results to return',
           default: 10
+        },
+        coinNames: {
+          type: 'array',
+          description: 'Filter results to only include these specific coins',
+          items: {
+            type: 'string'
+          }
         }
       }
     }),
-    execute: async ({ flavor = "CoinRotator", intervals, limit = 10 }) => {
+    execute: async ({ flavor = "CoinRotator", intervals, limit = 10, coinNames }) => {
       try {
-        console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit });
+        console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit, coinNames });
 
         // Call the socket server API endpoint for aligned trends
         const result = await callSocketServer('/api/trends/aligned', {
           flavor,
           intervals,
-          limit
+          limit,
+          coinNames
         });
 
         console.log('getAlignedTrends - Result:', result);
@@ -829,7 +845,7 @@ const tools = {
         console.error('getAlignedTrends Error:', {
           message: error.message,
           stack: error.stack,
-          params: { flavor, intervals, limit }
+          params: { flavor, intervals, limit, coinNames }
         });
         return jsonToMarkdown({ error: "Failed to fetch aligned trends" });
       }
