@@ -1234,6 +1234,110 @@ const tools = {
         return jsonToMarkdown({ error: "Failed to fetch global market data" });
       }
     }
+  }),
+
+  batchParallel: tool({
+    description: "Execute multiple operations in parallel to save time. Great for analyzing multiple coins at once, comparing different timeframes, or gathering varied market data in a single request. Use this when you need to perform multiple similar operations (like checking several coins) or want to collect different types of related data simultaneously.",
+    parameters: jsonSchema({
+      type: 'object',
+      properties: {
+        operations: {
+          type: 'array',
+          description: 'Array of operations to execute in parallel',
+          items: {
+            type: 'object',
+            properties: {
+              tool: {
+                type: 'string',
+                description: 'Name of the tool to execute (e.g., "getCoinBySymbol", "getMarketHealth")'
+              },
+              args: {
+                type: 'object',
+                description: 'Arguments to pass to the tool'
+              },
+              label: {
+                type: 'string',
+                description: 'Optional label to identify this operation in the results'
+              }
+            },
+            required: ['tool', 'args']
+          }
+        }
+      },
+      required: ['operations']
+    }),
+    execute: async ({ operations }) => {
+      try {
+        console.log('Tool executed: batchParallel', {
+          operationCount: operations.length,
+          operations: operations.map(op => ({ tool: op.tool, label: op.label }))
+        });
+
+        if (!Array.isArray(operations) || operations.length === 0) {
+          return jsonToMarkdown({ error: "No operations provided" });
+        }
+
+        // Validate operations
+        for (const op of operations) {
+          if (!op.tool || !tools[op.tool]) {
+            return jsonToMarkdown({
+              error: `Invalid tool specified: ${op.tool}`,
+              availableTools: Object.keys(tools).filter(t => t !== 'batchParallel')
+            });
+          }
+        }
+
+        // Execute all operations in parallel
+        const results = await Promise.all(
+          operations.map(async (op) => {
+            try {
+              // Get the tool's execute function
+              const toolFn = tools[op.tool].execute;
+              if (!toolFn) {
+                return {
+                  label: op.label || op.tool,
+                  error: `Tool ${op.tool} does not have an execute function`
+                };
+              }
+
+              // Execute the tool with the provided arguments
+              const result = await toolFn(op.args || {});
+              return {
+                label: op.label || op.tool,
+                tool: op.tool,
+                args: op.args,
+                result
+              };
+            } catch (error) {
+              console.error(`Error executing operation ${op.tool}:`, error);
+              return {
+                label: op.label || op.tool,
+                tool: op.tool,
+                args: op.args,
+                error: error.message || "Operation failed"
+              };
+            }
+          })
+        );
+
+        console.log('batchParallel - Completed all operations:', results.length);
+
+        // Return the combined results
+        return jsonToMarkdown({
+          batchResults: results.map(r => ({
+            label: r.label,
+            tool: r.tool,
+            result: r.result || r.error
+          }))
+        });
+      } catch (error) {
+        console.error('batchParallel Error:', {
+          message: error.message,
+          stack: error.stack
+        });
+        return jsonToMarkdown({ error: "Failed to execute batch operations" });
+      }
+    }
   })
 };
 
