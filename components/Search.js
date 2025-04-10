@@ -57,6 +57,32 @@ const Search = ({ categories, collapsed }) => {
 
   const router = useRouter()
 
+  // Store the processed messages
+  const [processedMessages, setProcessedMessages] = useState([]);
+
+  // Process messages once when they're received or changed
+  useEffect(() => {
+    // Only process when messages change
+    const newProcessedMessages = messages.map(message => {
+      if (message.role === 'assistant' && message.content) {
+        // Fix markdown headings after colons/periods only in assistant messages
+        return {
+          ...message,
+          // Only replace in content that actually has the pattern, which is rare
+          processedContent: message.content.includes(':#') || message.content.includes('.#')
+            ? message.content.replace(/([:.])(\s*)#/g, '$1\n\n#')
+            : message.content
+        };
+      }
+      return {
+        ...message,
+        processedContent: message.content
+      };
+    });
+
+    setProcessedMessages(newProcessedMessages);
+  }, [messages]);
+
   useEffect(() => {
     const fetchCoins = async () => {
       const res = await fetch('/api/search')
@@ -321,7 +347,7 @@ const Search = ({ categories, collapsed }) => {
           <div className={classnames(searchStyles.searchResults, searchStyles.aiAnswer)} ref={messagesEndRef}>
             {messages.length > 0 ? (
               <div className={searchStyles.conversationHistory}>
-                {messages.map((message, index) => (
+                {processedMessages.map((message, index) => (
                   <div key={index} className={classnames(searchStyles.messageContainer, {
                     [searchStyles.userMessage]: message.role === 'user',
                     [searchStyles.assistantMessage]: message.role === 'assistant'
@@ -332,7 +358,9 @@ const Search = ({ categories, collapsed }) => {
                       </div>
                     )}
                     <div className={searchStyles.messageContent}>
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {message.processedContent}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 ))}
