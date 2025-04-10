@@ -896,7 +896,7 @@ const tools = {
       properties: {
         interval: {
           type: 'string',
-          description: 'Trend data interval (1d, 4h)',
+          description: 'Trend data interval',
           default: '1d'
         }
       }
