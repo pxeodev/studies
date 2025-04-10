@@ -1,7 +1,7 @@
 import { retry } from '@lifeomic/attempt';
 
 const KEY_PASS_CONTRACT = '0xdb20e21c95f9b3b1ffb98e765b6664aaf4d6aef6';
-const ALCHEMY_BASE_URL = 'https://base-mainnet.g.alchemy.com/v2/TbFuq5tQAa5kedmODXaxUO0diDWcPDgf/';
+const ALCHEMY_BASE_URL = 'https://base-mainnet.g.alchemy.com/nft/v3/TbFuq5tQAa5kedmODXaxUO0diDWcPDgf/';
 
 export default async function auth(walletAddress) {
   try {
@@ -11,7 +11,7 @@ export default async function auth(walletAddress) {
         const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
         try {
-          const response = await fetch(`${ALCHEMY_BASE_URL}getNFTs/?owner=${walletAddress}`, {
+          const response = await fetch(`${ALCHEMY_BASE_URL}getNFTsForOwner/?owner=${walletAddress}`, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -36,8 +36,7 @@ export default async function auth(walletAddress) {
       }
     );
 
-    const contracts = result?.ownedNfts?.map(nft => nft?.contract?.address);
-    console.log(contracts);
+    const contracts = result?.ownedNfts?.map(nft => nft?.contract?.address?.toLowerCase());
     return contracts?.includes(KEY_PASS_CONTRACT);
   } catch (e) {
     console.log('Auth Error')
