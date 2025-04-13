@@ -336,7 +336,11 @@ const Search = ({ categories, collapsed }) => {
                     </div>
                   </div>
                 ))}
-                {(status === 'submitted' && messages[messages.length - 1]?.role === 'user') || isProcessingToolCalls ? (
+                {/* Show "Thinking..." when waiting for response or during tool calls with empty content */}
+                {(status === 'submitted' || status === 'streaming') &&
+                 (messages[messages.length - 1]?.role === 'user' ||
+                  (messages[messages.length - 1]?.role === 'assistant' &&
+                   !messages[messages.length - 1]?.content?.trim())) ? (
                   <div className={searchStyles.assistantMessage}>
                     <div className={searchStyles.messageRole}><img className={searchStyles.toadAiIcon} src="/toad-ai.png" alt="Toady" width="18" height="18" />&nbsp;Toady</div>
                     <div className={searchStyles.messageContent}>Thinking...</div>
