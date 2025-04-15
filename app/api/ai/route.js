@@ -1251,7 +1251,7 @@ const tools = {
                 type: 'string',
                 description: 'Name of the tool to execute (e.g., "getCoinBySymbol", "getMarketHealth")'
               },
-              args: {
+              toolArguments: {
                 type: 'object',
                 description: 'Arguments to pass to the tool'
               },
@@ -1260,7 +1260,7 @@ const tools = {
                 description: 'Optional label to identify this operation in the results'
               }
             },
-            required: ['tool', 'args']
+            required: ['tool', 'toolArguments']
           }
         }
       },
@@ -1301,11 +1301,11 @@ const tools = {
               }
 
               // Execute the tool with the provided arguments
-              const result = await toolFn(op.args || {});
+              const result = await toolFn(op.toolArguments || {});
               return {
                 label: op.label || op.tool,
                 tool: op.tool,
-                args: op.args,
+                toolArguments: op.toolArguments,
                 result
               };
             } catch (error) {
@@ -1313,7 +1313,7 @@ const tools = {
               return {
                 label: op.label || op.tool,
                 tool: op.tool,
-                args: op.args,
+                toolArguments: op.toolArguments,
                 error: error.message || "Operation failed"
               };
             }
@@ -1468,7 +1468,7 @@ export async function POST(req) {
       console.log('Using Vertex model:', vertexModelId);
       model = vertex(vertexModelId);
       providerMetadata = {
-        anthropic: {
+        vertex: {
           cacheControl: { type: 'ephemeral' },
         }
       };
