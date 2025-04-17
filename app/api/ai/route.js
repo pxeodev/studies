@@ -1395,6 +1395,10 @@ const getVertexModelId = async () => {
   return fetchR2FileContents('playground-vertex-toadaimodelid.txt');
 }
 
+const getOpenRouterModelId = async () => {
+  return fetchR2FileContents('playground-openrouter-toadaimodelid.txt');
+}
+
 export async function POST(req) {
   const { messages, walletAddress, data } = await req.json();
   console.log('Received POST request with messages:', JSON.stringify(messages, null, 2));
@@ -1413,17 +1417,19 @@ export async function POST(req) {
 
   try {
     console.log('Getting system prompt and model ID...');
-    const [systemPrompt, serverProvider, modelId, vertexModelId] = await Promise.all([
+    const [systemPrompt, serverProvider, modelId, vertexModelId, openRouterModelId] = await Promise.all([
       getSystemPrompt(),
       getServerProvider(),
       getModelId(),
-      getVertexModelId()
+      getVertexModelId(),
+      getOpenRouterModelId()
     ]);
     console.log('Server Provider:', serverProvider);
     console.log('Model ID:', modelId);
     console.log('Vertex Model ID:', vertexModelId);
-    // Modify the messages array if coinId is present in data or to add timestamp
+    console.log('OpenRouter Model ID:', openRouterModelId);
     let processedMessages = [...messages];
+    // Modify the messages array if coinId is present in data or to add timestamp
     if (userMessage && userMessage.role === 'user') {
       // Find the last user message
       const lastUserMessageIndex = processedMessages.findIndex(m => m.role === 'user');
@@ -1474,8 +1480,8 @@ export async function POST(req) {
         }
       };
     } else if (serverProvider === 'openrouter') {
-      console.log('Using OpenRouter model: anthropic/claude-3.7-sonnet');
-      model = openrouter('anthropic/claude-3.7-sonnet')
+      console.log('Using OpenRouter model:', openRouterModelId);
+      model = openrouter(openRouterModelId)
       providerMetadata = {
         openrouter: {
           cacheControl: { type: 'ephemeral' },
