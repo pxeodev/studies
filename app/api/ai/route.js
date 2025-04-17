@@ -1396,7 +1396,7 @@ const getVertexModelId = async () => {
 }
 
 const getOpenRouterModelId = async () => {
-  return fetchR2FileContents('playground-openrouter-toadaimodelid.txt');
+  return fetchR2FileContents('openrouter-toadaimodelid.txt');
 }
 
 export async function POST(req) {
