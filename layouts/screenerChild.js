@@ -37,7 +37,7 @@ const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
-  ssr: true
+  ssr: false
 })
 const queryClient = new QueryClient()
 

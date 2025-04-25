@@ -7,6 +7,11 @@
   flex-direction: column;
   overflow: hidden; // Prevent overflow within the tab itself
   background-color: var(--cr-secondary-bg); // Consistent background
+  height: 100%; // Default height for desktop
+
+  @media (max-width: @screen-md) {
+    height: calc(100vh - 52px); // Apply calc height only on smaller screens
+  }
 }
 
 .gatingContainer {
@@ -73,6 +78,8 @@
   flex-direction: column;
   max-width: 80%; // Reverted to original value
   border-radius: 4px; // Reverted to original
+  background-color: var(--cr-primary-bg) !important;
+  color: var(--cr-secondary-text) !important;
 }
 
 .messageContent {
