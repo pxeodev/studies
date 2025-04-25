@@ -28,25 +28,14 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
   const router = useRouter()
   const screens = useBreakPoint()
 
-  const handleToadyClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const currentPath = router.asPath;
-
-    const pathWithoutHash = currentPath.split('#')[0];
-    router.push(`${pathWithoutHash}#toady`);
-  }
-
-  // Then use it in the menu items
   let menuItems = [
     {
       label: 'Screener Tools',
       key: 'screenertools',
       children: [
         {
-          label: <span onClick={handleToadyClick}>Toady AI</span>,
-          key: 'toad-ai',
+          label: <Link href="/toady" prefetch={false}>Toady AI</Link>,
+          key: '/toady',
           icon: <img src="/toad-ai.png" alt="Toady" width="22" height="22" />
         },
         {
@@ -248,8 +237,8 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
     menuItems = [
       {
         label: 'Toady AI',
-        icon: <span onClick={handleToadyClick}><img src="/toad-ai.png" alt="Toady" width="22" height="22" /></span>,
-        key: 'toad-ai',
+        icon: <Link href="/toady" prefetch={false}><img src="/toad-ai.png" alt="Toady" width="22" height="22" /></Link>,
+        key: '/toady',
       },
       {
         label: 'Watchlist',
@@ -326,13 +315,7 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
   }
 
   const handleMenuClick = (e) => {
-    if (e.key === 'toad-ai') {
-      e.domEvent.preventDefault();
-
-      const currentPath = router.asPath;
-      const pathWithoutHash = currentPath.split('#')[0];
-      router.push(`${pathWithoutHash}#toady`);
-    } else if (onMenuItemSelected) {
+    if (onMenuItemSelected) {
       onMenuItemSelected(e);
     }
   }
@@ -344,7 +327,6 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
       items={menuItems}
       className={styles.menu}
       selectedKeys={[selectedKey]}
-      onClick={handleMenuClick}
       {...props}
     />
   );
