@@ -3071,9 +3071,9 @@ axios@^1.5.0:
     proxy-from-env "^1.1.0"
 
 axios@^1.7.9:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.4.tgz#78990bb4bc63d2cae072952d374835950a82f447"
-  integrity sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.9.0.tgz#25534e3b72b54540077d33046f77e3b8d7081901"
+  integrity sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -3587,8 +3587,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#main":
-  version "1.6.0"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#57d6bb065fec9c37fee7de8c6d032b08c1a5d875"
+  version "1.6.2"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#8a965d9cbd72c770a28399f5bb357a51d5560228"
   dependencies:
     axios "^1.7.9"
     axios-logger "^2.8.1"
@@ -5638,12 +5638,7 @@ has-symbols@^1.0.1, has-symbols@^1.0.2:
   resolved "https://registry.npmjs.org/has-symbols/-/has-symbols-1.0.2.tgz"
   integrity sha512-chXa79rL/UC2KlX17jo3vRGz0azaWEx5tGqZg5pO3NUyEJVB17dMruQlzCCOfUvElghKcm5194+BCRvi2Rv/Gw==
 
-has-symbols@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.0.3.tgz#bb7b2c4349251dce87b125f7bdf874aa7c8b39f8"
-  integrity sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==
-
-has-symbols@^1.1.0:
+has-symbols@^1.0.3, has-symbols@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.1.0.tgz#fc9c6a783a084951d0b971fe1018de813707a338"
   integrity sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==
