@@ -1340,6 +1340,59 @@ const tools = {
         return jsonToMarkdown({ error: "Failed to execute batch operations" });
       }
     }
+  }),
+
+  getCategoryTrends: tool({
+    description: "Use this when a user asks about trend distribution within a specific category. Returns the trend breakdown (UP, HODL, DOWN counts) for the specified category.",
+    parameters: jsonSchema({
+      type: 'object',
+      properties: {
+        categoryName: {
+          type: 'string',
+          description: 'The name of the category to get trend data for'
+        },
+        interval: {
+          type: 'string',
+          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
+          default: '1d'
+        }
+      },
+      required: ['categoryName']
+    }),
+    execute: async ({ categoryName, interval = "1d" }) => {
+      try {
+        console.log('Tool executed: getCategoryTrends', { categoryName, interval });
+
+        // Call the socket server API endpoint for category trends
+        const result = await callSocketServer('/api/category/trends', {
+          categoryName,
+          interval
+        });
+
+        console.log('getCategoryTrends - Result:', result);
+
+        if (result.error) {
+          return jsonToMarkdown({ error: result.error });
+        }
+
+        // Format the result, ensuring trends object is present
+        const data = {
+          categoryName,
+          interval,
+          trends: result.trends || { UP: 0, HODL: 0, DOWN: 0 },
+          coinCount: result.coinCount || 0
+        };
+
+        return jsonToMarkdown(data);
+      } catch (error) {
+        console.error('getCategoryTrends Error:', {
+          message: error.message,
+          stack: error.stack,
+          params: { categoryName, interval }
+        });
+        return jsonToMarkdown({ error: "Failed to fetch category trend data" });
+      }
+    }
   })
 };
 
