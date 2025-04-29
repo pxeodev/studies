@@ -1,21 +1,7 @@
 {
   "regions": [
-    "iad1",
     "sfo1",
     "fra1",
-    "sin1",
-    "syd1",
-    "bom1",
-    "gru1",
-    "cle1",
-    "pdx1",
-    "dub1",
-    "lhr1",
-    "cpt1",
-    "icn1",
-    "kix1"
-  ],
-  "functions": {
-    "app/api/ai/route.js": {}
-  }
+    "sin1"
+  ]
 }
