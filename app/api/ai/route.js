@@ -2,6 +2,7 @@ import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { anthropic } from '@ai-sdk/anthropic';
 import { vertex } from '@ai-sdk/google-vertex/edge';
 import { openrouter } from '@openrouter/ai-sdk-provider';
+import { openai } from '@ai-sdk/openai';
 import { streamText, tool, jsonSchema } from 'ai';
 import { Converter } from '@memochou1993/json2markdown';
 import Exa from "exa-js"
@@ -1454,6 +1455,10 @@ const getOpenRouterModelId = async () => {
   return fetchR2FileContents('playground-openrouter-toadaimodelid.txt');
 }
 
+const getOpenAiModelId = async () => {
+  return fetchR2FileContents('playground-openai-toadaimodelid.txt');
+}
+
 export async function POST(req) {
   const { messages, walletAddress, data } = await req.json();
   console.log('Received POST request with messages:', JSON.stringify(messages, null, 2));
@@ -1472,17 +1477,19 @@ export async function POST(req) {
 
   try {
     console.log('Getting system prompt and model ID...');
-    const [systemPromptContent, serverProvider, modelId, vertexModelId, openRouterModelId] = await Promise.all([
+    const [systemPromptContent, serverProvider, modelId, vertexModelId, openRouterModelId, openAiModelId] = await Promise.all([
       getSystemPrompt(),
       getServerProvider(),
       getModelId(),
       getVertexModelId(),
-      getOpenRouterModelId()
+      getOpenRouterModelId(),
+      getOpenAiModelId()
     ]);
     console.log('Server Provider:', serverProvider);
     console.log('Model ID:', modelId);
     console.log('Vertex Model ID:', vertexModelId);
     console.log('OpenRouter Model ID:', openRouterModelId);
+    console.log('OpenAI Model ID:', openAiModelId);
 
     // Construct context string from data
     let contextInformation = "";
@@ -1530,6 +1537,9 @@ export async function POST(req) {
           cacheControl: { type: 'ephemeral' },
         }
       };
+    } else if (serverProvider === 'openai') {
+      console.log('Using OpenAI model:', openAiModelId);
+      model = openai(openAiModelId);
     } else {
       throw new Error(`Unsupported AI provider: ${serverProvider}`);
     }
