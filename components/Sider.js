@@ -4,7 +4,8 @@ import {
   MenuFoldOutlined,
 } from '@ant-design/icons'
 import classnames from 'classnames'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import Logo from './Logo'
 import Search from './Search'
@@ -17,10 +18,15 @@ import { DarkModeContext } from '../layouts/screener.js'
 import styles from "../styles/sider.module.less"
 
 const Sider = ({ topCategories, categories }) => {
+  const { pathname } = useRouter()
   const [darkMode, setDarkMode] = useContext(DarkModeContext)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(pathname === '/toady')
   const [collapsing, setCollapsing] = useState(false)
   let Trigger = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+
+  useEffect(() => {
+    setCollapsed(pathname === '/toady')
+  }, [pathname])
 
   return (
     <Layout.Sider
