@@ -1201,7 +1201,7 @@ const getAiConfiguration = async () => {
     });
 
     return {
-      systemPromptContent: data.systemPrompt,
+      systemPromptContent: data.systemPromptContent,
       serverProvider: data.serverProvider,
       modelId: data.anthropicModelId,
       vertexModelId: data.vertexModelId,
