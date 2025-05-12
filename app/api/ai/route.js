@@ -232,7 +232,7 @@ const tools = {
 
         return { query, results: formattedResults };
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -355,7 +355,7 @@ const tools = {
 
         return { query, results: formattedResults };
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -421,7 +421,7 @@ const tools = {
 
         return formattedResult;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -504,7 +504,7 @@ const tools = {
 
         return { sourceUrl: url, similarResults: formattedResults };
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -550,12 +550,12 @@ const tools = {
         console.log('getCoinByContract - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         return result;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -596,12 +596,12 @@ const tools = {
         console.log('getCoinBySymbol - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         return result;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -642,12 +642,12 @@ const tools = {
         console.log('getCoinByName - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         return result;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -674,7 +674,7 @@ const tools = {
 
         return categories;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -727,7 +727,7 @@ const tools = {
 
         return trends;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -781,7 +781,7 @@ const tools = {
 
         return alignedTrends;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -816,7 +816,7 @@ const tools = {
 
         return coinIds;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -845,7 +845,7 @@ const tools = {
         console.log('getMarketHealth - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         const data = {
@@ -856,7 +856,7 @@ const tools = {
 
         return data;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -885,7 +885,7 @@ const tools = {
         console.log('getMarketHealthCrossing - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         const data = {
@@ -897,7 +897,7 @@ const tools = {
 
         return data;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -938,12 +938,12 @@ const tools = {
         console.log('getCoinById - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         return result;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -975,7 +975,7 @@ const tools = {
 
         return tweets;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -1097,7 +1097,7 @@ const tools = {
         // Return the coin IDs with filter details and explicitly include items field
         return coinIds;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -1119,12 +1119,12 @@ const tools = {
         console.log('globalMarketData - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         return result;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   }),
@@ -1159,7 +1159,7 @@ const tools = {
         console.log('getCategoryTrends - Result:', result);
 
         if (result.error) {
-          return { error: result.error };
+          throw(error)
         }
 
         // Format the result, ensuring trends object is present
@@ -1172,7 +1172,7 @@ const tools = {
 
         return data;
       } catch (error) {
-        return { error: error.message };
+        throw(error)
       }
     }
   })
@@ -1583,7 +1583,7 @@ const processDynamicFanoutStep = async (step, stepResults, results) => {
         result
       };
     } catch (toolError) {
-      console.error(`Error executing tool ${toolName}:`, toolError);
+      console.error(`Error executing tool processDynamicFanoutStep ${toolName}:`, toolError);
       return {
         toolName,
         parameters,
@@ -1643,7 +1643,7 @@ const processRegularStep = async (step, stepResults) => {
         result
       };
     } catch (toolError) {
-      console.error(`Error executing tool ${toolName}:`, toolError);
+      console.error(`Error executing tool processRegularStep ${toolName}:`, toolError);
       return {
         toolName,
         parameters: finalParameters,
