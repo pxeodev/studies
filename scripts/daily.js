@@ -56,7 +56,7 @@ const fetchCoinDataCoingecko = async (coinId) => {
 
   let platforms;
   if (hasPlatforms(coinData.platforms)) {
-    platforms = pickBy(coinData.platforms, contract => contract.length)
+    platforms = pickBy(coinData.platforms, contract => contract?.length)
     if (!Object.keys(platforms).length) {
       platforms = null
     }
