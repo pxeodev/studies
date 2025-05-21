@@ -1700,11 +1700,6 @@ export async function POST(req) {
       contextInformation += `Current relevant coin ID for context: ${data.coinId}\n`;
     }
 
-    // Add the results from the tool execution as context for the model
-    contextInformation += "\n### Pre-retrieved information for this query ###\n";
-    contextInformation += `Query type: ${queryPlan.queryType}\n`;
-    contextInformation += `Query description: ${queryPlan.description}\n\n`;
-
     // Add each step's results to the context
     for (const step of executionResults) {
       contextInformation += `## Step: ${step.description} (${step.stepId}) ##\n`;
@@ -1714,6 +1709,8 @@ export async function POST(req) {
         contextInformation += `### Information from ${toolResult.toolName}: ###\n`;
         if (toolResult.error) {
           contextInformation += `Error: ${toolResult.error}\n\n`;
+        } else if (typeof toolResult.result === 'object') {
+          contextInformation += `${JSON.stringify(toolResult.result, null, 2)}\n\n`;
         } else {
           contextInformation += `${toolResult.result}\n\n`;
         }
