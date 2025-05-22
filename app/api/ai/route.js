@@ -1131,15 +1131,19 @@ const tools = {
           enum: ['asc', 'desc'],
           description: 'Sort order for results',
           default: 'desc'
+        },
+        withPerps: {
+          type: 'boolean',
+          description: 'Only include coins that are traded in futures/perpetual markets (perps)'
         }
       }
     }),
     execute: async ({ trend, categories, marketCapMin, marketCapMax, streakMin, streakMax,
-                     exchanges, cexOnly, dexOnly, interval = "1d", flavor = "CoinRotator", limit = 10, sortBy = 'marketCap', sortOrder = 'desc' }) => {
+                     exchanges, cexOnly, dexOnly, interval = "1d", flavor = "CoinRotator", limit = 10, sortBy = 'marketCap', sortOrder = 'desc', withPerps }) => {
       try {
         console.log('Tool executed: getFilteredCoins', {
           trend, categories, marketCapMin, marketCapMax, streakMin, streakMax,
-          exchanges, cexOnly, dexOnly, interval, flavor, limit, sortBy, sortOrder
+          exchanges, cexOnly, dexOnly, interval, flavor, limit, sortBy, sortOrder, withPerps
         });
 
         // Convert boolean parameters to strings for query params
@@ -1161,7 +1165,8 @@ const tools = {
           flavor,
           limit,
           sortBy,
-          sortOrder
+          sortOrder,
+          withPerps
         });
 
         console.log('getFilteredCoins - Result:', coinIds);
