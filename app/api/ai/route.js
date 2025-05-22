@@ -197,29 +197,25 @@ const tools = {
       required: []
     }),
     execute: async () => {
-      try {
-        console.log('Tool executed: getCurrentMarketVibe');
-        const url = new URL('/api/alpha/messages', process.env.AI_SERVER_URL);
-        url.searchParams.append('channelName', 'summary');
-        url.searchParams.append('limit', '1');
-        const response = await fetch(url.toString(), {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`AI server returned ${response.status}: ${errorText}`);
+      console.log('Tool executed: getCurrentMarketVibe');
+      const url = new URL('/api/alpha/messages', process.env.AI_SERVER_URL);
+      url.searchParams.append('channelName', 'summary');
+      url.searchParams.append('limit', '1');
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
         }
-        const data = await response.json();
-        if (Array.isArray(data) && data.length > 0 && data[0].message) {
-          return data[0].message;
-        } else {
-          return 'No market vibe message available.';
-        }
-      } catch (error) {
-        throw(error)
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`AI server returned ${response.status}: ${errorText}`);
+      }
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0 && data[0].message) {
+        return data[0].message;
+      } else {
+        return 'No market vibe message available.';
       }
     }
   }),
@@ -268,49 +264,45 @@ const tools = {
       required: ['query']
     }),
     execute: async ({ query, useAutoprompt = false, numResults = 5, startPublishedDate, endPublishedDate, includeDomains, excludeDomains }) => {
-      try {
-        console.log('Tool executed: exaSearch', {
-          query,
-          useAutoprompt,
-          numResults,
-          startPublishedDate,
-          endPublishedDate,
-          includeDomains,
-          excludeDomains
-        });
+      console.log('Tool executed: exaSearch', {
+        query,
+        useAutoprompt,
+        numResults,
+        startPublishedDate,
+        endPublishedDate,
+        includeDomains,
+        excludeDomains
+      });
 
-        // Initialize the Exa client with API key from environment
-        const exa = new Exa(process.env.EXA_API_KEY);
+      // Initialize the Exa client with API key from environment
+      const exa = new Exa(process.env.EXA_API_KEY);
 
-        // Build search options
-        const searchOptions = {
-          numResults,
-          useAutoprompt
-        };
+      // Build search options
+      const searchOptions = {
+        numResults,
+        useAutoprompt
+      };
 
-        // Add optional parameters if provided
-        if (startPublishedDate) searchOptions.startPublishedDate = startPublishedDate;
-        if (endPublishedDate) searchOptions.endPublishedDate = endPublishedDate;
-        if (includeDomains && includeDomains.length > 0) searchOptions.includeDomains = includeDomains;
-        if (excludeDomains && excludeDomains.length > 0) searchOptions.excludeDomains = excludeDomains;
+      // Add optional parameters if provided
+      if (startPublishedDate) searchOptions.startPublishedDate = startPublishedDate;
+      if (endPublishedDate) searchOptions.endPublishedDate = endPublishedDate;
+      if (includeDomains && includeDomains.length > 0) searchOptions.includeDomains = includeDomains;
+      if (excludeDomains && excludeDomains.length > 0) searchOptions.excludeDomains = excludeDomains;
 
-        // Execute the search
-        const searchResult = await exa.search(query, searchOptions);
-        console.log('exaSearch - Result count:', searchResult.results?.length || 0);
+      // Execute the search
+      const searchResult = await exa.search(query, searchOptions);
+      console.log('exaSearch - Result count:', searchResult.results?.length || 0);
 
-        // Format the results for display
-        const formattedResults = searchResult.results?.map(result => ({
-          title: result.title,
-          url: result.url,
-          publishedDate: result.publishedDate,
-          score: result.score,
-          snippet: result.text || result.extract
-        })) || [];
+      // Format the results for display
+      const formattedResults = searchResult.results?.map(result => ({
+        title: result.title,
+        url: result.url,
+        publishedDate: result.publishedDate,
+        score: result.score,
+        snippet: result.text || result.extract
+      })) || [];
 
-        return { query, results: formattedResults };
-      } catch (error) {
-        throw(error)
-      }
+      return { query, results: formattedResults };
     }
   }),
 
@@ -359,8 +351,7 @@ const tools = {
       required: ['query']
     }),
     execute: async ({ query, useAutoprompt = false, numResults = 3, includeDomains, retrieveText = true, retrieveHighlights = false, maxCharacters = 5000 }) => {
-      try {
-        console.log('Tool executed: exaSearchWithContents', {
+      console.log('Tool executed: exaSearchWithContents', {
           query,
           useAutoprompt,
           numResults,
@@ -431,9 +422,6 @@ const tools = {
         }) || [];
 
         return { query, results: formattedResults };
-      } catch (error) {
-        throw(error)
-      }
     }
   }),
 
@@ -461,45 +449,41 @@ const tools = {
       required: ['question']
     }),
     execute: async ({ question, model = 'exa', retrieveText = false }) => {
-      try {
-        console.log('Tool executed: exaAnswer', {
-          question,
-          model,
-          retrieveText
-        });
+      console.log('Tool executed: exaAnswer', {
+        question,
+        model,
+        retrieveText
+      });
 
-        // Initialize the Exa client with API key from environment
-        const exa = new Exa(process.env.EXA_API_KEY);
+      // Initialize the Exa client with API key from environment
+      const exa = new Exa(process.env.EXA_API_KEY);
 
-        // Set options
-        const options = {
-          model,
-          text: retrieveText
-        };
+      // Set options
+      const options = {
+        model,
+        text: retrieveText
+      };
 
-        // Generate answer
-        const answerResult = await exa.answer(question, options);
-        console.log('exaAnswer - Generated answer with citations');
+      // Generate answer
+      const answerResult = await exa.answer(question, options);
+      console.log('exaAnswer - Generated answer with citations');
 
-        // Format the result
-        const formattedResult = {
-          question,
-          answer: answerResult.answer
-        };
+      // Format the result
+      const formattedResult = {
+        question,
+        answer: answerResult.answer
+      };
 
-        // Include citations if available
-        if (answerResult.citations && answerResult.citations.length > 0) {
-          formattedResult.citations = answerResult.citations.map(citation => ({
-            title: citation.title,
-            url: citation.url,
-            text: citation.text
-          }));
-        }
-
-        return formattedResult;
-      } catch (error) {
-        throw(error)
+      // Include citations if available
+      if (answerResult.citations && answerResult.citations.length > 0) {
+        formattedResult.citations = answerResult.citations.map(citation => ({
+          title: citation.title,
+          url: citation.url,
+          text: citation.text
+        }));
       }
+
+      return formattedResult;
     }
   }),
 
@@ -531,8 +515,7 @@ const tools = {
       required: ['url']
     }),
     execute: async ({ url, numResults = 5, excludeSourceDomain = true, retrieveText = false }) => {
-      try {
-        console.log('Tool executed: exaFindSimilar', {
+      console.log('Tool executed: exaFindSimilar', {
           url,
           numResults,
           excludeSourceDomain,
@@ -580,9 +563,6 @@ const tools = {
         }) || [];
 
         return { sourceUrl: url, similarResults: formattedResults };
-      } catch (error) {
-        throw(error)
-      }
     }
   }),
 
@@ -613,27 +593,23 @@ const tools = {
       required: ['contractAddress', 'chain']
     }),
     execute: async ({ contractAddress, chain, interval = "1d", trendLimit = 5 }) => {
-      try {
-        console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval, trendLimit });
+      console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval, trendLimit });
 
-        // Call the socket server API endpoint for contract lookup
-        const result = await callSocketServer('/api/coin/contract', {
-          contractAddress,
-          chain,
-          interval,
-          trendLimit
-        });
+      // Call the socket server API endpoint for contract lookup
+      const result = await callSocketServer('/api/coin/contract', {
+        contractAddress,
+        chain,
+        interval,
+        trendLimit
+      });
 
-        console.log('getCoinByContract - Result:', result);
+      console.log('getCoinByContract - Result:', result);
 
-        if (result.error) {
-          throw(result.error)
-        }
-
-        return result;
-      } catch (error) {
-        throw(error)
+      if (result.error) {
+        throw(result.error)
       }
+
+      return result;
     }
   }),
 
@@ -660,26 +636,22 @@ const tools = {
       required: ['symbol']
     }),
     execute: async ({ symbol, interval = "1d", trendLimit = 5 }) => {
-      try {
-        console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval, trendLimit });
+      console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval, trendLimit });
 
-        // Call the socket server API endpoint for symbol lookup
-        const result = await callSocketServer('/api/coin/symbol', {
-          symbol,
-          interval,
-          trendLimit
-        });
+      // Call the socket server API endpoint for symbol lookup
+      const result = await callSocketServer('/api/coin/symbol', {
+        symbol,
+        interval,
+        trendLimit
+      });
 
-        console.log('getCoinBySymbol - Result:', result);
+      console.log('getCoinBySymbol - Result:', result);
 
-        if (result.error) {
-          throw(result.error)
-        }
-
-        return result;
-      } catch (error) {
-        throw(error)
+      if (result.error) {
+        throw(result.error)
       }
+
+      return result;
     }
   }),
 
@@ -706,26 +678,22 @@ const tools = {
       required: ['name']
     }),
     execute: async ({ name, interval = "1d", trendLimit = 5 }) => {
-      try {
-        console.log('Tool executed: getCoinByName', { name, interval, trendLimit });
+      console.log('Tool executed: getCoinByName', { name, interval, trendLimit });
 
-        // Call the socket server API endpoint for name lookup
-        const result = await callSocketServer('/api/coin/name', {
-          name,
-          interval,
-          trendLimit
-        });
+      // Call the socket server API endpoint for name lookup
+      const result = await callSocketServer('/api/coin/name', {
+        name,
+        interval,
+        trendLimit
+      });
 
-        console.log('getCoinByName - Result:', result);
+      console.log('getCoinByName - Result:', result);
 
-        if (result.error) {
-          throw(result.error)
-        }
-
-        return result;
-      } catch (error) {
-        throw(error)
+      if (result.error) {
+        throw(result.error)
       }
+
+      return result;
     }
   }),
 
@@ -739,20 +707,16 @@ const tools = {
       required: []
     }),
     execute: async () => {
-      try {
-        console.log('Tool executed: getAllCategories');
+      console.log('Tool executed: getAllCategories');
 
-        // Call the socket server API endpoint for categories
-        const result = await callSocketServer('/api/categories');
+      // Call the socket server API endpoint for categories
+      const result = await callSocketServer('/api/categories');
 
-        console.log('getAllCategories - Result:', result);
+      console.log('getAllCategories - Result:', result);
 
-        const categories = Array.isArray(result) ? result : [];
+      const categories = Array.isArray(result) ? result : [];
 
-        return categories;
-      } catch (error) {
-        throw(error)
-      }
+      return categories;
     }
   }),
 
@@ -787,25 +751,21 @@ const tools = {
       }
     }),
     execute: async ({ interval = "1d", type = "fresh", limit = 10, coinNames }) => {
-      try {
-        console.log('Tool executed: getExtremeTrends', { interval, type, limit, coinNames });
+      console.log('Tool executed: getExtremeTrends', { interval, type, limit, coinNames });
 
-        // Call the socket server API endpoint for extreme trends
-        const result = await callSocketServer('/api/trends/extreme', {
-          interval,
-          type,
-          limit,
-          coinNames
-        });
+      // Call the socket server API endpoint for extreme trends
+      const result = await callSocketServer('/api/trends/extreme', {
+        interval,
+        type,
+        limit,
+        coinNames
+      });
 
-        console.log('getExtremeTrends - Result:', result);
+      console.log('getExtremeTrends - Result:', result);
 
-        const trends = Array.isArray(result) ? result : [];
+      const trends = Array.isArray(result) ? result : [];
 
-        return trends;
-      } catch (error) {
-        throw(error)
-      }
+      return trends;
     }
   }),
 
@@ -841,25 +801,21 @@ const tools = {
       }
     }),
     execute: async ({ flavor = "CoinRotator", intervals, limit = 10, coinNames }) => {
-      try {
-        console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit, coinNames });
+      console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit, coinNames });
 
-        // Call the socket server API endpoint for aligned trends
-        const result = await callSocketServer('/api/trends/aligned', {
-          flavor,
-          intervals,
-          limit,
-          coinNames
-        });
+      // Call the socket server API endpoint for aligned trends
+      const result = await callSocketServer('/api/trends/aligned', {
+        flavor,
+        intervals,
+        limit,
+        coinNames
+      });
 
-        console.log('getAlignedTrends - Result:', result);
+      console.log('getAlignedTrends - Result:', result);
 
-        const alignedTrends = Array.isArray(result) ? result : [];
+      const alignedTrends = Array.isArray(result) ? result : [];
 
-        return alignedTrends;
-      } catch (error) {
-        throw(error)
-      }
+      return alignedTrends;
     }
   }),
 
@@ -876,25 +832,21 @@ const tools = {
       required: ['category']
     }),
     execute: async ({ category }) => {
-      try {
-        console.log('Tool executed: getCoinsByCategory', { category });
+      console.log('Tool executed: getCoinsByCategory', { category });
 
-        // Call the socket server API endpoint for coins by category
-        const result = await callSocketServer('/api/coins/category', {
-          category
-        });
+      // Call the socket server API endpoint for coins by category
+      const result = await callSocketServer('/api/coins/category', {
+        category
+      });
 
-        console.log('getCoinsByCategory - Result:', result);
+      console.log('getCoinsByCategory - Result:', result);
 
-        const coins = Array.isArray(result) ? result : [];
+      const coins = Array.isArray(result) ? result : [];
 
-        // Extract coin IDs for fanout operations
-        const coinIds = coins.map(coin => coin.id || coin.coinId || coin.symbol);
+      // Extract coin IDs for fanout operations
+      const coinIds = coins.map(coin => coin.id || coin.coinId || coin.symbol);
 
-        return coinIds;
-      } catch (error) {
-        throw(error)
-      }
+      return coinIds;
     }
   }),
 
@@ -911,30 +863,26 @@ const tools = {
       }
     }),
     execute: async ({ interval = "1d" }) => {
-      try {
-        console.log('Tool executed: getMarketHealth', { interval });
+      console.log('Tool executed: getMarketHealth', { interval });
 
-        // Call the socket server API endpoint for market health
-        const result = await callSocketServer('/api/market/health', {
-          interval
-        });
+      // Call the socket server API endpoint for market health
+      const result = await callSocketServer('/api/market/health', {
+        interval
+      });
 
-        console.log('getMarketHealth - Result:', result);
+      console.log('getMarketHealth - Result:', result);
 
-        if (result.error) {
-          throw(error)
-        }
-
-        const data = {
-          date: result.date,
-          trends: result.trends,
-          extremes: result.extremes
-        };
-
-        return data;
-      } catch (error) {
-        throw(error)
+      if (result.error) {
+        throw(result.error)
       }
+
+      const data = {
+        date: result.date,
+        trends: result.trends,
+        extremes: result.extremes
+      };
+
+      return data;
     }
   }),
 
@@ -962,7 +910,7 @@ const tools = {
         console.log('getMarketHealthCrossing - Result:', result);
 
         if (result.error) {
-          throw(error)
+          throw(result.error)
         }
 
         const data = {
@@ -1201,7 +1149,7 @@ const tools = {
         console.log('globalMarketData - Result:', result);
 
         if (result.error) {
-          throw(error)
+          throw(result.error)
         }
 
         return result;
@@ -1241,7 +1189,7 @@ const tools = {
         console.log('getCategoryTrends - Result:', result);
 
         if (result.error) {
-          throw(error)
+          throw(result.error)
         }
 
         // Format the result, ensuring trends object is present
