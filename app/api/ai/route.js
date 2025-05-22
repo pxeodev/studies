@@ -13,6 +13,36 @@ process.env.GOOGLE_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqh
 export const runtime = 'edge';
 export const preferredRegion = ['sfo1', 'fra1', 'sin1'];
 
+// Helper function to add timeout to fetch requests
+const fetchWithTimeout = async (url, options = {}, timeoutMs = 60000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error(`Request timeout after ${timeoutMs}ms`);
+    }
+    throw error;
+  }
+};
+
+// Helper function to add timeout to any promise (for external API calls)
+const withTimeout = async (promise, timeoutMs = 60000) => {
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error(`Operation timeout after ${timeoutMs}ms`)), timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]);
+};
+
 // Function to track events in Mixpanel using fetch (Edge runtime compatible)
 const trackMixpanelEvent = async (event, properties) => {
   try {
@@ -29,7 +59,7 @@ const trackMixpanelEvent = async (event, properties) => {
     const encodedData = Buffer.from(JSON.stringify(data)).toString('base64');
 
     // Send the event to Mixpanel
-    const response = await fetch('https://api.mixpanel.com/track', {
+    const response = await fetchWithTimeout('https://api.mixpanel.com/track', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -75,7 +105,7 @@ const reportErrorToServer = async (error, context = {}) => {
     // Use the same base URL as other API calls
     const url = new URL('/api/errors/report', process.env.AI_SERVER_URL);
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithTimeout(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +145,7 @@ const callSocketServer = async (endpoint, params = {}) => {
   });
 
   try {
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithTimeout(url.toString(), {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
@@ -201,7 +231,7 @@ const tools = {
       const url = new URL('/api/alpha/messages', process.env.AI_SERVER_URL);
       url.searchParams.append('channelName', 'summary');
       url.searchParams.append('limit', '1');
-      const response = await fetch(url.toString(), {
+      const response = await fetchWithTimeout(url.toString(), {
         method: 'GET',
         headers: {
           'Accept': 'application/json'
@@ -290,7 +320,7 @@ const tools = {
       if (excludeDomains && excludeDomains.length > 0) searchOptions.excludeDomains = excludeDomains;
 
       // Execute the search
-      const searchResult = await exa.search(query, searchOptions);
+      const searchResult = await withTimeout(exa.search(query, searchOptions));
       console.log('exaSearch - Result count:', searchResult.results?.length || 0);
 
       // Format the results for display
@@ -389,10 +419,10 @@ const tools = {
         }
 
         // Execute the search and retrieve contents
-        const result = await exa.searchAndContents(query, {
+        const result = await withTimeout(exa.searchAndContents(query, {
           ...searchOptions,
           ...contentsOptions
-        });
+        }));
 
         console.log('exaSearchWithContents - Result count:', result.results?.length || 0);
 
@@ -465,7 +495,7 @@ const tools = {
       };
 
       // Generate answer
-      const answerResult = await exa.answer(question, options);
+      const answerResult = await withTimeout(exa.answer(question, options));
       console.log('exaAnswer - Generated answer with citations');
 
       // Format the result
@@ -534,12 +564,12 @@ const tools = {
         let result;
         // Decide whether to get contents along with similar URLs
         if (retrieveText) {
-          result = await exa.findSimilarAndContents(url, {
+          result = await withTimeout(exa.findSimilarAndContents(url, {
             ...options,
             text: true
-          });
+          }));
         } else {
-          result = await exa.findSimilar(url, options);
+          result = await withTimeout(exa.findSimilar(url, options));
         }
 
         console.log('exaFindSimilar - Result count:', result.results?.length || 0);
@@ -1215,7 +1245,7 @@ const getAiConfiguration = async () => {
     const url = new URL('/api/toady/config', process.env.AI_SERVER_URL);
     url.searchParams.append('playground', 'true');
 
-    const response = await fetch(url.toString(), {
+    const response = await fetchWithTimeout(url.toString(), {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
