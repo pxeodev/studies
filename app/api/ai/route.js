@@ -1262,8 +1262,8 @@ const getAiConfigurationAndPrompts = async (sessionId = null) => {
           'Accept': 'application/json'
         }
       }),
-      langfuse.getPrompt("System prompt"),
-      langfuse.getPrompt("Classification Prompt")
+      langfuse.getPrompt("System prompt", undefined, { label: 'beta' }),
+      langfuse.getPrompt("Classification Prompt", undefined, { label: 'beta' })
     ]);
 
     if (!apiResponse.ok) {
