@@ -146,7 +146,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
   // Render gating or chat UI
   let content;
   if (!walletAddress) {
-    content = <div className={toadyStyles.gatingContainer}><NotConnected feature='Toady AI'/></div>;
+    content = <div className={toadyStyles.gatingContainer}><NotConnected feature='Shumi AI'/></div>;
   } else if (!hasKeyPass) {
     content = <div className={toadyStyles.gatingContainer}><NoKeyPass /></div>;
   } else {
@@ -162,7 +162,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
                  })}>
                    {message.role === 'assistant' && (
                      <div className={toadyStyles.messageRole}>
-                       <img className={toadyStyles.toadAiIcon} src="/toad-ai.png" alt="Toady" width="18" height="18" />Toady
+                       <img className={toadyStyles.toadAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi
                      </div>
                    )}
                    <div className={toadyStyles.messageContent}>
@@ -175,7 +175,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
                {/* Show "Thinking..." indicator */}
                {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
                  <div className={classnames(toadyStyles.messageContainer, toadyStyles.assistantMessage, toadyStyles.thinkingIndicator)}>
-                   <div className={toadyStyles.messageRole}><img className={toadyStyles.toadAiIcon} src="/toad-ai.png" alt="Toady" width="18" height="18" />Toady</div>
+                   <div className={toadyStyles.messageRole}><img className={toadyStyles.toadAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi</div>
                    <div className={toadyStyles.messageContent}>Thinking...</div>
                  </div>
                ) : null}
@@ -183,7 +183,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
                {/* Add error display */}
                {error && (
                  <div className={classnames(toadyStyles.messageContainer, toadyStyles.assistantMessage, toadyStyles.errorMessage)}>
-                   <div className={toadyStyles.messageRole}><img className={toadyStyles.toadAiIcon} src="/toad-ai.png" alt="Toady" width="18" height="18" />Toady</div>
+                   <div className={toadyStyles.messageRole}><img className={toadyStyles.toadAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi</div>
                    <div className={toadyStyles.messageContent}>
                      <div>Something went wrong. Please try again.</div>
                      <Button type="primary" onClick={() => reload()} className={toadyStyles.retryButton}>
@@ -234,7 +234,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
                   </Button>
                 ) : (
                   <Button type="primary" onClick={askAi} disabled={error != null || (!input.trim() && !coinTag)}>
-                    Ask Toady
+                    Ask Shumi
                   </Button>
                 )}
                 <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={toadyStyles.clearChatButton} icon={<PlusSquareOutlined />} />
@@ -246,7 +246,7 @@ const Toady = ({ isActive, initialSuggestions }) => {
             ref={aiInputRef} // Use the specific ref for AI input
             spellCheck="false"
             disabled={error != null} // Disable input on error
-            placeholder="Ask Toady anything..."
+            placeholder="Ask Shumi anything..."
           />
         </div>
       </>

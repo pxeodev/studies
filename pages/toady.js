@@ -52,7 +52,7 @@ export async function getStaticProps() {
       `
     );
   } catch (error) {
-    console.error("Error fetching Toady suggestions from Strapi:", error);
+    console.error("Error fetching Shumi suggestions from Strapi:", error);
   }
 
   const toadySuggestions = toadySuggestionsQuery?.data?.toadySuggestion?.data?.attributes?.suggestions || "";

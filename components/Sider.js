@@ -20,12 +20,12 @@ import styles from "../styles/sider.module.less"
 const Sider = ({ topCategories, categories }) => {
   const { pathname } = useRouter()
   const [darkMode, setDarkMode] = useContext(DarkModeContext)
-  const [collapsed, setCollapsed] = useState(pathname === '/toady')
+  const [collapsed, setCollapsed] = useState(pathname === '/shumi')
   const [collapsing, setCollapsing] = useState(false)
   let Trigger = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
 
   useEffect(() => {
-    setCollapsed(pathname === '/toady')
+    setCollapsed(pathname === '/shumi')
   }, [pathname])
 
   return (

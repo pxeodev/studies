@@ -34,9 +34,9 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
       key: 'screenertools',
       children: [
         {
-          label: <Link href="/toady" prefetch={false}>Toady AI</Link>,
-          key: '/toady',
-          icon: <img src="/toad-ai.png" alt="Toady" width="22" height="22" />
+          label: <Link href="/shumi" prefetch={false}>Shumi AI</Link>,
+          key: '/shumi',
+          icon: <img src="/shumi-ai.png" alt="Shumi" width="22" height="22" />
         },
         {
           label: <Link href="/" prefetch={false}>Crypto Trends</Link>,
@@ -236,9 +236,9 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
   if (collapsed) {
     menuItems = [
       {
-        label: 'Toady AI',
-        icon: <Link href="/toady" prefetch={false}><img src="/toad-ai.png" alt="Toady" width="22" height="22" /></Link>,
-        key: '/toady',
+        label: 'Shumi AI',
+        icon: <Link href="/shumi" prefetch={false}><img src="/shumi-ai.png" alt="Shumi" width="22" height="22" /></Link>,
+        key: '/shumi',
       },
       {
         label: 'Watchlist',
