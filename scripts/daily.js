@@ -84,7 +84,7 @@ const fetchCoinDataCoingecko = async (coinId) => {
     marketCap,
     marketCapRank: coinData.market_data.market_cap_rank,
     fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd ?? null,
-    currentPrice: coinData.market_data.current_price?.usd,
+    currentPrice: coinData.market_data.current_price?.usd || null,
     circulatingSupply: coinData.market_data.circulating_supply,
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
