@@ -36,7 +36,7 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
         {
           label: <Link href="/shumi" prefetch={false}>Shumi AI</Link>,
           key: '/shumi',
-          icon: <img src="/toad-ai.png" alt="Shumi" width="22" height="22" />
+          icon: <img src="/shumi.png" alt="Shumi" width="22" height="22" />
         },
         {
           label: <Link href="/" prefetch={false}>Crypto Trends</Link>,
@@ -237,7 +237,7 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
     menuItems = [
       {
         label: 'Shumi AI',
-        icon: <Link href="/shumi" prefetch={false}><img src="/toad-ai.png" alt="Shumi" width="22" height="22" /></Link>,
+        icon: <Link href="/shumi" prefetch={false}><img src="/shumi.png" alt="Shumi" width="22" height="22" /></Link>,
         key: '/shumi',
       },
       {

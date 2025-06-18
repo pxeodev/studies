@@ -70,7 +70,7 @@ const Search = ({ categories, collapsed }) => {
     setQuery('')
     setTab('search');
 
-    if (window.location.hash === '#toady') {
+    if (window.location.hash === '#shumi') {
       const pathWithoutHash = router.asPath.split('#')[0];
       router.push(pathWithoutHash, undefined, { shallow: true });
     }
@@ -79,10 +79,10 @@ const Search = ({ categories, collapsed }) => {
   useEffect(() => {
     const path = router.asPath
     const afterHash = path.split('#')[1]
-    if (afterHash === 'toady' && !searchModalVisible) {
+    if (afterHash === 'shumi' && !searchModalVisible) {
       setSearchModalVisible(true)
       setTab('ai')
-    } else if (afterHash !== 'toady' && searchModalVisible && tab === 'ai') {
+    } else if (afterHash !== 'shumi' && searchModalVisible && tab === 'ai') {
     }
   }, [router.asPath, searchModalVisible, tab])
 
@@ -243,7 +243,7 @@ const Search = ({ categories, collapsed }) => {
         open={searchModalVisible}
         onCancel={closeModal}
         afterClose={() => {
-          if (window.location.hash === '#toady') {
+          if (window.location.hash === '#shumi') {
             const pathWithoutHash = router.asPath.split('#')[0];
             if (router.asPath !== pathWithoutHash) {
                 router.push(pathWithoutHash, undefined, { shallow: true });
@@ -266,7 +266,7 @@ const Search = ({ categories, collapsed }) => {
             className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
             onClick={() => setTab('ai')}
           >
-            <img src="/toad-ai.png" alt="Shumi" width="18" height="18" />Shumi
+            <img src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi
           </div>
         </div>
         <div className={searchStyles.contentWrapper}>
