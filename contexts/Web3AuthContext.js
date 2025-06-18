@@ -16,16 +16,72 @@ export const useWeb3Auth = () => {
 
 const clientId = "BPi5PB_UiIZ-cPz1GtV5i1I2iOSOHuimiXBI0e-Oe_u6X3oVAbCiAZOTEBtTXw4tsluTITPqA8zMsfxIKMjiqNQ";
 
-const chainConfig = {
-  chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: "0x2105", // Base chain
-  rpcTarget: "https://mainnet.base.org",
-  displayName: "Base",
-  blockExplorerUrl: "https://basescan.org",
-  ticker: "ETH",
-  tickerName: "Ethereum",
-  logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+// Multi-chain configuration
+const chainConfigs = {
+  base: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0x2105", // Base chain
+    rpcTarget: "https://mainnet.base.org",
+    displayName: "Base",
+    blockExplorerUrl: "https://basescan.org",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+  },
+  ethereum: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0x1", // Ethereum Mainnet
+    rpcTarget: "https://rpc.ankr.com/eth",
+    displayName: "Ethereum",
+    blockExplorerUrl: "https://etherscan.io",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+  },
+  polygon: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0x89", // Polygon Mainnet
+    rpcTarget: "https://rpc.ankr.com/polygon",
+    displayName: "Polygon",
+    blockExplorerUrl: "https://polygonscan.com",
+    ticker: "MATIC",
+    tickerName: "Polygon",
+    logo: "https://cryptologos.cc/logos/polygon-matic-logo.png",
+  },
+  arbitrum: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0xa4b1", // Arbitrum One
+    rpcTarget: "https://rpc.ankr.com/arbitrum",
+    displayName: "Arbitrum",
+    blockExplorerUrl: "https://arbiscan.io",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    logo: "https://cryptologos.cc/logos/arbitrum-arb-logo.png",
+  },
+  optimism: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0xa", // Optimism
+    rpcTarget: "https://rpc.ankr.com/optimism",
+    displayName: "Optimism",
+    blockExplorerUrl: "https://optimistic.etherscan.io",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    logo: "https://cryptologos.cc/logos/optimism-ethereum-op-logo.png",
+  },
+  bsc: {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: "0x38", // BSC Mainnet
+    rpcTarget: "https://rpc.ankr.com/bsc",
+    displayName: "BNB Smart Chain",
+    blockExplorerUrl: "https://bscscan.com",
+    ticker: "BNB",
+    tickerName: "BNB",
+    logo: "https://cryptologos.cc/logos/bnb-bnb-logo.png",
+  }
 };
+
+// Default chain (Base)
+const defaultChainConfig = chainConfigs.base;
 
 export const Web3AuthProvider = ({ children }) => {
   const [web3auth, setWeb3auth] = useState(null);
@@ -34,6 +90,7 @@ export const Web3AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [currentChain, setCurrentChain] = useState('base'); // Track current chain
 
   // Handle client-side hydration
   useEffect(() => {
@@ -46,7 +103,7 @@ export const Web3AuthProvider = ({ children }) => {
         // Only initialize after client-side hydration
         if (isClient) {
           const privateKeyProvider = new EthereumPrivateKeyProvider({
-            config: { chainConfig },
+            config: { chainConfig: defaultChainConfig },
           });
 
           const web3authInstance = new Web3Auth({
@@ -152,12 +209,30 @@ export const Web3AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await web3auth.logout();
+      if (web3auth && web3auth.connected) {
+        await web3auth.logout();
+      }
+      // Always clear state regardless of Web3Auth status
       setWeb3authProvider(null);
       setUser(null);
       setLoggedIn(false);
+      setCurrentChain('base'); // Reset to default chain
+      
+      // Clear any cookies as well
+      document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+      console.log('Logout completed successfully');
     } catch (error) {
       console.error("Logout error:", error);
+      // Still clear state even if logout fails
+      setWeb3authProvider(null);
+      setUser(null);
+      setLoggedIn(false);
+      setCurrentChain('base');
+      
+      // Clear cookies
+      document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
       throw error;
     }
   };
@@ -174,17 +249,72 @@ export const Web3AuthProvider = ({ children }) => {
     return [address];
   };
 
-  const getBalance = async () => {
+  const switchChain = async (chainKey) => {
     if (!web3authProvider) {
       console.log("provider not initialized yet");
-      return "0";
+      return false;
     }
-    
-    const ethProvider = new ethers.BrowserProvider(web3authProvider);
-    const signer = await ethProvider.getSigner();
-    const address = await signer.getAddress();
-    const balance = await ethProvider.getBalance(address);
-    return ethers.formatEther(balance);
+
+    try {
+      const chainConfig = chainConfigs[chainKey];
+      if (!chainConfig) {
+        throw new Error(`Chain ${chainKey} not supported`);
+      }
+
+      console.log(`Switching to ${chainConfig.displayName}...`);
+      
+      // Request to switch chain
+      await web3authProvider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainConfig.chainId }],
+      });
+
+      setCurrentChain(chainKey);
+      console.log(`Successfully switched to ${chainConfig.displayName}`);
+      return true;
+    } catch (error) {
+      // If chain doesn't exist, try to add it
+      if (error.code === 4902) {
+        try {
+          const chainConfig = chainConfigs[chainKey];
+          await web3authProvider.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: chainConfig.chainId,
+              chainName: chainConfig.displayName,
+              nativeCurrency: {
+                name: chainConfig.tickerName,
+                symbol: chainConfig.ticker,
+                decimals: 18,
+              },
+              rpcUrls: [chainConfig.rpcTarget],
+              blockExplorerUrls: [chainConfig.blockExplorerUrl],
+            }],
+          });
+          
+          setCurrentChain(chainKey);
+          console.log(`Successfully added and switched to ${chainConfig.displayName}`);
+          return true;
+        } catch (addError) {
+          console.error('Failed to add chain:', addError);
+          return false;
+        }
+      } else {
+        console.error('Failed to switch chain:', error);
+        return false;
+      }
+    }
+  };
+
+  const getCurrentChainConfig = () => {
+    return chainConfigs[currentChain];
+  };
+
+  const getSupportedChains = () => {
+    return Object.keys(chainConfigs).map(key => ({
+      key,
+      ...chainConfigs[key]
+    }));
   };
 
   const saveUserToDatabase = async (userData) => {
@@ -225,10 +355,13 @@ export const Web3AuthProvider = ({ children }) => {
     user,
     loggedIn,
     isLoading: isLoading || !isClient,
+    currentChain,
     login,
     logout,
     getAccounts,
-    getBalance,
+    switchChain,
+    getCurrentChainConfig,
+    getSupportedChains,
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button, Modal, Space, Avatar, message } from 'antd';
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
@@ -14,9 +14,6 @@ const Web3AuthConnectButton = ({ collapsed }) => {
   const handleLogin = useCallback(async () => {
     setIsLoggingIn(true);
     
-    // Show immediate feedback
-    message.loading({ content: 'Connecting...', key: 'login', duration: 0 });
-    
     try {
       console.log('Starting login process...');
       
@@ -30,8 +27,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       
       // Check if we're actually connected (even if DB save might have failed)
       if (loggedIn || result?.address) {
-        // Update message to success
-        message.success({ content: 'Successfully connected!', key: 'login', duration: 3 });
+        message.success({ content: 'Successfully connected!', duration: 3 });
       } else {
         throw new Error('Connection verification failed');
       }
@@ -43,14 +39,22 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       if (loggedIn) {
         message.warning({
           content: 'Connected successfully, but some features may be limited due to database sync issues.',
-          key: 'login',
           duration: 5
         });
       } else {
-        // Update message to error
+        // Better error messages for common cases
+        let errorMessage = 'Connection failed. Please try again.';
+        
+        if (error.message?.includes('rejected') || error.message?.includes('denied') || error.message?.includes('aborted')) {
+          errorMessage = 'Connection cancelled by user.';
+        } else if (error.message?.includes('network') || error.message?.includes('timeout')) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else if (error.message?.includes('unsupported')) {
+          errorMessage = 'Wallet not supported. Please try a different wallet.';
+        }
+        
         message.error({
-          content: `Connection failed: ${error.message || 'Please try again.'}`,
-          key: 'login',
+          content: errorMessage,
           duration: 5
         });
       }
@@ -173,37 +177,27 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       >
         <div className={connectButtonStyles.userInfo}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <div style={{ textAlign: 'center' }}>
+            <div className={connectButtonStyles.userProfile}>
               {user?.profileImage ? (
                 <Avatar size={64} src={user.profileImage} style={{ marginBottom: 16 }} />
               ) : (
                 <Avatar size={64} icon={<UserOutlined />} style={{ marginBottom: 16 }} />
               )}
               <div>
-                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: 4 }}>
-                  {user?.name || 'Anonymous User'}
+                <div className={connectButtonStyles.userName}>
+                  {user?.name || (walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'User')}
                 </div>
                 {user?.email && (
-                  <div style={{ color: '#666', fontSize: '14px', marginBottom: 8 }}>
+                  <div className={connectButtonStyles.userEmail}>
                     {user.email}
                   </div>
                 )}
-                <div style={{ fontSize: '12px', color: '#999' }}>
-                  Connected via {user?.typeOfLogin || 'Social Login'}
-                </div>
               </div>
             </div>
             
             {walletAddress && (
-              <div style={{ 
-                background: '#f5f5f5', 
-                padding: '12px', 
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontFamily: 'monospace',
-                wordBreak: 'break-all'
-              }}>
-                <div style={{ marginBottom: '4px', fontWeight: 'bold' }}>Wallet Address:</div>
+              <div className={connectButtonStyles.walletAddress}>
+                <div className={connectButtonStyles.walletLabel}>Wallet Address:</div>
                 {walletAddress}
               </div>
             )}

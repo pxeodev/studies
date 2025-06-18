@@ -9,7 +9,7 @@ import { getImageURL } from '../utils/minifyImageURL';
 
 import platformSelectStyles from '../styles/platformSelect.module.less'
 
-// TODO: Remove this hack once we have the right names
+// Get chain data for platform selection
 const getChainData = (chainsData, platform, platformName) => {
   return chainsData.find(chain => chain.name.toLowerCase().includes(platformName.toLowerCase()) ||
   chain.name.toLowerCase().includes(platform.toLowerCase()))

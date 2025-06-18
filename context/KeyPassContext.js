@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useRef } from 'react';
+import { createContext, useState, useEffect, useRef } from 'react';
 import useAccount from '../hooks/useAccount';
 
 // Create the context

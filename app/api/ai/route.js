@@ -1746,6 +1746,21 @@ export async function POST(req) {
   console.log('Received POST request with user messages:', JSON.stringify(userMessages, null, 2));
   console.log('Request data:', data);
 
+  // AUTHENTICATION GATING: Require wallet address for Shumi AI access
+  if (!walletAddress || !walletAddress.startsWith('0x')) {
+    console.log('Shumi AI access denied: No valid wallet address provided');
+    return new Response(JSON.stringify({
+      error: 'Authentication required',
+      message: 'Wallet connection required to access Shumi AI'
+    }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+  }
+
   // Get the user message (last message in the array)
   const userMessage = messages.length > 0 ? messages[messages.length - 1] : null;
   if (!userMessage || userMessage.role !== 'user') {

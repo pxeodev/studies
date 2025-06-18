@@ -31,13 +31,14 @@ const TableFiltersAdvancedTab = ({
   }
 
   // Only check wallet connection (KeyPass is now always granted for authenticated users)
-  if (!hasWallet) {
-    return (
-      <div className={indexStyles.modalContent}>
-        <NotConnected />
-      </div>
-    )
-  }
+  // Remove gating to allow non-gated access to advanced filters
+  // if (!hasWallet) {
+  //   return (
+  //     <div className={indexStyles.modalContent}>
+  //       <NotConnected />
+  //     </div>
+  //   )
+  // }
   return (
     <>
       <Row className={classnames(indexStyles.modalRow, indexStyles.modalRowHeader)}>

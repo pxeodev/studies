@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { gql } from '@urql/core';
 import globalData from '../lib/globalData'
-import ToadyComponent from '../components/Toady';
+import Shumi from '../components/Shumi';
 import strapi from 'coinrotator-utils/strapi.mjs'
 import PageHeader from '../components/PageHeader'
 
@@ -26,7 +26,7 @@ export async function getStaticProps() {
         }
       `,
       {
-        slug: 'toady',
+        slug: 'shumi',
       }
     );
   } catch (error) {
@@ -36,12 +36,12 @@ export async function getStaticProps() {
 
   const pageData = pageQuery?.data?.pages?.data[0]?.attributes || {};
 
-  let toadySuggestionsQuery = null;
+  let shumiSuggestionsQuery = null;
   try {
-    toadySuggestionsQuery = await strapi.query(
+    shumiSuggestionsQuery = await strapi.query(
       gql`
-        query ToadySuggestion {
-          toadySuggestion {
+        query ShumiSuggestion {
+          shumiSuggestion {
             data {
               attributes {
                 suggestions
@@ -52,21 +52,21 @@ export async function getStaticProps() {
       `
     );
   } catch (error) {
-    console.error("Error fetching Toady suggestions from Strapi:", error);
+    console.error("Error fetching Shumi suggestions from Strapi:", error);
   }
 
-  const toadySuggestions = toadySuggestionsQuery?.data?.toadySuggestion?.data?.attributes?.suggestions || "";
+  const shumiSuggestions = shumiSuggestionsQuery?.data?.shumiSuggestion?.data?.attributes?.suggestions || "";
 
   return {
     props: {
       appData,
       pageData,
-      toadySuggestions,
+      shumiSuggestions,
     },
   }
 }
 
-const ToadyPage = ({ pageData, toadySuggestions }) => {
+const ShumiPage = ({ pageData, shumiSuggestions }) => {
   return (
     <>
       <Head>
@@ -74,9 +74,9 @@ const ToadyPage = ({ pageData, toadySuggestions }) => {
         <meta name="description" key="description" content={pageData?.metaDescription} />
       </Head>
       <PageHeader title={pageData?.title} explainer={pageData.content} />
-      <ToadyComponent isActive={true} initialSuggestions={toadySuggestions} />
+      <Shumi isActive={true} initialSuggestions={shumiSuggestions} />
     </>
   );
 };
 
-export default ToadyPage;
+export default ShumiPage;

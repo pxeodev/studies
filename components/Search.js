@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
 import searchStyles from '../styles/search.module.less'
-import Toady from './Toady'
+import Shumi from './Shumi'
 
 const Search = ({ categories, collapsed }) => {
   const [coins, setCoins] = useState([])
@@ -233,7 +233,7 @@ const Search = ({ categories, collapsed }) => {
       </div>
     </>
   ) : (
-    <Toady isActive={tab === 'ai'} />
+    <Shumi isActive={tab === 'ai'} />
   );
 
   return (
@@ -266,7 +266,7 @@ const Search = ({ categories, collapsed }) => {
             className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
             onClick={() => setTab('ai')}
           >
-            <img src="/toad-ai.png" alt="Toady" width="18" height="18" />Toady
+            <img src="/toad-ai.png" alt="Shumi" width="18" height="18" />Shumi
           </div>
         </div>
         <div className={searchStyles.contentWrapper}>

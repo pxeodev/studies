@@ -6,8 +6,8 @@ export default async function handler(req, res) {
     try {
       const queryResult = await strapi.query(
         gql`
-          query ToadySuggestion {
-            toadySuggestion {
+          query ShumiSuggestion {
+            shumiSuggestion {
               data {
                 attributes {
                   suggestions
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
       res.status(200).json({ suggestions });
     } catch (error) {
-      console.error('Error fetching Toady suggestions from Strapi (API route):', error);
+      console.error('Error fetching Shumi suggestions from Strapi (API route):', error);
       res.status(500).json({ error: 'Failed to fetch suggestions' });
     }
   } else {

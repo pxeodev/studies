@@ -27,10 +27,9 @@ const useAccount = () => {
     fetchAddress();
   }, [loggedIn, getAccounts]);
 
-  // Fallback to cookie data for backward compatibility during migration
-  const cookieWalletAddress = cookies?.user?.walletAddress;
-  
-  return walletAddress || cookieWalletAddress;
+  // Only return wallet address if actually connected via Web3Auth
+  // Remove cookie fallback to prevent false "connected" state
+  return walletAddress;
 }
 
 export default useAccount

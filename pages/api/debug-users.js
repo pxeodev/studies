@@ -10,27 +10,27 @@ const handler = async (req, res) => {
   try {
     // Get recent users with Web3Auth authentication
     const recentUsers = await sql`
-      SELECT 
+      SELECT
         id,
-        "walletAddress",
-        "web3auth_id",
+        walletAddress,
+        web3authId,
         provider,
         email,
         name,
-        "auth_method",
-        "created_at",
-        "updated_at"
-      FROM "User" 
-      WHERE "auth_method" = 'web3auth'
-      ORDER BY "updated_at" DESC 
+        authMethod,
+        createdAt,
+        updatedAt
+      FROM "User"
+      WHERE authMethod = 'web3auth'
+      ORDER BY updatedAt DESC
       LIMIT 10
     `;
 
     // Get total count of Web3Auth users
     const totalCount = await sql`
-      SELECT COUNT(*) as count 
-      FROM "User" 
-      WHERE "auth_method" = 'web3auth'
+      SELECT COUNT(*) as count
+      FROM "User"
+      WHERE authMethod = 'web3auth'
     `;
 
     res.status(200).json({
@@ -42,9 +42,9 @@ const handler = async (req, res) => {
         provider: user.provider,
         email: user.email,
         name: user.name,
-        auth_method: user.auth_method,
-        created_at: user.created_at,
-        updated_at: user.updated_at
+        authMethod: user.authMethod,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
       }))
     });
 

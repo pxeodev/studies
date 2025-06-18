@@ -22,7 +22,10 @@
     "fixTrends": "swc scripts/fixTrends.js -o dist/fixTrends.mjs",
     "start": "next start",
     "overrideCategories": "swc scripts/overrideCategories.js -o dist/overrideCategories.mjs",
-    "debbb": "node scripts/daily.mjs"
+    "debbb": "node scripts/daily.mjs",
+    "fix-db-schema": "node scripts/fix-database-schema.js",
+    "check-db-schema": "node scripts/check-database-schema.js",
+    "test-web3auth-api": "node scripts/test-web3auth-api.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.9",
@@ -35,6 +38,7 @@
     "@memochou1993/json2markdown": "^0.0.15",
     "@metamask/detect-provider": "2",
     "@next/bundle-analyzer": "^13.4.9",
+    "@noble/hashes": "^1.2.0",
     "@openrouter/ai-sdk-provider": "^0.4.5",
     "@opentelemetry/api-logs": "^0.200.0",
     "@opentelemetry/exporter-jaeger": "^2.0.1",

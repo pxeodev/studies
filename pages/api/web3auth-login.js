@@ -47,17 +47,25 @@ const handler = async (req, res) => {
       hasProfileImage: !!profile_image
     });
 
-    if (!walletAddress || !web3auth_id || !provider) {
-      console.error('Missing required fields:', { walletAddress: !!walletAddress, web3auth_id: !!web3auth_id, provider: !!provider });
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!walletAddress) {
+      console.error('Missing required fields:', { walletAddress: !!walletAddress });
+      return res.status(400).json({ error: 'Missing wallet address' });
     }
 
-    // Check if user exists by wallet address or web3auth_id
-    let existingUser = (await sql`
-      SELECT * FROM "User" 
-      WHERE "walletAddress" = ${walletAddress} 
-      OR "web3auth_id" = ${web3auth_id}
-    `)[0];
+    // Check if user exists by wallet address or web3auth_id (if available)
+    let existingUser;
+    if (web3auth_id) {
+      existingUser = (await sql`
+        SELECT * FROM "User"
+        WHERE walletAddress = ${walletAddress}
+        OR web3authId = ${web3auth_id}
+      `)[0];
+    } else {
+      existingUser = (await sql`
+        SELECT * FROM "User"
+        WHERE walletAddress = ${walletAddress}
+      `)[0];
+    }
 
     if (existingUser) {
       console.log('Found existing user:', {
@@ -99,8 +107,8 @@ const handler = async (req, res) => {
         // User already exists with Web3Auth, just update last login
         const updatedUser = (await sql`
           UPDATE "User"
-          SET "updated_at" = NOW()
-          WHERE "id" = ${existingUser.id}
+          SET updatedAt = NOW()
+          WHERE id = ${existingUser.id}
           RETURNING *
         `)[0];
         
@@ -117,23 +125,23 @@ const handler = async (req, res) => {
       // Create new user
       const newUser = (await sql`
         INSERT INTO "User" (
-          "walletAddress",
-          "web3auth_id",
-          "provider",
-          "email",
-          "name",
-          "profile_image",
-          "auth_method",
-          "created_at",
-          "updated_at"
+          walletAddress,
+          web3authId,
+          provider,
+          email,
+          name,
+          profileImage,
+          authMethod,
+          createdAt,
+          updatedAt
         ) VALUES (
           ${walletAddress},
-          ${web3auth_id},
-          ${provider},
-          ${email},
-          ${name},
-          ${profile_image},
-          'web3auth',
+          ${web3auth_id || null},
+          ${provider || null},
+          ${email || null},
+          ${name || null},
+          ${profile_image || null},
+          ${web3auth_id ? 'web3auth' : 'wallet'},
           NOW(),
           NOW()
         )
