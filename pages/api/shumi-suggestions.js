@@ -6,8 +6,8 @@ export default async function handler(req, res) {
     try {
       const queryResult = await strapi.query(
         gql`
-          query ShumiSuggestion {
-            shumiSuggestion {
+          query ToadySuggestion {
+            toadySuggestion {
               data {
                 attributes {
                   suggestions

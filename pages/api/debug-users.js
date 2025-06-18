@@ -12,17 +12,17 @@ const handler = async (req, res) => {
     const recentUsers = await sql`
       SELECT
         id,
-        walletAddress,
-        web3authId,
+        "walletAddress",
+        "web3authId",
         provider,
         email,
         name,
-        authMethod,
-        createdAt,
-        updatedAt
+        "authMethod",
+        "createdAt",
+        "updatedAt"
       FROM "User"
-      WHERE authMethod = 'web3auth'
-      ORDER BY updatedAt DESC
+      WHERE "authMethod" = 'web3auth'
+      ORDER BY "updatedAt" DESC
       LIMIT 10
     `;
 
@@ -30,7 +30,7 @@ const handler = async (req, res) => {
     const totalCount = await sql`
       SELECT COUNT(*) as count
       FROM "User"
-      WHERE authMethod = 'web3auth'
+      WHERE "authMethod" = 'web3auth'
     `;
 
     res.status(200).json({

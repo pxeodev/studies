@@ -6,13 +6,13 @@ const sql = postgres(process.env.DATABASE_URL);
 const onSuccess = (res, user) => {
   const relevantUserData = pick(user, [
     'id',
-    'walletAddress', 
-    'web3auth_id', 
-    'provider', 
-    'email', 
-    'name', 
-    'profile_image',
-    'auth_method'
+    'walletAddress',
+    'web3authId',
+    'provider',
+    'email',
+    'name',
+    'profileImage',
+    'authMethod'
   ]);
   
   let twentyYearsFromNow = new Date();
@@ -57,13 +57,13 @@ const handler = async (req, res) => {
     if (web3auth_id) {
       existingUser = (await sql`
         SELECT * FROM "User"
-        WHERE walletAddress = ${walletAddress}
-        OR web3authId = ${web3auth_id}
+        WHERE "walletAddress" = ${walletAddress}
+        OR "web3authId" = ${web3auth_id}
       `)[0];
     } else {
       existingUser = (await sql`
         SELECT * FROM "User"
-        WHERE walletAddress = ${walletAddress}
+        WHERE "walletAddress" = ${walletAddress}
       `)[0];
     }
 
@@ -71,24 +71,24 @@ const handler = async (req, res) => {
       console.log('Found existing user:', {
         id: existingUser.id,
         walletAddress: existingUser.walletAddress,
-        auth_method: existingUser.auth_method,
-        existing_web3auth_id: existingUser.web3auth_id
+        authMethod: existingUser.authMethod,
+        existing_web3authId: existingUser.web3authId
       });
 
       // Update existing user with Web3Auth data if it's a legacy user
-      if (existingUser.auth_method === 'legacy' || !existingUser.web3auth_id) {
+      if (existingUser.authMethod === 'legacy' || !existingUser.web3authId) {
         console.log('Upgrading legacy user to Web3Auth...');
         
         const updatedUser = (await sql`
           UPDATE "User"
           SET
-            "web3auth_id" = ${web3auth_id},
+            "web3authId" = ${web3auth_id},
             "provider" = ${provider},
             "email" = ${email || existingUser.email},
             "name" = ${name || existingUser.name},
-            "profile_image" = ${profile_image || existingUser.profile_image},
-            "auth_method" = 'web3auth',
-            "updated_at" = NOW()
+            "profileImage" = ${profile_image || existingUser.profileImage},
+            "authMethod" = 'web3auth',
+            "updatedAt" = NOW()
           WHERE "id" = ${existingUser.id}
           RETURNING *
         `)[0];
@@ -97,7 +97,7 @@ const handler = async (req, res) => {
           id: updatedUser.id,
           walletAddress: updatedUser.walletAddress,
           provider: updatedUser.provider,
-          auth_method: updatedUser.auth_method
+          authMethod: updatedUser.authMethod
         });
         
         onSuccess(res, updatedUser);
@@ -107,8 +107,8 @@ const handler = async (req, res) => {
         // User already exists with Web3Auth, just update last login
         const updatedUser = (await sql`
           UPDATE "User"
-          SET updatedAt = NOW()
-          WHERE id = ${existingUser.id}
+          SET "updatedAt" = NOW()
+          WHERE "id" = ${existingUser.id}
           RETURNING *
         `)[0];
         
@@ -125,15 +125,15 @@ const handler = async (req, res) => {
       // Create new user
       const newUser = (await sql`
         INSERT INTO "User" (
-          walletAddress,
-          web3authId,
-          provider,
-          email,
-          name,
-          profileImage,
-          authMethod,
-          createdAt,
-          updatedAt
+          "walletAddress",
+          "web3authId",
+          "provider",
+          "email",
+          "name",
+          "profileImage",
+          "authMethod",
+          "createdAt",
+          "updatedAt"
         ) VALUES (
           ${walletAddress},
           ${web3auth_id || null},
