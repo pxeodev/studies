@@ -3,6 +3,7 @@ import { Web3Auth } from '@web3auth/modal';
 import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from '@web3auth/base';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { ethers } from 'ethers';
+import { useCookies } from 'react-cookie';
 
 const Web3AuthContext = createContext(null);
 
@@ -84,6 +85,7 @@ const chainConfigs = {
 const defaultChainConfig = chainConfigs.base;
 
 export const Web3AuthProvider = ({ children }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [web3auth, setWeb3auth] = useState(null);
   const [web3authProvider, setWeb3authProvider] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -218,8 +220,8 @@ export const Web3AuthProvider = ({ children }) => {
       setLoggedIn(false);
       setCurrentChain('base'); // Reset to default chain
       
-      // Clear any cookies as well
-      document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      // Clear user cookie safely using react-cookie
+      removeCookie('user', { path: '/' });
       
       console.log('Logout completed successfully');
     } catch (error) {
@@ -230,8 +232,8 @@ export const Web3AuthProvider = ({ children }) => {
       setLoggedIn(false);
       setCurrentChain('base');
       
-      // Clear cookies
-      document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      // Clear user cookie safely using react-cookie
+      removeCookie('user', { path: '/' });
       
       throw error;
     }
