@@ -3,17 +3,11 @@ import classnames from 'classnames'
 import { useState, useEffect } from 'react'
 
 import indexStyles from '../styles/index.module.less'
-import NotConnected from './gating/NotConnected.js'
-import useAccount from '../hooks/useAccount.js'
-import useKeyPass from '../hooks/useKeyPass.js'
 
 const TableFiltersAdvancedTab = ({
   formState,
   formDispatch,
  }) => {
-  const walletAddress = useAccount()
-  const hasKeyPass = useKeyPass()
-  const hasWallet = Boolean(walletAddress)
   const [isClient, setIsClient] = useState(false)
 
   // Handle client-side hydration to prevent hydration mismatch
@@ -30,15 +24,6 @@ const TableFiltersAdvancedTab = ({
     )
   }
 
-  // Only check wallet connection (KeyPass is now always granted for authenticated users)
-  // Remove gating to allow non-gated access to advanced filters
-  // if (!hasWallet) {
-  //   return (
-  //     <div className={indexStyles.modalContent}>
-  //       <NotConnected />
-  //     </div>
-  //   )
-  // }
   return (
     <>
       <Row className={classnames(indexStyles.modalRow, indexStyles.modalRowHeader)}>

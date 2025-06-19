@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import classnames from 'classnames'
 
-import useKeyPass from '../hooks/useKeyPass';
 import useAccount from '../hooks/useAccount';
 import shumiStyles from '../styles/shumi.module.less'
 import NotConnected from './gating/NotConnected'
@@ -17,7 +16,6 @@ const generateSessionId = () => {
 };
 
 const Shumi = ({ isActive, initialSuggestions }) => {
-  const hasKeyPass = useKeyPass()
   const walletAddress = useAccount()
   const [coinTag, setCoinTag] = useState(null);
   const [currentSuggestions, setCurrentSuggestions] = useState([]);
