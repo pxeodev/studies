@@ -891,7 +891,7 @@ const tools = {
       properties: {
         interval: {
           type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
+          description: `Trend data interval. Supported intervals: ${SUPPORTED_INTERVALS.join(', ')}`,
           default: '1d'
         }
       }
