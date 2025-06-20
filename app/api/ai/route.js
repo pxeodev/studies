@@ -221,15 +221,8 @@ const callSocketServer = async (endpoint, params = {}) => {
   }
 };
 
-// Define tools first
-const tools = {
-  getCurrentMarketVibe: tool({
-    description: "Get the current market vibe. Returns the latest summary message.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {},
-      required: []
-    }),
+const toolImplementations = {
+  getCurrentMarketVibe: {
     execute: async () => {
       console.log('Tool executed: getCurrentMarketVibe');
       const url = new URL('/api/alpha/messages', process.env.AI_SERVER_URL);
@@ -252,51 +245,8 @@ const tools = {
         return 'No market vibe message available.';
       }
     }
-  }),
-  exaSearch: tool({
-    description: "Use this to search the web for information using the Exa API. Useful for finding current information or researching topics that aren't covered by the system's knowledge.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        query: {
-          type: 'string',
-          description: 'The search query to find information on the web'
-        },
-        useAutoprompt: {
-          type: 'boolean',
-          description: 'Whether to use Exa\'s autoprompt feature to improve the search query',
-          default: false
-        },
-        numResults: {
-          type: 'number',
-          description: 'Number of search results to return',
-          default: 5
-        },
-        startPublishedDate: {
-          type: 'string',
-          description: 'Filter for content published after this date (YYYY-MM-DD)',
-        },
-        endPublishedDate: {
-          type: 'string',
-          description: 'Filter for content published before this date (YYYY-MM-DD)',
-        },
-        includeDomains: {
-          type: 'array',
-          description: 'List of domains to include in the search results',
-          items: {
-            type: 'string'
-          }
-        },
-        excludeDomains: {
-          type: 'array',
-          description: 'List of domains to exclude from the search results',
-          items: {
-            type: 'string'
-          }
-        }
-      },
-      required: ['query']
-    }),
+  },
+  exaSearch: {
     execute: async ({ query, useAutoprompt = false, numResults = 5, startPublishedDate, endPublishedDate, includeDomains, excludeDomains }) => {
       console.log('Tool executed: exaSearch', {
         query,
@@ -338,52 +288,9 @@ const tools = {
 
       return { query, results: formattedResults };
     }
-  }),
+  },
 
-  exaSearchWithContents: tool({
-    description: "Search the web and retrieve full text contents of the search results in a single operation. Useful when you need more context from search results beyond just snippets.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        query: {
-          type: 'string',
-          description: 'The search query to find information on the web'
-        },
-        useAutoprompt: {
-          type: 'boolean',
-          description: 'Whether to use Exa\'s autoprompt feature to improve the search query',
-          default: false
-        },
-        numResults: {
-          type: 'number',
-          description: 'Number of search results to return',
-          default: 3
-        },
-        includeDomains: {
-          type: 'array',
-          description: 'List of domains to include in the search results',
-          items: {
-            type: 'string'
-          }
-        },
-        retrieveText: {
-          type: 'boolean',
-          description: 'Whether to retrieve full text of the search results',
-          default: true
-        },
-        retrieveHighlights: {
-          type: 'boolean',
-          description: 'Whether to retrieve highlights relevant to the query',
-          default: false
-        },
-        maxCharacters: {
-          type: 'number',
-          description: 'Maximum number of characters to retrieve for each result',
-          default: 5000
-        }
-      },
-      required: ['query']
-    }),
+  exaSearchWithContents: {
     execute: async ({ query, useAutoprompt = false, numResults = 3, includeDomains, retrieveText = true, retrieveHighlights = false, maxCharacters = 5000 }) => {
       console.log('Tool executed: exaSearchWithContents', {
           query,
@@ -457,31 +364,9 @@ const tools = {
 
         return { query, results: formattedResults };
     }
-  }),
+  },
 
-  exaAnswer: tool({
-    description: "Generate an answer to a question using Exa's search and answer capabilities with citations to source material. Best for factual questions that require up-to-date information.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        question: {
-          type: 'string',
-          description: 'The question to answer'
-        },
-        model: {
-          type: 'string',
-          description: 'The model to use for generating the answer',
-          enum: ['exa', 'exa-pro'],
-          default: 'exa'
-        },
-        retrieveText: {
-          type: 'boolean',
-          description: 'Whether to include the full text of cited sources in the response',
-          default: false
-        }
-      },
-      required: ['question']
-    }),
+  exaAnswer: {
     execute: async ({ question, model = 'exa', retrieveText = false }) => {
       console.log('Tool executed: exaAnswer', {
         question,
@@ -519,35 +404,9 @@ const tools = {
 
       return formattedResult;
     }
-  }),
+  },
 
-  exaFindSimilar: tool({
-    description: "Find web content similar to a specific URL. Useful for discovering related articles, research, or alternative viewpoints on a topic.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        url: {
-          type: 'string',
-          description: 'The URL to find similar content for'
-        },
-        numResults: {
-          type: 'number',
-          description: 'Number of similar results to return',
-          default: 5
-        },
-        excludeSourceDomain: {
-          type: 'boolean',
-          description: 'Whether to exclude results from the same domain as the source URL',
-          default: true
-        },
-        retrieveText: {
-          type: 'boolean',
-          description: 'Whether to retrieve the full text of similar results',
-          default: false
-        }
-      },
-      required: ['url']
-    }),
+  exaFindSimilar: {
     execute: async ({ url, numResults = 5, excludeSourceDomain = true, retrieveText = false }) => {
       console.log('Tool executed: exaFindSimilar', {
           url,
@@ -598,34 +457,9 @@ const tools = {
 
         return { sourceUrl: url, similarResults: formattedResults };
     }
-  }),
+  },
 
-  getCoinByContract: tool({
-    description: "Use this when a user asks about a specific blockchain contract address. Returns coin metadata (including futures data as open Interest, futures volume of the last 24 hours and funding rate), trend history with streaks, and band-based support/resistance zones.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        contractAddress: {
-          type: 'string',
-          description: 'The blockchain contract address to look up'
-        },
-        chain: {
-          type: 'string',
-          description: 'The blockchain network (ethereum, binance-smart-chain, etc)'
-        },
-        interval: {
-          type: 'string',
-          description: 'Trend data interval (1d, 4h)',
-          default: '1d'
-        },
-        trendLimit: {
-          type: 'number',
-          description: 'Maximum number of trend records to return',
-          default: 5
-        }
-      },
-      required: ['contractAddress', 'chain']
-    }),
+  getCoinByContract: {
     execute: async ({ contractAddress, chain, interval = "1d", trendLimit = 5 }) => {
       console.log('Tool executed: getCoinByContract', { contractAddress, chain, interval, trendLimit });
 
@@ -645,30 +479,9 @@ const tools = {
 
       return result;
     }
-  }),
+  },
 
-  getCoinBySymbol: tool({
-    description: "Use this when a user mentions a crypto symbol/ticker. Example: 'What's the trend for BTC?' or 'Show ETH analysis'. Returns coin metadata (including futures data as open Interest, futures volume of the last 24 hours and funding rate), trend history with streaks, and band-based support/resistance zones.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        symbol: {
-          type: 'string',
-          description: 'The cryptocurrency trading symbol (BTC, ETH, etc)'
-        },
-        interval: {
-          type: 'string',
-          description: 'Trend data interval (1d, 4h)',
-          default: '1d'
-        },
-        trendLimit: {
-          type: 'number',
-          description: 'Maximum number of trend records to return',
-          default: 5
-        }
-      },
-      required: ['symbol']
-    }),
+  getCoinBySymbol: {
     execute: async ({ symbol, interval = "1d", trendLimit = 5 }) => {
       console.log('Tool executed: getCoinBySymbol - Starting', { symbol, interval, trendLimit });
 
@@ -687,30 +500,9 @@ const tools = {
 
       return result;
     }
-  }),
+  },
 
-  getCoinByName: tool({
-    description: "Use this when a user mentions a cryptocurrency's full name. Example: 'Show me Bitcoin trends' or 'What's the analysis for Ethereum?'. Returns coin metadata (including futures data as open Interest, futures volume of the last 24 hours and funding rate), trend history with streaks, and band-based support/resistance zones.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string',
-          description: "The cryptocurrency's full name (Bitcoin, Ethereum, etc)"
-        },
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        },
-        trendLimit: {
-          type: 'number',
-          description: 'Maximum number of trend records to return',
-          default: 5
-        }
-      },
-      required: ['name']
-    }),
+  getCoinByName: {
     execute: async ({ name, interval = "1d", trendLimit = 5 }) => {
       console.log('Tool executed: getCoinByName', { name, interval, trendLimit });
 
@@ -729,17 +521,9 @@ const tools = {
 
       return result;
     }
-  }),
+  },
 
-  getAllCategories: tool({
-    description: "Use this when a user asks for all categories. Or before you call getCategoryTrends to cross-reference the list of available categories. Returns a list of all unique cryptocurrency categories across all coins in the database. This means that a user query might contain a category that is not an exact match to the list of available categories, so you need to make sure that you use the correct category name. For example the user asking about the 'RWA' category actually means our 'RWA (Real World Assets)' category from the getAllCategories tool.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        // No additional parameters needed
-      },
-      required: []
-    }),
+  getAllCategories: {
     execute: async () => {
       console.log('Tool executed: getAllCategories');
 
@@ -752,38 +536,9 @@ const tools = {
 
       return categories;
     }
-  }),
+  },
 
-  getExtremeTrends: tool({
-    description: "Use this when a user asks about fresh or stale trends. 'Fresh' trends are those that just started (streak = 1), while 'stale' trends are those that have been ongoing for a long time (high streak value).",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        },
-        type: {
-          type: 'string',
-          description: "Type of extreme trends to fetch ('fresh' or 'stale')",
-          enum: ['fresh', 'stale'],
-          default: 'fresh'
-        },
-        limit: {
-          type: 'number',
-          description: 'Maximum number of results to return',
-          default: 10
-        },
-        coinNames: {
-          type: 'array',
-          description: 'Filter results to only include these specific coins',
-          items: {
-            type: 'string'
-          }
-        }
-      }
-    }),
+  getExtremeTrends: {
     execute: async ({ interval = "1d", type = "fresh", limit = 10, coinNames }) => {
       console.log('Tool executed: getExtremeTrends', { interval, type, limit, coinNames });
 
@@ -801,39 +556,9 @@ const tools = {
 
       return trends;
     }
-  }),
+  },
 
-  getAlignedTrends: tool({
-    description: "Use this when a user asks about coins with aligned trends across all timeframes. Returns coins where the trend direction (UP, DOWN, HODL) is the same across all supported intervals.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        flavor: {
-          type: 'string',
-          description: 'The trend algorithm flavor to use',
-          default: 'CoinRotator'
-        },
-        intervals: {
-          type: 'array',
-          description: 'Array of intervals to check for trend alignment. If omitted, all intervals will be checked.',
-          items: {
-            type: 'string'
-          }
-        },
-        limit: {
-          type: 'number',
-          description: 'Maximum number of results to return',
-          default: 10
-        },
-        coinNames: {
-          type: 'array',
-          description: 'Filter results to only include these specific coins',
-          items: {
-            type: 'string'
-          }
-        }
-      }
-    }),
+  getAlignedTrends: {
     execute: async ({ flavor = "CoinRotator", intervals, limit = 10, coinNames }) => {
       console.log('Tool executed: getAlignedTrends', { flavor, intervals, limit, coinNames });
 
@@ -851,20 +576,9 @@ const tools = {
 
       return alignedTrends;
     }
-  }),
+  },
 
-  getCoinsByCategory: tool({
-    description: "Use this when a user asks about coins in a specific category. Returns a list of coins that belong to the specified category.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        category: {
-          type: 'string',
-          description: 'The category name to search for'
-        }
-      },
-      required: ['category']
-    }),
+  getCoinsByCategory: {
     execute: async ({ category }) => {
       console.log('Tool executed: getCoinsByCategory', { category });
 
@@ -882,20 +596,9 @@ const tools = {
 
       return coinIds;
     }
-  }),
+  },
 
-  getMarketHealth: tool({
-    description: "Use this when a user asks about overall market health or sentiment. Returns data about the distribution of UP, DOWN, and HODL trends across the market. Returns an object with: date (timestamp), trends (object with counts of UP, HODL, and DOWN trends, e.g. { UP: 103, HODL: 462, DOWN: 409 }), extremes (array of extreme values for each trend).",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        interval: {
-          type: 'string',
-          description: `Trend data interval. Supported intervals: ${SUPPORTED_INTERVALS.join(', ')}`,
-          default: '1d'
-        }
-      }
-    }),
+  getMarketHealth: {
     execute: async ({ interval = "1d" }) => {
       console.log('Tool executed: getMarketHealth', { interval });
 
@@ -918,20 +621,9 @@ const tools = {
 
       return data;
     }
-  }),
+  },
 
-  getMarketHealthCrossing: tool({
-    description: "Use this when a user asks about market trend crossings or shifts. Returns information about the most recent crossing where one trend type overtook another.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        }
-      }
-    }),
+  getMarketHealthCrossing: {
     execute: async ({ interval = "1d" }) => {
       try {
         console.log('Tool executed: getMarketHealthCrossing', { interval });
@@ -959,30 +651,9 @@ const tools = {
         throw(error)
       }
     }
-  }),
+  },
 
-  getCoinById: tool({
-    description: "Use this when you have a specific coinId to look up. Returns coin metadata (including futures data as open Interest, futures volume of the last 24 hours and funding rate), trend history with streaks, and band-based support/resistance zones.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        coinId: {
-          type: 'string',
-          description: 'The unique identifier of the coin to look up'
-        },
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        },
-        trendLimit: {
-          type: 'number',
-          description: 'Maximum number of trend records to return',
-          default: 5
-        }
-      },
-      required: ['coinId']
-    }),
+  getCoinById: {
     execute: async ({ coinId, interval = "1d", trendLimit = 5 }) => {
       try {
         console.log('Tool executed: getCoinById', { coinId, interval, trendLimit });
@@ -1005,20 +676,9 @@ const tools = {
         throw(error)
       }
     }
-  }),
+  },
 
-  getRecentTweets: tool({
-    description: "Use this when a user asks about recent tweets from a specific Twitter account. Returns the 10 most recent tweets from the specified Twitter handle.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        handle: {
-          type: 'string',
-          description: 'Twitter username without the @ symbol at the start'
-        }
-      },
-      required: ['handle']
-    }),
+  getRecentTweets: {
     execute: async ({ handle }) => {
       try {
         console.log('Tool executed: getRecentTweets', { handle });
@@ -1037,89 +697,9 @@ const tools = {
         throw(error)
       }
     }
-  }),
+  },
 
-  getFilteredCoins: tool({
-    description: "Use this when a user wants to filter coins by criteria like trend direction, market cap, categories, etc. Example: 'Show me uptrend coins in the DeFi category' or 'Find coins with market cap under 100M with strong uptrends'. Returns a list of coin names, in order to get more information about a coin use the getCoinByName tool with this coin name as a parameter.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        trend: {
-          type: 'string',
-          description: 'Filter by trend direction: UP, HODL, or DOWN',
-          enum: ['UP', 'HODL', 'DOWN']
-        },
-        categories: {
-          type: 'array',
-          description: 'Filter by one or more categories (e.g., ["defi", "nft"])',
-          items: {
-            type: 'string'
-          }
-        },
-        marketCapMin: {
-          type: 'number',
-          description: 'Minimum market cap in USD'
-        },
-        marketCapMax: {
-          type: 'number',
-          description: 'Maximum market cap in USD'
-        },
-        streakMin: {
-          type: 'number',
-          description: 'Minimum trend streak length (absolute value)'
-        },
-        streakMax: {
-          type: 'number',
-          description: 'Maximum trend streak length (absolute value)'
-        },
-        exchanges: {
-          type: 'array',
-          description: 'Filter by one or more exchanges',
-          items: {
-            type: 'string'
-          }
-        },
-        cexOnly: {
-          type: 'boolean',
-          description: 'Only include coins listed on centralized exchanges'
-        },
-        dexOnly: {
-          type: 'boolean',
-          description: 'Only include coins listed on decentralized exchanges'
-        },
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        },
-        flavor: {
-          type: 'string',
-          description: 'Trend algorithm flavor',
-          default: 'CoinRotator'
-        },
-        limit: {
-          type: 'number',
-          description: 'Maximum number of results to return',
-          default: 10
-        },
-        sortBy: {
-          type: 'string',
-          enum: ['marketCap'],
-          description: 'Sort results by this field',
-          default: 'marketCap'
-        },
-        sortOrder: {
-          type: 'string',
-          enum: ['asc', 'desc'],
-          description: 'Sort order for results',
-          default: 'desc'
-        },
-        withPerps: {
-          type: 'boolean',
-          description: 'Only include coins that are traded in futures/perpetual markets (perps)'
-        }
-      }
-    }),
+  getFilteredCoins: {
     execute: async ({ trend, categories, marketCapMin, marketCapMax, streakMin, streakMax,
                      exchanges, cexOnly, dexOnly, interval = "1d", flavor = "CoinRotator", limit = 10, sortBy = 'marketCap', sortOrder = 'desc', withPerps }) => {
       try {
@@ -1164,15 +744,9 @@ const tools = {
         throw(error)
       }
     }
-  }),
+  },
 
-  globalMarketData: tool({
-    description: "Use this when a user asks about global cryptocurrency market data. Returns the latest global market statistics including totalMarketCap (total cryptocurrency market capitalization), totalMarketVolume (24h trading volume), and marketCapPercentage (dominance percentages of top cryptocurrencies like Bitcoin).",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {},
-      required: []
-    }),
+  globalMarketData: {
     execute: async () => {
       try {
         console.log('Tool executed: globalMarketData');
@@ -1191,25 +765,9 @@ const tools = {
         throw(error)
       }
     }
-  }),
+  },
 
-  getCategoryTrends: tool({
-    description: "Use this when a user asks about trend distribution within a specific category. Returns the trend breakdown (UP, HODL, DOWN counts) for the specified category. Make sure that before you call this tool, you cross-referenced the list of available categories using the getAllCategories tool. This means that a user query might contain a category that is not an exact match to the list of available categories, so you need to make sure that you use the correct category name. For example the user asking about the 'RWA' category actually means our 'RWA (Real World Assets)' category from the getAllCategories tool.",
-    parameters: jsonSchema({
-      type: 'object',
-      properties: {
-        categoryName: {
-          type: 'string',
-          description: 'The name of the category to get trend data for'
-        },
-        interval: {
-          type: 'string',
-          description: `Trend data interval (${SUPPORTED_INTERVALS.join(', ')})`,
-          default: '1d'
-        }
-      },
-      required: ['categoryName']
-    }),
+  getCategoryTrends: {
     execute: async ({ categoryName, interval = "1d" }) => {
       try {
         console.log('Tool executed: getCategoryTrends', { categoryName, interval });
@@ -1239,7 +797,7 @@ const tools = {
         throw(error)
       }
     }
-  })
+  }
 };
 
 // Function to fetch AI configuration and Langfuse prompts in parallel
@@ -1263,7 +821,7 @@ const getAiConfigurationAndPrompts = async (sessionId = null) => {
         }
       }),
       langfuse.getPrompt("System prompt", undefined, { label: "playground" }),
-      langfuse.getPrompt("Classification Prompt", undefined, { label: "playground" })
+      langfuse.getPrompt("Classification Prompt", undefined, { label: "playground" }),
     ]);
 
     if (!apiResponse.ok) {
@@ -1397,19 +955,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
       throw new Error(`Critical failure: Unable to fetch categories required for query classification. Original error: ${catError.message}`);
     }
 
-    // Prepare tool definitions for the prompt by extracting relevant parts
-    const serializableTools = {};
-    for (const toolName in tools) {
-        if (Object.hasOwnProperty.call(tools, toolName)) {
-            const toolDefinition = tools[toolName];
-            serializableTools[toolName] = {
-                description: toolDefinition.description,
-                parameters: toolDefinition.parameters // This is the JSON schema object
-            };
-        }
-    }
-    const toolDefinitionsJson = JSON.stringify(serializableTools, null, 2);
-
     // Prepare session history info for the classifier
     let sessionHistoryInfo = '';
     if (Array.isArray(sessionHistory) && sessionHistory.length > 0) {
@@ -1451,7 +996,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
     const classifierSystemPrompt = classificationPromptContent
       .replace('${query}', query)
       .replace('${categoriesStringForPrompt}', categoriesStringForPrompt)
-      .replace('${toolDefinitionsJson}', toolDefinitionsJson)
       + sessionHistoryInfo; // Append session history info
 
     console.log('Using classification prompt from API server with session history');
@@ -1480,7 +1024,7 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
 };
 
 // Function to execute tools based on the query plan
-const executeToolsFromPlan = async (plan) => {
+const executeToolsFromPlan = async (plan, tools) => {
   console.log('Executing tools from plan:', plan);
 
   // Sort the execution plan topologically before executing
@@ -1497,12 +1041,12 @@ const executeToolsFromPlan = async (plan) => {
 
       // Handle dynamic fanout steps
       if (step.dynamicFanout === true && step.sourceStep) {
-        await processDynamicFanoutStep(step, stepResults, results);
+        await processDynamicFanoutStep(step, stepResults, results, tools);
         continue;
       }
 
       // Process regular steps
-      const stepPromise = processRegularStep(step, stepResults);
+      const stepPromise = processRegularStep(step, stepResults, tools);
       const completedStep = await stepPromise;
       results[completedStep.stepId] = completedStep;
     }
@@ -1588,7 +1132,7 @@ const sortPlanTopologically = (executionPlan) => {
 };
 
 // Helper function to process a dynamic fanout step
-const processDynamicFanoutStep = async (step, stepResults, results) => {
+const processDynamicFanoutStep = async (step, stepResults, results, tools) => {
   console.log(`Processing dynamic fanout step: ${step.stepId}, source: ${step.sourceStep}`);
 
   // Ensure we have a source step and it's been processed
@@ -1684,7 +1228,7 @@ const processDynamicFanoutStep = async (step, stepResults, results) => {
 };
 
 // Helper function to process a regular step
-const processRegularStep = async (step, stepResults) => {
+const processRegularStep = async (step, stepResults, tools) => {
   console.log(`Processing regular step: ${step.stepId}`);
 
   // For each step, process the tools
@@ -1797,7 +1341,7 @@ export async function POST(req) {
 
     // STEP 2: Execute the tools specified in the plan to retrieve data
     console.log('Step 2: Executing tools based on the plan...');
-    const newExecutionResults = await executeToolsFromPlan(queryPlan);
+    const newExecutionResults = await executeToolsFromPlan(queryPlan, toolImplementations);
     console.log('Plan execution completed with results from steps:',
       newExecutionResults.map(step => step.stepId));
 
