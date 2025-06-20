@@ -15,7 +15,7 @@ export const useWeb3Auth = () => {
   return context;
 };
 
-const clientId = "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
+const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
 
 // Environment detection for better development experience
 const isDevelopment = process.env.NODE_ENV === 'development' || typeof window !== 'undefined' && window.location.hostname === 'localhost';
@@ -115,17 +115,19 @@ export const Web3AuthProvider = ({ children }) => {
             clientId,
             web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET, // Use your configured Sapphire Mainnet
             privateKeyProvider,
-            uiConfig: {
-              appName: "CoinRotator",
-              mode: "light",
-              logoLight: "https://coinrotator.app/coin.svg",
-              logoDark: "https://coinrotator.app/coin.svg",
-              defaultLanguage: "en",
-              theme: {
-                primary: "#1890ff",
-              },
-              loginMethodsOrder: ["google", "discord", "twitter", "github"],
-            },
+            // uiConfig: {
+            //   // WHITELABEL FEATURES - Requires paid Web3Auth plan
+            //   // Commented out to use free plan without custom branding
+            //   appName: "CoinRotator",
+            //   mode: "light",
+            //   logoLight: "https://coinrotator.app/coin.svg",
+            //   logoDark: "https://coinrotator.app/coin.svg",
+            //   defaultLanguage: "en",
+            //   theme: {
+            //     primary: "#1890ff",
+            //   },
+            //   loginMethodsOrder: ["google", "discord", "twitter", "github"],
+            // },
           });
 
           console.log('Web3Auth initialized with SAPPHIRE_MAINNET');
@@ -158,12 +160,14 @@ export const Web3AuthProvider = ({ children }) => {
   const login = async () => {
     try {
       console.log('Starting Web3Auth login...');
+      debugger; // Debug point 1: Login start
       
       if (!web3auth) {
         console.error("Web3Auth not initialized");
         throw new Error("Web3Auth not initialized");
       }
       
+      debugger; // Debug point 2: Before connect
       // Add connection timeout for better error handling
       const connectPromise = web3auth.connect();
       const timeoutPromise = new Promise((_, reject) =>
@@ -171,8 +175,10 @@ export const Web3AuthProvider = ({ children }) => {
       );
       
       console.log('Web3Auth instance available, attempting to connect...');
+      debugger; // Debug point 3: During connect
       const web3authProvider = await Promise.race([connectPromise, timeoutPromise]);
       console.log('Web3Auth connect successful, provider:', !!web3authProvider);
+      debugger; // Debug point 4: After connect
       
       setWeb3authProvider(web3authProvider);
       
