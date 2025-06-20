@@ -115,31 +115,35 @@ export const Web3AuthProvider = ({ children }) => {
             clientId,
             web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET, // Use your configured Sapphire Mainnet
             privateKeyProvider,
-            // uiConfig: {
-            //   // WHITELABEL FEATURES - Requires paid Web3Auth plan
-            //   // Commented out to use free plan without custom branding
-            //   appName: "CoinRotator",
-            //   mode: "light",
-            //   logoLight: "https://coinrotator.app/coin.svg",
-            //   logoDark: "https://coinrotator.app/coin.svg",
-            //   defaultLanguage: "en",
-            //   theme: {
-            //     primary: "#1890ff",
-            //   },
-            //   loginMethodsOrder: ["google", "discord", "twitter", "github"],
-            // },
+            uiConfig: {
+              // Only using FREE features - no whitelabel/custom branding
+              defaultLanguage: "en",
+              loginMethodsOrder: ["google", "discord", "twitter", "github"],
+              // REMOVED WHITELABEL FEATURES (require paid plan):
+              // appName: "CoinRotator",
+              // mode: "light",
+              // logoLight: "https://coinrotator.app/coin.svg",
+              // logoDark: "https://coinrotator.app/coin.svg",
+              // theme: { primary: "#1890ff" },
+            },
           });
 
           console.log('Web3Auth initialized with SAPPHIRE_MAINNET');
+          console.log('Client ID:', clientId);
 
           await web3authInstance.init();
+          console.log('Web3Auth init completed successfully');
+          
           setWeb3auth(web3authInstance);
           setWeb3authProvider(web3authInstance.provider);
 
           if (web3authInstance.connected) {
+            console.log('Web3Auth already connected, restoring session...');
             setLoggedIn(true);
             const user = await web3authInstance.getUserInfo();
             setUser(user);
+          } else {
+            console.log('Web3Auth not connected, ready for login');
           }
         }
       } catch (error) {
