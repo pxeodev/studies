@@ -49,6 +49,20 @@ let moduleExports = {
             value: 'public, max-age=9999999999, must-revalidate',
           }
         ],
+      },
+      {
+        // Fix Web3Auth COOP issues for social login
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'unsafe-none',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none',
+          },
+        ],
       }
     ]
   },
