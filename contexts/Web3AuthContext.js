@@ -130,6 +130,9 @@ export const Web3AuthProvider = ({ children }) => {
 
           console.log('Web3Auth initialized with SAPPHIRE_MAINNET');
           console.log('Client ID:', clientId);
+          console.log('Environment variables check:');
+          console.log('NEXT_PUBLIC_WEB3AUTH_CLIENT_ID:', process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID);
+          console.log('NODE_ENV:', process.env.NODE_ENV);
 
           await web3authInstance.init();
           console.log('Web3Auth init completed successfully');
@@ -139,9 +142,22 @@ export const Web3AuthProvider = ({ children }) => {
 
           if (web3authInstance.connected) {
             console.log('Web3Auth already connected, restoring session...');
-            setLoggedIn(true);
-            const user = await web3authInstance.getUserInfo();
-            setUser(user);
+            try {
+              setLoggedIn(true);
+              const user = await web3authInstance.getUserInfo();
+              setUser(user);
+              console.log('Session restored successfully for user:', user?.email);
+            } catch (sessionError) {
+              console.error('Session restoration failed:', sessionError);
+              // Clear any corrupted session
+              try {
+                await web3authInstance.logout();
+              } catch (logoutError) {
+                console.error('Logout during session cleanup failed:', logoutError);
+              }
+              setLoggedIn(false);
+              setUser(null);
+            }
           } else {
             console.log('Web3Auth not connected, ready for login');
           }
@@ -164,6 +180,12 @@ export const Web3AuthProvider = ({ children }) => {
   const login = async () => {
     try {
       console.log('Starting Web3Auth login...');
+      console.log('Web3Auth instance status:', {
+        exists: !!web3auth,
+        connected: web3auth?.connected,
+        status: web3auth?.status,
+        provider: !!web3auth?.provider
+      });
       debugger; // Debug point 1: Login start
       
       if (!web3auth) {
@@ -172,6 +194,13 @@ export const Web3AuthProvider = ({ children }) => {
       }
       
       debugger; // Debug point 2: Before connect
+      
+      // Double-check web3auth instance before connecting
+      if (!web3auth || web3auth === null) {
+        console.error("Web3Auth instance is null before connect");
+        throw new Error("Web3Auth instance is null - please refresh and try again");
+      }
+      
       // Add connection timeout for better error handling
       const connectPromise = web3auth.connect();
       const timeoutPromise = new Promise((_, reject) =>
