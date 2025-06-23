@@ -53,7 +53,7 @@
     "@vercel/otel": "^1.13.0",
     "@web3auth/base": "^9.7.0",
     "@web3auth/ethereum-provider": "^9.7.0",
-    "@web3auth/modal": "^10.0.3",
+    "@web3auth/modal": "^9.7.0",
     "@web3auth/single-factor-auth": "^9.5.0",
     "@web3modal/wagmi": "^4.2.1",
     "ai": "^4.3.5",

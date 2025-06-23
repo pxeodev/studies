@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Web3Auth } from '@web3auth/modal';
 import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from '@web3auth/base';
-import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { ethers } from 'ethers';
 import { useCookies } from 'react-cookie';
 
@@ -15,10 +14,16 @@ export const useWeb3Auth = () => {
   return context;
 };
 
-const clientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
+// Use different client IDs for development vs production
+const isDevelopment = process.env.NODE_ENV === 'development' || (typeof window !== 'undefined' && window.location.hostname === 'localhost');
 
-// Environment detection for better development experience
-const isDevelopment = process.env.NODE_ENV === 'development' || typeof window !== 'undefined' && window.location.hostname === 'localhost';
+// Development client ID (Sapphire Devnet) - works with localhost without domain whitelisting
+const developmentClientId = "BGkgGCsO6v6Uve1k6glWCNKU2ims2t1Ljc9tU9HKUO5me2OTlxXP-bhY9OU7PPuBeT0FQ8qAZPU_ArEoLpSeeEU";
+
+// Production client ID (Sapphire Mainnet)
+const productionClientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
+
+const clientId = isDevelopment ? developmentClientId : productionClientId;
 
 // Multi-chain configuration
 const chainConfigs = {
@@ -107,14 +112,14 @@ export const Web3AuthProvider = ({ children }) => {
       try {
         // Only initialize after client-side hydration
         if (isClient) {
-          const privateKeyProvider = new EthereumPrivateKeyProvider({
-            config: { chainConfig: defaultChainConfig },
-          });
-
           const web3authInstance = new Web3Auth({
             clientId,
-            web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET, // Use your configured Sapphire Mainnet
-            privateKeyProvider,
+            web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
+            chainConfig: defaultChainConfig, // v8 uses chainConfig directly instead of privateKeyProvider
+            // Add additional configuration for better stability
+            enableLogging: true,
+            sessionTime: 86400, // 24 hours
+            storageKey: "local",
             uiConfig: {
               // Only using FREE features - no whitelabel/custom branding
               defaultLanguage: "en",
@@ -128,11 +133,14 @@ export const Web3AuthProvider = ({ children }) => {
             },
           });
 
-          console.log('Web3Auth initialized with SAPPHIRE_MAINNET');
+          const networkName = isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET';
+          console.log(`Web3Auth initialized with ${networkName}`);
           console.log('Client ID:', clientId);
+          console.log('Environment:', isDevelopment ? 'DEVELOPMENT (Devnet)' : 'PRODUCTION (Mainnet)');
           console.log('Environment variables check:');
           console.log('NEXT_PUBLIC_WEB3AUTH_CLIENT_ID:', process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID);
           console.log('NODE_ENV:', process.env.NODE_ENV);
+          console.log('Hostname:', typeof window !== 'undefined' ? window.location.hostname : 'server-side');
 
           await web3authInstance.init();
           console.log('Web3Auth init completed successfully');
@@ -143,20 +151,30 @@ export const Web3AuthProvider = ({ children }) => {
           if (web3authInstance.connected) {
             console.log('Web3Auth already connected, restoring session...');
             try {
-              setLoggedIn(true);
-              const user = await web3authInstance.getUserInfo();
-              setUser(user);
-              console.log('Session restored successfully for user:', user?.email);
+              // Verify instance is still valid before session restoration
+              if (web3authInstance && web3authInstance !== null) {
+                setLoggedIn(true);
+                const user = await web3authInstance.getUserInfo();
+                setUser(user);
+                console.log('Session restored successfully for user:', user?.email);
+              } else {
+                console.error('Web3Auth instance became null during session restoration');
+                setLoggedIn(false);
+                setUser(null);
+              }
             } catch (sessionError) {
               console.error('Session restoration failed:', sessionError);
               // Clear any corrupted session
               try {
-                await web3authInstance.logout();
+                if (web3authInstance && web3authInstance !== null) {
+                  await web3authInstance.logout();
+                }
               } catch (logoutError) {
                 console.error('Logout during session cleanup failed:', logoutError);
               }
               setLoggedIn(false);
               setUser(null);
+              setWeb3authProvider(null);
             }
           } else {
             console.log('Web3Auth not connected, ready for login');
@@ -180,45 +198,73 @@ export const Web3AuthProvider = ({ children }) => {
   const login = async () => {
     try {
       console.log('Starting Web3Auth login...');
+      
+      // Wait for web3auth to be properly initialized with more robust checking
+      let attempts = 0;
+      const maxAttempts = 20; // Increased attempts
+      while ((!web3auth || web3auth === null || (web3auth.status !== 'ready' && web3auth.status !== 'connected')) && attempts < maxAttempts) {
+        console.log(`Waiting for Web3Auth initialization... attempt ${attempts + 1}, status: ${web3auth?.status}`);
+        await new Promise(resolve => setTimeout(resolve, 300)); // Shorter intervals
+        attempts++;
+      }
+      
+      if (!web3auth || web3auth === null) {
+        console.error("Web3Auth not initialized after waiting");
+        throw new Error("Web3Auth not initialized - please refresh the page and try again");
+      }
+      
+      if (web3auth.status !== 'ready' && web3auth.status !== 'connected') {
+        console.error("Web3Auth not ready after waiting, status:", web3auth.status);
+        throw new Error("Web3Auth not ready - please refresh the page and try again");
+      }
+      
       console.log('Web3Auth instance status:', {
         exists: !!web3auth,
         connected: web3auth?.connected,
         status: web3auth?.status,
-        provider: !!web3auth?.provider
+        provider: !!web3auth?.provider,
+        ready: web3auth?.ready
       });
-      debugger; // Debug point 1: Login start
       
-      if (!web3auth) {
-        console.error("Web3Auth not initialized");
-        throw new Error("Web3Auth not initialized");
-      }
+      // Store reference to prevent null during async operations
+      const web3authInstance = web3auth;
       
-      debugger; // Debug point 2: Before connect
-      
-      // Double-check web3auth instance before connecting
-      if (!web3auth || web3auth === null) {
+      if (!web3authInstance || web3authInstance === null) {
         console.error("Web3Auth instance is null before connect");
         throw new Error("Web3Auth instance is null - please refresh and try again");
       }
       
-      // Add connection timeout for better error handling
-      const connectPromise = web3auth.connect();
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Connection timeout - please check your internet connection')), 30000)
-      );
-      
       console.log('Web3Auth instance available, attempting to connect...');
-      debugger; // Debug point 3: During connect
-      const web3authProvider = await Promise.race([connectPromise, timeoutPromise]);
+      console.log('About to call web3authInstance.connect()...');
+      
+      // Add a small delay to ensure Web3Auth is fully ready
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Use the stored reference instead of the state variable
+      const web3authProvider = await web3authInstance.connect();
       console.log('Web3Auth connect successful, provider:', !!web3authProvider);
-      debugger; // Debug point 4: After connect
+      
+      // Verify the instance is still valid after connect
+      if (!web3authInstance || web3authInstance === null) {
+        console.error("Web3Auth instance became null after connect");
+        throw new Error("Web3Auth instance became null during connection");
+      }
       
       setWeb3authProvider(web3authProvider);
       
-      if (web3auth.connected) {
+      if (web3authInstance.connected) {
         console.log('Web3Auth connected, getting user info...');
-        const user = await web3auth.getUserInfo();
-        console.log('User info received:', { name: user?.name, email: user?.email, provider: user?.typeOfLogin });
+        const user = await web3authInstance.getUserInfo();
+        
+        // Log full user object to see available properties in v8
+        console.log('Full user object from Web3Auth v8:', user);
+        console.log('User info received:', {
+          name: user?.name,
+          email: user?.email,
+          provider: user?.typeOfLogin || user?.loginProvider || user?.verifier,
+          verifierId: user?.verifierId,
+          aggregateVerifier: user?.aggregateVerifier
+        });
         
         setUser(user);
         setLoggedIn(true);
@@ -236,7 +282,8 @@ export const Web3AuthProvider = ({ children }) => {
           await saveUserToDatabase({
             ...user,
             walletAddress: address,
-            provider: user.typeOfLogin,
+            provider: user.typeOfLogin || user.loginProvider || user.verifier || 'unknown',
+            web3auth_id: user.verifierId || user.sub || user.id,
           });
           console.log('Database save completed successfully');
         } catch (dbError) {
@@ -256,18 +303,26 @@ export const Web3AuthProvider = ({ children }) => {
       console.error("Error stack:", error.stack);
       
       // Enhanced error messages for better user experience
+      console.log('Full error object:', error);
+      console.log('Error code:', error.code);
+      console.log('Error name:', error.name);
+      console.log('Error type:', typeof error);
+      
       if (error.message?.includes('timeout')) {
         throw new Error('Connection timed out. Please check your internet connection and try again.');
-      } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
-        throw new Error('Network error. Please check your connection and try again.');
-      } else if (error.message?.includes('cors')) {
-        throw new Error('Configuration error. Please contact support.');
-      } else if (error.message?.includes('unauthorized') || error.message?.includes('access_denied')) {
-        throw new Error('Authentication failed. Please try a different login method.');
+      } else if (error.message?.includes('network') || error.message?.includes('fetch') || error.message?.includes('Failed to fetch')) {
+        console.error('Network error details:', error);
+        throw new Error(`Network error: ${error.message}. Please check your internet connection and try again.`);
+      } else if (error.message?.includes('cors') || error.message?.includes('CORS')) {
+        throw new Error('CORS error. Please check your network configuration.');
       } else if (error.message?.includes('popup_blocked')) {
         throw new Error('Popup blocked. Please allow popups for this site and try again.');
       } else if (error.message?.includes('user_cancelled') || error.message?.includes('user_denied')) {
         throw new Error('Login cancelled by user.');
+      } else if (error.message?.includes('loginWithSessionId')) {
+        // Handle the specific null instance error
+        console.error('Web3Auth instance became null during authentication');
+        throw new Error('Authentication failed due to session error. Please refresh the page and try again.');
       }
       
       throw error;
