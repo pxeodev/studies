@@ -206,10 +206,10 @@ export const Web3AuthProvider = ({ children }) => {
       
       // Wait for web3auth to be properly initialized with more robust checking
       let attempts = 0;
-      const maxAttempts = 20; // Increased attempts
+      const maxAttempts = 30; // Increased attempts for modal initialization
       while ((!web3auth || web3auth === null || (web3auth.status !== 'ready' && web3auth.status !== 'connected')) && attempts < maxAttempts) {
         console.log(`Waiting for Web3Auth initialization... attempt ${attempts + 1}, status: ${web3auth?.status}`);
-        await new Promise(resolve => setTimeout(resolve, 300)); // Shorter intervals
+        await new Promise(resolve => setTimeout(resolve, 500)); // Longer intervals for modal init
         attempts++;
       }
       
@@ -221,6 +221,27 @@ export const Web3AuthProvider = ({ children }) => {
       if (web3auth.status !== 'ready' && web3auth.status !== 'connected') {
         console.error("Web3Auth not ready after waiting, status:", web3auth.status);
         throw new Error("Web3Auth not ready - please refresh the page and try again");
+      }
+
+      // Additional check for modal initialization - wait for modal to be ready
+      console.log('Web3Auth status is ready, checking modal initialization...');
+      let modalAttempts = 0;
+      const maxModalAttempts = 10;
+      while (modalAttempts < maxModalAttempts) {
+        try {
+          // Try a small operation to see if modal is ready
+          if (web3auth.status === 'ready' && web3auth.provider === null) {
+            console.log(`Modal initialization check ${modalAttempts + 1}/${maxModalAttempts}...`);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait longer for modal
+            modalAttempts++;
+          } else {
+            break; // Modal seems ready
+          }
+        } catch (error) {
+          console.log(`Modal check attempt ${modalAttempts + 1} failed:`, error.message);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          modalAttempts++;
+        }
       }
       
       console.log('Web3Auth instance status:', {
@@ -251,9 +272,17 @@ export const Web3AuthProvider = ({ children }) => {
       debugger; // Debug point 3: During connect
       console.log('About to call web3authInstance.connect()...');
 
-      // Add a small delay to ensure Web3Auth is fully ready
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Add a longer delay to ensure Web3Auth modal is fully ready
+      console.log('Waiting for modal to be fully initialized...');
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay
 
+      // Final check before connect - ensure we're not in a transitional state
+      if (web3authInstance.status !== 'ready' && web3authInstance.status !== 'connected') {
+        console.error('Web3Auth status changed during initialization:', web3authInstance.status);
+        throw new Error('Web3Auth status became unstable during initialization');
+      }
+
+      console.log('Final status check passed, calling connect...');
       // Use the stored reference instead of the state variable
       const web3authProvider = await web3authInstance.connect();
       console.log('Web3Auth connect successful, provider:', !!web3authProvider);
@@ -325,6 +354,9 @@ export const Web3AuthProvider = ({ children }) => {
       
       if (error.message?.includes('timeout')) {
         throw new Error('Connection timed out. Please check your internet connection and try again.');
+      } else if (error.name === 'WalletInitializationError' || error.message?.includes('Login modal is not initialized') || error.message?.includes('Wallet is not ready yet')) {
+        console.error('Web3Auth modal initialization error:', error);
+        throw new Error('Web3Auth is still initializing. Please wait a moment and try again, or refresh the page if the issue persists.');
       } else if (error.message?.includes('network') || error.message?.includes('fetch') || error.message?.includes('Failed to fetch')) {
         console.error('Network error details:', error);
         throw new Error(`Network error: ${error.message}. Please check your internet connection and try again.`);
