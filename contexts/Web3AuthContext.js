@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Web3Auth } from '@web3auth/modal';
 import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from '@web3auth/base';
+import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { ethers } from 'ethers';
 import { useCookies } from 'react-cookie';
 
@@ -112,10 +113,14 @@ export const Web3AuthProvider = ({ children }) => {
       try {
         // Only initialize after client-side hydration
         if (isClient) {
+          const privateKeyProvider = new EthereumPrivateKeyProvider({
+            config: { chainConfig: defaultChainConfig },
+          });
+
           const web3authInstance = new Web3Auth({
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
-            chainConfig: defaultChainConfig, // v8 uses chainConfig directly instead of privateKeyProvider
+            privateKeyProvider,
             // Add additional configuration for better stability
             enableLogging: true,
             sessionTime: 86400, // 24 hours
@@ -225,24 +230,34 @@ export const Web3AuthProvider = ({ children }) => {
         provider: !!web3auth?.provider,
         ready: web3auth?.ready
       });
-      
+      debugger; // Debug point 1: Login start
+
+      if (!web3auth) {
+        console.error("Web3Auth not initialized");
+        throw new Error("Web3Auth not initialized");
+      }
+
+      debugger; // Debug point 2: Before connect
       // Store reference to prevent null during async operations
       const web3authInstance = web3auth;
-      
+
+      // Double-check web3auth instance before connecting
       if (!web3authInstance || web3authInstance === null) {
         console.error("Web3Auth instance is null before connect");
         throw new Error("Web3Auth instance is null - please refresh and try again");
       }
-      
+
       console.log('Web3Auth instance available, attempting to connect...');
+      debugger; // Debug point 3: During connect
       console.log('About to call web3authInstance.connect()...');
-      
+
       // Add a small delay to ensure Web3Auth is fully ready
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Use the stored reference instead of the state variable
       const web3authProvider = await web3authInstance.connect();
       console.log('Web3Auth connect successful, provider:', !!web3authProvider);
+      debugger; // Debug point 4: After connect
       
       // Verify the instance is still valid after connect
       if (!web3authInstance || web3authInstance === null) {
