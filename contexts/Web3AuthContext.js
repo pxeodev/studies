@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Web3Auth } from '@web3auth/modal';
-import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from '@web3auth/base';
-import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
+import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from '@web3auth/base';
 import { ethers } from 'ethers';
 import { useCookies } from 'react-cookie';
 
@@ -102,6 +101,8 @@ export const Web3AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [currentChain, setCurrentChain] = useState('base'); // Track current chain
+  const [initializationError, setInitializationError] = useState(null);
+  const [initializationComplete, setInitializationComplete] = useState(false);
 
   // Handle client-side hydration
   useEffect(() => {
@@ -111,86 +112,53 @@ export const Web3AuthProvider = ({ children }) => {
   useEffect(() => {
     const init = async () => {
       try {
-        // Only initialize after client-side hydration
         if (isClient) {
-          const privateKeyProvider = new EthereumPrivateKeyProvider({
-            config: { chainConfig: defaultChainConfig },
-          });
+          console.log('Starting Web3Auth initialization...');
+          setInitializationError(null);
 
           const web3authInstance = new Web3Auth({
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
-            privateKeyProvider,
-            // Add additional configuration for better stability
-            enableLogging: true,
-            sessionTime: 86400, // 24 hours
-            storageKey: "local",
+            chainConfig: defaultChainConfig,
             uiConfig: {
-              // Only using FREE features - no whitelabel/custom branding
-              defaultLanguage: "en",
-              loginMethodsOrder: ["google", "discord", "twitter", "github"],
-              // REMOVED WHITELABEL FEATURES (require paid plan):
-              // appName: "CoinRotator",
-              // mode: "light",
-              // logoLight: "https://coinrotator.app/coin.svg",
-              // logoDark: "https://coinrotator.app/coin.svg",
-              // theme: { primary: "#1890ff" },
+              appName: "CoinRotator",
+              mode: "light",
+              uxMode: "popup",
             },
           });
 
-          const networkName = isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET';
-          console.log(`Web3Auth initialized with ${networkName}`);
-          console.log('Client ID:', clientId);
-          console.log('Environment:', isDevelopment ? 'DEVELOPMENT (Devnet)' : 'PRODUCTION (Mainnet)');
-          console.log('Environment variables check:');
-          console.log('NEXT_PUBLIC_WEB3AUTH_CLIENT_ID:', process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID);
-          console.log('NODE_ENV:', process.env.NODE_ENV);
-          console.log('Hostname:', typeof window !== 'undefined' ? window.location.hostname : 'server-side');
-
+          console.log('Initializing Web3Auth modal...');
           await web3authInstance.init();
-          console.log('Web3Auth init completed successfully');
-          
-          setWeb3auth(web3authInstance);
-          setWeb3authProvider(web3authInstance.provider);
 
-          if (web3authInstance.connected) {
-            console.log('Web3Auth already connected, restoring session...');
+          setWeb3auth(web3authInstance);
+
+          if (web3authInstance.connected && web3authInstance.provider) {
+            console.log('Existing session found, restoring...');
             try {
-              // Verify instance is still valid before session restoration
-              if (web3authInstance && web3authInstance !== null) {
-                setLoggedIn(true);
-                const user = await web3authInstance.getUserInfo();
-                setUser(user);
-                console.log('Session restored successfully for user:', user?.email);
-              } else {
-                console.error('Web3Auth instance became null during session restoration');
-                setLoggedIn(false);
-                setUser(null);
-              }
+              setLoggedIn(true);
+              setWeb3authProvider(web3authInstance.provider);
+              const user = await web3authInstance.getUserInfo();
+              setUser(user);
+              console.log('✅ Session restored for user:', user?.email || user?.name);
             } catch (sessionError) {
-              console.error('Session restoration failed:', sessionError);
-              // Clear any corrupted session
-              try {
-                if (web3authInstance && web3authInstance !== null) {
-                  await web3authInstance.logout();
-                }
-              } catch (logoutError) {
-                console.error('Logout during session cleanup failed:', logoutError);
-              }
+              console.warn('⚠️ Session restoration failed, clearing state:', sessionError.message);
+              // Clear any invalid session state
               setLoggedIn(false);
-              setUser(null);
               setWeb3authProvider(null);
+              setUser(null);
+              console.log('No valid session, ready for login');
             }
           } else {
-            console.log('Web3Auth not connected, ready for login');
+            console.log('No existing session, ready for login');
           }
         }
       } catch (error) {
-        console.error("Web3Auth initialization error:", error);
-        console.error("Error details:", error.message, error.stack);
+        console.error("❌ Web3Auth initialization failed:", error);
+        setInitializationError(error.message || 'Failed to initialize Web3Auth');
       } finally {
         if (isClient) {
           setIsLoading(false);
+          setInitializationComplete(true);
         }
       }
     };
@@ -202,176 +170,53 @@ export const Web3AuthProvider = ({ children }) => {
 
   const login = async () => {
     try {
-      console.log('Starting Web3Auth login...');
-      
-      // Wait for web3auth to be properly initialized with more robust checking
-      let attempts = 0;
-      const maxAttempts = 30; // Increased attempts for modal initialization
-      while ((!web3auth || web3auth === null || (web3auth.status !== 'ready' && web3auth.status !== 'connected')) && attempts < maxAttempts) {
-        console.log(`Waiting for Web3Auth initialization... attempt ${attempts + 1}, status: ${web3auth?.status}`);
-        await new Promise(resolve => setTimeout(resolve, 500)); // Longer intervals for modal init
-        attempts++;
-      }
-      
-      if (!web3auth || web3auth === null) {
-        console.error("Web3Auth not initialized after waiting");
-        throw new Error("Web3Auth not initialized - please refresh the page and try again");
-      }
-      
-      if (web3auth.status !== 'ready' && web3auth.status !== 'connected') {
-        console.error("Web3Auth not ready after waiting, status:", web3auth.status);
-        throw new Error("Web3Auth not ready - please refresh the page and try again");
-      }
-
-      // Additional check for modal initialization - wait for modal to be ready
-      console.log('Web3Auth status is ready, checking modal initialization...');
-      let modalAttempts = 0;
-      const maxModalAttempts = 10;
-      while (modalAttempts < maxModalAttempts) {
-        try {
-          // Try a small operation to see if modal is ready
-          if (web3auth.status === 'ready' && web3auth.provider === null) {
-            console.log(`Modal initialization check ${modalAttempts + 1}/${maxModalAttempts}...`);
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait longer for modal
-            modalAttempts++;
-          } else {
-            break; // Modal seems ready
-          }
-        } catch (error) {
-          console.log(`Modal check attempt ${modalAttempts + 1} failed:`, error.message);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          modalAttempts++;
-        }
-      }
-      
-      console.log('Web3Auth instance status:', {
-        exists: !!web3auth,
-        connected: web3auth?.connected,
-        status: web3auth?.status,
-        provider: !!web3auth?.provider,
-        ready: web3auth?.ready
-      });
-      debugger; // Debug point 1: Login start
-
+      console.log('🚀 Starting Web3Auth login...');
       if (!web3auth) {
-        console.error("Web3Auth not initialized");
         throw new Error("Web3Auth not initialized");
       }
 
-      debugger; // Debug point 2: Before connect
-      // Store reference to prevent null during async operations
-      const web3authInstance = web3auth;
-
-      // Double-check web3auth instance before connecting
-      if (!web3authInstance || web3authInstance === null) {
-        console.error("Web3Auth instance is null before connect");
-        throw new Error("Web3Auth instance is null - please refresh and try again");
-      }
-
-      console.log('Web3Auth instance available, attempting to connect...');
-      debugger; // Debug point 3: During connect
-      console.log('About to call web3authInstance.connect()...');
-
-      // Add a longer delay to ensure Web3Auth modal is fully ready
-      console.log('Waiting for modal to be fully initialized...');
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay
-
-      // Final check before connect - ensure we're not in a transitional state
-      if (web3authInstance.status !== 'ready' && web3authInstance.status !== 'connected') {
-        console.error('Web3Auth status changed during initialization:', web3authInstance.status);
-        throw new Error('Web3Auth status became unstable during initialization');
-      }
-
-      console.log('Final status check passed, calling connect...');
-      // Use the stored reference instead of the state variable
-      const web3authProvider = await web3authInstance.connect();
-      console.log('Web3Auth connect successful, provider:', !!web3authProvider);
-      debugger; // Debug point 4: After connect
-      
-      // Verify the instance is still valid after connect
-      if (!web3authInstance || web3authInstance === null) {
-        console.error("Web3Auth instance became null after connect");
-        throw new Error("Web3Auth instance became null during connection");
+      console.log('Connecting to Web3Auth...');
+      const web3authProvider = await web3auth.connect();
+      if (!web3authProvider) {
+        throw new Error('No provider returned from Web3Auth connection');
       }
       
+      console.log('✅ Web3Auth connection successful');
       setWeb3authProvider(web3authProvider);
+      setLoggedIn(true);
       
-      if (web3authInstance.connected) {
-        console.log('Web3Auth connected, getting user info...');
-        const user = await web3authInstance.getUserInfo();
-        
-        // Log full user object to see available properties in v8
-        console.log('Full user object from Web3Auth v8:', user);
-        console.log('User info received:', {
-          name: user?.name,
-          email: user?.email,
-          provider: user?.typeOfLogin || user?.loginProvider || user?.verifier,
-          verifierId: user?.verifierId,
-          aggregateVerifier: user?.aggregateVerifier
+      const user = await web3auth.getUserInfo();
+      setUser(user);
+      console.log('✅ User info retrieved:', { email: user?.email, name: user?.name });
+
+      // Create ethers provider using the Web3Auth provider
+      const ethProvider = new ethers.BrowserProvider(web3authProvider);
+      const signer = await ethProvider.getSigner();
+      const address = await signer.getAddress();
+      console.log('✅ Wallet address retrieved:', address);
+
+      try {
+        await saveUserToDatabase({
+          ...user,
+          walletAddress: address,
+          provider: user.typeOfLogin || 'unknown',
+          web3auth_id: user.verifierId,
         });
-        
-        setUser(user);
-        setLoggedIn(true);
-        
-        // Get wallet address
-        console.log('Getting wallet address...');
-        const ethProvider = new ethers.BrowserProvider(web3authProvider);
-        const signer = await ethProvider.getSigner();
-        const address = await signer.getAddress();
-        console.log('Wallet address obtained:', address);
-        
-        // Try to save user data to database, but don't fail the login if this fails
-        try {
-          console.log('Saving user data to database...');
-          await saveUserToDatabase({
-            ...user,
-            walletAddress: address,
-            provider: user.typeOfLogin || user.loginProvider || user.verifier || 'unknown',
-            web3auth_id: user.verifierId || user.sub || user.id,
-          });
-          console.log('Database save completed successfully');
-        } catch (dbError) {
-          console.error('Database save failed, but login was successful:', dbError);
-          // Don't throw here - the login was successful even if DB save failed
-        }
-        
-        console.log('Login process completed successfully');
-        return { user, address };
-      } else {
-        console.error('Web3Auth connection failed - not connected after connect()');
-        throw new Error('Web3Auth connection failed');
+        console.log('✅ User data saved to database');
+      } catch (dbError) {
+        console.warn('⚠️ Database save failed, but login was successful:', dbError.message);
       }
+
+      console.log('🎉 Login process completed successfully');
+      return { user, address };
+
     } catch (error) {
-      console.error("Login error details:", error);
-      console.error("Error message:", error.message);
-      console.error("Error stack:", error.stack);
-      
-      // Enhanced error messages for better user experience
-      console.log('Full error object:', error);
-      console.log('Error code:', error.code);
-      console.log('Error name:', error.name);
-      console.log('Error type:', typeof error);
-      
-      if (error.message?.includes('timeout')) {
-        throw new Error('Connection timed out. Please check your internet connection and try again.');
-      } else if (error.name === 'WalletInitializationError' || error.message?.includes('Login modal is not initialized') || error.message?.includes('Wallet is not ready yet')) {
-        console.error('Web3Auth modal initialization error:', error);
-        throw new Error('Web3Auth is still initializing. Please wait a moment and try again, or refresh the page if the issue persists.');
-      } else if (error.message?.includes('network') || error.message?.includes('fetch') || error.message?.includes('Failed to fetch')) {
-        console.error('Network error details:', error);
-        throw new Error(`Network error: ${error.message}. Please check your internet connection and try again.`);
-      } else if (error.message?.includes('cors') || error.message?.includes('CORS')) {
-        throw new Error('CORS error. Please check your network configuration.');
-      } else if (error.message?.includes('popup_blocked')) {
-        throw new Error('Popup blocked. Please allow popups for this site and try again.');
-      } else if (error.message?.includes('user_cancelled') || error.message?.includes('user_denied')) {
-        throw new Error('Login cancelled by user.');
-      } else if (error.message?.includes('loginWithSessionId')) {
-        // Handle the specific null instance error
-        console.error('Web3Auth instance became null during authentication');
-        throw new Error('Authentication failed due to session error. Please refresh the page and try again.');
-      }
-      
+      console.error("❌ Login failed:", error);
+      console.error("Error details:", {
+        message: error.message,
+        code: error.code,
+        stack: error.stack
+      });
       throw error;
     }
   };
@@ -390,6 +235,11 @@ export const Web3AuthProvider = ({ children }) => {
       // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
       
+      // Clear localStorage session
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('web3auth_session');
+      }
+      
       console.log('Logout completed successfully');
     } catch (error) {
       console.error("Logout error:", error);
@@ -401,6 +251,11 @@ export const Web3AuthProvider = ({ children }) => {
       
       // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
+      
+      // Clear localStorage session on logout error
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('web3auth_session');
+      }
       
       throw error;
     }
@@ -525,6 +380,8 @@ export const Web3AuthProvider = ({ children }) => {
     loggedIn,
     isLoading: isLoading || !isClient,
     currentChain,
+    initializationComplete,
+    initializationError,
     login,
     logout,
     getAccounts,

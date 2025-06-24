@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 let moduleExports = {
   experimental: {
     swcPlugins: [["next-superjson-plugin", {}]],
-    appDir: true,
+    // `appDir` is enabled by default in Next 13; keep config clean
     instrumentationHook: true,
   },
   lessLoaderOptions: {
