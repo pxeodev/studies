@@ -984,29 +984,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
     console.log('Classifying query using GPT-4.1 Mini:', query);
     console.log('Session history available:', Array.isArray(sessionHistory) ? sessionHistory.length : 0);
 
-    // Fetch available categories to provide to the classifier
-    let availableCategories;
-    let categoriesStringForPrompt;
-
-    try {
-      console.log('Fetching categories for classifier prompt...');
-      const fetchedCategories = await callSocketServer('/api/categories');
-
-      if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
-        availableCategories = fetchedCategories; // Store for potential other uses if needed
-        categoriesStringForPrompt = "System-Recognized Categories (use these exact names for 'getCategoryTrends'):\n" + fetchedCategories.map(cat => `- "${cat}"`).join('\n');
-        console.log('Successfully fetched categories for classifier prompt:', availableCategories);
-      } else {
-        // This case handles if the API returns an empty array or an unexpected non-error response.
-        console.error('API server returned no categories or an invalid category list format. Count:', fetchedCategories?.length);
-        throw new Error('Failed to fetch a valid, non-empty list of categories from the API server.');
-      }
-    } catch (catError) {
-      console.error('Critical error fetching categories for classifier prompt:', catError);
-      // Re-throw to ensure the main process stops if categories are not available.
-      throw new Error(`Critical failure: Unable to fetch categories required for query classification. Original error: ${catError.message}`);
-    }
-
     // Prepare session history info for the classifier
     let sessionHistoryInfo = '';
     if (Array.isArray(sessionHistory) && sessionHistory.length > 0) {
@@ -1047,7 +1024,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
     // Use the API-provided classification prompt content
     const classifierSystemPrompt = classificationPromptContent
       .replace('${query}', query)
-      .replace('${categoriesStringForPrompt}', categoriesStringForPrompt)
       + sessionHistoryInfo; // Append session history info
 
     console.log('Using classification prompt from API server with session history');
