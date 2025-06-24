@@ -1,7 +1,5 @@
 import { pick } from 'lodash';
-import postgres from 'postgres';
-
-const sql = postgres(process.env.DATABASE_URL);
+import sql from '../../lib/database.mjs';
 
 const onSuccess = (res, user) => {
   const relevantUserData = pick(user, [
