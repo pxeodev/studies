@@ -2,10 +2,8 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { vertex } from '@ai-sdk/google-vertex/edge';
 import { openrouter } from '@openrouter/ai-sdk-provider';
 import { openai } from '@ai-sdk/openai';
-import { streamText, tool, jsonSchema, generateObject } from 'ai';
+import { streamText, jsonSchema, generateObject } from 'ai';
 import Exa from "exa-js"
-import { SUPPORTED_INTERVALS } from 'coinrotator-utils/variables.mjs'
-import { z } from 'zod';
 import { Converter } from '@memochou1993/json2markdown';
 import { Langfuse } from "langfuse";
 
@@ -895,35 +893,89 @@ const saveSessionData = async (sessionId, walletAddress, userMessage, classifier
 };
 
 // Query classification schema for GPT-4.1 Mini
-const queryPlanSchema = z.object({
-  queryType: z.enum([
-    'coinInfo',
-    'marketHealth',
-    'categoryInfo',
-    'trendAnalysis',
-    'multipleCoins',
-    'factualQuestion',
-    'other'
-  ]).describe('The type of information the user is requesting'),
-  description: z.string().describe('Brief description of what the user is asking for'),
-  executionPlan: z.array(
-    z.object({
-      stepId: z.string().describe('Unique identifier for this step'),
-      description: z.string().describe('What this step accomplishes'),
-      dependsOn: z.array(z.string()).optional().describe('IDs of steps that must complete before this one can run'),
-      parallelizable: z.boolean().describe('Whether this step can run in parallel with other non-dependent steps'),
-      dynamicFanout: z.boolean().optional().describe('Whether this step should be dynamically applied to each item in a list from a source step'),
-      sourceStep: z.string().optional().describe('ID of the step containing the list to fan out over (required when dynamicFanout is true)'),
-      tools: z.array(
-        z.object({
-          toolName: z.string().describe('Name of the tool to be called'),
-          parameters: z.record(z.any()).describe('Parameters to pass to the tool. Use an empty object {} if no parameters are needed.'),
-          usesResultFrom: z.string().optional().describe('If this tool uses the result from another tool, specify the step ID')
-        })
-      ).describe('Tools to execute in this step')
-    })
-  ).describe('Ordered plan for executing tools, with dependencies and parallel execution information'),
-  additionalContext: z.string().optional().describe('Any additional information that might help in answering the query')
+const queryPlanSchema = jsonSchema({
+  type: 'object',
+  properties: {
+    queryType: {
+      type: 'string',
+      description: 'The type of information the user is requesting',
+      enum: [
+        'coinInfo',
+        'marketHealth',
+        'categoryInfo',
+        'trendAnalysis',
+        'multipleCoins',
+        'factualQuestion',
+        'other'
+      ]
+    },
+    description: {
+      type: 'string',
+      description: 'Brief description of what the user is asking for'
+    },
+    executionPlan: {
+      type: 'array',
+      description: 'Ordered plan for executing tools, with dependencies and parallel execution information',
+      items: {
+        type: 'object',
+        properties: {
+          stepId: {
+            type: 'string',
+            description: 'Unique identifier for this step'
+          },
+          description: {
+            type: 'string',
+            description: 'What this step accomplishes'
+          },
+          dependsOn: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'IDs of steps that must complete before this one can run'
+          },
+          parallelizable: {
+            type: 'boolean',
+            description: 'Whether this step can run in parallel with other non-dependent steps'
+          },
+          dynamicFanout: {
+            type: 'boolean',
+            description: 'Whether this step should be dynamically applied to each item in a list from a source step'
+          },
+          sourceStep: {
+            type: 'string',
+            description: 'ID of the step containing the list to fan out over (required when dynamicFanout is true)'
+          },
+          tools: {
+            type: 'array',
+            description: 'Tools to execute in this step',
+            items: {
+              type: 'object',
+              properties: {
+                toolName: {
+                  type: 'string',
+                  description: 'Name of the tool to be called'
+                },
+                parameters: {
+                  type: 'object',
+                  description: 'Parameters to pass to the tool. Use an empty object {} if no parameters are needed.'
+                },
+                usesResultFrom: {
+                  type: 'string',
+                  description: 'If this tool uses the result from another tool, specify the step ID'
+                }
+              },
+              required: ['toolName', 'parameters']
+            }
+          }
+        },
+        required: ['stepId', 'description', 'parallelizable', 'tools']
+      }
+    },
+    additionalContext: {
+      type: 'string',
+      description: 'Any additional information that might help in answering the query'
+    }
+  },
+  required: ['queryType', 'description', 'executionPlan']
 });
 
 // Function to classify the query using GPT-4.1 Mini
@@ -931,29 +983,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
   try {
     console.log('Classifying query using GPT-4.1 Mini:', query);
     console.log('Session history available:', Array.isArray(sessionHistory) ? sessionHistory.length : 0);
-
-    // Fetch available categories to provide to the classifier
-    let availableCategories;
-    let categoriesStringForPrompt;
-
-    try {
-      console.log('Fetching categories for classifier prompt...');
-      const fetchedCategories = await callSocketServer('/api/categories');
-
-      if (Array.isArray(fetchedCategories) && fetchedCategories.length > 0) {
-        availableCategories = fetchedCategories; // Store for potential other uses if needed
-        categoriesStringForPrompt = "System-Recognized Categories (use these exact names for 'getCategoryTrends'):\n" + fetchedCategories.map(cat => `- "${cat}"`).join('\n');
-        console.log('Successfully fetched categories for classifier prompt:', availableCategories);
-      } else {
-        // This case handles if the API returns an empty array or an unexpected non-error response.
-        console.error('API server returned no categories or an invalid category list format. Count:', fetchedCategories?.length);
-        throw new Error('Failed to fetch a valid, non-empty list of categories from the API server.');
-      }
-    } catch (catError) {
-      console.error('Critical error fetching categories for classifier prompt:', catError);
-      // Re-throw to ensure the main process stops if categories are not available.
-      throw new Error(`Critical failure: Unable to fetch categories required for query classification. Original error: ${catError.message}`);
-    }
 
     // Prepare session history info for the classifier
     let sessionHistoryInfo = '';
@@ -995,7 +1024,6 @@ const classifyQuery = async (query, sessionId, classificationPromptContent, sess
     // Use the API-provided classification prompt content
     const classifierSystemPrompt = classificationPromptContent
       .replace('${query}', query)
-      .replace('${categoriesStringForPrompt}', categoriesStringForPrompt)
       + sessionHistoryInfo; // Append session history info
 
     console.log('Using classification prompt from API server with session history');
