@@ -767,29 +767,27 @@ const toolImplementations = {
     }
   },
 
-  getCategoryTrends: {
+  getCategory: {
     execute: async ({ categoryName, interval = "1d" }) => {
       try {
-        console.log('Tool executed: getCategoryTrends', { categoryName, interval });
+        console.log('Tool executed: getCategory', { categoryName, interval });
 
         // Call the socket server API endpoint for category trends
-        const result = await callSocketServer('/api/category/trends', {
+        const result = await callSocketServer('/api/category', {
           categoryName,
           interval
         });
 
-        console.log('getCategoryTrends - Result:', result);
+        console.log('getCategoryData - Result:', result);
 
         if (result.error) {
           throw(result.error)
         }
 
-        // Format the result, ensuring trends object is present
         const data = {
+          ...result,
           categoryName,
           interval,
-          trends: result.trends || { UP: 0, HODL: 0, DOWN: 0 },
-          coinCount: result.coinCount || 0
         };
 
         return data;
