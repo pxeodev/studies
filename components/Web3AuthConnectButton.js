@@ -353,7 +353,6 @@ const Web3AuthConnectButton = ({ collapsed }) => {
             <h4>
               {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'User'}
             </h4>
-            <p>Wallet Account</p>
           </div>
         </div>
 
