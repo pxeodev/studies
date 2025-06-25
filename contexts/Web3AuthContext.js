@@ -122,20 +122,11 @@ export const Web3AuthProvider = ({ children }) => {
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
             chainConfig: defaultChainConfig,
             uiConfig: {
-              appName: "CoinRotator",
               mode: "light",
-              logoLight: "https://web3auth.io/images/web3authlog.png",
-              logoDark: "https://web3auth.io/images/web3authlogodark.png",
               defaultLanguage: "en",
               loginMethodsOrder: ["google", "facebook", "twitter"],
-              modalZIndex: "99999",
-              // Disable wallet UI completely
-              uxMode: "popup",
-              displayErrorsOnModal: false
-            },
-            // Disable wallet services and UI
-            enableLogging: false,
-            sessionTime: 86400, // 1 day
+              uxMode: "popup"
+            }
           });
 
           console.log('Initializing Web3Auth modal...');
