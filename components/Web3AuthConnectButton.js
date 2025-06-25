@@ -42,20 +42,20 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       }
 
       const result = await login();
-      
+
       // Handle the new return format from login method
       if (result && result.success === false) {
         // Login returned an error object instead of throwing
         const error = result.error;
         const shouldShowError = result.shouldShowError;
-        
+
         console.error('Login failed:', error);
-        
+
         if (shouldShowError) {
           // Enhanced user-friendly error handling for legitimate errors
           let errorMessage = 'Connection failed. Please try again.';
           const errorMsg = error.message?.toLowerCase() || '';
-          
+
           if (errorMsg.includes('popup_blocked') || errorMsg.includes('popup')) {
             errorMessage = 'Popup was blocked. Please allow popups for this site and try again.';
           } else if (error.message?.includes('initializing') || error.message?.includes('not initialized')) {
@@ -71,7 +71,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
           } else if (error.message?.includes('No provider returned')) {
             errorMessage = 'Connection setup failed. Please try again.';
           }
-          
+
           message.error({ content: errorMessage, key: 'login', duration: 4 });
         } else {
           // User cancellation - clear any existing loading messages silently
@@ -110,7 +110,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
   // Fetch user's Telegram data when modal opens
   const fetchUserTelegramData = useCallback(async () => {
     if (!walletAddress) return;
-    
+
     try {
       const response = await fetch('/api/user-telegram-status', {
         method: 'POST',
@@ -119,7 +119,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         },
         body: JSON.stringify({ walletAddress }),
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setUserTelegramData(data);
@@ -134,7 +134,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       message.error('Wallet address not found');
       return;
     }
-    
+
     try {
       // Generate a secure link for Telegram authentication
       const response = await fetch('/api/generate-telegram-link', {
@@ -144,15 +144,15 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         },
         body: JSON.stringify({ walletAddress }),
       });
-      
+
       if (response.ok) {
         const { telegramBotUrl } = await response.json();
-        
+
         // Open Telegram bot in new window
         window.open(telegramBotUrl, '_blank');
-        
+
         message.info('Please complete the verification in Telegram.');
-        
+
       } else {
         throw new Error('Failed to generate Telegram link');
       }
@@ -164,7 +164,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
 
   const handleTelegramUnlink = useCallback(async () => {
     if (!walletAddress) return;
-    
+
     try {
       const response = await fetch('/api/unlink-telegram', {
         method: 'POST',
@@ -173,7 +173,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         },
         body: JSON.stringify({ walletAddress }),
       });
-      
+
       if (response.ok) {
         setUserTelegramData(null);
         message.success('Telegram account unlinked successfully!');
@@ -188,7 +188,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
 
   const copyToClipboard = useCallback(async () => {
     if (!walletAddress) return;
-    
+
     try {
       await navigator.clipboard.writeText(walletAddress);
       setCopied(true);
@@ -220,7 +220,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
   // Get display text for button
   const getDisplayText = useCallback(async () => {
     if (!loggedIn) return 'Connect';
-    
+
     if (walletAddress) {
       if (collapsed) {
         return `0x${walletAddress.slice(2, 4).toUpperCase()}...${walletAddress.slice(-2).toUpperCase()}`;
@@ -228,7 +228,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         return `0x${walletAddress.slice(2, 6).toUpperCase()}...${walletAddress.slice(-4).toUpperCase()}`;
       }
     }
-    
+
     // Fallback to getting address from Web3Auth
     try {
       const accounts = await getAccounts();
@@ -244,7 +244,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     } catch (error) {
       console.error('Error getting accounts:', error);
     }
-    
+
     return user?.name || user?.email || 'Connected';
   }, [loggedIn, walletAddress, collapsed, user, getAccounts]);
 
@@ -262,7 +262,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
   const getButtonText = () => {
     // Don't show text when collapsed
     if (collapsed) return '';
-    
+
     // Don't show "Loading..." text - just show the appropriate button text
     if (initializationError) return 'Error';
     if (!initializationComplete) return hasStoredSession ? 'Reconnect' : 'Connect';
@@ -308,12 +308,20 @@ const Web3AuthConnectButton = ({ collapsed }) => {
             style={{ marginRight: 8 }}
           />
         )}
-        
+
         {/* Only show text when not collapsed */}
         {!collapsed && (
           <span className={connectButtonStyles.text}>{getButtonText()}</span>
         )}
-        
+
+        {
+          collapsed && loggedIn && (
+            <span className={connectButtonStyles.iconWrapper}>
+              <LoginOutlined />
+            </span>
+          )
+        }
+
         {!loggedIn && !initializationError && (
           <span className={connectButtonStyles.iconWrapper}>
             <LoginOutlined />
