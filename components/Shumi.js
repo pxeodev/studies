@@ -191,7 +191,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                  })}>
                    {message.role === 'assistant' && (
                       <div className={shumiStyles.messageRole}>
-                        <img className={shumiStyles.shumiAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi
+                        <img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi
                      </div>
                    )}
                    <div className={shumiStyles.messageContent}>
@@ -204,7 +204,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                {/* Show "Thinking..." indicator */}
                {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
                   <div className={classnames(shumiStyles.messageContainer, shumiStyles.assistantMessage, shumiStyles.thinkingIndicator)}>
-                    <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi</div>
+                    <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
                     <div className={shumiStyles.messageContent}>Thinking...</div>
                   </div>
                ) : null}
@@ -212,7 +212,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                {/* Add error display */}
                {error && (
                   <div className={classnames(shumiStyles.messageContainer, shumiStyles.assistantMessage, shumiStyles.errorMessage)}>
-                    <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi-ai.png" alt="Shumi" width="18" height="18" />Shumi</div>
+                    <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
                     <div className={shumiStyles.messageContent}>
                      <div>Something went wrong. Please try again.</div>
                      <Button type="primary" onClick={() => reload()} className={shumiStyles.retryButton}>
