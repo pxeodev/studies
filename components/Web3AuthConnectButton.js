@@ -3,6 +3,7 @@ import { Button, Modal, Space, Avatar, message, Divider, Card, Typography, Switc
 import { UserOutlined, LogoutOutlined, LinkOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
+import { useCookies } from 'react-cookie';
 import connectButtonStyles from '../styles/connectButton.module.less';
 
 const { Text, Title } = Typography;
@@ -10,9 +11,8 @@ const { Text, Title } = Typography;
 const Web3AuthConnectButton = ({ collapsed }) => {
   const [accountModalVisible, setAccountModalVisible] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [telegramLinking, setTelegramLinking] = useState(false);
-  const [telegramLinkingTimeout, setTelegramLinkingTimeout] = useState(null);
   const [userTelegramData, setUserTelegramData] = useState(null);
+  const [cookies] = useCookies(['telegram_verified']);
   const {
     user,
     loggedIn,
@@ -131,14 +131,6 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       message.error('Wallet address not found');
       return;
     }
-
-    // Clear any existing timeout
-    if (telegramLinkingTimeout) {
-      clearTimeout(telegramLinkingTimeout);
-      setTelegramLinkingTimeout(null);
-    }
-
-    setTelegramLinking(true);
     
     try {
       // Generate a secure link for Telegram authentication
@@ -156,48 +148,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         // Open Telegram bot in new window
         window.open(telegramBotUrl, '_blank');
         
-        message.info('Please complete the verification in Telegram. This will timeout in 2 minutes.');
-        
-        let pollCount = 0;
-        const maxPolls = 40; // 2 minutes (40 * 3 seconds)
-        
-        // Poll for verification completion
-        const pollInterval = setInterval(async () => {
-          pollCount++;
-          
-          try {
-            await fetchUserTelegramData();
-            
-            // Check if linking was successful
-            if (userTelegramData?.telegramId) {
-              clearInterval(pollInterval);
-              message.success('Telegram account linked successfully!');
-              setTelegramLinking(false);
-              setTelegramLinkingTimeout(null);
-              return;
-            }
-          } catch (error) {
-            console.error('Error polling Telegram status:', error);
-          }
-          
-          // Timeout after 2 minutes
-          if (pollCount >= maxPolls) {
-            clearInterval(pollInterval);
-            setTelegramLinking(false);
-            setTelegramLinkingTimeout(null);
-            message.warning('Telegram linking timed out. Please try again if you want to link your account.');
-          }
-        }, 3000);
-        
-        // Set timeout reference for cleanup
-        const timeoutId = setTimeout(() => {
-          clearInterval(pollInterval);
-          setTelegramLinking(false);
-          setTelegramLinkingTimeout(null);
-          message.warning('Telegram linking timed out. Please try again if you want to link your account.');
-        }, 120000); // 2 minutes
-        
-        setTelegramLinkingTimeout(timeoutId);
+        message.info('Please complete the verification in Telegram.');
         
       } else {
         throw new Error('Failed to generate Telegram link');
@@ -205,10 +156,8 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     } catch (error) {
       console.error('Error linking Telegram:', error);
       message.error('Failed to link Telegram account. Please try again.');
-      setTelegramLinking(false);
-      setTelegramLinkingTimeout(null);
     }
-  }, [walletAddress, fetchUserTelegramData, userTelegramData, telegramLinkingTimeout]);
+  }, [walletAddress]);
 
   const handleTelegramUnlink = useCallback(async () => {
     if (!walletAddress) return;
@@ -241,23 +190,15 @@ const Web3AuthConnectButton = ({ collapsed }) => {
 
   const closeAccountModal = useCallback(() => {
     setAccountModalVisible(false);
-    
-    // Clean up any ongoing Telegram linking process
-    if (telegramLinkingTimeout) {
-      clearTimeout(telegramLinkingTimeout);
-      setTelegramLinkingTimeout(null);
-    }
-    setTelegramLinking(false);
-  }, [telegramLinkingTimeout]);
+  }, []);
 
-  // Cleanup on component unmount
+  // Watch for telegram verification cookie changes
   useEffect(() => {
-    return () => {
-      if (telegramLinkingTimeout) {
-        clearTimeout(telegramLinkingTimeout);
-      }
-    };
-  }, [telegramLinkingTimeout]);
+    if (cookies.telegram_verified && accountModalVisible) {
+      // Refresh telegram data when cookie indicates verification
+      fetchUserTelegramData();
+    }
+  }, [cookies.telegram_verified, accountModalVisible, fetchUserTelegramData]);
 
   // Get display text for button
   const getDisplayText = useCallback(async () => {
@@ -335,6 +276,11 @@ const Web3AuthConnectButton = ({ collapsed }) => {
           [connectButtonStyles.connected]: loggedIn,
           [connectButtonStyles.collapsed]: collapsed,
         })}
+        style={{
+          // Ensure button is visible on mobile
+          minWidth: collapsed ? '28px' : '210px',
+          display: 'flex !important'
+        }}
       >
         {loggedIn && user?.profileImage && !collapsed && (
           <Avatar
@@ -349,7 +295,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
           <span className={connectButtonStyles.text}>{getButtonText()}</span>
         )}
         
-        {!loggedIn && !initializationError && !collapsed && (
+        {!loggedIn && !initializationError && (
           <span className={connectButtonStyles.iconWrapper}>
             <svg width={24} height={24} viewBox="0 0 24 24" fill="currentColor">
               <path d="M12.2278 1.92038c-3.57423-.00937-6.71954 1.83985-8.5172 4.6336-.07968.12422.00938.28828.15703.28828h1.64766c.1125 0 .21797-.04922.28828-.13594.16406-.19922.33985-.3914.525-.57422.76406-.76172 1.65235-1.36172 2.64141-1.7789 1.02187-.43125 2.10942-.65157 3.23202-.65157 1.1227 0 2.2102.21797 3.232.65157.9891.41718 1.8774 1.01718 2.6414 1.7789.7641.76172 1.3618 1.65 1.7813 2.63672.4336 1.02188.6516 2.10708.6516 3.22968 0 1.1227-.2204 2.2078-.6516 3.2297-.4172.9867-1.0172 1.875-1.7813 2.6367-.764.7617-1.6523 1.3617-2.6414 1.7789a8.26698 8.26698 0 0 1-3.232.6516c-1.1226 0-2.21015-.2203-3.23202-.6516a8.2911 8.2911 0 0 1-2.64141-1.7789c-.18515-.1851-.35859-.3773-.525-.5742-.07031-.0867-.17812-.1359-.28828-.1359H3.86763c-.14765 0-.23906.164-.15703.2882 1.79532 2.7868 4.92657 4.6336 8.4914 4.6336 5.5359 0 10.0313-4.4554 10.0875-9.975.0563-5.60856-4.4461-10.16715-10.0617-10.18122ZM9.25873 14.6235v-1.7812H1.89935c-.10312 0-.1875-.0844-.1875-.1875v-1.3125c0-.1032.08438-.1875.1875-.1875h7.35938V9.37351c0-.15703.18281-.24609.30469-.14766l3.32578 2.62505a.1871.1871 0 0 1 .0719.1476c0 .0285-.0064.0566-.0189.0821a.18865.18865 0 0 1-.053.0656l-3.32578 2.625c-.12188.0961-.30469.0093-.30469-.1477Z" fill="currentColor"/>
@@ -440,9 +386,13 @@ const Web3AuthConnectButton = ({ collapsed }) => {
             <Card size="small" style={{ background: '#fafafa' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#0088cc">
-                    <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.568 8.16c-.169 1.858-.896 6.728-.896 6.728-.896 6.728-1.268 7.928-1.268 7.928-.16.906-.576 1.056-.576 1.056s-.736.064-1.536-.576c-.8-.64-2.048-1.536-2.048-1.536s-1.28-.896-1.28-1.92c0-1.024.64-1.536.64-1.536s4.224-3.776 4.352-4.032c.128-.256-.128-.384-.128-.384-.192-.128-4.608 2.944-4.608 2.944s-.512.32-1.472.064c-.96-.256-2.048-.64-2.048-.64s-1.216-.768.832-1.536c2.048-.768 4.608-1.664 6.784-2.432 2.176-.768 2.624-.64 2.624-.64s.96-.192.96.576z"/>
-                  </svg>
+                  <img
+                    src="/telegram.svg"
+                    alt="Telegram"
+                    width="20"
+                    height="20"
+                    style={{ flexShrink: 0 }}
+                  />
                   <Text strong style={{ color: '#0088cc', fontSize: '14px' }}>
                     Telegram Integration
                   </Text>
@@ -487,36 +437,15 @@ const Web3AuthConnectButton = ({ collapsed }) => {
                     <Text type="secondary" style={{ fontSize: '13px', display: 'block', marginBottom: '16px', lineHeight: '1.4' }}>
                       Link your Telegram account to receive notifications and access exclusive features.
                     </Text>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      <Button
-                        type="primary"
-                        icon={<LinkOutlined />}
-                        loading={telegramLinking}
-                        onClick={handleTelegramLink}
-                        size="small"
-                        disabled={telegramLinking}
-                        style={{ borderRadius: '6px' }}
-                      >
-                        {telegramLinking ? 'Linking...' : 'Link Telegram'}
-                      </Button>
-                      {telegramLinking && (
-                        <Button
-                          type="default"
-                          size="small"
-                          onClick={() => {
-                            if (telegramLinkingTimeout) {
-                              clearTimeout(telegramLinkingTimeout);
-                              setTelegramLinkingTimeout(null);
-                            }
-                            setTelegramLinking(false);
-                            message.info('Telegram linking cancelled.');
-                          }}
-                          style={{ borderRadius: '6px' }}
-                        >
-                          Cancel
-                        </Button>
-                      )}
-                    </div>
+                    <Button
+                      type="primary"
+                      icon={<LinkOutlined />}
+                      onClick={handleTelegramLink}
+                      size="small"
+                      style={{ borderRadius: '6px' }}
+                    >
+                      Link Telegram
+                    </Button>
                   </div>
                 )}
               </div>

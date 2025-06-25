@@ -9,6 +9,8 @@
   padding: 0 !important;
   background-color: var(--cr-primary-bg) !important;
   border: 1px solid var(--cr-secondary-border) !important;
+  position: relative !important;
+  z-index: 1 !important;
 
   &.collapsed {
     width: 28px !important;
@@ -16,6 +18,7 @@
     font-size: 12px;
     padding: 4px !important;
     padding-left: 3px !important;
+    min-width: 28px !important;
 
     .iconWrapper {
       border-left: 0 !important;
@@ -26,6 +29,46 @@
     &.connected {
       width: unset !important;
       padding-left: 4px !important;
+      min-width: unset !important;
+    }
+  }
+
+  // Mobile specific styles
+  @media (max-width: 768px) {
+    &.collapsed {
+      width: 32px !important;
+      height: 32px !important;
+      min-width: 32px !important;
+      
+      .iconWrapper {
+        width: 24px !important;
+        height: 24px !important;
+      }
+    }
+    
+    &:not(.collapsed) {
+      width: 180px !important;
+      min-width: 180px !important;
+    }
+  }
+
+  // Ensure visibility on all screen sizes
+  @media (max-width: 480px) {
+    &.collapsed {
+      width: 36px !important;
+      height: 36px !important;
+      min-width: 36px !important;
+      
+      .iconWrapper {
+        width: 28px !important;
+        height: 28px !important;
+      }
+    }
+    
+    &:not(.collapsed) {
+      width: 160px !important;
+      min-width: 160px !important;
+      font-size: 14px !important;
     }
   }
 }
@@ -66,6 +109,17 @@
   width: 40px !important;
   transition: all 0.3s;
   border-left: 1px solid var(--cr-secondary-border);
+  
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    height: 32px;
+    width: 32px !important;
+  }
+  
+  @media (max-width: 480px) {
+    height: 36px;
+    width: 36px !important;
+  }
 }
 
 .collapsedSpinner {
@@ -125,6 +179,25 @@
   @media (max-width: @screen-md) {
     .modalButtons {
       flex-direction: column;
+    }
+  }
+  
+  // Mobile modal adjustments
+  @media (max-width: 768px) {
+    :global(.ant-modal) {
+      margin: 16px !important;
+      max-width: calc(100vw - 32px) !important;
+    }
+    
+    :global(.ant-modal-content) {
+      border-radius: 12px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    :global(.ant-modal) {
+      margin: 8px !important;
+      max-width: calc(100vw - 16px) !important;
     }
   }
 }
