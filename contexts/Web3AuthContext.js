@@ -124,7 +124,7 @@ export const Web3AuthProvider = ({ children }) => {
             uiConfig: {
               mode: "light",
               defaultLanguage: "en",
-              loginMethodsOrder: ["google", "facebook", "twitter"],
+              loginMethodsOrder: ["google", "facebook", "twitter", "discord", "apple", "github", "reddit", "farcaster", "wechat"],
               uxMode: "popup"
             }
           });
