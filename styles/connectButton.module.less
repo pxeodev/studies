@@ -33,6 +33,14 @@
     }
   }
 
+  // Tablet and smaller desktop styles
+  @media (max-width: 1024px) {
+    &:not(.collapsed) {
+      width: 180px !important;
+      min-width: 180px !important;
+    }
+  }
+
   // Mobile specific styles
   @media (max-width: 768px) {
     &.collapsed {
@@ -47,12 +55,12 @@
     }
     
     &:not(.collapsed) {
-      width: 180px !important;
-      min-width: 180px !important;
+      width: 170px !important;
+      min-width: 170px !important;
     }
   }
 
-  // Ensure visibility on all screen sizes
+  // Small mobile styles
   @media (max-width: 480px) {
     &.collapsed {
       width: 36px !important;
@@ -65,6 +73,15 @@
       }
     }
     
+    &:not(.collapsed) {
+      width: 160px !important;
+      min-width: 160px !important;
+      font-size: 14px !important;
+    }
+  }
+
+  // Ensure button is always visible, even on very small desktop windows
+  @media (max-width: 900px) and (min-width: 769px) {
     &:not(.collapsed) {
       width: 160px !important;
       min-width: 160px !important;
@@ -213,14 +230,14 @@
     }
     
     .userEmail {
-      color: #666;
+      color: var(--cr-secondary-text);
       font-size: 14px;
       margin-bottom: 8px;
     }
   }
   
   .walletAddress {
-    background: #f5f5f5;
+    background: var(--cr-secondary-bg);
     padding: 12px;
     border-radius: 6px;
     font-size: 12px;
@@ -241,11 +258,11 @@
       margin-bottom: 12px;
       
       &.connected {
-        color: #52c41a;
+        color: var(--cr-success-color);
       }
       
       &.disconnected {
-        color: #faad14;
+        color: var(--cr-warning-color);
       }
     }
     
@@ -254,13 +271,13 @@
       
       .username {
         font-weight: bold;
-        color: #1890ff;
+        color: var(--cr-primary-color);
       }
     }
     
     .telegramDescription {
       font-size: 12px;
-      color: #666;
+      color: var(--cr-secondary-text);
       margin-bottom: 12px;
       line-height: 1.4;
     }
@@ -273,11 +290,12 @@
   }
   
   .accountCard {
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--cr-secondary-border);
     border-radius: 8px;
+    background: var(--cr-card-bg);
     
     &:hover {
-      border-color: #d9d9d9;
+      border-color: var(--cr-primary-border);
     }
   }
   
