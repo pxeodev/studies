@@ -131,16 +131,8 @@ export const Web3AuthProvider = ({ children }) => {
               mode: "light",
               defaultLanguage: "en",
               loginMethodsOrder: ["google", "twitter", "discord", "apple", "github", "reddit", "farcaster", "wechat"],
-              uxMode: isMobile ? "redirect" : "popup", // Use redirect for mobile, popup for desktop
-              // Hide the modal by default - authentication will happen silently
-              modalZIndex: -1,
-              appLogo: "https://web3auth.io/images/web3auth-logo.svg",
-              theme: {
-                primary: "#768729"
-              }
-            },
-            enableLogging: isDevelopment,
-            storageKey: "local"
+              uxMode: isMobile ? "redirect" : "popup" // Use redirect for mobile, popup for desktop
+            }
           });
 
           console.log('Initializing Web3Auth modal...');
@@ -214,15 +206,12 @@ export const Web3AuthProvider = ({ children }) => {
     }
   }, [isClient]);
 
-  const login = async (loginProvider = null, silent = false) => {
+  const login = async () => {
     try {
       console.log('🚀 Starting Web3Auth login...');
       if (!web3auth) {
         throw new Error("Web3Auth not initialized");
       }
-
-      // Detect if mobile device for specific handling
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
       // Check if we have a stored session that can be auto-connected
       if (hasStoredSession && !loggedIn) {
@@ -231,52 +220,7 @@ export const Web3AuthProvider = ({ children }) => {
         console.log('Connecting to Web3Auth...');
       }
       
-      // For silent authentication, try to connect without showing UI
-      if (silent && hasStoredSession) {
-        try {
-          const web3authProvider = await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
-            loginProvider: loginProvider || "google",
-            mfaLevel: "none",
-            extraLoginOptions: {
-              login_hint: "",
-              domain: window.location.origin
-            }
-          });
-          
-          if (web3authProvider) {
-            console.log('✅ Silent authentication successful');
-            setWeb3authProvider(web3authProvider);
-            setLoggedIn(true);
-            setHasStoredSession(true);
-            
-            const user = await web3auth.getUserInfo();
-            setUser(user);
-            
-            const ethProvider = new ethers.BrowserProvider(web3authProvider);
-            const signer = await ethProvider.getSigner();
-            const address = await signer.getAddress();
-            
-            return { user, address };
-          }
-        } catch (silentError) {
-          console.log('Silent authentication failed, falling back to normal flow');
-        }
-      }
-      
-      // For mobile devices, use specific login options
-      const connectOptions = isMobile ? {
-        loginProvider: loginProvider || undefined,
-        extraLoginOptions: {
-          domain: window.location.origin,
-          verifierIdField: "sub",
-          connection: "",
-          isVerifierIdCaseSensitive: false
-        }
-      } : {
-        loginProvider: loginProvider || undefined
-      };
-
-      const web3authProvider = await web3auth.connect(connectOptions);
+      const web3authProvider = await web3auth.connect();
       if (!web3authProvider) {
         throw new Error('No provider returned from Web3Auth connection');
       }
