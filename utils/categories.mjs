@@ -136,9 +136,9 @@ export async function createCategoriesPromptInLangfuse(options = {}) {
     }
   }
 
-  // Only include categories with total volume >= 100000
+  // Only include categories with total volume >= 500000
   let filteredCategories = Array.from(categoryVolumeMap.entries())
-    .filter(([_, volume]) => volume >= 100000)
+    .filter(([_, volume]) => volume >= 500000)
     .map(([category]) => category)
     .sort((a, b) => a.localeCompare(b));
 
