@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Button, Modal, Space, Avatar, message, Divider, Card, Typography, Switch } from 'antd';
 import { UserOutlined, LogoutOutlined, LinkOutlined, CheckCircleOutlined, ExclamationCircleOutlined, LoginOutlined, CopyOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
@@ -217,8 +217,8 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     }
   }, [cookies.telegram_verified, accountModalVisible, fetchUserTelegramData]);
 
-  // Get display text for button
-  const getDisplayText = useCallback(async () => {
+  // Get display text for button - using useMemo to prevent hydration issues
+  const displayText = useMemo(() => {
     if (!loggedIn) return 'Connect';
 
     if (walletAddress) {
@@ -229,35 +229,25 @@ const Web3AuthConnectButton = ({ collapsed }) => {
       }
     }
 
-    // Fallback to getting address from Web3Auth
-    try {
-      const accounts = await getAccounts();
-      if (accounts.length > 0) {
-        const address = accounts[0];
-        setWalletAddress(address);
-        if (collapsed) {
-          return `0x${address.slice(2, 4).toUpperCase()}...${address.slice(-2).toUpperCase()}`;
-        } else {
-          return `0x${address.slice(2, 6).toUpperCase()}...${address.slice(-4).toUpperCase()}`;
-        }
-      }
-    } catch (error) {
-      console.error('Error getting accounts:', error);
-    }
-
     return user?.name || user?.email || 'Connected';
-  }, [loggedIn, walletAddress, collapsed, user, getAccounts]);
+  }, [loggedIn, walletAddress, collapsed, user]);
 
-  const [displayText, setDisplayText] = useState('Connect');
-
-  // Update display text when state changes
+  // Fetch wallet address when logged in but address is missing
   useEffect(() => {
-    if (loggedIn) {
-      getDisplayText().then(setDisplayText);
-    } else {
-      setDisplayText('Connect');
+    if (loggedIn && !walletAddress) {
+      const fetchAddress = async () => {
+        try {
+          const accounts = await getAccounts();
+          if (accounts.length > 0) {
+            setWalletAddress(accounts[0]);
+          }
+        } catch (error) {
+          console.error('Error getting accounts:', error);
+        }
+      };
+      fetchAddress();
     }
-  }, [loggedIn, walletAddress, collapsed, getDisplayText]);
+  }, [loggedIn, walletAddress, getAccounts]);
 
   const getButtonText = () => {
     // Don't show text when collapsed
@@ -266,7 +256,8 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     // Show "Connect" immediately, even during initialization
     if (initializationError) return 'Error';
     if (!initializationComplete) return 'Connect'; // Always show "Connect" during init
-    if (hasStoredSession && !loggedIn) return 'Reconnect';
+    // Remove the "Reconnect" text - always show "Connect" when not logged in
+    if (!loggedIn) return 'Connect';
     return displayText;
   };
 

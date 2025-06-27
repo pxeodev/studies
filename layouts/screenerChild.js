@@ -8,7 +8,6 @@ import { KeyPassProvider } from '../context/KeyPassContext'
 import Header from '../components/Header'
 import Banner from '../components/Banner'
 import Sider from '../components/Sider'
-import MobileConnectButton from '../components/MobileConnectButton'
 import useDarkMode from "../hooks/usedarkmode"
 import useBreakPoint from "../hooks/useBreakPoint"
 import baseStyles from "../styles/base.module.less"
@@ -54,7 +53,6 @@ export default function ScreenerLayout({ page, pageProps }) {
               {page}
             </Layout>
           </Layout>
-          <MobileConnectButton />
         </KeyPassProvider>
       </Web3AuthProvider>
     </>
