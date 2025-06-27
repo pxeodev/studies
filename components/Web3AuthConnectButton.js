@@ -263,9 +263,9 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     // Don't show text when collapsed
     if (collapsed) return '';
 
-    // Show "Connect" immediately, even during initialization
+    // Don't show "Loading..." text - just show the appropriate button text
     if (initializationError) return 'Error';
-    if (!initializationComplete) return 'Connect'; // Always show "Connect" during init
+    if (!initializationComplete) return hasStoredSession ? 'Reconnect' : 'Connect';
     if (hasStoredSession && !loggedIn) return 'Reconnect';
     return displayText;
   };
@@ -289,7 +289,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
         onClick={handleButtonClick}
         loading={false}
         danger={!!initializationError}
-        disabled={!!initializationError} // Only disable on actual errors, not during loading
+        disabled={isLoading || !!initializationError}
         className={classnames(connectButtonStyles.button, {
           [connectButtonStyles.connected]: loggedIn,
           [connectButtonStyles.collapsed]: collapsed,

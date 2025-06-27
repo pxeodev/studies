@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import InitialLoadingScreen from '../components/InitialLoadingScreen'
 
 import ScreenerLayout from "../layouts/screener"
 import "../styles/ant.less"
@@ -10,10 +9,5 @@ export default function MyApp({ Component, pageProps }) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ScreenerLayout
 
-  return (
-    <>
-      <InitialLoadingScreen />
-      {getLayout(<Component {...pageProps} />, pageProps)}
-    </>
-  )
+  return getLayout(<Component {...pageProps} />, pageProps)
 }

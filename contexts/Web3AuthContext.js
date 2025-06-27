@@ -116,13 +116,7 @@ export const Web3AuthProvider = ({ children }) => {
         if (isClient) {
           console.log('Starting Web3Auth initialization...');
           setInitializationError(null);
-          
-          // Set loading to false immediately so button is clickable
-          setIsLoading(false);
 
-          // Detect if mobile device
-          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-          
           const web3authInstance = new Web3Auth({
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
@@ -131,7 +125,7 @@ export const Web3AuthProvider = ({ children }) => {
               mode: "light",
               defaultLanguage: "en",
               loginMethodsOrder: ["google", "twitter", "discord", "apple", "github", "reddit", "farcaster", "wechat"],
-              uxMode: isMobile ? "redirect" : "popup" // Use redirect for mobile, popup for desktop
+              uxMode: "popup"
             }
           });
 
@@ -193,9 +187,9 @@ export const Web3AuthProvider = ({ children }) => {
       } catch (error) {
         console.error("❌ Web3Auth initialization failed:", error);
         setInitializationError(error.message || 'Failed to initialize Web3Auth');
-        setIsLoading(false); // Ensure loading is false even on error
       } finally {
         if (isClient) {
+          setIsLoading(false);
           setInitializationComplete(true);
         }
       }
