@@ -38,7 +38,17 @@ const Header = ({ categories, screens, topCategories }) => {
 
   return (
     <AntHeader className={headerStyles.header}>
-      <Menu mode="horizontal" items={menuItems} style={{ minWidth: '280px', display: 'flex' }} disabledOverflow />
+      <Menu
+        mode="horizontal"
+        items={menuItems}
+        style={{
+          minWidth: '280px',
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-between'
+        }}
+        disabledOverflow
+      />
     </AntHeader>
   );
 }

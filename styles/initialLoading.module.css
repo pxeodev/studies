@@ -1,0 +1,180 @@
+.loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #1a1a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.chatInterface {
+  width: 500px;
+  max-width: 90vw;
+  background: #16213e;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  border: 1px solid #2a3f5f;
+}
+
+.chatHeader {
+  background: #0f3460;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #2a3f5f;
+}
+
+.headerLogo {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+
+.mushroomIcon {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.4));
+}
+
+.loadingContent {
+  padding: 40px 30px;
+  text-align: center;
+  color: white;
+}
+
+.mainTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #8892b0;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+.loadingDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+.loadingDots span {
+  width: 8px;
+  height: 8px;
+  background-color: #64ffda;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.loadingDots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loadingDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loadingDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.statusMessage {
+  font-size: 14px;
+  color: #64ffda;
+  margin-bottom: 20px;
+  min-height: 20px;
+  animation: fadeInOut 1.2s infinite;
+}
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background: #2a3f5f;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #64ffda, #4fc3f7);
+  border-radius: 2px;
+  animation: progressAnimation 5s ease-in-out;
+  width: 0%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes progressAnimation {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chatInterface {
+    width: 95vw;
+    margin: 0 10px;
+  }
+  
+  .loadingContent {
+    padding: 30px 20px;
+  }
+  
+  .mainTitle {
+    font-size: 28px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+  }
+  
+  .statusMessage {
+    font-size: 12px;
+  }
+}
