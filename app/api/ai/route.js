@@ -1518,6 +1518,7 @@ export async function POST(req) {
             finishReason: result.finishReason,
             walletAddress,
             userMessage: userMessage?.content,
+            queryPlan,
             messageCount: messages.length,
             sessionId,
             timestamp: new Date().toISOString()
@@ -1545,6 +1546,7 @@ export async function POST(req) {
           errorType: 'StreamError',
           walletAddress,
           userMessage: userMessage?.content,
+          queryPlan,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -1569,6 +1571,7 @@ export async function POST(req) {
           errorType: 'StreamResponseError',
           walletAddress,
           userMessage: userMessage?.content,
+          queryPlan,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -1596,6 +1599,7 @@ export async function POST(req) {
     await reportErrorToServer(e, {
       walletAddress,
       userMessage: userMessage?.content,
+      queryPlan,
       messageCount: messages.length,
       sessionId,
       url: req.url,
