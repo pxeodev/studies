@@ -122,8 +122,8 @@ export async function createCategoriesPromptInLangfuse(options = {}) {
 
   // Fetch all categories, coingeckoCategories, and volume from the Coin table
   let coins = await sql`SELECT "categories", "coingeckoCategories", "volume" FROM "Coin"`;
-  // Map: category name -> total volume
-  const categoryVolumeMap = new Map();
+  // Map: category name -> { totalVolume, coinCount }
+  const categoryStatsMap = new Map();
 
   for (const coin of coins) {
     coin.categories ||= [];
@@ -131,14 +131,17 @@ export async function createCategoriesPromptInLangfuse(options = {}) {
     const allCategories = [...coin.categories, ...coin.coingeckoCategories];
     for (const category of allCategories) {
       if (!category) continue;
-      const prev = categoryVolumeMap.get(category) || 0;
-      categoryVolumeMap.set(category, prev + Number(coin.volume || 0));
+
+      const currentStats = categoryStatsMap.get(category) || { totalVolume: 0, coinCount: 0 };
+      currentStats.totalVolume += Number(coin.volume || 0);
+      currentStats.coinCount += 1;
+      categoryStatsMap.set(category, currentStats);
     }
   }
 
-  // Only include categories with total volume >= 500000
-  let filteredCategories = Array.from(categoryVolumeMap.entries())
-    .filter(([_, volume]) => volume >= 500000)
+  // Only include categories with total volume >= 1,000,000 and coin count >= 3
+  let filteredCategories = Array.from(categoryStatsMap.entries())
+    .filter(([_, stats]) => stats.totalVolume >= 1000000 && stats.coinCount >= 3)
     .map(([category]) => category)
     .sort((a, b) => a.localeCompare(b));
 
