@@ -1409,6 +1409,8 @@ export async function POST(req) {
       contextInformation += `Current relevant coin ID for context: ${data.coinId}\n`;
     }
 
+    contextInformation += `## Data fetching result ##\n`;
+
     // Add each step's results to the context (using all execution results)
     for (const step of allExecutionResults) {
       contextInformation += `## Step: ${step.description} (${step.stepId}) ##\n`;
