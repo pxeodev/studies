@@ -126,9 +126,6 @@ export const Web3AuthProvider = ({ children }) => {
             chainConfig: defaultChainConfig,
             enableLogging: isDevelopment,
             storageKey: "local",
-            modalConfig: {
-              loginMethodsOrder: ['google','twitter','discord','farcaster','apple']
-            }
           });
 
           console.log('Initializing Web3Auth modal...');
