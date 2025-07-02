@@ -244,49 +244,6 @@ const toolImplementations = {
       }
     }
   },
-  exaSearch: {
-    execute: async ({ query, useAutoprompt = false, numResults = 5, startPublishedDate, endPublishedDate, includeDomains, excludeDomains }) => {
-      console.log('Tool executed: exaSearch', {
-        query,
-        useAutoprompt,
-        numResults,
-        startPublishedDate,
-        endPublishedDate,
-        includeDomains,
-        excludeDomains
-      });
-
-      // Initialize the Exa client with API key from environment
-      const exa = new Exa(process.env.EXA_API_KEY);
-
-      // Build search options
-      const searchOptions = {
-        numResults,
-        useAutoprompt
-      };
-
-      // Add optional parameters if provided
-      if (startPublishedDate) searchOptions.startPublishedDate = startPublishedDate;
-      if (endPublishedDate) searchOptions.endPublishedDate = endPublishedDate;
-      if (includeDomains && includeDomains.length > 0) searchOptions.includeDomains = includeDomains;
-      if (excludeDomains && excludeDomains.length > 0) searchOptions.excludeDomains = excludeDomains;
-
-      // Execute the search
-      const searchResult = await withTimeout(exa.search(query, searchOptions));
-      console.log('exaSearch - Result count:', searchResult.results?.length || 0);
-
-      // Format the results for display
-      const formattedResults = searchResult.results?.map(result => ({
-        title: result.title,
-        url: result.url,
-        publishedDate: result.publishedDate,
-        score: result.score,
-        snippet: result.text || result.extract
-      })) || [];
-
-      return { query, results: formattedResults };
-    }
-  },
 
   exaSearchWithContents: {
     execute: async ({ query, useAutoprompt = false, numResults = 3, includeDomains, retrieveText = true, retrieveHighlights = false, maxCharacters = 5000 }) => {
@@ -401,59 +358,6 @@ const toolImplementations = {
       }
 
       return formattedResult;
-    }
-  },
-
-  exaFindSimilar: {
-    execute: async ({ url, numResults = 5, excludeSourceDomain = true, retrieveText = false }) => {
-      console.log('Tool executed: exaFindSimilar', {
-          url,
-          numResults,
-          excludeSourceDomain,
-          retrieveText
-        });
-
-        // Initialize the Exa client with API key from environment
-        const exa = new Exa(process.env.EXA_API_KEY);
-
-        // Set options
-        const options = {
-          numResults,
-          excludeSourceDomain
-        };
-
-        let result;
-        // Decide whether to get contents along with similar URLs
-        if (retrieveText) {
-          result = await withTimeout(exa.findSimilarAndContents(url, {
-            ...options,
-            text: true
-          }));
-        } else {
-          result = await withTimeout(exa.findSimilar(url, options));
-        }
-
-        console.log('exaFindSimilar - Result count:', result.results?.length || 0);
-
-        // Format the results
-        const formattedResults = result.results?.map(result => {
-          const formattedResult = {
-            title: result.title,
-            url: result.url,
-            publishedDate: result.publishedDate,
-            score: result.score,
-            snippet: result.extract || result.text?.substring(0, 200) + '...'
-          };
-
-          // Add full text if requested and available
-          if (retrieveText && result.text) {
-            formattedResult.content = result.text;
-          }
-
-          return formattedResult;
-        }) || [];
-
-        return { sourceUrl: url, similarResults: formattedResults };
     }
   },
 
