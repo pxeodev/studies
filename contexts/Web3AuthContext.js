@@ -126,6 +126,40 @@ export const Web3AuthProvider = ({ children }) => {
             chainConfig: defaultChainConfig,
             enableLogging: isDevelopment,
             storageKey: "local",
+            uiConfig: {
+              // Only show these login methods
+              loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
+              // Hide specific login methods
+              hideExternalWallets: true,
+              // Customize appearance
+              theme: {
+                primary: "#0364ff",
+              },
+              // Customize login modal
+              appLogo: "https://coinrotator.io/logo.png", // Your app logo
+              modalZIndex: "99999",
+              // Mobile-specific settings for better Twitter auth
+              ...(isMobile && {
+                displayErrorsOnModal: true,
+                logLevel: "debug",
+                // Twitter mobile auth improvements
+                socialLoginConfig: {
+                  twitter: {
+                    name: "twitter",
+                    typeOfLogin: "twitter",
+                    description: "Login with Twitter",
+                    clientId: "", // Will use Web3Auth's default
+                    logoHover: "",
+                    logoLight: "",
+                    logoDark: "",
+                    mainOption: true,
+                    showOnModal: true,
+                    showOnDesktop: true,
+                    showOnMobile: true
+                  }
+                }
+              })
+            },
           });
 
           console.log('Initializing Web3Auth modal...');
@@ -216,14 +250,27 @@ export const Web3AuthProvider = ({ children }) => {
         console.log('Connecting to Web3Auth...');
       }
 
-      // For mobile devices, use specific login options
+      // For mobile devices, use specific login options with improved Twitter handling
       const connectOptions = isMobile ? {
         loginProvider: loginProvider || undefined,
+        mfaLevel: "none", // Disable MFA for smoother mobile experience
         extraLoginOptions: {
           domain: window.location.origin,
           verifierIdField: "sub",
           connection: loginProvider || "",
-          isVerifierIdCaseSensitive: false
+          isVerifierIdCaseSensitive: false,
+          // Fix for Twitter showing raw HTML on mobile
+          display: loginProvider === "twitter" ? "page" : "popup",
+          prompt: "login",
+          // Twitter-specific mobile fixes
+          ...(loginProvider === "twitter" && {
+            response_type: "code",
+            scope: "openid profile email",
+            redirect_uri: window.location.origin,
+            // Force mobile-friendly Twitter auth
+            mobile: "true",
+            ui_locales: "en"
+          })
         }
       } : {
         loginProvider: loginProvider || undefined
