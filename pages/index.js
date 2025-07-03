@@ -12,7 +12,7 @@ import globalData from '../lib/globalData';
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 
 import indexStyles from '../styles/index.module.less'
 

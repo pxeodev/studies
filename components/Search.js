@@ -1,4 +1,4 @@
-import { Modal, Input } from 'antd'
+import { Modal, Input, Tag } from 'antd'
 import { SearchOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router'
@@ -6,16 +6,21 @@ import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
-
 import searchStyles from '../styles/search.module.less'
+import Shumi from './Shumi'
 
 const Search = ({ categories, collapsed }) => {
   const [coins, setCoins] = useState([])
+  const [tab, setTab] = useState('search');
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [query, setQuery] = useState(searchValue);
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
+  const [modifierKey, setModifierKey] = useState('⌘')
+
+  const router = useRouter()
+
   useEffect(() => {
     const fetchCoins = async () => {
       const res = await fetch('/api/search')
@@ -24,38 +29,73 @@ const Search = ({ categories, collapsed }) => {
       setFuseCoinIndex(Fuse.createIndex(['name', 'symbol', 'contract'], coins))
     }
     fetchCoins()
-    const eventRef = document.addEventListener('keydown', (e) => {
-      if (e.key === '/') {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
         setSearchModalVisible(true)
       }
-    })
+      if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+         e.preventDefault();
+        setSearchModalVisible(true)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
     return () => {
-      document.removeEventListener('keydown', eventRef)
+      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
+
   useEffect(() => {
     if (searchModalVisible) {
-      setTimeout(
-        () => searchInputRef.current.focus(),
-        100
-      )
+      if (tab === 'search' && searchInputRef.current) {
+        setTimeout(() => searchInputRef.current.focus(), 100)
+      }
     }
-  }, [searchModalVisible])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchModalVisible, tab])
+
   const setQueryDebounced = useCallback(debounce(setQuery, 250), []);
+
   const openSearchModal = useCallback(() => {
     setSearchModalVisible(true)
   }, []);
+
   const onSearchValueChange = useCallback((e) => {
     setSearchValue(e.target.value);
     setQueryDebounced(e.target.value.trim().toLowerCase());
   }, [setSearchValue, setQueryDebounced]);
+
   const closeModal = useCallback(() => {
     setSearchModalVisible(false)
     setSearchValue('')
     setQuery('')
-  }, []);
-  const router = useRouter()
+    setTab('search');
+
+    if (window.location.hash === '#shumi') {
+      const pathWithoutHash = router.asPath.split('#')[0];
+      router.push(pathWithoutHash, undefined, { shallow: true });
+    }
+  }, [router]);
+
+  useEffect(() => {
+    const path = router.asPath
+    const afterHash = path.split('#')[1]
+    if (afterHash === 'shumi' && !searchModalVisible) {
+      setSearchModalVisible(true)
+      setTab('ai')
+    } else if (afterHash !== 'shumi' && searchModalVisible && tab === 'ai') {
+    }
+  }, [router.asPath, searchModalVisible, tab])
+
+  useEffect(() => {
+    // Determine the modifier key based on the operating system
+    // Use navigator.userAgent as navigator.platform is deprecated and userAgentData has limited support
+    const userAgent = navigator?.userAgent?.toLowerCase() || '';
+    if (userAgent.includes('win') || userAgent.includes('linux')) {
+      setModifierKey('Ctrl+')
+    } else if (userAgent.includes('mac')) {
+      setModifierKey('⌘')
+    } // Keep default '⌘' if detection fails or for other OS
+  }, [])
 
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
@@ -64,6 +104,11 @@ const Search = ({ categories, collapsed }) => {
         <SearchOutlined className={searchStyles.placeholderMagnifier} />
         <span className={searchStyles.placeholderText}>Search</span>
       </>}
+      suffix={
+        <Tag className={searchStyles.shortcutTag}>
+          {modifierKey}K
+        </Tag>
+      }
       disabled
     />
   </div>
@@ -97,7 +142,7 @@ const Search = ({ categories, collapsed }) => {
       <>
         <div className={searchStyles.optionTitle}>Coins</div>
         {
-          filteredCoins.map((coin) => {
+          filteredCoins.slice(0, 10).map((coin) => {
             return (
               <div
                 className={classnames(searchStyles.option, searchStyles.coinOption)}
@@ -137,14 +182,14 @@ const Search = ({ categories, collapsed }) => {
       <>
         <div className={searchStyles.optionTitle}>Categories</div>
         {
-          filteredCategories.map((category) => {
+          filteredCategories.slice(0, 5).map((category) => {
             return (
               <div
                 className={classnames(searchStyles.option, searchStyles.categoryOption)}
                 key={category}
                 onClick={() => {
                   closeModal();
-                  const categorySlug = slugify(category)
+                  const categorySlug = slugify(category, { lower: true, strict: true })
                   router.push(`/category/${categorySlug}`)}
                 }>
                 <span className={searchStyles.categoryOption}>{category}</span>
@@ -156,46 +201,80 @@ const Search = ({ categories, collapsed }) => {
     )
   }
 
-  let results = <>
+  let searchResultsContent = <>
     {coinOptions}
     {categoryOptions}
   </>
   if (query === '') {
-    results = <div className={searchStyles.empty}>
+    searchResultsContent = <div className={searchStyles.empty}>
       Search for&nbsp;
       <span className={searchStyles.noQueryHighlight}>Coin name, Category, Contract Address</span>
     </div>
   } else if (filteredCoins.length === 0 && filteredCategories.length === 0) {
-    results = <div className={searchStyles.empty}>
-      No results.
+    searchResultsContent = <div className={searchStyles.empty}>
+      No results found for "{query}".
     </div>
   }
 
+  const content = tab === 'search' ? (
+    <>
+      <Input
+        className={classnames(searchStyles.searchSelect, searchStyles.classicSearchSelect)}
+        allowClear
+        prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
+        value={searchValue}
+        onChange={onSearchValueChange}
+        ref={searchInputRef}
+        spellCheck="false"
+        placeholder="Search coins, categories..."
+      />
+      <div className={searchStyles.searchResults}>
+        {searchResultsContent}
+      </div>
+    </>
+  ) : (
+    <Shumi isActive={tab === 'ai'} />
+  );
+
   return (
-    <div>
+    <>
       {searchTrigger}
       <Modal
         open={searchModalVisible}
-        onCancel={() => setSearchModalVisible(false)}
+        onCancel={closeModal}
+        afterClose={() => {
+          if (window.location.hash === '#shumi') {
+            const pathWithoutHash = router.asPath.split('#')[0];
+            if (router.asPath !== pathWithoutHash) {
+                router.push(pathWithoutHash, undefined, { shallow: true });
+            }
+          }
+          setTab('search');
+        }}
         className={searchStyles.modal}
         footer={null}
         closeIcon={null}
       >
-        <Input
-          className={searchStyles.searchSelect}
-          allowClear
-          prefix={<SearchOutlined className={searchStyles.placeholderMagnifier}/>}
-          value={searchValue}
-          onChange={onSearchValueChange}
-          ref={searchInputRef}
-          spellCheck="false"
-        />
-        <div className={searchStyles.searchResults}>
-          {results}
+        <div className={searchStyles.tabs}>
+          <div
+            className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'search'})}
+            onClick={() => setTab('search')}
+          >
+            Search
+          </div>
+          <div
+            className={classnames(searchStyles.tab, {[searchStyles.active]: tab === 'ai'})}
+            onClick={() => setTab('ai')}
+          >
+            <img src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi
+          </div>
+        </div>
+        <div className={searchStyles.contentWrapper}>
+            {content}
         </div>
       </Modal>
-    </div>
+    </>
   );
-}
+};
 
 export default Search

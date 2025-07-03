@@ -4,7 +4,8 @@ import {
   MenuFoldOutlined,
 } from '@ant-design/icons'
 import classnames from 'classnames'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import Logo from './Logo'
 import Search from './Search'
@@ -12,15 +13,20 @@ import Funders from './Funders'
 import Socials from './Socials'
 import NavigationMenu from './NavigationMenu'
 import DarkModeSwitch from './DarkModeSwitch'
-import ConnectButton from './ConnectButton.js'
+import Web3AuthConnectButton from './Web3AuthConnectButton.js'
 import { DarkModeContext } from '../layouts/screener.js'
 import styles from "../styles/sider.module.less"
 
 const Sider = ({ topCategories, categories }) => {
+  const { pathname } = useRouter()
   const [darkMode, setDarkMode] = useContext(DarkModeContext)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(pathname === '/shumi')
   const [collapsing, setCollapsing] = useState(false)
   let Trigger = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+
+  useEffect(() => {
+    setCollapsed(pathname === '/shumi')
+  }, [pathname])
 
   return (
     <Layout.Sider
@@ -47,7 +53,7 @@ const Sider = ({ topCategories, categories }) => {
         { collapsed ? <></> : <DarkModeSwitch darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Space>
       <Space size={12} className={styles.connect}>
-        { collapsed ? <></> : <ConnectButton /> }
+        <Web3AuthConnectButton collapsed={collapsed} />
       </Space>
       <NavigationMenu topCategories={topCategories} collapsed={collapsed} />
       <div className={styles.footer}>

@@ -17,7 +17,7 @@ import PageHeader from '../components/PageHeader'
 import useIsHoverable from '../hooks/useIsHoverable'
 import useVirtualTable from '../hooks/useVirtualTable'
 import { dailySuperSuperTrend, dailySuperSuperTrendStreak, weeklySuperSuperTrend, marketCap } from '../utils/sharedColumns'
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 import useSocketStore from '../hooks/useSocketStore'
 
 import tableStyles from '../styles/table.module.less'

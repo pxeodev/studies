@@ -23,7 +23,7 @@ import { getCategories } from '../../utils/categories.mjs'
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../../utils/minifyImageURL';
 import useSocketStore from '../../hooks/useSocketStore';
-import strapi from '../../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 
 export default function Category({ coinsData, hiddenCoins, appData, exchangeData, category, currentUrl }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)

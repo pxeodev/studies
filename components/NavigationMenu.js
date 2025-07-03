@@ -24,17 +24,21 @@ import slugify from 'slugify'
 import styles from "../styles/navigationmenu.module.less"
 import { currentNarratives } from 'coinrotator-utils/variables.mjs'
 import useBreakPoint from '../hooks/useBreakPoint'
-import useKeyPass from '../hooks/useKeyPass'
 
-const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected }) => {
+const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }) => {
   const router = useRouter()
   const screens = useBreakPoint()
-  let hasKeyPass = useKeyPass()
+
   let menuItems = [
     {
       label: 'Screener Tools',
       key: 'screenertools',
       children: [
+        {
+          label: <Link href="/shumi" prefetch={false}>Shumi AI</Link>,
+          key: '/shumi',
+          icon: <img src="/shumi.png" alt="Shumi" width="22" height="22" />
+        },
         {
           label: <Link href="/" prefetch={false}>Crypto Trends</Link>,
           key: '/',
@@ -238,6 +242,11 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
   if (collapsed) {
     menuItems = [
       {
+        label: 'Shumi AI',
+        icon: <Link href="/shumi" prefetch={false}><img src="/shumi.png" alt="Shumi" width="22" height="22" /></Link>,
+        key: '/shumi',
+      },
+      {
         label: 'Watchlist',
         icon: <Link href="/watchlist" prefetch={false}><StarFilled className={styles.sunsetOrange} /></Link>,
         key: '/watchlist',
@@ -309,10 +318,19 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
     }
   }
 
-  let props = {}
+  let props = {
+    openKeys: ['screenertools']
+  }
   if (!screens.lg) {
     props.openKeys = ['keypass', 'screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about']
   }
+
+  const handleMenuClick = (e) => {
+    if (onMenuItemSelected) {
+      onMenuItemSelected(e);
+    }
+  }
+
   return (
     <Menu
       mode="inline"
@@ -320,7 +338,6 @@ const NavigationMenu = ({ collapsed = false , topCategories, onMenuItemSelected 
       items={menuItems}
       className={styles.menu}
       selectedKeys={[selectedKey]}
-      onClick={onMenuItemSelected}
       {...props}
     />
   );

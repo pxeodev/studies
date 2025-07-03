@@ -2,12 +2,8 @@ import Head from 'next/head'
 import { Layout } from 'antd'
 import { createContext, useEffect } from "react"
 import { Client } from "react-hydration-provider";
-import { createWeb3Modal } from '@web3modal/wagmi/react'
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
-
-import { base } from 'wagmi/chains'
+import { Web3AuthProvider } from '../contexts/Web3AuthContext'
+import { KeyPassProvider } from '../context/KeyPassContext'
 
 import Header from '../components/Header'
 import Banner from '../components/Banner'
@@ -16,61 +12,27 @@ import useDarkMode from "../hooks/usedarkmode"
 import useBreakPoint from "../hooks/useBreakPoint"
 import baseStyles from "../styles/base.module.less"
 import SharedLayout from "../layouts/shared"
-import variableStyles from '../styles/variables.module.less'
 
 export const DarkModeContext = createContext(null);
 export const NotificationContext = createContext(null);
 
-const projectId = '6789ab4356c448d7b46d927fc92f6a96'
-let url = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL
-if (process.env.VERCEL_ENV === 'preview') {
-  url = `https://${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}`
-}
-const metadata = {
-  name: 'CoinRotator',
-  url,
-  icons: ['https://coinrotator.app/coin.svg']
-}
-const chains = [base]
-const config = defaultWagmiConfig({
-  chains,
-  projectId,
-  metadata,
-  ssr: true
-})
-const queryClient = new QueryClient()
-
 export default function ScreenerLayout({ page, pageProps }) {
   const darkMode = useDarkMode();
   const isDark = darkMode[0]
-  createWeb3Modal({
-    defaultChain: base,
-    wagmiConfig: config,
-    projectId,
-    featuredWalletIds: [
-      'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
-      '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
-      '18388be9ac2d02726dbac9777c96efaac06d744b2f6d580fccdd4127a6d01fd1'
-    ],
-    enableAnalytics: true,
-    themeMode: isDark ? 'dark' : 'light',
-    themeVariables: {
-      '--w3m-font-family': variableStyles.fontFamily,
-    },
-  })
+  
   useEffect(() => {
     const html = document.querySelector('html');
     html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
   }, [isDark])
+  
   const screens = useBreakPoint();
-
-  const {topCategories,categories} = pageProps.appData
+  const {topCategories, categories} = pageProps.appData
 
   return (
     <>
-      <WagmiProvider config={config}>
-        <Banner />
-        <QueryClientProvider client={queryClient}>
+      <Web3AuthProvider>
+        <KeyPassProvider>
+          <Banner />
           <Layout className={baseStyles.outerLayout}>
             <SharedLayout pageProps={pageProps} />
             <Head>
@@ -91,8 +53,8 @@ export default function ScreenerLayout({ page, pageProps }) {
               {page}
             </Layout>
           </Layout>
-        </QueryClientProvider>
-      </WagmiProvider>
+        </KeyPassProvider>
+      </Web3AuthProvider>
     </>
   )
 }

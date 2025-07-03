@@ -12,7 +12,7 @@ import convertTickersToExchanges from '../utils/convertTickersToExchanges';
 import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import useTableFilters from '../hooks/useTableFilters';
 import sql from "../lib/database.mjs";
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import pick from 'lodash/pick';
 

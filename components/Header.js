@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd'
 import Logo from './Logo'
 import Search from './Search'
 import NavigationModal from './NavigationModal'
-import ConnectButton from './ConnectButton'
+import Web3AuthConnectButton from './Web3AuthConnectButton'
 
 import headerStyles from '../styles/header.module.less'
 
@@ -22,7 +22,7 @@ const Header = ({ categories, screens, topCategories }) => {
     {
       key: 'connect',
       className: headerStyles.connect,
-      label: <ConnectButton collapsed />
+      label: <Web3AuthConnectButton collapsed />
     },
     {
       key: 'search',

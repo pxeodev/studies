@@ -9,7 +9,7 @@ import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import MarketHealthChart from '../components/MarketHealthChart';
 import useBreakPoint from '../hooks/useBreakPoint';
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 import useSocketStore from '../hooks/useSocketStore';
 
 import styles from "../styles/market-health.module.less"

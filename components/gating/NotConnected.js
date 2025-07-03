@@ -1,14 +1,16 @@
-import ConnectButton from '../ConnectButton'
+import { useHydrated } from 'react-hydration-provider';
+import Web3AuthConnectButton from '../Web3AuthConnectButton'
 
 import gatingStyles from '../../styles/gating.module.less'
 
-const NotConnected = () => {
+const NotConnected = ({feature = 'Advanced Data'}) => {
+  const hydrated = useHydrated();
+
   return (
     <div>
-      <span className={gatingStyles.text}>Please connect your wallet to access CoinRotator’s Advanced Data. Don’t have the CoinRotator Key Pass?&nbsp;</span>
-      <a className={gatingStyles.link} href="https://coinrotator.medium.com/coinrotator-key-pass-guide-to-unlocking-v3-c126a79ead6c" target="_blank" rel="noopener noreferrer">Learn how to get it!</a>
+      <span className={gatingStyles.text}>Please connect your wallet to access {feature}.</span>
       <div className={gatingStyles.buttonWrapper}>
-        <ConnectButton />
+        {hydrated && <Web3AuthConnectButton />}
       </div>
     </div>
   )

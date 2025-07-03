@@ -52,7 +52,7 @@ body {
   color: var(--cr-primary-text);
 }
 
-.ant-menu-item a:hover, .ant-menu-item-selected a {
+.ant-menu-item a:hover, .ant-menu-item-selected a, .ant-menu-item span:hover, .ant-menu-item-selected span {
   color: var(--cr-primary-text);
 }
 
@@ -170,8 +170,8 @@ body {
 }
 
 .ant-input-affix-wrapper {
-  border: 1px solid var(--cr-secondary-border) !important;
   color: var(--cr-primary-text);
+  border-color: var(--cr-secondary-border) !important;
   border-radius: 2px;
   background-color: var(--cr-tertiary-bg);
 
@@ -185,6 +185,11 @@ body {
   &:hover {
     border-color: var(--cr-primary-color);
   }
+}
+
+.anticon {
+  justify-content: center;
+  align-items: center;
 }
 
 .ant-input-clear-icon {

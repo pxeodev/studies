@@ -14,7 +14,7 @@ import chunkedPromiseAll from 'coinrotator-utils/chunkedPromiseAll.mjs'
 import { getImageSlug } from '../utils/minifyImageURL';
 import useTableFilters from '../hooks/useTableFilters';
 import sql from "../lib/database.mjs";
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 
 export default function KucoinScreener({ coinsData, hiddenCoins, appData, exchangeData, pageData }) {
   const [formState, formDispatch, defaultFormState, portfolioInputValue, setPortfolioInputValue] = useTableFilters(coinsData)

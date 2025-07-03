@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import strapi from '../utils/strapi.js';
+import strapi from 'coinrotator-utils/strapi.mjs'
 import { gql } from '@urql/core'
 
 dotenv.config();

@@ -1,0 +1,220 @@
+@import './base.module.less';
+@import './variables.module.less';
+
+// Wrapper for the entire AI tab content
+.aiTab {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Prevent overflow within the tab itself
+  background-color: var(--cr-secondary-bg); // Consistent background
+  height: 100%; // Default height for desktop
+
+  @media (max-width: @screen-lg) {
+    height: calc(100vh - 52px); // Apply calc height only on smaller screens
+  }
+}
+
+.gatingContainer {
+  padding: 16px;
+  flex: 1; // Allow gating message to take space if chat isn't shown
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+// Styles for the main chat/conversation area
+.conversationArea {
+  flex: 1; // Allow conversation area to grow and fill space
+  overflow-y: auto; // Enable vertical scrolling for messages
+  padding: 16px; // Reverted to match original .searchResults
+  scroll-behavior: smooth;
+  background-color: var(--cr-secondary-bg) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; // Spacing between messages/suggestions
+
+  // Inherit markdown styles
+  &:extend(.markdown all);
+}
+
+// Disable anchoring for all descendants within the scroll area
+.conversationArea * {
+  overflow-anchor: none;
+}
+
+// Enable anchoring only for the specific anchor element
+#shumi-anchor {
+  overflow-anchor: auto;
+  height: 1px; // Must have size to work
+}
+
+// Styles for AI suggestions when chat history is empty
+.suggestions {
+  background-color: var(--cr-secondary-bg) !important; // Match chat area background
+}
+
+.suggestionTitle {
+  background-color: var(--cr-secondary-bg) !important; // Match chat area background
+  color: #8C8C8C !important;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.suggestionButton {
+  padding: 12px;
+  border: 1px solid var(--cr-primary-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #8C8C8C !important; // Use primary text color
+  background-color: var(--cr-primary-bg); // Use primary background
+  transition: background-color 0.2s;
+  text-align: left;
+
+  &:hover {
+    background-color: var(--cr-quintiary-bg);
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
+}
+
+// Styles for conversation messages
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%; // Reverted to original value
+  border-radius: 4px; // Reverted to original
+  background-color: var(--cr-primary-bg) !important;
+  color: var(--cr-secondary-text) !important;
+}
+
+.messageContent {
+  padding: 12px; // Reverted to original value
+  border-radius: 4px; // Reverted to match container
+  word-wrap: break-word; // Ensure long words break (legacy)
+  overflow-wrap: break-word; // Standard property for breaking long words
+  width: fit-content;
+  min-width: 0; // Helps prevent overflow in flex contexts
+
+  p {
+    margin-bottom: 4px; // Reduced margin-bottom from 8px to 4px
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.userMessage {
+  align-self: flex-end;
+  .messageContent {
+    border: 1px solid var(--cr-primary-border);
+  }
+}
+
+.assistantMessage {
+  align-self: flex-start;
+  .messageContent {
+    background-color: var(--cr-secondary-bg); // Use secondary background (matching original search results)
+    border: 0 !important; // Remove border added during refactor
+  }
+}
+
+.messageRole {
+  font-weight: bold;
+  padding-bottom: 4px;
+  font-size: 14px;
+  background-color: var(--cr-secondary-bg) !important;
+  color: var(--cr-secondary-text);
+  display: flex;
+  align-items: center;
+
+  .shumiAiIcon {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    vertical-align: middle; // Explicitly set vertical align
+  }
+}
+
+
+// Styles for the input area at the bottom
+.inputArea {
+  border-top: 1px solid var(--cr-primary-border);
+  flex-shrink: 0; // Prevent input area from shrinking
+  background-color: var(--cr-primary-bg);
+}
+
+.aiInput {
+  width: 100%;
+  height: 48px !important;
+  font-size: 16px;
+  line-height: 24px;
+  border: 0 !important;
+  background-color: var(--cr-primary-bg) !important;
+  box-shadow: none !important;
+  padding-left: 11px !important; // Align with search input padding
+
+  input {
+    background-color: var(--cr-primary-bg) !important;
+  }
+
+  // Style for the input prefix (icon + tag)
+  :global(.ant-input-prefix) {
+      display: flex;
+      align-items: center;
+      margin-right: 4px; // Space between prefix and text
+  }
+
+  .placeholderMagnifier {
+    color: #8C8C8C !important;
+    display: flex !important; // Ensure icon aligns
+    align-items: center !important;
+  }
+
+  // Style for the input suffix (buttons)
+  :global(.ant-input-suffix) {
+      display: flex;
+      align-items: center;
+  }
+}
+
+
+.stopButton {
+  // Inherit button styles, add specific overrides if needed
+}
+
+.retryButton {
+  margin-top: 8px;
+}
+
+.clearChatButton {
+  // Specific styles if needed
+  min-width: 32px; // Ensure button has a minimum width for icon only
+  padding: 0 8px; // Adjust padding for icon button
+}
+
+.coinTag {
+  // margin-left: 8px; // Handled by prefix gap
+  // margin-right: 4px; // Handled by prefix gap
+  // Inherit Ant Design tag styles
+}
+
+// Thinking indicator styles
+.thinkingIndicator {
+    .messageContent {
+        color: var(--cr-secondary-text);
+    }
+}
+
+// Error message styles
+.errorMessage {
+    // Uses .assistantMessage styles by default
+    .messageContent {
+        color: var(--cr-error-color); // Use error color
+    }
+}

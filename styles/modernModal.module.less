@@ -1,0 +1,368 @@
+// Modern Modal Styles
+.modernModal {
+  .ant-modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: var(--cr-card-bg);
+    overflow: hidden;
+  }
+
+  .ant-modal-header {
+    border-bottom: 1px solid var(--cr-secondary-border);
+    padding: 20px 24px 16px;
+    background: var(--cr-card-bg);
+    
+    .ant-modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--cr-primary-text);
+      margin: 0;
+    }
+  }
+
+  .ant-modal-close {
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--cr-secondary-bg);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--cr-hover-bg);
+    }
+
+    .ant-modal-close-x {
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      line-height: 16px;
+      color: var(--cr-secondary-text);
+    }
+  }
+
+  .ant-modal-body {
+    padding: 24px;
+    background: var(--cr-card-bg);
+  }
+}
+
+// Profile Section
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  text-align: center;
+
+  .profileAvatar {
+    margin-bottom: 16px;
+    
+    .ant-avatar {
+      background: var(--cr-secondary-bg);
+      color: var(--cr-secondary-text);
+    }
+  }
+
+  .profileInfo {
+    h4 {
+      font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--cr-primary-text);
+      margin: 0 0 4px 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--cr-secondary-text);
+      margin: 0;
+    }
+  }
+}
+
+// Section Headers
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    background: #3b82f6;
+    border-radius: 50%;
+  }
+
+  h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cr-primary-text);
+    margin: 0;
+  }
+}
+
+// Wallet Address Section
+.walletSection {
+  margin-bottom: 24px;
+
+  .walletAddressContainer {
+    position: relative;
+    background: var(--cr-secondary-bg);
+    border: 1px solid var(--cr-secondary-border);
+    border-radius: 8px;
+    padding: 12px 48px 12px 12px;
+
+    .walletAddress {
+      font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--cr-primary-text);
+      word-break: break-all;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .copyButton {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--cr-card-bg);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--cr-hover-bg);
+      }
+
+      .anticon {
+        font-size: 14px;
+        color: var(--cr-secondary-text);
+      }
+
+      &.copied .anticon {
+        color: #10b981;
+      }
+    }
+  }
+}
+
+// Telegram Section
+.telegramSection {
+  margin-bottom: 24px;
+
+  .telegramCard {
+    background: var(--cr-secondary-bg);
+    border: 1px dashed var(--cr-secondary-border);
+    border-radius: 8px;
+    padding: 16px;
+
+    .telegramStatus {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+
+      .statusIcon {
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .statusContent {
+        flex: 1;
+
+        .statusBadge {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: var(--cr-card-bg);
+          border: 1px solid var(--cr-secondary-border);
+          border-radius: 12px;
+          padding: 2px 8px;
+          font-size: 11px;
+          font-weight: 500;
+          color: var(--cr-secondary-text);
+          margin-bottom: 8px;
+
+          &.connected {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #16a34a;
+          }
+
+          &.notConnected {
+            background: #fef3c7;
+            border-color: #d97706;
+            color: #d97706;
+          }
+        }
+
+        .statusDescription {
+          font-size: 13px;
+          color: var(--cr-secondary-text);
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        .connectedInfo {
+          margin-top: 8px;
+          
+          .telegramUsername {
+            font-size: 14px;
+            color: var(--cr-primary-text);
+            font-weight: 500;
+            
+            span {
+              color: var(--cr-secondary-text);
+              font-weight: normal;
+            }
+          }
+        }
+      }
+    }
+
+    .telegramButton {
+      width: 100%;
+      height: 36px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+
+      &.linkButton {
+        background: #3b82f6;
+        border-color: #3b82f6;
+        color: white;
+
+        &:hover {
+          background: #2563eb;
+          border-color: #2563eb;
+        }
+      }
+
+      &.unlinkButton {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+
+        &:hover {
+          background: #dc2626;
+          border-color: #dc2626;
+        }
+      }
+    }
+  }
+}
+
+// Separator
+.separator {
+  border-color: var(--cr-secondary-border);
+  margin: 24px 0;
+}
+
+// Disconnect Button
+.disconnectButton {
+  width: 100%;
+  height: 44px;
+  background: #ef4444;
+  border-color: #ef4444;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+  }
+
+  &:focus {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+  }
+}
+
+// Dark mode support
+[data-theme='dark'] {
+  .modernModal {
+    .ant-modal-content {
+      background: #1f2937;
+    }
+
+    .ant-modal-header {
+      background: #1f2937;
+      border-bottom-color: #374151;
+    }
+
+    .ant-modal-body {
+      background: #1f2937;
+    }
+  }
+
+  .profileSection {
+    .profileAvatar {
+      .ant-avatar {
+        background: #374151;
+        color: #9ca3af;
+      }
+    }
+  }
+
+  .walletSection {
+    .walletAddressContainer {
+      background: #374151;
+      border-color: #4b5563;
+
+      .copyButton {
+        background: #1f2937;
+
+        &:hover {
+          background: #4b5563;
+        }
+      }
+    }
+  }
+
+  .telegramSection {
+    .telegramCard {
+      background: #374151;
+      border-color: #4b5563;
+
+      .statusContent {
+        .statusBadge {
+          background: #1f2937;
+          border-color: #4b5563;
+        }
+      }
+    }
+  }
+
+  .separator {
+    border-color: #374151;
+  }
+}

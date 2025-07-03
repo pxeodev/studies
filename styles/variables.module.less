@@ -16,6 +16,7 @@
 @cr-dark-success-color: #8FD460;
 @cr-dark-error-color: #E84749;
 @cr-dark-primary-color: #5273E0;
+@cr-warning-color: @gold-6;
 
 // DARK MODE COLORS
 
@@ -36,6 +37,21 @@
 @screen-md: 600px;
 @screen-sm: 480px;
 
+// BACKGROUND COLORS
+@cr-primary-bg: @component-background;
+@cr-secondary-bg: @background-color-light;
+@cr-card-bg: @component-background;
+@cr-input-bg: @input-bg;
+
+// TEXT COLORS
+@cr-primary-text: @text-color;
+@cr-secondary-text: @text-color-secondary;
+@cr-disabled-text: @disabled-color;
+
+// BORDER COLORS
+@cr-primary-border: @border-color-base;
+@cr-secondary-border: @border-color-split;
+
 // EXPORTS
 :export {
   white: @white;
@@ -43,6 +59,7 @@
   primaryColor: var(--cr-primary-color);
   successColor: var(--cr-success-color);
   errorColor: var(--cr-error-color);
+  warningColor: var(--cr-warning-color);
   lightSuccessColor: @green-6;
   lightErrorColor: @red-6;
   lightPrimaryColor: @geekblue-6;
@@ -54,4 +71,13 @@
   crGray9: @cr-gray-9;
   geekBlue7: @geekblue-7;
   fontFamily: @font-family;
+  crPrimaryBg: var(--cr-primary-bg);
+  crSecondaryBg: var(--cr-secondary-bg);
+  crCardBg: var(--cr-card-bg);
+  crInputBg: var(--cr-input-bg);
+  crPrimaryText: var(--cr-primary-text);
+  crSecondaryText: var(--cr-secondary-text);
+  crDisabledText: var(--cr-disabled-text);
+  crPrimaryBorder: var(--cr-primary-border);
+  crSecondaryBorder: var(--cr-secondary-border);
 }

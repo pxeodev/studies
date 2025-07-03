@@ -11,7 +11,7 @@ import sitemapStyles from '../styles/sitemap.module.less'
 import globalData from '../lib/globalData';
 import PageHeader from '../components/PageHeader'
 import sql from "../lib/database.mjs";
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 
 const { Title } = Typography;
 const EXCLUDED_PAGES = ['_app.js', '_document.js', '_error.js', 'sitemap.js', '404.js', '500.js', 'index.js']

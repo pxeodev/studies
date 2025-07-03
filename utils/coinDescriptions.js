@@ -1,6 +1,6 @@
 import { gql } from '@urql/core'
 
-import strapi from './strapi.js'
+import strapi from 'coinrotator-utils/strapi.mjs'
 
 function addTemplateDescription(description, coin) {
   return `${description}

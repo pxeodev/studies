@@ -1,33 +1,29 @@
 import { Row, Col, Switch, Divider } from 'antd'
 import classnames from 'classnames'
+import { useState, useEffect } from 'react'
 
 import indexStyles from '../styles/index.module.less'
-import NotConnected from './gating/NotConnected.js'
-import NoKeyPass from './gating/NoKeyPass.js'
-import useAccount from '../hooks/useAccount.js'
-import useKeyPass from '../hooks/useKeyPass.js'
 
 const TableFiltersAdvancedTab = ({
   formState,
   formDispatch,
  }) => {
-  const walletAddress = useAccount()
-  const hasKeyPass = useKeyPass()
-  const hasWallet = Boolean(walletAddress)
+  const [isClient, setIsClient] = useState(false)
 
-  if (!hasWallet) {
+  // Handle client-side hydration to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Show loading state during hydration
+  if (!isClient) {
     return (
       <div className={indexStyles.modalContent}>
-        <NotConnected />
-      </div>
-    )
-  } else if (!hasKeyPass) {
-    return (
-      <div className={indexStyles.modalContent}>
-        <NoKeyPass />
+        <div></div>
       </div>
     )
   }
+
   return (
     <>
       <Row className={classnames(indexStyles.modalRow, indexStyles.modalRowHeader)}>

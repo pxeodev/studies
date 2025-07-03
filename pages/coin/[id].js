@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import pick from 'lodash/pick';
 import uniq from 'lodash/uniq';
-import { useCallback, useEffect, useState, useContext, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useState, useContext, useMemo } from 'react';
 import classnames from 'classnames';
 
 import sql from '../../lib/database.mjs'
@@ -221,6 +221,9 @@ export default function Coin(coin) {
       <meta property="og:image:width" content="250" />
       <meta property="og:image:height" content="250" />
       <meta property="og:image:type" content="image/png" />
+      <meta property="x-cr-coin-id" content={coin.id} />
+      <meta property="x-cr-coin-name" content={coin.name} />
+      <meta property="x-cr-coin-symbol" content={coin.symbol} />
     </Head>
     <PageHeader
       title={coin.name}

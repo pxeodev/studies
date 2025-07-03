@@ -7,7 +7,7 @@ import faqStyles from "../styles/faq.module.less"
 
 import PageHeader from '../components/PageHeader'
 import globalData from '../lib/globalData';
-import strapi from '../utils/strapi';
+import strapi from 'coinrotator-utils/strapi.mjs'
 import { gql } from '@urql/core'
 
 const { Content } = Layout;

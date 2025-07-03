@@ -1,19 +1,4 @@
-import axios from 'axios';
-import axiosRetry, { exponentialDelay } from 'axios-retry';
-import * as AxiosLogger from 'axios-logger'
-
-const KEY_PASS_CONTRACT = '0xdb20e21c95f9b3b1ffb98e765b6664aaf4d6aef6';
-
-const alchemy = axios.create({
-  baseURL: 'https://base-mainnet.g.alchemy.com/v2/TbFuq5tQAa5kedmODXaxUO0diDWcPDgf/',
-  timeout: 30000,
-})
-axiosRetry(alchemy, {
-  onRetry: (_count, err) => console.log(_count, err),
-  shouldResetTimeout: true,
-  retryDelay: exponentialDelay
-})
-alchemy.interceptors.request.use(AxiosLogger.requestLogger);
+import auth from '../../utils/auth.js'
 
 const handler = async (req, res) => {
   const walletAddress = req.query.walletAddress
@@ -23,11 +8,17 @@ const handler = async (req, res) => {
     res.status(400).json({ ok: false })
   } else {
     try {
-      const result = (await alchemy.get(`getNFTs/?owner=${walletAddress}`)).data
-      const contracts = result?.ownedNfts?.map(nft => nft?.contract?.address)
-      console.log(contracts)
-      res.setHeader('Cache-Control', 'max-age=3600')
-      if (contracts?.includes(KEY_PASS_CONTRACT)) {
+      const hasKeyPass = await auth(walletAddress)
+
+      // Set cache headers for better caching
+      res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400')
+      // Add a cache tag for this specific wallet
+      res.setHeader('Cache-Tag', `wallet-${walletAddress}`)
+      // Add Vary header to ensure proper caching by wallet address
+      res.setHeader('Vary', 'Accept-Encoding, X-Wallet-Address')
+      res.setHeader('X-Wallet-Address', walletAddress)
+
+      if (hasKeyPass) {
         res.status(200).json({ ok: true })
       } else {
         res.status(403).json({ ok: false })
