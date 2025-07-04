@@ -9,7 +9,6 @@ import isNil from 'lodash/isNil.js'
 import union from 'lodash/union.js'
 import uniqBy from 'lodash/uniqBy.js'
 
-import '../lib/sentry.mjs'
 import { quoteSymbols } from 'coinrotator-utils/variables.mjs'
 import sql from '../lib/database.mjs'
 import coinGecko, { getOhlc, getCoin, getMarket } from 'coinrotator-utils/coinGecko.mjs'
