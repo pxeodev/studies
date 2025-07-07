@@ -9,7 +9,6 @@ import isNil from 'lodash/isNil.js'
 import union from 'lodash/union.js'
 import uniqBy from 'lodash/uniqBy.js'
 
-import '../lib/sentry.mjs'
 import { quoteSymbols } from 'coinrotator-utils/variables.mjs'
 import sql from '../lib/database.mjs'
 import coinGecko, { getOhlc, getCoin, getMarket } from 'coinrotator-utils/coinGecko.mjs'
@@ -18,7 +17,7 @@ import { getAllCoins } from '../lib/lunr.mjs'
 import { hasPlatforms } from '../utils/coingecko.mjs';
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
-import { overrideCoinCategories, aliasCoinCategories } from '../utils/categories.mjs';
+import { overrideCoinCategories, aliasCoinCategories, createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
 
 dotenv.config();
 
@@ -56,7 +55,7 @@ const fetchCoinDataCoingecko = async (coinId) => {
 
   let platforms;
   if (hasPlatforms(coinData.platforms)) {
-    platforms = pickBy(coinData.platforms, contract => contract.length)
+    platforms = pickBy(coinData.platforms, contract => contract?.length)
     if (!Object.keys(platforms).length) {
       platforms = null
     }
@@ -78,14 +77,14 @@ const fetchCoinDataCoingecko = async (coinId) => {
     description: coinData.description.en,
     homepage: coinData.links.homepage[0] || null,
     twitter: coinData.links.twitter_screen_name || '',
-    twitterFollowers: coinData.community_data.twitter_followers,
-    ath: coinData.market_data.ath.usd,
-    atl: coinData.market_data.atl.usd,
+    twitterFollowers: coinData.community_data.twitter_followers || null,
+    ath: coinData.market_data.ath.usd || coinData.market_data.current_price?.usd,
+    atl: coinData.market_data.atl.usd || coinData.market_data.current_price?.usd,
     marketCap,
     volume,
     marketCapRank: coinData.market_data.market_cap_rank,
     fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd ?? null,
-    currentPrice: coinData.market_data.current_price?.usd,
+    currentPrice: coinData.market_data.current_price?.usd || null,
     circulatingSupply: coinData.market_data.circulating_supply,
     totalSupply: coinData.market_data.total_supply,
     maxSupply: coinData.market_data.max_supply,
@@ -97,12 +96,12 @@ const fetchCoinDataCoingecko = async (coinId) => {
     INSERT INTO "Coin" (
       id, symbol, name, "defaultPlatform", platforms, images, description, homepage, twitter, "twitterFollowers",
       ath, atl, "marketCap", "marketCapRank", "fullyDilutedValuation", "currentPrice", "circulatingSupply", "totalSupply",
-      "maxSupply", tickers, "coingeckoCategories"
+      "maxSupply", tickers, "coingeckoCategories", "volume"
     ) VALUES (
       ${coinId}, ${dbCoinData.symbol}, ${dbCoinData.name}, ${dbCoinData.defaultPlatform}, ${dbCoinData.platforms}, ${dbCoinData.images},
       ${dbCoinData.description}, ${dbCoinData.homepage}, ${dbCoinData.twitter}, ${dbCoinData.twitterFollowers}, ${dbCoinData.ath}, ${dbCoinData.atl},
       ${dbCoinData.marketCap}, ${dbCoinData.marketCapRank}, ${dbCoinData.fullyDilutedValuation}, ${dbCoinData.currentPrice}, ${dbCoinData.circulatingSupply},
-      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}
+      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}, ${dbCoinData.volume}
     ) ON CONFLICT (id) DO UPDATE SET
       symbol = EXCLUDED.symbol,
       name = EXCLUDED.name,
@@ -123,7 +122,8 @@ const fetchCoinDataCoingecko = async (coinId) => {
       "totalSupply" = EXCLUDED."totalSupply",
       "maxSupply" = EXCLUDED."maxSupply",
       tickers = EXCLUDED.tickers,
-      "coingeckoCategories" = EXCLUDED."coingeckoCategories"
+      "coingeckoCategories" = EXCLUDED."coingeckoCategories",
+      "volume" = EXCLUDED."volume"
   `
 
   await sql`INSERT INTO "CoinTime" ("coinId", "date", "marketCap", "volume") VALUES (${coinId}, ${new Date()}, ${marketCap}, ${volume})`
@@ -254,6 +254,13 @@ const fetchCoinDataAndOhlcs = async () => {
   for (let chunk of chunkedOhlcRequests) {
     await Promise.all(chunk.map(({ coinId, symbol }) => fetchOhlcData(coinId, symbol)))
   }
+
+  try {
+    const promptResult = await createCategoriesPromptInLangfuse();
+    console.log('Langfuse categories prompt created:', promptResult?.id || promptResult);
+  } catch (e) {
+    console.error('Failed to create categories prompt in Langfuse:', e);
+  }
 }
 
 const fetchDerivativesData = async() => {
@@ -336,6 +343,7 @@ setTimeout(async () => {
     setTimeout(async () => {
       await axios.get('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
       try {
+        await axios.post('https://api.vercel.com/v1/integrations/deploy/prj_uc9CaXrUEpspFxIJeoTgrrWqaIAY/zigJ5zntts')
         await axios.post('https://api.netlify.com/build_hooks/673aebced624ef0d703c7049')
       } catch(e) {}
       await createJob({ serviceId: 'crn-c8q7r2pg7hp6tkba3sj0', startCommand: 'node dist/bot.mjs' })

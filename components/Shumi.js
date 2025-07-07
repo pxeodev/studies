@@ -262,7 +262,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                     Stop
                   </Button>
                 ) : (
-                  <Button type="primary" onClick={askAi} disabled={error != null || (!input.trim() && !coinTag)}>
+                  <Button type="primary" onClick={askAi} disabled={error != null}>
                     Ask Shumi
                   </Button>
                 )}

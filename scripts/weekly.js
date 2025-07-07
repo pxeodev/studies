@@ -1,9 +1,8 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
-import '../lib/sentry.mjs'
 import sql from '../lib/database.mjs'
-import { overrideCoinCategories } from '../utils/categories.mjs';
+import { overrideCoinCategories, createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
 import retry from '../utils/retry.mjs';
 
@@ -128,6 +127,15 @@ const dropsTab = async () => {
 
 const weekly = async () => {
   await dropsTab()
+
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      const promptResult = await createCategoriesPromptInLangfuse();
+      console.log('Langfuse categories prompt created:', promptResult?.id || promptResult);
+    } catch (e) {
+      console.error('Failed to create categories prompt in Langfuse:', e);
+    }
+  }
 }
 
 weekly()

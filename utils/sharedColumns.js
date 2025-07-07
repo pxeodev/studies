@@ -95,7 +95,7 @@ export function weeklySuperSuperTrendStreak(router, isHoverable) {
     dataIndex: 'weeklySuperSuperTrendStreak',
     sorter: (a, b) => Number(a.weeklySuperSuperTrendStreak) - Number(b.weeklySuperSuperTrendStreak),
     render: (weeklySuperSuperTrendStreak) => {
-      return weeklySuperSuperTrendStreak
+      return weeklySuperSuperTrendStreak ? weeklySuperSuperTrendStreak : null
     }
   }
 }

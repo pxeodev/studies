@@ -1241,6 +1241,7 @@ const processRegularStep = async (step, stepResults, tools) => {
 };
 
 export async function POST(req) {
+  let queryPlan;
   const { messages, walletAddress, data } = await req.json();
   const userMessages = messages.filter(message => message.role === 'user');
   console.log('Received POST request with user messages:', JSON.stringify(userMessages, null, 2));
@@ -1307,7 +1308,7 @@ export async function POST(req) {
 
     // STEP 1: Classify query and create a data retrieval plan using GPT-4.1 Mini
     console.log('Step 1: Classifying query...');
-    const queryPlan = await classifyQuery(userMessage.content, sessionId, classificationPromptContent, sessionHistory);
+    queryPlan = await classifyQuery(userMessage.content, sessionId, classificationPromptContent, sessionHistory);
     console.log('Query plan generated:', queryPlan);
 
     // STEP 2: Execute the tools specified in the plan to retrieve data
@@ -1448,6 +1449,7 @@ export async function POST(req) {
             finishReason: result.finishReason,
             walletAddress,
             userMessage: userMessage?.content,
+            queryPlan,
             messageCount: messages.length,
             sessionId,
             timestamp: new Date().toISOString()
@@ -1475,6 +1477,7 @@ export async function POST(req) {
           errorType: 'StreamError',
           walletAddress,
           userMessage: userMessage?.content,
+          queryPlan,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -1499,6 +1502,7 @@ export async function POST(req) {
           errorType: 'StreamResponseError',
           walletAddress,
           userMessage: userMessage?.content,
+          queryPlan,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -1526,6 +1530,7 @@ export async function POST(req) {
     await reportErrorToServer(e, {
       walletAddress,
       userMessage: userMessage?.content,
+      queryPlan,
       messageCount: messages.length,
       sessionId,
       url: req.url,

@@ -129,6 +129,11 @@ const CoinTable = ({
   useEffect(() => {
     if (socket) {
       socket.on("i", (prices) => {
+        for (const key in prices) {
+          if (Object.prototype.hasOwnProperty.call(prices, key)) {
+            prices[key] = Number(prices[key]);
+          }
+        }
         setPrices(prices)
         localStorage.setItem("prices", JSON.stringify(prices))
         console.debug("Received initial prices", prices);
@@ -138,7 +143,7 @@ const CoinTable = ({
         setPrices((prevPrices) => {
           const newPrices = { ...prevPrices }
           Object.entries(priceUpdates).forEach(([coinSymbol, price]) => {
-            newPrices[coinSymbol] = price
+            newPrices[coinSymbol] = Number(price)
           })
           return newPrices
         })
@@ -296,7 +301,7 @@ const CoinTable = ({
       return preferredExchanges.includes(derivativeA) ? 1 : derivativeA.localeCompare(derivativeB)
     })
     let percentageFromATH, percentageFromATL
-    const livePrice = prices[coinData.symbol]
+    const livePrice = prices[coinData.id]
     if (livePrice) {
       percentageFromATH = round(((coinData.ath - livePrice) / coinData.ath * 100), 2) + '%'
       percentageFromATL = round((livePrice / coinData.atl) * 100, 2) + '%'
@@ -329,7 +334,7 @@ const CoinTable = ({
     return {
       key: `${coinData.id}-${coinData.name}`,
       id: coinData.id,
-      price: prices[coinData.symbol],
+      price: prices[coinData.id],
       coinData: {
         symbol: coinData.symbol,
         imageSlug: coinData.imageSlug,

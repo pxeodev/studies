@@ -124,18 +124,22 @@ export const Web3AuthProvider = ({ children }) => {
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
             chainConfig: defaultChainConfig,
-            uiConfig: {
-              mode: "light",
-              defaultLanguage: "en",
-              loginMethodsOrder: ["google", "twitter", "discord", "apple", "github", "reddit", "farcaster", "wechat"],
-              uxMode: isMobile ? "redirect" : "popup", // Use redirect for mobile, popup for desktop
-              appLogo: "https://web3auth.io/images/web3auth-logo.svg",
-              theme: {
-                primary: "#768729"
-              }
-            },
             enableLogging: isDevelopment,
-            storageKey: "local"
+            storageKey: "local",
+            uiConfig: {
+              // Only show these login methods
+              loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
+              // Hide specific login methods
+              hideExternalWallets: true,
+              modalZIndex: "99999",
+              // Mobile-specific settings for better Twitter auth
+              displayErrorsOnModal: false,
+              logLevel: isDevelopment ? "debug" : "error",
+              // Force redirect mode for mobile to prevent raw HTML issues
+              uxMode: isMobile ? "redirect" : "popup",
+            },
+            // Add sessionTime to prevent session timeout issues
+            sessionTime: 86400, // 24 hours
           });
 
           console.log('Initializing Web3Auth modal...');
@@ -147,15 +151,15 @@ export const Web3AuthProvider = ({ children }) => {
           console.log('Checking for existing session...');
           console.log('Connected status:', web3authInstance.connected);
           console.log('Provider status:', !!web3authInstance.provider);
-          
+
           // Add a small delay to ensure Web3Auth has fully initialized
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           // Re-check after delay
           console.log('Re-checking after delay...');
           console.log('Connected status:', web3authInstance.connected);
           console.log('Provider status:', !!web3authInstance.provider);
-          
+
           // Check for session - either connected OR provider available indicates a stored session
           if (web3authInstance.connected && web3authInstance.provider) {
             console.log('Full session found, restoring...');
@@ -225,30 +229,24 @@ export const Web3AuthProvider = ({ children }) => {
       } else {
         console.log('Connecting to Web3Auth...');
       }
-      
-      // For mobile devices, use specific login options
-      const connectOptions = isMobile ? {
+
+      // Configure login options based on device and provider
+      let connectOptions = {
         loginProvider: loginProvider || undefined,
-        extraLoginOptions: {
-          domain: window.location.origin,
-          verifierIdField: "sub",
-          connection: "",
-          isVerifierIdCaseSensitive: false
-        }
-      } : {
-        loginProvider: loginProvider || undefined
+        mfaLevel: "none", // Disable MFA for smoother experience
       };
+
 
       const web3authProvider = await web3auth.connect(connectOptions);
       if (!web3authProvider) {
         throw new Error('No provider returned from Web3Auth connection');
       }
-      
+
       console.log('✅ Web3Auth connection successful');
       setWeb3authProvider(web3authProvider);
       setLoggedIn(true);
       setHasStoredSession(true);
-      
+
       const user = await web3auth.getUserInfo();
       setUser(user);
       console.log('✅ User info retrieved:', {
@@ -287,7 +285,7 @@ export const Web3AuthProvider = ({ children }) => {
       const errorMsg = error.message?.toLowerCase() || '';
       const errorString = error?.toString()?.toLowerCase() || '';
       const errorCode = error.code;
-      
+
       const isUserCancellation =
         errorMsg.includes('wallet popup has been closed by the user') ||
         errorMsg.includes('popup_closed') ||
@@ -310,7 +308,7 @@ export const Web3AuthProvider = ({ children }) => {
         errorCode === 4001 || // User rejected request
         errorCode === 'ACTION_REJECTED' ||
         errorCode === 'USER_CANCELLED';
-      
+
       if (isUserCancellation) {
         console.log('ℹ️ User cancelled login process');
         // Return a special object to indicate user cancellation
@@ -339,15 +337,15 @@ export const Web3AuthProvider = ({ children }) => {
       setLoggedIn(false);
       setHasStoredSession(false);
       setCurrentChain('base'); // Reset to default chain
-      
+
       // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
-      
+
       // Clear localStorage session
       if (typeof window !== 'undefined') {
         localStorage.removeItem('web3auth_session');
       }
-      
+
       console.log('Logout completed successfully');
     } catch (error) {
       console.error("Logout error:", error);
@@ -357,15 +355,15 @@ export const Web3AuthProvider = ({ children }) => {
       setLoggedIn(false);
       setHasStoredSession(false);
       setCurrentChain('base');
-      
+
       // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
-      
+
       // Clear localStorage session on logout error
       if (typeof window !== 'undefined') {
         localStorage.removeItem('web3auth_session');
       }
-      
+
       throw error;
     }
   };
@@ -375,7 +373,7 @@ export const Web3AuthProvider = ({ children }) => {
       console.log("provider not initialized yet");
       return [];
     }
-    
+
     const ethProvider = new ethers.BrowserProvider(web3authProvider);
     const signer = await ethProvider.getSigner();
     const address = await signer.getAddress();
@@ -395,7 +393,7 @@ export const Web3AuthProvider = ({ children }) => {
       }
 
       console.log(`Switching to ${chainConfig.displayName}...`);
-      
+
       // Request to switch chain
       await web3authProvider.request({
         method: 'wallet_switchEthereumChain',
@@ -424,7 +422,7 @@ export const Web3AuthProvider = ({ children }) => {
               blockExplorerUrls: [chainConfig.blockExplorerUrl],
             }],
           });
-          
+
           setCurrentChain(chainKey);
           console.log(`Successfully added and switched to ${chainConfig.displayName}`);
           return true;
@@ -466,13 +464,13 @@ export const Web3AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(userData),
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Database save failed:', response.status, errorText);
         throw new Error(`Failed to save user data: ${response.status}`);
       }
-      
+
       const result = await response.json();
       console.log('User data saved successfully:', result);
       return result;

@@ -51,12 +51,25 @@ let moduleExports = {
         ],
       },
       {
-        // Fix Web3Auth COOP issues for social login
+        // Fix Web3Auth COOP issues for social login - allow same-origin for better OAuth handling
         source: '/(.*)',
         headers: [
           {
             key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
             value: 'unsafe-none',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          // Mobile-specific headers for better OAuth handling
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
           },
         ],
       }
