@@ -702,14 +702,15 @@ const toolImplementations = {
   },
 
   getCoinHistoricalMetaData: {
-    execute: async ({ coinId, timestamp }) => {
+    execute: async ({ coinId, timestampAmount, timestampInterval }) => {
       try {
-        console.log('Tool executed: getCoinHistoricalMetaData', { coinId, timestamp });
+        console.log('Tool executed: getCoinHistoricalMetaData', { coinId, timestampAmount, timestampInterval });
 
         // Call the socket server API endpoint for historical metadata
         const result = await callSocketServer('/api/coin/historical-metadata', {
           coinId,
-          timestamp
+          timestampAmount,
+          timestampInterval
         });
 
         console.log('getCoinHistoricalMetaData - Result:', result);
