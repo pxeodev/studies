@@ -15,6 +15,7 @@ import {
   LineChartOutlined,
   TagsOutlined,
   DoubleRightOutlined,
+  BookFilled,
 } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -198,6 +199,11 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
         //   icon: <TeamOutlined className={styles.geekBlue} />
         // },
         {
+          label: <Link href="https://coinrotator.gitbook.io/docs" target="_blank" rel="noopener noreferrer">Docs</Link>,
+          key: '/docs',
+          icon: <BookFilled className={styles.dustRed} />
+        },
+        {
           label: <Link href="/faq">FAQ</Link>,
           key: '/faq',
           icon: <QuestionCircleFilled className={styles.sunsetOrange} />
@@ -270,6 +276,11 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
       //   icon: <Link href="/team"><TeamOutlined className={styles.geekBlue} /></Link>,
       //   key: '/team'
       // },
+      {
+        label: <Link href="https://coinrotator.gitbook.io/docs" target="_blank" rel="noopener noreferrer">Docs</Link>,
+        key: '/docs',
+        icon: <BookFilled className={styles.dustRed} />
+      },
       {
         label: 'FAQ',
         icon: <Link href="/faq"><QuestionCircleFilled className={styles.sunsetOrange} /></Link>,

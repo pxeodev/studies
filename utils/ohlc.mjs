@@ -1,6 +1,6 @@
 import sql from '../lib/database.mjs';
 import { defaultAtrPeriods, defaultMultiplier, classicAtrPeriods, classicMultiplier, SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
-import supertrend from './supertrend.mjs';
+import supertrend from 'coinrotator-utils/supertrend.mjs';
 import convertToWeeklySignals from './convertToWeeklySignals.mjs';
 import { subDays } from 'date-fns';
 import convertToDailySignals from './convertToDailySignals.mjs';
@@ -18,12 +18,14 @@ export const convertOhlcsToSuperTrends = (ohlcs, coinId, quoteSymbol, flavor, we
     return {
       coinId,
       quoteSymbol,
-      trend,
+      trend: trend.signal,
+      upperband: Number(trend.currentFinalUpperband) || null,
+      lowerband: Number(trend.currentFinalLowerband) || null,
       flavor,
       date: matchingOhlcs[4],
       weekly,
     }
-  }).filter(t => t.trend !== '')
+  }).filter(t => t.trend !== undefined && t.trend !== '')
 }
 
 export async function saveDailyOhlcsToSupertrends (ohlcs, coinId) {

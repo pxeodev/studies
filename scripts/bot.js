@@ -3,7 +3,6 @@ import isMonday from 'date-fns/isMonday/index.js'
 import groupBy from 'lodash/groupBy.js';
 import { Readable } from 'stream';
 
-import '../lib/sentry.mjs'
 import { channelCreateMessage } from '../lib/discord.mjs'
 import { postMessage, sendDocument } from '../lib/telegram.mjs'
 import getFreshSignals from '../utils/getFreshSignals.mjs';
