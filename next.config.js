@@ -167,6 +167,11 @@ let moduleExports = {
         destination: '/category/Internet-of-Things-%28IOT%29',
         permanent: true,
       },
+      {
+        source: '/Shumi',
+        destination: '/shumi',
+        permanent: true,
+      },
     ]
   },
 }
