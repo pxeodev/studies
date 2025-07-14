@@ -54,6 +54,14 @@
         .logo {
             width: 104px;
             height: 32px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
         }
 
         .connect-btn {
@@ -86,6 +94,7 @@
             align-items: center;
             width: 100%;
             flex: 1;
+            padding: 80px 0;
         }
 
         .hero-section {
@@ -338,7 +347,7 @@
                 
                 <div class="hero-text-section">
                     <h1 class="main-heading">trade intelligence on autopilot <br />with 🍄 shumi</h1>
-                    <p class="description-text">TerraUSD TRON avalanche stacks tether stellar celsius uniswap dash celo horizen zcash livepeer stellar PancakeSwap shiba-inu</p>
+                    <p class="description-text">terrausd tron avalanche stacks tether stellar celsius uniswap dash<br>celo horizen zcash livepeer stellar pancakeswap shiba-inu</p>
                 </div>
 
                 <div class="cta-buttons">
