@@ -1,0 +1,126 @@
+@import './variables.module.less';
+
+.sidebar {
+  height: 100vh;
+  padding: 16px 0 50px 0;
+  background: var(--cr-primary-bg) !important;
+  border-right: 1px solid var(--cr-primary-border);
+
+  &:hover {
+    :global(.ant-layout-sider-trigger) {
+      display: block;
+    }
+  }
+
+  :global(.ant-layout-sider-trigger) {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 217px;
+    bottom: unset;
+    width: 20px !important;
+    text-align: right;
+    padding-right: 8px;
+    height: 30px;
+    line-height: 30px;
+    background: unset;
+
+    svg {
+      height: 15px;
+      width: 17px;
+      fill: @cr-gray-7;
+    }
+  }
+
+  &.collapsing {
+    :global(*) {
+      display: none;
+    }
+  }
+
+  &.collapsed {
+    padding-top: 30px;
+    background: var(--cr-secondary-bg) !important;
+
+    :global(.ant-layout-sider-trigger) {
+      display: block !important;
+      padding-right: unset;
+      left: 16px;
+      width: 20px !important;
+    }
+
+    :global(.ant-layout-sider-children) {
+      border-top: 1px solid var(--cr-primary-border);
+      border-bottom: 1px solid var(--cr-primary-border);
+      padding-top: 12px;
+      background: var(--cr-primary-bg);
+    }
+
+    .logo {
+      height: 32px;
+      margin-bottom: 12px;
+    }
+
+    .tools {
+      padding-bottom: 12px;
+    }
+
+    :global(.anticon) {
+      width: 28px;
+      height: 28px;
+      vertical-align: -6px !important;
+
+      :global(svg:not([data-icon="menu-unfold"])) {
+        height: 17px;
+        vertical-align: 3px !important;
+      }
+    }
+
+    :global([aria-label="menu-unfold"]) {
+      vertical-align: -3px !important;
+    }
+
+    :global([role="menu"]) {
+      padding-top: 2px !important;
+    }
+
+    :global([role="menuitem"]) {
+      padding-left: 14px !important;
+    }
+
+    .footer {
+      height: 225px;
+    }
+  }
+}
+
+.trigger:hover svg {
+  fill: var(--cr-secondary-text);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.tools {
+  width: 100%;
+  justify-content: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--cr-primary-border);
+}
+
+.connect {
+  width: 100%;
+  padding: 16px 14px;
+  margin-left: auto;
+  border-bottom: 1px solid var(--cr-primary-border);
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  text-align: center;
+}

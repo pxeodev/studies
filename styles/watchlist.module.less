@@ -1,0 +1,22 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.container {
+  &:extend(.container);
+
+  align-items: center;
+
+  @media (max-width: @screen-md) {
+    padding: 32px 24px;
+  }
+
+  @media (max-width: @screen-sm) {
+    padding: 32px 16px;
+  }
+
+  .table {
+    :global(.ant-table) {
+      border-bottom: 1px solid var(--cr-primary-border) !important;
+    }
+  }
+}

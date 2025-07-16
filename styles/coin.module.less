@@ -1,0 +1,392 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+// Coin
+.title {
+  font-size: 24px !important;
+  line-height: 32px !important;
+  margin-bottom: 0 !important;
+}
+
+.trendTag :global(.ant-tag) {
+  border: none !important;
+  margin-right: 0 !important;
+  line-height: 20px !important;
+  padding: 2px 4px !important;
+  border: 1px solid var(--cr-primary-border);
+  border-radius: 2px;
+
+  @media screen and (max-width: @screen-md) {
+    font-size: 10px;
+  }
+}
+
+.trendKey {
+  color: @text-color-secondary;
+}
+
+.trendText {
+  color: var(--cr-primary-text);
+}
+
+.signalExplainer path {
+  fill: @text-color-secondary;
+
+  &:hover {
+    fill: var(--cr-primary-text);
+  }
+}
+
+.section {
+  padding: 16px;
+  min-height: 64px;
+  box-shadow: 1px 0 0 0 var(--cr-primary-border), 0 1px 0 0 var(--cr-primary-border), 1px 1px 0 0 var(--cr-primary-border), 1px 0 0 0 var(--cr-primary-border) inset, 0 1px 0 0 var(--cr-primary-border) inset !important;
+}
+
+.sectionFlex {
+  display: flex;
+}
+
+.sectionParent {
+  min-height: 35vh;
+
+  :global(.ant-card-body) {
+    background-color: var(--cr-primary-bg);
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    min-height: unset;
+  }
+}
+
+.sectionHeader {
+  width: 100%;
+
+  h1 {
+    color: var(--cr-secondary-text) !important;
+  }
+}
+
+.sectionsDailyAndWeekly {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  @media screen and (max-width: @screen-lg) {
+    flex-direction: column;
+  }
+}
+
+.sectionDailyTrend {
+  width: unset;
+
+  @media screen and (max-width: @screen-lg) {
+    width: 100%;
+    box-shadow: none;
+  }
+}
+
+.sectionWeeklyTrend {
+  width: unset;
+  box-shadow: none;
+
+  @media screen and (max-width: @screen-lg) {
+    width: 100%;
+  }
+}
+
+.tab {
+  width: calc(100% / 3);
+  text-align: center;
+  cursor: pointer;
+  box-shadow: none;
+  border: 1px solid var(--cr-primary-border);
+  border-bottom: 0;
+
+  &.active {
+    background-color: var(--cr-secondary-bg);
+    cursor: auto;
+  }
+
+  &.noRightBorder {
+    border-right: 0;
+  }
+
+  &.noLeftBorder {
+    border-left: 0;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    padding: 20px;
+  }
+}
+
+.tabTitle {
+  font-size: 14px !important;
+  font-weight: bold;
+  color: var(--cr-tertiary-text) !important;
+  margin-bottom: 0 !important;
+  user-select: none;
+
+  &.activeTitle {
+    color: var(--cr-primary-color) !important;
+  }
+}
+
+.sectionDescription {
+  width: 100%;
+  padding-right: 32px;
+
+  &:extend(.markdown all);
+}
+
+.sectionContract {
+  border-top: 0 !important;
+
+  @media screen and (max-width: @screen-lg) {
+    width: 100% !important;
+  }
+}
+
+.sectionOnline {
+  @media screen and (max-width: @screen-md) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    width: 100% !important;
+    min-height: unset;
+  }
+
+  .button {
+    line-height: 28px; /* Adjusted line height for better alignment */
+  }
+
+  .buttonSite {
+    color: var(--cr-primary-bg) !important;
+    background-color: var(--cr-primary-text) !important;
+  }
+}
+
+.sectionContract, .sectionOnline {
+  width: 50%;
+}
+
+.sectionOnlineFW {
+  width: 100% !important;
+}
+
+.sectionData {
+  min-height: 288px;
+  width: 25%;
+
+  @media screen and (max-width: @screen-sm) {
+    width: 100% !important;
+    min-height: unset;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .sectionData :global(.ant-tag) {
+    background-color: @cr-gray-4;
+  }
+}
+
+.data {
+  margin-bottom: 16px;
+}
+
+.label {
+  color: @text-color-secondary !important;
+  line-height: 24px !important;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  margin-bottom: 0 !important;
+}
+
+.value {
+  color: var(--cr-primary-text);
+  line-height: 24px;
+  font-weight: bold;
+}
+
+.percentageChange {
+  font-size: 12px;
+  color: var(--cr-success-color);
+}
+
+.percentageChangeNegative {
+  color: var(--cr-error-color);
+}
+
+.valueAnnotation {
+  margin-left: 3px;
+  font-size: 11px;
+}
+
+.valueTable {
+  margin-top: 5px;
+  max-width: 40%;
+
+  table {
+    border-top: 1px solid var(--cr-primary-border) !important;
+  }
+
+  thead th {
+    font-weight: bold;
+    padding: 8px;
+  }
+
+  tbody {
+    td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    td:first-child {
+      font-weight: bold;
+    }
+  }
+}
+
+.greenRoi {
+  color: var(--cr-success-color);
+}
+
+.redRoi {
+  color: var(--cr-error-color);
+}
+
+.similarCoin {
+  cursor: pointer;
+  margin-bottom: 2px;
+  margin-right: 5px;
+}
+
+.sectionIco {
+  width: 100%;
+}
+
+.sectionTags .sectionSimilarCoins {
+  @media screen and (max-width: @screen-lg) {
+    min-height: unset;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    min-height: unset;
+    width: 100%;
+  }
+}
+
+.sectionDataC1, .sectionDataC2, .sectionTags, .sectionSimilarCoins {
+  @media screen and (max-width: @screen-lg) {
+    width: 50%;
+  }
+
+  @media screen and (max-width: @screen-md) {
+    width: 50%;
+  }
+}
+
+.sectionChart {
+  display: block;
+  width: 100%;
+  height: 450px !important;
+
+  @media screen and (max-width: @screen-sm) {
+    padding: 0;
+    padding-bottom: 16px;
+    height: 350px !important;
+  }
+}
+
+#chart {
+  max-width: 700px;
+  margin: auto;
+  height: calc(100% - 16px) !important;
+}
+
+// Market
+
+.sectionTrade {
+  width: 100%;
+  padding: 0;
+}
+
+.marketTitle {
+  margin: 1em 1em 0.5em !important;
+  text-align: center;
+  text-align: left;
+  color: var(--cr-secondary-text) !important;
+}
+
+.marketFilter {
+  display: block;
+  margin: 22px;
+}
+
+.marketTable table {
+  table-layout: fixed !important;
+
+  background-color: var(--cr-secondary-bg);
+  border-left: 1px solid var(--cr-primary-border) !important;
+  border-top: 1px solid var(--cr-primary-border) !important;
+  border-radius: 2px;
+
+  thead tr th {
+    font-weight: bold;
+    background-color: var(--cr-secondary-bg) !important;
+    color: var(--cr-primary-text);
+    user-select: none;
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 0px solid var(--cr-primary-border) !important;
+  }
+
+  tbody tr td {
+    border-right: 1px solid var(--cr-primary-border) !important;
+    border-bottom: 1px solid var(--cr-primary-border) !important;
+    background-color: var(--cr-primary-bg);
+  }
+}
+
+.marketTable > div > div > div > div {
+  border-left: 1px solid var(--cr-primary-border) !important;
+  background-color: var(--cr-secondary-bg);
+  color: var(--cr-primary-text);
+}
+
+.marketTableRow:hover {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg);
+
+  > td {
+    color: var(--cr-primary-text);
+    background-color: var(--cr-secondary-bg) !important;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .marketTable table tbody tr td {
+    background-color: var(--cr-tertiary-bg);
+  }
+}
+
+.marketSpace {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.coinTag {
+  color: var(--cr-primary-text);
+  background: var(--cr-secondary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  #chart + div > a > span {
+    color: var(--cr-primary-color) !important;
+  }
+
+  .coinTag {
+    border: 1px solid @cr-gray-5;
+  }
+}

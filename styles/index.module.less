@@ -1,0 +1,238 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.container {
+  &:extend(.container);
+  align-items: center;
+
+  @media (max-width: @screen-md) {
+    padding: 32px 24px;
+  }
+
+  @media (max-width: @screen-sm) {
+    padding: 0;
+  }
+}
+
+.message {
+  position:fixed;
+  top: 76px;
+  z-index: 999;
+
+    @media (max-width: @screen-md) {
+      position: inherit;
+      margin-bottom: 16px;
+  }
+}
+
+.marketHealthButton {
+  margin-bottom: 64px;
+  font-size: 16px;
+  padding: 8px 16px;
+  height: unset;
+}
+
+// Filters
+.filters {
+  width: 100%;
+  background-color: var(--cr-primary-bg);
+  border: 1px solid var(--cr-primary-border);
+  border-bottom: 0;
+
+  @media screen and (max-width: @screen-sm) {
+    border: none;
+  }
+
+  :global(.ant-card-body) {
+    padding: 0;
+  }
+
+  .nameFilter {
+    background-color: var(--cr-primary-bg);
+    box-shadow: none !important;
+
+    input {
+      background-color: var(--cr-primary-bg);
+    }
+  }
+
+  .row {
+    width: 100%;
+    margin-left: 0 !important;
+    padding: 16px;
+  }
+
+  .filterDivider {
+    margin: 0;
+  }
+
+  .appliedFilterCol {
+    line-height: 40px;
+  }
+
+  .col {
+    @media screen and (max-width: @screen-md) {
+      margin-bottom: 12px;
+    }
+
+    @media screen and (max-width: @screen-md) {
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
+
+    label {
+      color: var(--cr-primary-text);
+    }
+  }
+}
+
+.select {
+  width: 100%;
+}
+
+.allFiltersButton {
+  width: 100%;
+  max-width: 150px;
+  background-color: var(--cr-primary-bg);
+
+  @media screen and (max-width: @screen-md) {
+    margin: 0;
+  }
+}
+
+.configModal {
+  :global(.ant-modal-body) {
+    max-height: calc(700px - 56px - 64px);
+    overflow-y: auto;
+    padding: 0;
+
+    @media (max-width: @screen-lg) {
+      max-height: calc(500px - 56px - 64px);
+    }
+
+    @media (max-width: @screen-md) {
+      max-height: unset;
+    }
+  }
+}
+
+.configModalHeader {
+  width: 100%
+}
+
+.tab {
+  width: 50% !important;
+  text-align: center !important;
+  display: inline-block;
+  border-bottom: 1px solid var(--cr-primary-border) !important;
+  border-left: 0 !important;
+  border-top: 0 !important;
+}
+
+.configModalBody {
+  padding: 24px;
+}
+
+.configModalButtons {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.appliedFilterTag {
+  margin-right: 16px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--cr-primary-color);
+  background: var(--cr-quintiary-bg);
+  color: var(--cr-secondary-text);
+
+  :global(.anticon-close) {
+    color: var(--cr-primary-color);
+    margin-left: 4px !important;
+    vertical-align: initial;
+  }
+}
+
+.appliedFilterTagValue {
+  color: var(--cr-primary-color);
+}
+
+.modalContent {
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalHeaderRow {
+  margin-bottom: 8px;
+}
+
+.modalRow {
+  margin-bottom: 16px;
+}
+
+.modalRowHeader {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.modalInput {
+  width: 100%;
+}
+
+.modalInputButton {
+  color: var(--cr-primary-text);
+  background-color: var(--cr-secondary-bg) !important;
+  border: 1px solid var(--cr-secondary-border);
+  padding: 4px 8px;
+}
+
+@media (max-width: @screen-sm) {
+  .modalInputButton {
+    height: 30px;
+  }
+}
+
+.modalExplainer {
+  color: @text-color-secondary;
+}
+
+.modalRangeInput {
+  width: 120px;
+  margin-right: 12px;
+}
+
+.modalRangeLabel {
+  text-align: center;
+}
+
+.modalSelect {
+  width: 100%;
+  background-color: var(--cr-primary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  .modalSelect span {
+    background-color: var(--cr-tertiary-border) !important;
+    color: var(--cr-secondary-text) !important;
+    border-color: var(--cr-secondary-border) !important;
+  }
+}
+
+.modalSelect > div {
+  border: 1px solid var(--cr-secondary-border) !important;
+}
+
+.tableRow {
+  width: 100%;
+  background-color: var(--cr-primary-bg);
+}
+
+.flavorRadio {
+  color: var(--cr-secondary-text);
+}
+
+.divider {
+  border-color: var(--cr-quartery-bg) !important;
+}

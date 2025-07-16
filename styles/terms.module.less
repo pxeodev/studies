@@ -1,0 +1,66 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.container {
+  &:extend(.container);
+
+  @media (max-width: @screen-sm) {
+    padding: 16px 24px 32px 24px;
+  }
+}
+
+.title {
+  &:extend(.title);
+
+  text-align: center;
+  font-weight: normal !important;
+  margin-bottom: 24px !important;
+
+  @media (max-width: @screen-md) {
+    margin-bottom: 16px !important;
+  }
+}
+
+.subtitle {
+  &:extend(.title);
+  text-align: left;
+
+  margin-top: 24px !important;
+
+  @media (max-width: @screen-md) {
+    margin-top: 16px !important;
+  }
+}
+
+.paragraph {
+  &:extend(.paragraph);
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.list {
+  margin-bottom: 24px !important;
+  padding-left: 48px !important;
+  color: var(--cr-primary-text);
+
+  @media (max-width: @screen-md) {
+    margin-bottom: 16px !important;
+    padding-left: 32px !important;
+  }
+
+  li {
+    font-size: 16px !important;
+    line-height: 24px !important;
+    margin-bottom: 12px !important;
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+.terms {
+  color: var(--cr-primary-color) !important;
+}

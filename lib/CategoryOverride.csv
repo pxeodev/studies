@@ -1,0 +1,405 @@
+Category,CoinSymbol,CoinName,addORremove
+"Proof of Stake",ETH,Ethereum,add
+"Proof of Stake",BNB,BNB,add
+"Proof of Stake",ADA,Cardano,add
+"Proof of Stake",DOT,Polkadot,add
+"Proof of Stake",MATIC,Polygon,add
+"Proof of Stake",BTS,BitShares,add
+"Proof of Stake",TRX,TRON,add
+"Proof of Stake",AVAX,Avalanche,add
+"Proof of Stake",ALGO,Algorand,add
+"Proof of Stake",XTZ,Tezos,add
+"Proof of Stake",EOS,EOS,add
+"Proof of Stake",HBAR,Hedera,add
+"Proof of Stake",DCR,Decred,add
+"Proof of Stake",ROSE,Oasis Network,add
+"Proof of Stake",10SET,Tenset,add
+"Proof of Stake",LUNA,Terra,add
+"Proof of Stake",WAVES,Waves,add
+"Proof of Stake",ONE,Harmony,add
+"Proof of Stake",ICX,ICON,add
+"Proof of Stake",ONT,Ontology,add
+"Proof of Stake",HIVE,Hive,add
+"Proof of Stake",LSK,Lisk,add
+"Proof of Stake",QTUM,Qtum,add
+"Zk Rollup",HEZ,Hermez Network,add
+"Zk Rollup",SYS,Syscoin,add
+"Zk Rollup",LRC,Loopring,add
+"Zk Rollup",MUTE,Mute,add
+"Zk Rollup",IMX,ImmutableX,add
+"Zk Rollup",ZKX,ZKSpace,add
+"Fractionalized NFT",DOG,The Doge NFT,add
+"Fractionalized NFT",NFT,APENFT,add
+"Fractionalized NFT",NFTX,NFTX,add
+"Artificial Intelligence (AI)",PHB,Phoenix Global,add
+"NFT Finance",JPEG,JPEG'd,add
+"NFT Finance",X2Y2,X2Y2,add
+"NFT Finance",MAGIC,Magic,add
+"Curve Ecosystem",CRV,Curve DAO,add
+"Curve Ecosystem",CVX,Convex Finance,add
+"Curve Ecosystem",FXS,Frax Share,add
+"Curve Ecosystem",AURA,Aura Finance,add
+"Curve Ecosystem",BTRFLY,Redacted,add
+"LSD Tokens",LDO,Lido Dao,add
+"LSD Tokens",RPL,Rocket Pool,add
+"LSD Tokens",FXS,Frax Share,add
+"LSD Tokens",SSV,SSV Network,add
+"Optimism Ecosystem",OP,Optimism,add
+"Optimism Ecosystem",VELO,Velo,add
+"Optimism Ecosystem",LYRA,Lyra Finance,add
+"Optimism Ecosystem",SNX,Synthetic Network,add
+"Artificial Intelligence (AI)",OCEAN,Ocean Protocol,add
+"Artificial Intelligence (AI)",RLC,iExec RLC,add
+"China Coins",FIL,Filecoin,add
+"China Coins",ZIL,Zilliqa,add
+"China Coins",NEO,NEO,add
+"China Coins",VET,VeChain,add
+"Storage",STX,Stacks,add
+"Storage",GLM,Golem,add
+"Layer 1",AVAX,Avalanche,add
+"Layer 1",SOL,Solana,add
+"Layer 1",FTM,Fantoma,add
+"Layer 1",BNB,BNB,add
+"Layer 1",MATIC,Polygon,add
+"Layer 1",ATOM,Cosmos Hub,add
+"Layer 1",ADA,Cardano,add
+"Layer 1",ALGO,Algorand,add
+"Layer 1",TRX,TRON,add
+"Layer 1",APT,Aptos,add
+"Privacy Coin",ROSE,Oasis Network,add
+"Privacy Coin",PHA,Phala Network,add
+"Retail",XRP,XRP,add
+"Retail",ADA,Cardano,add
+"Retail",DOGE,Dogecoin,add
+"Retail",SHIB,Shiba Inu,add
+"Dino Coins",LTC,Litecoin,add
+"Dino Coins",DASH,Dash,add
+"Dino Coins",NEO,NEO,add
+"Dino Coins",XLM,Stellar,add
+"Dino Coins",ETC,Ethereum Classic,add
+"Dino Coins",EOS,EOS,add
+"Dino Coins",DGB,DigiByte,add
+"Dino Coins",XVG,Verge,add
+"Zk Rollup",DUSK,DUSK Network,add
+"Zk Rollup",MINA,MINA Protocol,add
+"Zk Rollup",MATIC,Polygon,add
+"Proof of Work",BTC,Bitcoin,add
+"Proof of Work",DOGE,Dogecoin,add
+"Proof of Work",LTC,Litecoin,add
+"Proof of Work",ETC,Ethereum Classic,add
+"Proof of Work",RVN,Ravencoin,add
+"Proof of Work",KDA,Kadena,add
+"Infrastructure",OCEAN,Ocean Protocol,add
+"Infrastructure",HNT,Helium,add
+"Infrastructure",BAT,Basic Attention,add
+"Infrastructure",ENS,Ethereum Name Service,add
+"Infrastructure",API3,API3,add
+"Infrastructure",RLC,iExec RLC,add
+"Infrastructure",OCEAN,Ocean Protocol,add
+"Infrastructure",BAND,Band Protocol,add
+"Metaverse",ILV,Illuvium,add
+"Metaverse",GALA,GALA,add
+"Metaverse",GMT,STEPN,add
+"Metaverse",BNX,BinaryX,add
+"Metaverse",CHZ,Chiliz,add
+"Zk Rollup",CELR,Celr Network,add
+"Zk Rollup",METIS,Metis,add
+"Zk Rollup",XFT,Offshift,add
+"POA",VET,VeChain,add
+"POA",VTHO,VeThor,add
+"POA",POA,Proof of Network,add
+"POA",EWT,Energy Web,add
+"China Coins",DENT,Dent,add
+"China Coins",FLM,Flamingo Finance,add
+"China Coins",CFX,Conflux,add
+"China Coins",ACH,Alchemy Pay,add
+"China Coins",KEY,SelfKey,add
+"China Coins",QTUM,Qtum,add
+"China Coins",QKC,QuarkChain,add
+"China Coins",TVK,The Virtua Kolect,add
+"China Coins",OAX,OAX,add
+"BTC Layer 2",STX,Stacks,add
+"BTC Layer 2",SOV,Sovryn,add
+"BTC Layer 2",PNT,pNetwork,add
+"BTC Layer 2",COVAL,Circuits of Value,add
+"BTC Layer 2",BADGER,Badger DAO,add
+"BTC Layer 2",RIF,RSK Infrastructure Framework,add
+"BTC Layer 2",REN,REN,add
+"BTC Layer 2",ALEX,ALEX Lab,add
+"ISO 20022",QNT,Quant,add
+"ISO 20022",ALGO,Algorand,add
+"ISO 20022",MIOTA,IOTA,add
+"ISO 20022",XDC,XDC Network,add
+"ISO 20022",XRP,XRP,add
+"ISO 20022",XLM,Stellar,add
+"ISO 20022",HBAR,Hedera,add
+"Liquid Staking Providers","RPL","Rocket Pool",remove
+"LSD Tokens","RPL","Rocket Pool",add
+"Liquid Staking Providers","FXS","Frax Share",remove
+"LSD Tokens","FXS","Frax Share",add
+"Liquid Staking Providers","FIS","Stafi",remove
+"LSD Tokens","FIS","Stafi",add
+"Liquid Staking Providers","PSTAKE","pSTAKE Finance",remove
+"LSD Tokens","PSTAKE","pSTAKE Finance",add
+"Liquid Staking providers","LDO","Lido DAO",remove
+"LSD Tokens","LDO","Lido DAO",add
+"Liquid Staking Providers","ANKR","Ankr Network",remove
+"LSD Tokens","ANKR","Ankr Network",add
+"Liquid Staking Providers","SWISE","StakeWise",remove
+"LSD Tokens","SWISE","StakeWise",add
+"Liquid Staking Providers","QI","BENQI",remove
+"LSD Tokens","QI","BENQI",add
+"Liquid Staking Providers","SD","Stader",remove
+"LSD Tokens","SD","Stader",add
+"Fan Token","APL","Apollo",remove
+"CEX","BGB","Bitget Token",add
+"Big Data","RNDR","Render",add
+"Lending Platform","XCN","Onyxcoin",add
+"Lending Platform","JST","Just",add
+"Lending Platform","MNW","Morpheus Network",add
+"Lending Platform","TONIC","Tectonic",add
+"Lending Platform","FXS","Frax Share",add
+"Lending Platform","QI","BENQI",add
+"Lending Platform","VIRES","Vires Finance",add
+"Lending Platform","DF","dForce",add
+"Lending Platform","BPRO","B.Protocol",add
+"Lending Platform","SONNE","Sonne Finance",add
+"Lending Platform","WING","Wing Finance",add
+"Lending Platform","CANTO","CANTO",add
+"Lending Platform","BIFI","Beefy.Finance",add
+"RWA (Real World Assets)","MPL","Maple",add
+"RWA (Real World Assets)","CFG","Centrifuge",add
+"RWA (Real World Assets)","RBN","Ribbon Finance",add
+"RWA (Real World Assets)","USDR","Real USD",add
+"RWA (Real World Assets)","BTM","Bytom",add
+"DWF Labs","KAVA","Kava",add
+"DWF Labs","CRV","Curve DAO",add
+"DWF Labs","CYBER","CyberCONNECT",add
+"DWF Labs","BEL","Bella Protocol",add
+"DWF Labs","QUICK","Quickswap",add
+"DWF Labs","AMB","AirDao",add
+"DWF Labs","MDT","Measurable Data Token",add
+"DWF Labs","FET","Fetch.ai",add
+"DWF Labs","UNFI","Unfi Protocol DAO",add
+"DWF Labs","BLZ","Bluezelle",add
+"DWF Labs","TOMO","TomoChain",add
+"DWF Labs","YGG","Yield Guild Games",add
+"DWF Labs","ARKM","Arkham",add
+"DWF Labs","LPT","Livepeer",add
+"DWF Labs","ELF","aelf",add
+"Decentralized Options","RBN","Ribbon Finance",add
+"Decentralized Options","HXRO","HXRO",add
+"Decentralized Options","LYRA","Lyra Finance",add
+"Decentralized Options","RDPX","Dopex Rebate",add
+"Decentralized Options","PREMIA","Premia",add
+"Decentralized Options","DPX","Dopex",add
+"Decentralized Options","HEGIC","Hegic",add
+"Decentralized Options","BFR","Buffer Token",add
+"Decentralized Options","DERI","Deri Protocol",add
+"RWA Protocols","USDR","Real USD",add
+"RWA Protocols","MKR","Maker",add
+"DWF Labs","TRX","Tron",add
+"DWF Labs","TON","Toncoin",add
+"DWF Labs","MNT","Mantle",add
+"DWF Labs","ALGO","Algorand",add
+"DWF Labs","EOS","EOS",add
+"DWF Labs","EGLD","MultiversX",add
+"DWF Labs","SNX","Synthetix",add
+"DWF Labs","MIOTA","IOTA",add
+"DWF Labs","CFX","Conflux",add
+"DWF Labs","GALA","GALA",add
+"DWF Labs","FLR","Flare",add
+"DWF Labs","CELO","Celo",add
+"DWF Labs","MASK","Mask Network",add
+"DWF Labs","JASMY","JasmyCoin",add
+"DWF Labs","WAVES","Waves",add
+"DWF Labs","FLOKI","FLOKI",add
+"DWF Labs","MC","Merit Circle",add
+"DWF Labs","PYR","Vulcan Forged",add
+"DWF Labs","GAL","Galxe",add
+"DWF Labs","ACH","Alchemy Pay",add
+"DWF Labs","XRD","Radix",add
+"DWF Labs","BDX","Beldex",add
+"DWF Labs","C98","Coin98",add
+"DWF Labs","ID","SPACE ID",add
+"DWF Labs","MVL","MVL",add
+"DWF Labs","POND","Marlin",add
+"DWF Labs","ORBS","Orbs",add
+"DWF Labs","SYS","Syscoin",add
+"DWF Labs","BFC","Bifrost",add
+"DWF Labs","ARPA","ARPA",add
+"DWF Labs","METIS","Metis",add
+"DWF Labs","DODO","DODO",add
+"DWF Labs","WMT","World Mobile Token",add
+"DWF Labs","MBL","MovieBloc",add
+"DWF Labs","MBX","Marblex",add
+"DWF Labs","CBK","Cobak",add
+"DWF Labs","RSS3","RSS3",add
+"DWF Labs","CTC","Creditcoin",add
+"DWF Labs","SSX","SOMESING Exchange",add
+"DWF Labs","AGLD","Adventure Gold",add
+"DWF Labs","CEEK","CEEK Smart VR",add
+"DWF Labs","RACA","Radio Caca",add
+"DWF Labs","ORAI","Oraichain",add
+"DWF Labs","PERP","Perpetual Protocol",add
+"Artificial Intelligence (AI)","OLAS","Autonolas",add
+"DWF Labs","TRB","Tellor Tributes",add
+"DWF Labs","HIFI","Hifi Finance",add
+"DWF Labs","FRONT","Frontier",add
+"DWF Labs","BLZ","Bluzelle",add
+"Social","GAL","Galxe",add
+"Social","HOOK","Hooked Protocol",add
+"Social","XCAD","XCAD Network",add
+"Social","BGB","Bitget Token",add
+"Application","UNI","Uniswap",add
+"RWA (Real World Assets)","EL","ELYSIA",add
+"RWA (Real World Assets)","PROPC","Propchain",add
+"RWA (Real World Assets)","OPUL","Opulous",add
+"RWA (Real World Assets)","BOSON","Boson Protocol",add
+"RWA (Real World Assets)","PRO","Propy",add
+"RWA (Real World Assets)","Creditcoin","CTC",add
+"RWA (Real World Assets)","BTM","Bytom",add
+"RWA (Real World Assets)","POLYX","Polymesh",add
+"RWA (Real World Assets)","POLY","Polymath",add
+"Artificial Intelligence (AI)","IMGNAI","Image Generation AI",add
+"DWF Labs","LINA","Linear",add
+"BRC-20","TRAC","TRAC (Ordinals)",add
+"BRC-20","MOON","MOON (Ordinals)",add
+"BRC-20","MAXI","MAXI (Ordinals)",add
+"BRC-20","$B20","ALEX $B20",add
+"Predictions","SX","SX Network",add
+"Predictions","POLK","Polkamarkets",add
+"Privacy Coin","RAIL","Railgun",add
+"Zero Knowledge","RAIL","Railgun",add
+"Storage","ICP","Internet Computer",add
+"BRC-20 Token","TRAC","TRAC (Ordinals)",remove
+"RWA Protocols","EL","ELYSIA",remove
+"RWA Protocols","PROPC","Propchain",remove
+"RWA Protocols","OPUL","Opulous",remove
+"RWA Protocols","BOSON","Boson Protocol", remove
+"RWA Protocols","PRO","Propy",remove
+"RWA Protocols","Creditcoin","CTC",remove
+"RWA Protocols","BTM","Bytom",remove
+"RWA Protocols","POLYX","Polymesh",remove
+"RWA Protocols","POLY","Polymath",remove
+"RWA Protocols","USDR","Real USD",remove
+"RWA Protocols","MKR","Maker",remove
+"RWA (Real World Assets)","EL","ELYSIA",add
+"DePIN","FIL","Filecoin",add
+"DePIN","RNDR","Render",add
+"DePIN","THETA","Theta Network",add
+"DePIN","IOTA","IOTA",add
+"DePIN","HNT","Helium",add
+"DePIN","AKT","Akash Network",add
+"DePIN","AR","Arweave",add
+"DePIN","SC","Siacoin",add
+"DePIN","IOTX","IoTeX",add
+"DePIN","HOT","Holo",add
+"DePIN","XCH","Chia",add
+"DePIN","POKT","Pocket Network",add
+"DePIN","OCEAN","Ocean Protocol",add
+"DePIN","MOBILE","Helium Mobile",add
+"DePIN","GLM","Golem",add
+"DePIN","LPT","Livepeer",add
+"DePIN","SHDW","Shadow Token",add
+"DePIN","FLUX","Flux",add
+"DePIN","AIOZ","AIOZ Network",add
+"DePIN","HONEY","Hivemapper",add
+"DePIN","STORJ","Storj",add
+"DePIN","XYO","XYO Network",add
+"DePIN","DIMO","DIMO",add
+"DePIN","STOS","Stratos",add
+"DePIN","WMT","World Mobile Token",add
+"DePIN","CUDOS","Cudos",add
+"DePIN","OXT","Orchid Protocol",add
+"DePIN","CRU","Crust Network",add
+"DePIN","DATA","Streamr",add
+"DePIN","IOT","Helium IOT",add
+"DePIN","JKL","Jackal Protocol",add
+"DePIN","CERE","Cere Network",add
+"DePIN","DVPN","Sentinel",add
+"DePIN","HOPR","HOPR",add
+"DePIN","ALEPH","Aleph.im",add
+"DePIN","NODL","Nodle Network",add
+"DePIN","WNT","Wicrypt",add
+"DePIN","ZCN","Zus",add
+"DePIN","WIFI","WiFi Map",add
+"DePIN","NCDT","Nuco.cloud",add
+"DePIN","GEOD","Geodnet",add
+"DePIN","FOAM","FOAM",add
+"DePIN","TAO","Bittensor",add
+"DePIN","ATOR","AirTor Protocol",add
+"DePIN","OCTA","OctaSpace",add
+"DePIN","NAVI","Atlas Navi",add
+"DePIN","RWN","Rowan Coin",add
+"RWA (Real World Assets)","USDY","Ondo US Dollar Yield",add
+"Layer 1","SEI","Sei",add
+"Layer 1","KLAY","Klaytn",add
+"Gaming","APE","ApeCoin",add
+"NFT","APE","ApeCoin",add
+"Infrastructure",BLUR,Blur,add
+"CEX","MMX","MMX",add
+"Cat-Themed","1CAT","Bitcoin Cats",add
+"Meme","1CAT","Bitcoin Cats",add
+"High FDV","TIA","Celestia",add
+"High FDV","SUI","Sui",add
+"High FDV","IO","io.net",add
+"High FDV","SEI","Sei",add
+"High FDV","APT","Aptos",add
+"High FDV","ENA","Ethena",add
+"High FDV","JUP","Jupiter",add
+"High FDV","ONDO","Ondo",add
+"High FDV","ARB","Arbitrum",add
+"High FDV","OP","Optimism",add
+"TON Meme","NOT","Notcoin",add
+"TON Meme","DUROV","Povel Durev",add
+"TON Meme","RECA","The Resistance Cat",add
+"Murad Memes","APU","Apu Apustaja",add
+"Murad Memes","BITCOIN","HarryPotterObamaSonic10Inu",add
+"Murad Memes","GIGA","GIGAchad",add
+"Murad Memes","LOCKIN","LOCK IN",add
+"Murad Memes","MINI","mini",add
+"Murad Memes","MOG","MOG Coin",add
+"Murad Memes","POPCAT","Popcat",add
+"Murad Memes","SPX","SPX6900",add
+"Murad Memes","RETARDIO","RETARDIO",add
+"Dino Coins",XRP,XRP,add
+"Dino Coins",ALGO,Algorand,add
+"Dino Coins",HBAR,Hedera,add
+"Dino Coins",BCH,Bitcoin Cash,add
+"Dino Coins",BSV,Bitcoin SV,add
+"AI Agent Launchpad",AI16Z,ai16z,add
+"AI Agent Launchpad",CLANKER,tokenbot,add
+"Murad Memes","BITCOIN","HarryPotterObamaSonic10Inu (ETH)",add
+"Murad Memes","POPCAT","Popcat",add
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+@import './variables.module.less';
+
+@keyframes coin-flip {
+  0%   { transform: translateY(0) rotate3d(0, 1, 0, 0deg); }
+  50%  { transform: translateY(-6px) rotate3d(0, 1, 0, 180deg); }
+  100% { transform: translateY(0) rotate3d(0, 1, 0, 359deg); }
+}
+
+.svg {
+  margin-bottom: 9px;
+}
+
+.text {
+  color: var(--cr-primary-text);
+  font-size: 20px;
+  line-height: 52px;
+  margin-left: 6px;
+}
+
+.logo {
+  display: inline-block;
+  width: 100%;
+  user-select: none;
+
+  a::before {
+    display: none;
+  }
+
+  &:hover {
+    color: var(--cr-primary-text) !important;
+
+    .svg {
+      animation: coin-flip 1s ease-out;
+    }
+  }
+}

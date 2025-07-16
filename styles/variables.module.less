@@ -1,0 +1,83 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~antd/lib/style/color/colors.less';
+
+// TYPOGRAPHY
+@font-family: 'Satoshi-Variable', sans-serif;
+
+// COLORS – ANT OVERRIDES
+@text-color-secondary: #ACACAC;
+
+// COLORS – COINROTATOR
+
+@cr-primary-color: @geekblue-6;
+@cr-link-hover-color: @primary-color-hover;
+@cr-icon-fill: @disabled-color;
+@cr-icon-fill-hover: @text-color;
+@cr-dark-success-color: #8FD460;
+@cr-dark-error-color: #E84749;
+@cr-dark-primary-color: #5273E0;
+@cr-warning-color: @gold-6;
+
+// DARK MODE COLORS
+
+@cr-gray-1: #141414;
+@cr-gray-2: #1D1D1D;
+@cr-gray-3: #262626;
+@cr-gray-4: #303030;
+@cr-gray-5: #434343;
+@cr-gray-7: #7D7D7D;
+@cr-gray-8: #ACACAC;
+@cr-gray-9: #DBDBDB;
+@cr-gray-10: #BFBFBF;
+@cr-gold-1: #2B2111;
+
+// MEDIA QUERIES
+@screen-xl: 1440px;
+@screen-lg: 900px;
+@screen-md: 600px;
+@screen-sm: 480px;
+
+// BACKGROUND COLORS
+@cr-primary-bg: @component-background;
+@cr-secondary-bg: @background-color-light;
+@cr-card-bg: @component-background;
+@cr-input-bg: @input-bg;
+
+// TEXT COLORS
+@cr-primary-text: @text-color;
+@cr-secondary-text: @text-color-secondary;
+@cr-disabled-text: @disabled-color;
+
+// BORDER COLORS
+@cr-primary-border: @border-color-base;
+@cr-secondary-border: @border-color-split;
+
+// EXPORTS
+:export {
+  white: @white;
+  black: @black;
+  primaryColor: var(--cr-primary-color);
+  successColor: var(--cr-success-color);
+  errorColor: var(--cr-error-color);
+  warningColor: var(--cr-warning-color);
+  lightSuccessColor: @green-6;
+  lightErrorColor: @red-6;
+  lightPrimaryColor: @geekblue-6;
+  darkSuccessColor: @cr-dark-success-color;
+  darkErrorColor: @cr-dark-error-color;
+  darkPrimaryColor: @cr-dark-primary-color;
+  crGray4: @cr-gray-4;
+  crGray7: @cr-gray-7;
+  crGray9: @cr-gray-9;
+  geekBlue7: @geekblue-7;
+  fontFamily: @font-family;
+  crPrimaryBg: var(--cr-primary-bg);
+  crSecondaryBg: var(--cr-secondary-bg);
+  crCardBg: var(--cr-card-bg);
+  crInputBg: var(--cr-input-bg);
+  crPrimaryText: var(--cr-primary-text);
+  crSecondaryText: var(--cr-secondary-text);
+  crDisabledText: var(--cr-disabled-text);
+  crPrimaryBorder: var(--cr-primary-border);
+  crSecondaryBorder: var(--cr-secondary-border);
+}

@@ -1,0 +1,134 @@
+@import './variables.module.less';
+
+.menu {
+  font-size: 14px;
+  border-right: none !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--cr-primary-bg) !important;
+  max-height: calc(100vh - 200px - 50px);
+
+  :global(.ant-menu-submenu-title) {
+    cursor: auto;
+    margin-bottom: 0 !important;
+    &:not(:first-child) {
+      border-top: 1px solid var(--cr-primary-border);
+    }
+
+    :global(.ant-menu-title-content) {
+      font-size: 12px !important;
+      line-height: 22px !important;
+      color: #8C8C8C;
+      cursor: pointer;
+    }
+  }
+
+  :global(.ant-menu-sub) {
+    background: var(--cr-primary-bg) !important;
+  }
+
+  :global(.ant-menu-submenu-arrow) {
+    color: @cr-gray-7 !important;
+  }
+
+  :global([role=menuitem]) {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    font-weight: bold;
+    color: var(--cr-secondary-text);
+
+    &:hover {
+      color: var(--cr-secondary-text);
+    }
+  }
+
+  :global(.ant-menu-item-selected), :global(.ant-menu-item-active) {
+    background-color: var(--cr-secondary-bg) !important;
+
+    &::after {
+      opacity: 0 !important;
+    }
+  }
+
+  :global(.anticon) {
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    border-radius: 2px;
+
+    svg {
+      height: 15px;
+      vertical-align: -3px;
+    }
+  }
+
+  .sunsetOrange {
+    background: #FFE7BA;
+
+    svg {
+      fill: #FA8C16;
+    }
+  }
+
+  .polarGreen {
+    background: #D9F7BE;
+
+    svg {
+      fill: #52C41A;
+    }
+  }
+
+  .dustRed {
+    background: #FFCCC7;
+
+    svg {
+      fill: #F5222D;
+    }
+  }
+
+  .geekBlue {
+    background: #D6E4FF;
+
+    svg {
+      fill: #2F54EB;
+    }
+  }
+
+  .goldenPurple {
+    background: #EFDBFF;
+
+    svg {
+      fill: @purple-6;
+    }
+  }
+
+  .daybreakBlue {
+    background: #BAE7FF;
+
+    svg {
+      fill: #1890FF;
+    }
+  }
+
+  .gray {
+    background: #F0F0F0;
+
+    svg {
+      fill: #8C8C8C;
+    }
+  }
+}
+
+@media (max-width: @screen-lg) {
+  .menu {
+    max-height: unset;
+
+    :global(.ant-menu-submenu-title) {
+      text-align: center;
+    }
+
+    :global(.ant-menu-submenu-arrow) {
+      display: none;
+    }
+  }
+}

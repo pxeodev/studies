@@ -1,0 +1,33 @@
+@import './variables.module.less';
+
+.text {
+  color: @cr-gray-7;
+}
+
+.link {
+  margin-bottom: 1em;
+  color: @black;
+  text-decoration: underline;
+
+  &:hover, &:focus {
+    color: var(--cr-primary-color);
+    text-decoration: underline;
+  }
+}
+
+:root[data-theme="theme-dark"] {
+  .link {
+    color: @white;
+
+    &:hover, &:focus {
+      color: var(--cr-primary-color);
+    }
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  width: 100%;
+}

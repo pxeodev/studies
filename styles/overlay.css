@@ -1,0 +1,21 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  z-index: 9999; /* High z-index to ensure visibility */
+  backdrop-filter: blur(8px); /* Stronger blur effect */
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+  pointer-events: none; /* Allow clicks to pass through to modal */
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(8px)) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}

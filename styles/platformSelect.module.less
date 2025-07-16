@@ -1,0 +1,68 @@
+@import './variables.module.less';
+
+// Main Platform
+
+.mainPlatform {
+  margin-right: 0 !important;
+  line-height: 30px !important;
+  border-color: var(--cr-secondary-border) !important;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid @geekblue-6;
+  }
+
+  .text > :first-child {
+    color: @text-color-secondary !important;
+  }
+
+  .metamaskButton {
+    margin-top: -2px;
+  }
+}
+
+// Select Platform Input + Dropdown
+
+.selectPlatform {
+  line-height: 32px;
+
+  div {
+    background: var(--cr-tertiary-bg) !important;
+
+    :global(.ant-select-selection-placeholder) {
+      color: var(--cr-primary-text) !important;
+    }
+  }
+
+  :global(.ant-select-arrow) {
+    background-color: var(--cr-tertiary-bg) !important;
+  }
+
+  path {
+    color: var(--cr-primary-text) !important;
+    fill: var(--cr-primary-text) !important;
+  }
+}
+
+.selectDropdown {
+  background-color: var(--cr-tertiary-bg) !important;
+  fill: var(--cr-primary-text);
+
+  .option {
+    cursor: default;
+    color: var(--cr-primary-text);
+
+    &:hover {
+      background: var(--cr-quintiary-bg);
+    }
+  }
+
+  .metamaskButton {
+    margin-right: 10px;
+  }
+
+  .space {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

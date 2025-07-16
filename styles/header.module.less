@@ -1,0 +1,161 @@
+@import './variables.module.less';
+
+.header {
+  background: var(--cr-primary-bg) !important;
+  padding: 0 !important;
+  position: static;
+  width: 100%;
+  z-index: 1;
+  height: 52px !important;
+
+  ul {
+    background: var(--cr-primary-bg);
+    color: var(--cr-primary-text);
+    border-bottom: 1px solid var(--cr-primary-border) !important;
+    height: 52px;
+    display: flex;
+    li:first-child {
+      flex-grow: 1;
+    }
+    li:nth-child(2) {
+      padding-left: 0 !important;
+    }
+    li:nth-child(3) {
+      vertical-align: 1px !important;
+    }
+  }
+}
+
+.logo {
+  padding: 0 24px !important;
+  flex-grow: 1;
+  position: relative;
+
+  &:hover {
+    text-decoration: none;
+    transition: none !important;
+  }
+
+  &::after {
+    border-bottom: 0 !important;
+  }
+}
+
+.search, .connect {
+  margin-left: auto;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-left: 8px !important;
+}
+
+.search, .navigation, .connect {
+  display: inline-flex !important;
+  align-items: center !important;
+  user-select: none;
+  vertical-align: inherit !important;
+}
+
+.navigation {
+  padding-left: 8px !important;
+  padding-right: 12px !important;
+}
+
+.navigation::after, .search::after, .connect::after {
+  display: none;
+}
+
+.darkModeSwitch {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 5px;
+  height: 34px;
+  background: var(--cr-tertiary-bg);
+  border-radius: 2px;
+  border: 1px solid var(--cr-secondary-border);
+  color: var(--cr-primary-text);
+  cursor: pointer;
+
+  > span {
+    width: 100%;
+    gap: 8px;
+    display: flex;
+  }
+
+  img {
+    height: 22px;
+    width: 22px;
+    border-radius: 999px;
+  }
+
+  img[alt="sun"] {
+    padding: 2px;
+    background-color: #2B2111;
+  }
+
+  img[alt="moon"] {
+    background-color: @geekblue-1;
+  }
+}
+
+@media (max-width: @screen-md) {
+  .darkModeSwitch {
+    border: none;
+    padding: 0;
+    margin-left: 16px;
+
+    img {
+      height: 28px;
+      width: 28px;
+      padding: 4px;
+    }
+  }
+}
+
+.banner {
+  background-color: var(--cr-primary-color);
+  height: 30px;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--cr-tertiary-bg);
+  font-size: 12px;
+  user-select: none;
+  padding: 0 12px;
+}
+
+.bannerButton {
+  height: 22px !important;
+  font-size: 12px !important;
+  line-height: 14px !important;
+  background-color: var(--cr-tertiary-bg) !important;
+  color: var(--cr-secondary-text) !important;
+  margin-left: 6px !important;
+  margin-right: 6px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  text-shadow: none !important;
+}
+
+@media (max-width: @screen-md) {
+  .banner {
+    font-size: 10px;
+  }
+
+  .bannerButton {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: @screen-sm) {
+  .banner {
+    font-size: 9px;
+  }
+
+  .bannerButton {
+    font-size: 9px !important;
+  }
+}
+/* Revert the previous override to restore original button centering */

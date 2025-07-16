@@ -1,0 +1,291 @@
+@import './variables.module.less';
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px; /* Adjusted height to match icon size */
+  width: 210px;
+  padding: 4px !important;
+  background-color: var(--cr-primary-bg);
+  border: 1px solid var(--cr-secondary-border);
+  position: relative;
+  z-index: 1;
+
+  &.collapsed {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    padding: 4px;
+    padding-left: 3px;
+    min-width: 28px;
+
+    .iconWrapper {
+      border-left: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    &.connected {
+      width: unset;
+      padding-left: 4px;
+      min-width: unset;
+    }
+  }
+
+  // Tablet and smaller desktop styles
+  @media (max-width: 1024px) {
+    &:not(.collapsed) {
+      width: 180px;
+      min-width: 180px;
+    }
+  }
+
+  // Mobile specific styles
+  @media (max-width: 768px) {
+    &:not(.collapsed) {
+      width: 170px;
+      min-width: 170px;
+    }
+  }
+
+  // Ensure button is always visible, even on very small desktop windows
+  @media (max-width: 900px) and (min-width: 769px) {
+    &:not(.collapsed) {
+      width: 160px;
+      min-width: 160px;
+      font-size: 14px;
+    }
+  }
+}
+
+.text {
+  width: 100%;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.button:hover {
+  border-color: var(--cr-primary-color);
+
+  .iconWrapper {
+    border-color: var(--cr-primary-color);
+    color: var(--cr-primary-color);
+  }
+}
+
+.button[disabled], .button[disabled]:hover {
+  color: var(--cr-primary-text);
+  border-color: var(--cr-secondary-border);
+}
+
+.button[disabled]:hover {
+  .iconWrapper {
+    border-color: var(--cr-secondary-border);
+    color: var(--cr-primary-text);
+  }
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px; /* Adjusted to match Ant Design icon size */
+  width: 24px; /* Adjusted to match Ant Design icon size */
+  transition: all 0.3s;
+  border-left: 1px solid var(--cr-secondary-border);
+
+  :global(.anticon) {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    height: 24px; /* Adjusted for mobile */
+    width: 24px; /* Adjusted for mobile */
+  }
+
+  @media (max-width: 480px) {
+    height: 24px; /* Adjusted for small mobile */
+    width: 24px; /* Adjusted for small mobile */
+  }
+}
+
+.collapsedSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  svg {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.modal {
+  :global(.ant-modal-body) {
+    padding: 16px;
+  }
+
+  .modalDescription {
+    color: @cr-gray-7;
+    margin-bottom: 16px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .modalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    button {
+      height: 40px;
+      font-size: 16px;
+
+      &.connected {
+        background-color: var(--cr-error-color);
+        color: white;
+
+        &:hover {
+          background-color: var(--cr-error-color);
+          border-color: var(--cr-primary-border);
+        }
+      }
+    }
+  }
+
+  @media (max-width: @screen-md) {
+    .modalButtons {
+      flex-direction: column;
+    }
+  }
+
+  // Mobile modal adjustments
+  @media (max-width: 768px) {
+    :global(.ant-modal) {
+      margin: 16px !important;
+      max-width: calc(100vw - 32px) !important;
+    }
+
+    :global(.ant-modal-content) {
+      border-radius: 12px !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    :global(.ant-modal) {
+      margin: 8px !important;
+      max-width: calc(100vw - 16px) !important;
+    }
+  }
+}
+
+.userInfo {
+  .userProfile {
+    text-align: center;
+
+    .userName {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .userEmail {
+      color: var(--cr-secondary-text);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+  }
+
+  .walletAddress {
+    background: var(--cr-secondary-bg);
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: monospace;
+    word-break: break-all;
+
+    .walletLabel {
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+  }
+
+  .telegramSection {
+    .telegramStatus {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+
+      &.connected {
+        color: var(--cr-success-color);
+      }
+
+      &.disconnected {
+        color: var(--cr-warning-color);
+      }
+    }
+
+    .telegramUsername {
+      margin-bottom: 12px;
+
+      .username {
+        font-weight: bold;
+        color: var(--cr-primary-color);
+      }
+    }
+
+    .telegramDescription {
+      font-size: 12px;
+      color: var(--cr-secondary-text);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .telegramActions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  }
+
+  .accountCard {
+    border: 1px solid var(--cr-secondary-border);
+    border-radius: 8px;
+    background: var(--cr-card-bg);
+
+    &:hover {
+      border-color: var(--cr-primary-border);
+    }
+  }
+
+  .sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+
+    .telegramIcon {
+      color: #0088cc;
+    }
+  }
+}
+:global(body.dark) {
+  .walletAddress, .accountCard {
+    background: #ffffff !important;
+  }
+}

@@ -1,0 +1,36 @@
+@import './variables.module.less';
+
+.socials {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 0;
+  background-color: var(--cr-primary-bg);
+  border-top: 1px solid var(--cr-primary-border);
+  border-bottom: 1px solid var(--cr-primary-border);
+
+  &.collapsed {
+    border-top: 0;
+  }
+
+  img {
+    width: 28px;
+    height: 28px;
+
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
+
+  :global(.ant-space-item:last-child) {
+    display: none;
+  }
+}
+
+@media (max-width: @screen-md) {
+  .socials {
+    :global(.ant-space-item:last-child) {
+      display: block;
+      border-left: 1px solid var(--cr-primary-border);
+    }
+  }
+}

@@ -1,0 +1,144 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.table {
+  :global(.ant-table-header) {
+    table {
+      border-top: 1px solid var(--cr-primary-border) !important;
+    }
+  }
+
+  table {
+    colgroup col:first-child {
+      @media screen and (max-width: @screen-lg) {
+        width: 150px;
+      }
+    }
+  }
+}
+
+.row {
+  cursor: pointer;
+  color: var(--cr-primary-text);
+  background-color: var(--cr-primary-bg);
+}
+
+:root[data-theme="theme-dark"] {
+  .row {
+    background-color: var(--cr-tertiary-bg);
+    td {
+      background-color: var(--cr-tertiary-bg) !important;
+    }
+  }
+  .row:hover {
+    color: var(--cr-primary-text);
+    background-color: var(--cr-primary-bg) !important;
+
+    td {
+      background-color: var(--cr-primary-bg) !important;
+    }
+
+    .coin {
+      color: var(--cr-primary-color);
+    }
+
+    .value {
+      color: var(--cr-primary-text) !important;
+    }
+  }
+
+  .clickableTag {
+    background-color: @cr-gray-4;
+  }
+}
+
+.table > div > div > div > div {
+  background-color: var(--cr-secondary-bg);
+}
+
+.table > div > div > div {
+  background: var(--cr-secondary-bg) ;
+}
+
+.ant-table-container {
+  border-right: 1px solid var(--cr-primary-border) !important;
+  border-left: 0 !important;
+}
+
+.image {
+    width: 22px;
+    height: 22px;
+}
+
+.coin {
+    color: var(--cr-primary-text);
+
+    .name {
+        font-weight: bold;
+        margin-left: 6px;
+    }
+
+    .symbol {
+        color: #8C8C8C;
+        text-transform: uppercase;
+        margin-left: 6px;
+
+        @media (max-width: @screen-sm) {
+          color: var(--cr-primary-text);
+        }
+    }
+}
+
+.chart {
+  margin-left: 6px;
+
+  svg {
+    fill: var(--cr-primary-color);
+  }
+}
+
+.coin:hover {
+  color: @geekblue-6 !important;
+}
+
+.columnTitle {
+    display: inline-flex;
+    align-items: center;
+}
+
+.unclickableCell {
+  cursor: initial;
+}
+
+.clickableTag {
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: var(--cr-tertiary-bg);
+  color: var(--cr-secondary-text);
+  border: 1px solid var(--cr-primary-border);
+  border-radius: 2px;
+}
+
+.tag {
+  margin-right: 0;
+}
+
+.negativeValue {
+  color: var(--cr-error-color);
+}
+
+.positiveValue {
+  color: var(--cr-success-color);
+}
+
+.value {
+  color: var(--cr-primary-text) !important;
+}
+
+.changePercentage {
+  color: var(--cr-success-color);
+}
+
+.changePercentageNegative {
+  color: var(--cr-error-color);
+}

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "CoinTime" ALTER COLUMN "marketCap" DROP NOT NULL,
+ALTER COLUMN "volume" DROP NOT NULL;

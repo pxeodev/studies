@@ -1,0 +1,26 @@
+@import (reference) './base.module.less';
+@import './variables.module.less';
+
+.container {
+  &:extend(.container);
+
+  @media (max-width: @screen-sm) {
+    padding: 16px 24px 32px 24px;
+  }
+}
+
+.content {
+  &:extend(.markdown all);
+}
+
+.imageList {
+  padding-inline-start: 5px;
+  margin-left: 8px;
+
+  :global(img) {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    max-width: 600px;
+  }
+}
