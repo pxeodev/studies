@@ -7,6 +7,41 @@ import Exa from "exa-js"
 import { Converter } from '@memochou1993/json2markdown';
 import { Langfuse } from "langfuse";
 
+// Utility: Recursively substitute {result.property} placeholders in parameters using dependency result
+function substituteParameters(parameters, dependencyResult) {
+  if (!parameters || typeof parameters !== 'object') return parameters;
+
+  // Helper to resolve a path like 'coin.id' in the dependency result
+  function resolvePath(obj, path) {
+    return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+  }
+
+  // Recursively walk the parameters object
+  function substitute(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(substitute);
+    } else if (obj && typeof obj === 'object') {
+      const result = {};
+      for (const key in obj) {
+        result[key] = substitute(obj[key]);
+      }
+      return result;
+    } else if (typeof obj === 'string') {
+      // Match {result.property.subproperty...}
+      const match = obj.match(/^\{result\.(.+)\}$/);
+      if (match && dependencyResult) {
+        const value = resolvePath(dependencyResult, match[1]);
+        return value !== undefined ? value : obj;
+      }
+      return obj;
+    } else {
+      return obj;
+    }
+  }
+
+  return substitute(parameters);
+}
+
 // Hardcoded because of ENV newline issue
 process.env.GOOGLE_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC7reXGCX4qCHvG\n6Z9RDOvOE/ip5wHCCa/eRTNvtwtQ9hdJDzP4nD3qMo4Ybgq/4NQBAXwo9DVX9zSk\nLl3Kme5XZvXEh26Xhz657nDiqT6JVJ4oPemNQrWuk7oZ4xbs2gM0ygx+jh3hQLW0\ni1dz1aS+vrF+LvNbdStnde/5TRSZV16dc8Imla34j/DpIn5osb+I/7hYJF314S4B\nZbwN5Dt5vzW0fBEhF4L9atntPNFQlPlvSYyv2RY7Gr0M5TTca3U0d/intZ1GiJps\nDewjxaoSjcQ3gAmBlMfPdKr7CHQu/buOdGohrs/uUhEFxBCcFA71EtuFJiQf+v/I\n3XgLjNgNAgMBAAECgf9CxjG6WXufTjq7yuNO3bSy3ZLbixVVCZ1JDStVKWByrcbF\nzQ2bUVELbRv2v9rolKrZW23mzvyBD7NAYZQn7Byg0ZZ1Fg/YWduMy7PeRoO5g3cX\nWkUpEqhm31NCDUoFezZ+Jw/K90V/n0ZcYOH8lJweQZAPv89V+u+LyqpW84B2DcMq\nxttBmYiaqaWd8/ZZN/kxcdM5gWOWOgJPBo5zhSSkU3/+hJ+vNSGPPpCW3tFsIi8E\ngHf8DS5i5gtxllLt8Ypt4DgFtjrfHNl3A5wf5CxBa5/WupI6ZhdLvRvM+FfpNAss\ngILf+rmN2PXMVB77CDE4g/BEmHFJE+yvvlatRgECgYEA8T2e1aNDMnw+TnODN93x\nREGnZlLBfaqKogGVQ6dUtjTeDPEoaP/Zt7LQoIebj42r0T8dOkQxbXPeWH6fuTSW\n5zvkNKAtxWTTAQL94TV1OtD2TxPxV14JaSQWW9QwGhe98r8TueWHyGkqU38+v5FO\naK9WnUCuuz1XjAqm9fETjgECgYEAxyliF0gwLK8PlQaObFcvEH02EsZjulNx6koy\nwJrPblQwoPP+Tdr7U47gI9kMFhOeJLf3bWTOTsd643n9/z02Tp8bMinr2Q17XEuz\nUQpqxJEynO4ZmxKH5YAMXgfxAiAEp6mKU9SnkZ1PhG91Yfk+fQrU21V3/T7c8qYV\npbGyog0CgYEAgMLHGHh/0V6HUxBMpXEM6cWxN+hL5ms0e6wko2uYx3gIXRgK3aBR\n8L68pDI9Ua3oW1M4onTrfOQvdUSAtDXhpaJN99jXFVjvVsbmA2KpI6+NCEA4vM0w\ncLIWTQVAd2zcschTGxHsG4gmU1LDhzRjiXSs4lo36TCgndrBqtv1+AECgYAsewyi\nYIgJ4stbIEy827fyOdTS2qY5XhuqFQpCxBCh9oGp4PSiFM9e+SEMQJSXdagzUTcc\nopAFPj4vAfb9g4FWi+h6CqzXHFC561pQNkBkSH2CWRc08C2Tz0Zz1dg4/ker3oy7\nblpChlzVGkOgLxeKu9mQZwVWdSzJsNhS2l4oHQKBgD4DjX/9alefFH4nGJ+lGl8s\n4i8Gw9lhMuhHpl1y1dCu5oPO5luVUTtcLnlsjOfd6YVAvb2Un7XN9Cl+fYgiBgW0\nJh95SMU8ryhQaa3109KqQAlI2eu6z3ubq93/BaKy5oRS18AJ+fKfhgUGKX1YOydu\nEz33m6tbTHD/abdmZPNE\n-----END PRIVATE KEY-----\n`;
 
@@ -244,49 +279,6 @@ const toolImplementations = {
       }
     }
   },
-  exaSearch: {
-    execute: async ({ query, useAutoprompt = false, numResults = 5, startPublishedDate, endPublishedDate, includeDomains, excludeDomains }) => {
-      console.log('Tool executed: exaSearch', {
-        query,
-        useAutoprompt,
-        numResults,
-        startPublishedDate,
-        endPublishedDate,
-        includeDomains,
-        excludeDomains
-      });
-
-      // Initialize the Exa client with API key from environment
-      const exa = new Exa(process.env.EXA_API_KEY);
-
-      // Build search options
-      const searchOptions = {
-        numResults,
-        useAutoprompt
-      };
-
-      // Add optional parameters if provided
-      if (startPublishedDate) searchOptions.startPublishedDate = startPublishedDate;
-      if (endPublishedDate) searchOptions.endPublishedDate = endPublishedDate;
-      if (includeDomains && includeDomains.length > 0) searchOptions.includeDomains = includeDomains;
-      if (excludeDomains && excludeDomains.length > 0) searchOptions.excludeDomains = excludeDomains;
-
-      // Execute the search
-      const searchResult = await withTimeout(exa.search(query, searchOptions));
-      console.log('exaSearch - Result count:', searchResult.results?.length || 0);
-
-      // Format the results for display
-      const formattedResults = searchResult.results?.map(result => ({
-        title: result.title,
-        url: result.url,
-        publishedDate: result.publishedDate,
-        score: result.score,
-        snippet: result.text || result.extract
-      })) || [];
-
-      return { query, results: formattedResults };
-    }
-  },
 
   exaSearchWithContents: {
     execute: async ({ query, useAutoprompt = false, numResults = 3, includeDomains, retrieveText = true, retrieveHighlights = false, maxCharacters = 5000 }) => {
@@ -401,59 +393,6 @@ const toolImplementations = {
       }
 
       return formattedResult;
-    }
-  },
-
-  exaFindSimilar: {
-    execute: async ({ url, numResults = 5, excludeSourceDomain = true, retrieveText = false }) => {
-      console.log('Tool executed: exaFindSimilar', {
-          url,
-          numResults,
-          excludeSourceDomain,
-          retrieveText
-        });
-
-        // Initialize the Exa client with API key from environment
-        const exa = new Exa(process.env.EXA_API_KEY);
-
-        // Set options
-        const options = {
-          numResults,
-          excludeSourceDomain
-        };
-
-        let result;
-        // Decide whether to get contents along with similar URLs
-        if (retrieveText) {
-          result = await withTimeout(exa.findSimilarAndContents(url, {
-            ...options,
-            text: true
-          }));
-        } else {
-          result = await withTimeout(exa.findSimilar(url, options));
-        }
-
-        console.log('exaFindSimilar - Result count:', result.results?.length || 0);
-
-        // Format the results
-        const formattedResults = result.results?.map(result => {
-          const formattedResult = {
-            title: result.title,
-            url: result.url,
-            publishedDate: result.publishedDate,
-            score: result.score,
-            snippet: result.extract || result.text?.substring(0, 200) + '...'
-          };
-
-          // Add full text if requested and available
-          if (retrieveText && result.text) {
-            formattedResult.content = result.text;
-          }
-
-          return formattedResult;
-        }) || [];
-
-        return { sourceUrl: url, similarResults: formattedResults };
     }
   },
 
@@ -795,6 +734,31 @@ const toolImplementations = {
         throw(error)
       }
     }
+  },
+
+  getCoinHistoricalMetaData: {
+    execute: async ({ coinId, timestampAmount, timestampInterval }) => {
+      try {
+        console.log('Tool executed: getCoinHistoricalMetaData', { coinId, timestampAmount, timestampInterval });
+
+        // Call the socket server API endpoint for historical metadata
+        const result = await callSocketServer('/api/coin/historical-metadata', {
+          coinId,
+          timestampAmount,
+          timestampInterval
+        });
+
+        console.log('getCoinHistoricalMetaData - Result:', result);
+
+        if (result.error) {
+          throw(result.error)
+        }
+
+        return result;
+      } catch (error) {
+        throw(error)
+      }
+    }
   }
 };
 
@@ -808,7 +772,6 @@ const getAiConfigurationAndPrompts = async (sessionId = null) => {
     if (sessionId) {
       url.searchParams.append('sessionId', sessionId);
     }
-    url.searchParams.append('playground', 'false');
 
     // Fetch API configuration, system prompt, and classifier prompt in parallel
     const [apiResponse, langfuseSystemPrompt, langfuseClassifierPrompt] = await Promise.all([
@@ -1268,9 +1231,9 @@ const processRegularStep = async (step, stepResults, tools) => {
 
     // Apply parameter updates based on dependencies if specified
     if (usesResultFrom && stepResults[usesResultFrom]) {
-      // Simply pass the dependency information to the GPT model in the next phase
-      // The complex model will interpret this raw data appropriately
-      console.log(`Tool ${toolName} using results from step ${usesResultFrom}`);
+      // Use the substituteParameters utility to replace placeholders
+      finalParameters = substituteParameters(finalParameters, stepResults[usesResultFrom].tools[0].result);
+      console.log(`Tool ${toolName} using results from step ${usesResultFrom} with substituted parameters:`, finalParameters);
     }
 
     if (!tools[toolName]) {

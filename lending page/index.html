@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="virtual-protocol-site-verification" content="d531d97df1d7292ed7df12dba3ed579a" />
+    <title>Shumi - Autonomous Alpha for Degen Traders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+          --bg:#0b0e1a;
+          --panel:#131827;
+          --accent:#1f7168;
+          --fg:#e9ecf1;
+          --fg-muted:#8a93a8;
+          --grad-1:#2b3154;
+          --grad-2:#10152e;
+        }
+        body {
+            margin: 0;
+            height: 100%;
+            background: var(--bg);
+            color: var(--fg);
+            font: 16px/1.6 "Fira Mono", monospace;
+            overflow-x: hidden;
+        }
+        
+        .parallax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .code-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            pointer-events: none;
+        }
+        
+        .code-column {
+            width: 3%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .code-text {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            font-size: 11px;
+            font-family: "Fira Mono", monospace;
+            color: var(--accent);
+            opacity: 0.6;
+            white-space: pre-wrap;
+            line-height: 1.1;
+            animation: fall linear infinite;
+            text-shadow: 0 0 8px var(--accent);
+        }
+        
+        @keyframes fall {
+            0% {
+                top: -100px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+        
+        .hero {
+            position: relative;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--grad-1) 0%, var(--grad-2) 100%);
+            background: rgba(43, 49, 84, 0.8);
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-family: "Chakra Petch", sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--fg-muted);
+        }
+        
+        @keyframes logo-pop {
+            0% {
+                transform: scale(.6) rotate(-6deg);
+                opacity: 0;
+            }
+            80% {
+                transform: scale(1.05) rotate(1deg);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .logo-wrap {
+            animation: logo-pop .9s cubic-bezier(.4, 1.4, .5, 1) .3s forwards;
+            transform-origin: center;
+            opacity: 0;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .55rem 1rem;
+            background: rgba(19, 24, 39, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 6px #0007;
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .logo {
+            width: 44px;
+            height: auto;
+        }
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+        }
+        
+        .btn.connect {
+            font-family: "Chakra Petch", sans-serif;
+            font-weight: 600;
+            background: var(--accent);
+            color: var(--fg);
+            border: 0;
+            border-radius: 28px;
+            padding: .55rem 1.5rem;
+            cursor: pointer;
+            transition: filter .2s;
+        }
+        
+        .btn.connect:hover {
+            filter: brightness(1.1);
+        }
+        
+        .icon {
+            font-size: 1.25rem;
+            opacity: .75;
+            transition: opacity .2s;
+        }
+        
+        .icon:hover {
+            opacity: 1;
+        }
+        .hero-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;text-align:center;}
+        .hero-logo{width:160px;filter:drop-shadow(0 0 24px #1f716865);}
+        .hero-subtag{font-family:"Chakra Petch",sans-serif;font-size:1.25rem;color:var(--fg-muted);}
+        .skirt {
+            background: rgba(19, 24, 39, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            font-family: "Chakra Petch", sans-serif;
+            font-size: .9rem;
+            position: relative;
+            z-index: 1000;
+        }
+        .skirt-link{color:var(--fg-muted);text-decoration:none;font-weight:600;letter-spacing:.3px;text-transform:uppercase;transition:color .2s;}
+        .skirt-link:hover{color:var(--accent);text-decoration:underline;}
+        .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20;}
+        .modal.active{display:flex;}
+        .modal-panel{background:rgba(19,24,39,.80);padding:2.2rem 2.4rem;border-radius:18px;box-shadow:0 0 30px #000a;text-align:center;width:92%;max-width:320px;}
+        .modal-panel h2{margin:0 0 1.6rem;font-family:"Chakra Petch",sans-serif;font-size:1.2rem;}
+        .wallet-opt{width:100%;margin:.45rem 0;padding:.6rem;border:0;border-radius:12px;font-family:"Chakra Petch",sans-serif;font-weight:600;cursor:pointer;background:var(--accent);color:var(--fg);transition:filter .2s;}
+        .wallet-opt:hover{filter:brightness(1.1);}
+        .modal-note{margin-top:1.4rem;font-size:.75rem;color:var(--fg-muted);}
+        .modal-close{position:absolute;top:.8rem;right:.9rem;background:none;border:0;font-size:1.25rem;color:var(--fg-muted);cursor:pointer;}
+        @media(max-width:740px){
+          .tag{font-size:.9rem;}
+          .actions{gap:.6rem;}
+          .btn.connect{padding:.5rem 1.2rem;}
+        }
+        @media(max-width:560px){
+          .nav{flex-direction:column;gap:.8rem;text-align:center;}
+          .actions{flex-wrap:wrap;justify-content:center;}
+          .tag{order:3;}
+          .hero-logo{width:120px;}
+          .hero-subtag{font-size:1.05rem;}
+          .skirt{flex-wrap:wrap;gap:1rem;}
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax-container">
+        <div class="code-rain"></div>
+    </div>
+    
+    <header class="nav">
+        <div class="logo-wrap">
+            <img src="shumi.png" class="logo" alt="shumi" style="width: 44px; height: 44px; object-fit: contain;" />
+        </div>
+        <h1 class="tag">autonomous alpha for degen traders</h1>
+        <div class="actions">
+            <button id="connect-btn" class="btn connect">connect to shumi</button>
+            <a href="https://x.com/coinrotatorapp" class="icon" aria-label="docs">📄</a>
+            <a href="https://x.com/coinrotatorapp" class="icon" aria-label="gitbook">📘</a>
+            <a href="https://x.com/coinrotatorapp" class="icon" aria-label="twitter">🐦</a>
+            <a href="https://discord.gg/URARqw2KAS" class="icon" aria-label="discord">💬</a>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <img src="shumi.png" class="hero-logo" alt="shumi mark" style="width: 160px; height: 160px; object-fit: contain; filter: drop-shadow(0 0 24px #1f716865);" />
+            <p class="hero-subtag">trade intelligence on autopilot</p>
+        </div>
+    </section>
+    
+    <footer class="skirt">
+        <a href="https://x.com/coinrotatorapp" class="skirt-link">docs</a>
+        <a href="https://x.com/coinrotatorapp" class="skirt-link">gitbook</a>
+        <a href="https://x.com/coinrotatorapp" class="skirt-link">twitter</a>
+        <a href="https://discord.gg/URARqw2KAS" class="skirt-link">discord</a>
+        <a href="https://app.virtuals.io/geneses/6667" class="skirt-link">virtuals launch ↗️</a>
+    </footer>
+    
+    <div id="wallet-modal" class="modal">
+        <div class="modal-panel">
+            <button class="modal-close" aria-label="close">✕</button>
+            <h2>connect wallet</h2>
+            <button class="wallet-opt">metamask</button>
+            <button class="wallet-opt">walletconnect</button>
+            <button class="wallet-opt">phantom</button>
+            <p class="modal-note">providers will hook in later.</p>
+        </div>
+    </div>
+
+    <script>
+        function init() {
+            /* Create falling code rain effect - enhanced visibility */
+            const codeSnippets = [
+                'def moon_mission():\n  if rsi < 20:\n    leverage = 50x\n    send_it()',
+                'while diamond_hands:\n  hodl()\n  if dip:\n    buy_more()\n  sleep(1)',
+                'class DegenTrader:\n  def __init__(self):\n    self.risk = "YOLO"\n    self.strategy = "ape"',
+                'if candle.color == "green":\n  fomo_buy()\nelse:\n  panic_sell()\n# classic',
+                'def check_alpha():\n  for coin in shitcoins:\n    if pump > 1000%:\n      return "MOON"',
+                'leverage = input("1-100x? ")\nif leverage < 50:\n  print("ngmi")\nelse:\n  print("LFG!")',
+                'try:\n  profit = trade()\nexcept Exception:\n  print("rekt")\n  buy_rope()',
+                'import hopium\nfrom copium import *\n\nwhile not_rich:\n  trade_harder()',
+                'def ape_into(token):\n  wallet_balance = 0\n  if hype > 9000:\n    mortgage_house()',
+                'if twitter_hype:\n  buy_signal = True\nif elon_tweet:\n  to_the_moon()\nelse:\n  ngmi()',
+                '// Smart contract audit\nfunction rugPull() {\n  require(false, "trust me bro");\n}',
+                'const degen = {\n  risk: "maximum",\n  strategy: "send it",\n  exit: "never"\n};',
+                'SELECT * FROM trades\nWHERE profit > 0\n-- 0 rows returned\n-- pain',
+                'if (price.includes("ATH")) {\n  buyOrder.size = "life_savings";\n  execute();\n}',
+                'def calculate_loss():\n  return portfolio * -0.99\n\n# works every time',
+                'while (!millionaire) {\n  leverage++;\n  risk = "MAXIMUM";\n  pray();\n}',
+                'const strategy = {\n  entry: "FOMO",\n  exit: "panic",\n  risk: "house_money"\n};',
+                'if (meme_coin && viral_tiktok) {\n  all_in();\n  // this is financial advice\n}',
+                'def diamond_hands():\n  while price_down:\n    buy_dip()\n  return "wagmi"',
+                'pump_it = lambda x: x * 100\ndump_it = lambda x: x * 0.01\n# market_makers.py'
+            ];
+
+            function createCodeRain() {
+                const rain = document.querySelector('.code-rain');
+                if (!rain) return;
+                
+                rain.innerHTML = ''; // Clear existing content
+                
+                // Create 40 columns across screen
+                for (let i = 0; i < 40; i++) {
+                    const column = document.createElement('div');
+                    column.className = 'code-column';
+                    
+                    // Stagger the start times
+                    const startDelay = Math.random() * 3;
+                    
+                    setTimeout(() => {
+                        function dropCode() {
+                            const codeText = document.createElement('div');
+                            codeText.className = 'code-text';
+                            codeText.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+                            
+                            // Random duration between 3-7 seconds
+                            const duration = 3 + Math.random() * 4;
+                            codeText.style.animationDuration = duration + 's';
+                            
+                            column.appendChild(codeText);
+                            
+                            // Remove after animation completes
+                            setTimeout(() => {
+                                if (codeText.parentNode) {
+                                    codeText.parentNode.removeChild(codeText);
+                                }
+                            }, duration * 1000);
+                        }
+                        
+                        // Start the first drop
+                        dropCode();
+                        
+                        // Continue dropping at intervals
+                        setInterval(dropCode, (2 + Math.random() * 3) * 1000);
+                    }, startDelay * 1000);
+                    
+                    rain.appendChild(column);
+                }
+            }
+            
+            // Initialize the code rain
+            createCodeRain();
+            
+            // Restart animation every 30 seconds to ensure it keeps running
+            setInterval(createCodeRain, 30000);
+            
+            /* Simple parallax on scroll */
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rain = document.querySelector('.parallax-container');
+                if (rain) {
+                    rain.style.transform = `translateY(${scrolled * 0.1}px)`;
+                }
+            });
+            /* wallet modal controls */
+            const modal = document.getElementById('wallet-modal');
+            const connectBtn = document.getElementById('connect-btn');
+            const closeBtn = modal.querySelector('.modal-close');
+            connectBtn.onclick = () => modal.classList.add('active');
+            closeBtn.onclick = () => modal.classList.remove('active');
+            modal.onclick = e => {
+                if (e.target === modal || e.target.classList.contains('wallet-opt'))
+                    modal.classList.remove('active');
+            };
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
