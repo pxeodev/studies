@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+.DS_Store
+node_modules
+.idea
+package-lock.json
+=======
 node_modules
 # Keep environment variables out of version control
 .env
@@ -9,3 +15,4 @@ dist/**
 
 # Local Netlify folder
 .netlify
+>>>>>>> deae6bc54c397fa5ed38685619f3bedfda93add1
