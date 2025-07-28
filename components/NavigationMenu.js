@@ -19,6 +19,7 @@ import {
 } from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
 import slugify from 'slugify'
 
 import styles from "../styles/navigationmenu.module.less"
@@ -28,6 +29,18 @@ import useBreakPoint from '../hooks/useBreakPoint'
 const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }) => {
   const router = useRouter()
   const screens = useBreakPoint()
+
+  // State for managing which menu groups are open
+  const [openKeys, setOpenKeys] = useState(['screenertools'])
+
+  // Set initial open keys based on screen size
+  useEffect(() => {
+    if (!screens.lg) {
+      setOpenKeys(['keypass', 'screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about'])
+    } else {
+      setOpenKeys(['screenertools'])
+    }
+  }, [screens.lg])
 
   let menuItems = [
     {
@@ -318,11 +331,9 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
     }
   }
 
-  let props = {
-    openKeys: ['screenertools']
-  }
-  if (!screens.lg) {
-    props.openKeys = ['keypass', 'screenertools', 'currentnarratives', 'exchanges', 'preselects', 'topcategories', 'tutorials', 'about']
+  // Handler for opening/closing menu groups
+  const handleOpenChange = (keys) => {
+    setOpenKeys(keys)
   }
 
   const handleMenuClick = (e) => {
@@ -338,8 +349,9 @@ const NavigationMenu = ({ collapsed = false, topCategories, onMenuItemSelected }
       items={menuItems}
       className={styles.menu}
       selectedKeys={[selectedKey]}
+      openKeys={openKeys}
+      onOpenChange={handleOpenChange}
       onClick={handleMenuClick}
-      {...props}
     />
   );
 }
