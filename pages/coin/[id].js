@@ -113,7 +113,7 @@ export default function Coin(coin) {
   useEffect(() => {
     if (socket) {
       socket.on("i", (prices) => {
-        const price = prices[coin.symbol]
+        const price = prices[coin.id] || prices[coin.symbol]
         if (price) {
           setPrice(price)
         }
@@ -121,7 +121,7 @@ export default function Coin(coin) {
       });
 
       socket.on('p', (priceUpdates) => {
-        const priceUpdate = priceUpdates[coin.symbol]
+        const priceUpdate = priceUpdates[coin.id] || priceUpdates[coin.symbol]
         if (priceUpdate) {
           setPrice(priceUpdate)
         }
