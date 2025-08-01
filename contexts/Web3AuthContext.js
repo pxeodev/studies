@@ -121,6 +121,16 @@ export const Web3AuthProvider = ({ children }) => {
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|mobi/i.test(navigator.userAgent) || window.innerWidth <= 768;
           console.log('Device detected as:', isMobile ? 'Mobile' : 'Desktop');
 
+          // Enhanced OAuth redirect detection for mobile
+          const urlParams = new URLSearchParams(window.location.search);
+          const hasOAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('oauth_token') ||
+                                urlParams.has('oauth_verifier') || urlParams.has('access_token') ||
+                                window.location.hash.includes('access_token') || window.location.hash.includes('code');
+          
+          if (hasOAuthParams) {
+            console.log('🔄 OAuth redirect detected, Web3Auth will handle automatically');
+          }
+
           const web3authInstance = new Web3Auth({
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
@@ -129,6 +139,8 @@ export const Web3AuthProvider = ({ children }) => {
             storageKey: "local",
             // Add redirectUrl for proper mobile redirect handling
             redirectUrl: typeof window !== 'undefined' ? window.location.origin : undefined,
+            // CRITICAL: Add replaceUrlOnRedirect for mobile OAuth flow
+            replaceUrlOnRedirect: true,
             uiConfig: {
               // Only show these login methods
               loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
@@ -138,8 +150,8 @@ export const Web3AuthProvider = ({ children }) => {
               // Mobile-specific settings for better Twitter auth
               displayErrorsOnModal: false,
               logLevel: isDevelopment ? "debug" : "error",
-              // Force redirect mode for mobile to prevent raw HTML issues
-              uxMode: isMobile ? "redirect" : "popup",
+              // Force redirect mode for all devices to ensure consistent behavior
+              uxMode: "redirect",
             },
             // Add sessionTime to prevent session timeout issues
             sessionTime: 86400, // 24 hours
@@ -243,15 +255,8 @@ export const Web3AuthProvider = ({ children }) => {
       // For mobile devices, ensure we're using the correct redirect mode
       if (isMobile) {
         console.log('📱 Using mobile-optimized login flow with redirect mode');
-        // The redirectUrl is already set in the Web3Auth config
+        // The redirectUrl and replaceUrlOnRedirect are already set in the Web3Auth config
       }
-
-      // For mobile devices, ensure we're using the correct redirect mode
-      if (isMobile) {
-        console.log('📱 Using mobile-optimized login flow with redirect mode');
-        // The redirectUrl is already set in the Web3Auth config
-      }
-
 
       const web3authProvider = await web3auth.connect(connectOptions);
       if (!web3authProvider) {
