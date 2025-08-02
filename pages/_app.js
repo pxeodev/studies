@@ -5,8 +5,8 @@ import BugsnagPluginReact from '@bugsnag/plugin-react'
 import ScreenerLayout from "../layouts/screener"
 import "../styles/ant.less"
 
-// Only start Bugsnag if it hasn't been started yet (prevents double initialization)
-if (!(Bugsnag._client)) {
+// Only start Bugsnag if it hasn't been started yet and API key is available
+if (!(Bugsnag._client) && process.env.NEXT_PUBLIC_BUGSNAG_API_KEY) {
   Bugsnag.start({
     apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY,
     plugins: [new BugsnagPluginReact()]
