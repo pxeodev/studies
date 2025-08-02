@@ -14,18 +14,57 @@ export const useWeb3Auth = () => {
   return context;
 };
 
-// Use different client IDs for development vs production
-const isDevelopment = process.env.NODE_ENV === 'development' || (typeof window !== 'undefined' && window.location.hostname === 'localhost');
+// CRITICAL: Enhanced environment detection for your Vercel deployment
+const getEnvironmentDetails = () => {
+  if (typeof window === 'undefined') {
+    return {
+      isDevelopment: process.env.NODE_ENV === 'development',
+      isVercel: false,
+      hostname: 'server-side',
+      origin: null
+    };
+  }
 
-// Development client ID (Sapphire Devnet) - works with localhost without domain whitelisting
+  const hostname = window.location.hostname;
+  const origin = window.location.origin;
+  
+  // Development detection
+  const isDevelopment = 
+    process.env.NODE_ENV === 'development' ||
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.includes('.local') ||
+    hostname.includes('loca.lt') ||
+    hostname.includes('ngrok.io') ||
+    origin.includes('://localhost');
+
+  // Vercel detection
+  const isVercel = 
+    hostname.includes('.vercel.app') ||
+    hostname.includes('.vercel.dev') ||
+    process.env.VERCEL === '1' ||
+    process.env.VERCEL_ENV !== undefined;
+
+  return {
+    isDevelopment,
+    isVercel,
+    hostname,
+    origin,
+    isProduction: !isDevelopment && process.env.NODE_ENV === 'production'
+  };
+};
+
+const env = getEnvironmentDetails();
+
+// Client ID configuration
 const developmentClientId = "BGkgGCsO6v6Uve1k6glWCNKU2ims2t1Ljc9tU9HKUO5me2OTlxXP-bhY9OU7PPuBeT0FQ8qAZPU_ArEoLpSeeEU";
-
-// Production client ID (Sapphire Mainnet)
 const productionClientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
 
-const clientId = isDevelopment ? developmentClientId : productionClientId;
+// CRITICAL: Use correct client ID and network combination
+const clientId = env.isDevelopment ? developmentClientId : productionClientId;
+const network = env.isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET;
 
-// Multi-chain configuration
+// Chain configurations
 const chainConfigs = {
   base: {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
@@ -89,8 +128,38 @@ const chainConfigs = {
   }
 };
 
-// Default chain (Base)
 const defaultChainConfig = chainConfigs.base;
+
+// CRITICAL: Redirect URL configuration for your specific Vercel deployment
+const getRedirectUrl = () => {
+  if (typeof window === 'undefined') return undefined;
+  
+  const { origin, isDevelopment } = getEnvironmentDetails();
+  
+  // For development environments
+  if (isDevelopment) {
+    console.log('🔧 Development: Using origin as redirect URL:', origin);
+    return origin;
+  }
+  
+  // For Vercel production - use specific redirect page
+  const redirectUrl = `${origin}/web3auth-redirect.html`;
+  console.log('🔧 Vercel Production: Using redirect URL:', redirectUrl);
+  return redirectUrl;
+};
+
+// Debug logging
+console.log('🔧 Web3Auth Configuration for coinrotator-git-ai-playground-teamxx.vercel.app:', {
+  NODE_ENV: process.env.NODE_ENV,
+  VERCEL: process.env.VERCEL,
+  hostname: env.hostname,
+  origin: env.origin,
+  isDevelopment: env.isDevelopment,
+  isVercel: env.isVercel,
+  clientIdUsed: clientId.substring(0, 10) + '...' + clientId.slice(-10),
+  networkUsed: env.isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET',
+  redirectUrl: getRedirectUrl()
+});
 
 export const Web3AuthProvider = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
@@ -100,12 +169,11 @@ export const Web3AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [currentChain, setCurrentChain] = useState('base'); // Track current chain
+  const [currentChain, setCurrentChain] = useState('base');
   const [initializationError, setInitializationError] = useState(null);
   const [initializationComplete, setInitializationComplete] = useState(false);
-  const [hasStoredSession, setHasStoredSession] = useState(false); // Track if there's a stored session
+  const [hasStoredSession, setHasStoredSession] = useState(false);
 
-  // Handle client-side hydration
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -114,92 +182,128 @@ export const Web3AuthProvider = ({ children }) => {
     const init = async () => {
       try {
         if (isClient) {
-          console.log('Starting Web3Auth initialization...');
+          console.log('🚀 Initializing Web3Auth for Vercel deployment...');
           setInitializationError(null);
 
-          // Detect if mobile device
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-
-          const web3authInstance = new Web3Auth({
+          const redirectUrl = getRedirectUrl();
+          
+          const web3authConfig = {
             clientId,
-            web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
+            web3AuthNetwork: network,
             chainConfig: defaultChainConfig,
-            enableLogging: isDevelopment,
+            enableLogging: env.isDevelopment,
             storageKey: "local",
+            // CRITICAL: Set redirectUrl for Vercel
+            redirectUrl: redirectUrl,
             uiConfig: {
-              // Only show these login methods
               loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
-              // Hide specific login methods
               hideExternalWallets: true,
               modalZIndex: "99999",
-              // Mobile-specific settings for better Twitter auth
               displayErrorsOnModal: false,
-              logLevel: isDevelopment ? "debug" : "error",
-              // Force redirect mode for mobile to prevent raw HTML issues
+              logLevel: env.isDevelopment ? "debug" : "error",
+              // Force redirect for mobile
               uxMode: isMobile ? "redirect" : "popup",
+              mode: "light",
+              theme: {
+                primary: "#3396FF"
+              }
             },
-            // Add sessionTime to prevent session timeout issues
-            sessionTime: 86400, // 24 hours
+            sessionTime: 86400,
+          };
+
+          console.log('🔧 Final Web3Auth Config:', {
+            clientId: clientId.substring(0, 10) + '...' + clientId.slice(-10),
+            network: env.isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET',
+            redirectUrl,
+            uxMode: isMobile ? "redirect" : "popup",
+            isMobile
           });
 
-          console.log('Initializing Web3Auth modal...');
+          const web3authInstance = new Web3Auth(web3authConfig);
+          
+          console.log('🔧 Initializing Web3Auth instance...');
           await web3authInstance.init();
-
+          
           setWeb3auth(web3authInstance);
 
-          // Check for existing session after initialization
-          console.log('Checking for existing session...');
-          console.log('Connected status:', web3authInstance.connected);
-          console.log('Provider status:', !!web3authInstance.provider);
+          // Handle mobile redirect result
+          if (isMobile) {
+            console.log('📱 Mobile device - checking for redirect result...');
+            
+            // Check URL parameters for redirect result
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            
+            const hasRedirectData = 
+              urlParams.has('code') || 
+              urlParams.has('state') || 
+              hashParams.has('access_token') ||
+              document.referrer.includes('web3auth') ||
+              document.referrer.includes('auth.web3auth.io');
+            
+            if (hasRedirectData) {
+              console.log('📱 Mobile redirect data detected, processing...');
+              // Give Web3Auth time to process the redirect
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+          }
 
-          // Add a small delay to ensure Web3Auth has fully initialized
-          await new Promise(resolve => setTimeout(resolve, 100));
+          // Check for existing session
+          console.log('🔍 Checking for existing session...');
+          await new Promise(resolve => setTimeout(resolve, 200));
 
-          // Re-check after delay
-          console.log('Re-checking after delay...');
-          console.log('Connected status:', web3authInstance.connected);
-          console.log('Provider status:', !!web3authInstance.provider);
-
-          // Check for session - either connected OR provider available indicates a stored session
           if (web3authInstance.connected && web3authInstance.provider) {
-            console.log('Full session found, restoring...');
+            console.log('✅ Active session found, restoring...');
             try {
               setLoggedIn(true);
               setWeb3authProvider(web3authInstance.provider);
               const user = await web3authInstance.getUserInfo();
               setUser(user);
               setHasStoredSession(true);
-              console.log('✅ Session restored for user:', {
-                email: user?.email,
-                name: user?.name,
-                profileImage: user?.profileImage,
-                picture: user?.picture,
-                avatar: user?.avatar,
-                photo: user?.photo,
-                allFields: Object.keys(user || {})
-              });
+              console.log('✅ Session restored for:', user?.email);
             } catch (sessionError) {
-              console.warn('⚠️ Session restoration failed, clearing state:', sessionError.message);
-              // Clear any invalid session state
+              console.warn('⚠️ Session restoration failed:', sessionError.message);
               setLoggedIn(false);
               setWeb3authProvider(null);
               setUser(null);
               setHasStoredSession(false);
-              console.log('Session restoration failed, ready for login');
             }
           } else if (web3authInstance.provider && !web3authInstance.connected) {
-            console.log('Stored session detected but not fully connected - will auto-connect on user action');
+            console.log('📱 Partial session detected');
             setHasStoredSession(true);
-            setLoggedIn(false); // Keep UI showing disconnected until user clicks
-            console.log('✅ Stored session ready for auto-connect');
+            setLoggedIn(false);
           } else {
-            console.log('No existing session, ready for login');
+            console.log('🆕 No existing session');
             setHasStoredSession(false);
           }
         }
       } catch (error) {
         console.error("❌ Web3Auth initialization failed:", error);
-        setInitializationError(error.message || 'Failed to initialize Web3Auth');
+        
+        let errorMessage = error.message || 'Failed to initialize Web3Auth';
+        
+        if (errorMessage.includes('could not validate redirect')) {
+          errorMessage = `🚨 VERCEL DEPLOYMENT ISSUE: Domain not whitelisted properly.
+          
+Required whitelisted URLs in Web3Auth dashboard:
+- https://coinrotator-git-ai-playground-teamxx.vercel.app
+- https://coinrotator-git-ai-playground-teamxx.vercel.app/web3auth-redirect.html
+
+Client ID: ${clientId.substring(0, 10)}...${clientId.slice(-10)}
+Network: ${env.isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET'}`;
+        }
+        
+        setInitializationError(errorMessage);
+        console.error('🔧 Configuration Debug:', {
+          currentOrigin: window.location.origin,
+          expectedWhitelistedUrls: [
+            'https://coinrotator-git-ai-playground-teamxx.vercel.app',
+            'https://coinrotator-git-ai-playground-teamxx.vercel.app/web3auth-redirect.html'
+          ],
+          clientId: clientId.substring(0, 10) + '...' + clientId.slice(-10),
+          network: env.isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET'
+        });
       } finally {
         if (isClient) {
           setIsLoading(false);
@@ -216,28 +320,38 @@ export const Web3AuthProvider = ({ children }) => {
   const login = async (loginProvider = null) => {
     try {
       console.log('🚀 Starting Web3Auth login...');
+      
       if (!web3auth) {
         throw new Error("Web3Auth not initialized");
       }
 
-      // Detect if mobile device for specific handling
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-
-      // Check if we have a stored session that can be auto-connected
-      if (hasStoredSession && !loggedIn) {
-        console.log('📱 Auto-connecting with stored session...');
-      } else {
-        console.log('Connecting to Web3Auth...');
-      }
-
-      // Configure login options based on device and provider
+      const redirectUrl = getRedirectUrl();
+      
       let connectOptions = {
         loginProvider: loginProvider || undefined,
-        mfaLevel: "none", // Disable MFA for smoother experience
+        mfaLevel: "none",
+        // CRITICAL: Always include redirectUrl for Vercel
+        redirectUrl: redirectUrl,
       };
 
+      if (isMobile) {
+        connectOptions = {
+          ...connectOptions,
+          uxMode: "redirect",
+          display: "page",
+        };
+        console.log('📱 Mobile login with redirect mode');
+      }
+
+      console.log('🔧 Login options:', {
+        ...connectOptions,
+        clientId: clientId.substring(0, 10) + '...',
+        network: env.isDevelopment ? 'DEVNET' : 'MAINNET'
+      });
 
       const web3authProvider = await web3auth.connect(connectOptions);
+      
       if (!web3authProvider) {
         throw new Error('No provider returned from Web3Auth connection');
       }
@@ -249,21 +363,11 @@ export const Web3AuthProvider = ({ children }) => {
 
       const user = await web3auth.getUserInfo();
       setUser(user);
-      console.log('✅ User info retrieved:', {
-        email: user?.email,
-        name: user?.name,
-        profileImage: user?.profileImage,
-        picture: user?.picture,
-        avatar: user?.avatar,
-        photo: user?.photo,
-        allFields: Object.keys(user || {})
-      });
 
-      // Create ethers provider using the Web3Auth provider
+      // Get wallet address
       const ethProvider = new ethers.BrowserProvider(web3authProvider);
       const signer = await ethProvider.getSigner();
       const address = await signer.getAddress();
-      console.log('✅ Wallet address retrieved:', address);
 
       try {
         await saveUserToDatabase({
@@ -272,57 +376,44 @@ export const Web3AuthProvider = ({ children }) => {
           provider: user.typeOfLogin || 'unknown',
           web3auth_id: user.verifierId,
         });
-        console.log('✅ User data saved to database');
+        console.log('✅ User saved to database');
       } catch (dbError) {
-        console.warn('⚠️ Database save failed, but login was successful:', dbError.message);
+        console.warn('⚠️ Database save failed:', dbError.message);
       }
 
-      console.log('🎉 Login process completed successfully');
+      console.log('🎉 Login completed successfully');
       return { user, address };
 
     } catch (error) {
-      // Handle user cancellation gracefully without logging as error
+      console.error('❌ Login failed:', error);
+      
       const errorMsg = error.message?.toLowerCase() || '';
-      const errorString = error?.toString()?.toLowerCase() || '';
-      const errorCode = error.code;
-
-      const isUserCancellation =
-        errorMsg.includes('wallet popup has been closed by the user') ||
-        errorMsg.includes('popup_closed') ||
-        errorMsg.includes('user_closed_popup') ||
-        errorMsg.includes('cancelled') ||
-        errorMsg.includes('user_cancelled') ||
-        errorMsg.includes('user cancelled') ||
-        errorMsg.includes('user denied') ||
-        errorMsg.includes('user rejected') ||
-        errorMsg.includes('popup closed') ||
-        errorMsg.includes('modal closed') ||
-        errorMsg.includes('user closed the modal') ||
-        errorMsg.includes('authentication cancelled') ||
-        errorString.includes('popup closed') ||
-        errorString.includes('popup_closed') ||
-        errorString.includes('user_cancelled') ||
-        errorString.includes('user cancelled') ||
-        errorString.includes('user aborted') ||
-        errorString.includes('user closed the modal') ||
-        errorCode === 4001 || // User rejected request
-        errorCode === 'ACTION_REJECTED' ||
-        errorCode === 'USER_CANCELLED';
-
-      if (isUserCancellation) {
-        console.log('ℹ️ User cancelled login process');
-        // Return a special object to indicate user cancellation
-        return { success: false, error, shouldShowError: false };
-      } else {
-        console.error("❌ Login failed:", error);
-        console.error("Error details:", {
-          message: error.message,
-          code: error.code,
-          stack: error.stack
-        });
-        // Return error object for legitimate errors
-        return { success: false, error, shouldShowError: true };
+      
+      if (errorMsg.includes('could not validate redirect')) {
+        console.error('🚨 CRITICAL: Redirect validation failed for Vercel deployment');
+        console.error('🔧 Check Web3Auth dashboard whitelist for:');
+        console.error('   - https://coinrotator-git-ai-playground-teamxx.vercel.app');
+        console.error('   - https://coinrotator-git-ai-playground-teamxx.vercel.app/web3auth-redirect.html');
+        
+        return { 
+          success: false, 
+          error: new Error('Domain not whitelisted. Check Web3Auth dashboard configuration.'), 
+          shouldShowError: true 
+        };
       }
+
+      // Handle user cancellation
+      const isUserCancellation = 
+        errorMsg.includes('popup_closed') ||
+        errorMsg.includes('user_cancelled') ||
+        errorMsg.includes('cancelled') ||
+        error.code === 4001;
+
+      return { 
+        success: false, 
+        error, 
+        shouldShowError: !isUserCancellation 
+      };
     }
   };
 
@@ -331,46 +422,32 @@ export const Web3AuthProvider = ({ children }) => {
       if (web3auth && web3auth.connected) {
         await web3auth.logout();
       }
-      // Always clear state regardless of Web3Auth status
-      setWeb3authProvider(null);
-      setUser(null);
-      setLoggedIn(false);
-      setHasStoredSession(false);
-      setCurrentChain('base'); // Reset to default chain
-
-      // Clear user cookie safely using react-cookie
-      removeCookie('user', { path: '/' });
-
-      // Clear localStorage session
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('web3auth_session');
-      }
-
-      console.log('Logout completed successfully');
-    } catch (error) {
-      console.error("Logout error:", error);
-      // Still clear state even if logout fails
+      
       setWeb3authProvider(null);
       setUser(null);
       setLoggedIn(false);
       setHasStoredSession(false);
       setCurrentChain('base');
-
-      // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
-
-      // Clear localStorage session on logout error
+      
       if (typeof window !== 'undefined') {
         localStorage.removeItem('web3auth_session');
       }
 
+      console.log('✅ Logout completed');
+    } catch (error) {
+      console.error('❌ Logout error:', error);
+      // Clear state anyway
+      setWeb3authProvider(null);
+      setUser(null);
+      setLoggedIn(false);
+      setHasStoredSession(false);
       throw error;
     }
   };
 
   const getAccounts = async () => {
     if (!web3authProvider) {
-      console.log("provider not initialized yet");
       return [];
     }
 
@@ -382,7 +459,6 @@ export const Web3AuthProvider = ({ children }) => {
 
   const switchChain = async (chainKey) => {
     if (!web3authProvider) {
-      console.log("provider not initialized yet");
       return false;
     }
 
@@ -392,19 +468,14 @@ export const Web3AuthProvider = ({ children }) => {
         throw new Error(`Chain ${chainKey} not supported`);
       }
 
-      console.log(`Switching to ${chainConfig.displayName}...`);
-
-      // Request to switch chain
       await web3authProvider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainConfig.chainId }],
       });
 
       setCurrentChain(chainKey);
-      console.log(`Successfully switched to ${chainConfig.displayName}`);
       return true;
     } catch (error) {
-      // If chain doesn't exist, try to add it
       if (error.code === 4902) {
         try {
           const chainConfig = chainConfigs[chainKey];
@@ -424,16 +495,14 @@ export const Web3AuthProvider = ({ children }) => {
           });
 
           setCurrentChain(chainKey);
-          console.log(`Successfully added and switched to ${chainConfig.displayName}`);
           return true;
         } catch (addError) {
           console.error('Failed to add chain:', addError);
           return false;
         }
-      } else {
-        console.error('Failed to switch chain:', error);
-        return false;
       }
+      console.error('Failed to switch chain:', error);
+      return false;
     }
   };
 
@@ -450,13 +519,6 @@ export const Web3AuthProvider = ({ children }) => {
 
   const saveUserToDatabase = async (userData) => {
     try {
-      console.log('Saving user data to database:', {
-        walletAddress: userData.walletAddress,
-        provider: userData.provider,
-        email: userData.email,
-        name: userData.name
-      });
-
       const response = await fetch('/api/web3auth-login', {
         method: 'POST',
         headers: {
@@ -467,15 +529,12 @@ export const Web3AuthProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Database save failed:', response.status, errorText);
-        throw new Error(`Failed to save user data: ${response.status}`);
+        throw new Error(`Failed to save user data: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json();
-      console.log('User data saved successfully:', result);
-      return result;
+      return await response.json();
     } catch (error) {
-      console.error('Error saving user to database:', error);
+      console.error('Database save error:', error);
       throw error;
     }
   };
