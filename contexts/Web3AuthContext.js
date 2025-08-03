@@ -3,7 +3,6 @@ import { Web3Auth } from '@web3auth/modal';
 import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from '@web3auth/base';
 import { ethers } from 'ethers';
 import { useCookies } from 'react-cookie';
-import dynamic from 'next/dynamic';
 
 const Web3AuthContext = createContext(null);
 
@@ -15,27 +14,29 @@ export const useWeb3Auth = () => {
   return context;
 };
 
-// SSR-safe environment detection
-const getEnvironmentConfig = () => {
-  if (typeof window === 'undefined') {
-    // Server-side: use production config as default
-    return {
-      isDevelopment: false,
-      hostname: 'server'
-    };
-  }
-  
-  // Client-side
-  const isDevelopment = process.env.NODE_ENV === 'development' || window.location.hostname === 'localhost';
-  return {
-    isDevelopment,
-    hostname: window.location.hostname
-  };
-};
-
 // Use different client IDs for development vs production
+// Force production mode for Vercel deployments
+const isDevelopment = process.env.NODE_ENV === 'development' && (typeof window !== 'undefined' && window.location.hostname === 'localhost');
+
+// Development client ID (Sapphire Devnet) - works with localhost without domain whitelisting
 const developmentClientId = "BGkgGCsO6v6Uve1k6glWCNKU2ims2t1Ljc9tU9HKUO5me2OTlxXP-bhY9OU7PPuBeT0FQ8qAZPU_ArEoLpSeeEU";
+
+// Production client ID (Sapphire Mainnet)
 const productionClientId = process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID || "BGSAe0KHRjYU77EJ4ha84Vy_aalV4ld1tleSsz1V2OITE28JUJcbnsxjtMorTWL4BBItqSP4WfkMF6G7QXkBvSQ";
+
+const clientId = isDevelopment ? developmentClientId : productionClientId;
+
+// 🔍 DEBUG: Web3Auth Configuration
+console.log('🔍 Web3Auth Debug Info:');
+console.log('isDevelopment:', isDevelopment);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('hostname:', typeof window !== 'undefined' ? window.location.hostname : 'server');
+console.log('developmentClientId:', developmentClientId);
+console.log('productionClientId:', productionClientId);
+console.log('NEXT_PUBLIC_WEB3AUTH_CLIENT_ID env var:', process.env.NEXT_PUBLIC_WEB3AUTH_CLIENT_ID);
+console.log('clientId being used:', clientId);
+console.log('network:', isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET');
+console.log('🔍 End Debug Info');
 
 // Multi-chain configuration
 const chainConfigs = {
@@ -112,64 +113,62 @@ export const Web3AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [currentChain, setCurrentChain] = useState('base');
+  const [currentChain, setCurrentChain] = useState('base'); // Track current chain
   const [initializationError, setInitializationError] = useState(null);
   const [initializationComplete, setInitializationComplete] = useState(false);
-  const [hasStoredSession, setHasStoredSession] = useState(false);
-  const [environmentConfig, setEnvironmentConfig] = useState({ isDevelopment: false, hostname: 'server' });
+  const [hasStoredSession, setHasStoredSession] = useState(false); // Track if there's a stored session
 
-  // Handle client-side hydration and environment detection
+  // Handle client-side hydration
   useEffect(() => {
     setIsClient(true);
-    const config = getEnvironmentConfig();
-    setEnvironmentConfig(config);
-    
-    // Only log debug info on client side
-    if (typeof window !== 'undefined') {
-      const clientId = config.isDevelopment ? developmentClientId : productionClientId;
-      console.log('🔍 Web3Auth Debug Info:');
-      console.log('isDevelopment:', config.isDevelopment);
-      console.log('NODE_ENV:', process.env.NODE_ENV);
-      console.log('hostname:', config.hostname);
-      console.log('clientId being used:', clientId);
-      console.log('network:', config.isDevelopment ? 'SAPPHIRE_DEVNET' : 'SAPPHIRE_MAINNET');
-      console.log('🔍 End Debug Info');
-    }
   }, []);
 
   useEffect(() => {
     const init = async () => {
       try {
-        if (isClient && typeof window !== 'undefined') {
+        if (isClient) {
           console.log('Starting Web3Auth initialization...');
           setInitializationError(null);
 
-          const clientId = environmentConfig.isDevelopment ? developmentClientId : productionClientId;
-
-          // Detect if mobile device - only on client side
+          // Detect if mobile device
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
           const web3authInstance = new Web3Auth({
             clientId,
-            web3AuthNetwork: environmentConfig.isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
+            web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
             chainConfig: defaultChainConfig,
-            enableLogging: environmentConfig.isDevelopment,
+            enableLogging: isDevelopment,
             storageKey: "local",
             uiConfig: {
+              // Only show these login methods
               loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
-              hideExternalWallets: true,
+              // Hide specific login methods
+              hideExternalWallets: false, // Allow external wallets like demo
               modalZIndex: "99999",
+              // Mobile-specific settings for better Twitter auth
               displayErrorsOnModal: false,
-              logLevel: environmentConfig.isDevelopment ? "debug" : "error",
-              uxMode: isMobile ? "redirect" : "popup",
+              logLevel: isDevelopment ? "debug" : "error",
+              // Use popup mode for better mobile compatibility
+              uxMode: "popup",
             },
+            // Add sessionTime to prevent session timeout issues
             sessionTime: 86400, // 24 hours
           });
 
           console.log('Initializing Web3Auth modal...');
+          
           await web3authInstance.init();
+          console.log('Web3Auth modal initialized successfully');
 
           setWeb3auth(web3authInstance);
+          
+          // Log state like demo app
+          console.log('state updated', {
+            status: 'initialized',
+            web3authClientId: clientId,
+            web3authNetwork: isDevelopment ? 'sapphire_devnet' : 'sapphire_mainnet',
+            authBuildEnv: process.env.NODE_ENV
+          });
 
           // Check for existing session after initialization
           console.log('Checking for existing session...');
@@ -204,6 +203,7 @@ export const Web3AuthProvider = ({ children }) => {
               });
             } catch (sessionError) {
               console.warn('⚠️ Session restoration failed, clearing state:', sessionError.message);
+              // Clear any invalid session state
               setLoggedIn(false);
               setWeb3authProvider(null);
               setUser(null);
@@ -213,7 +213,7 @@ export const Web3AuthProvider = ({ children }) => {
           } else if (web3authInstance.provider && !web3authInstance.connected) {
             console.log('Stored session detected but not fully connected - will auto-connect on user action');
             setHasStoredSession(true);
-            setLoggedIn(false);
+            setLoggedIn(false); // Keep UI showing disconnected until user clicks
             console.log('✅ Stored session ready for auto-connect');
           } else {
             console.log('No existing session, ready for login');
@@ -231,10 +231,10 @@ export const Web3AuthProvider = ({ children }) => {
       }
     };
 
-    if (isClient && environmentConfig.hostname !== 'server') {
+    if (isClient) {
       init();
     }
-  }, [isClient, environmentConfig]);
+  }, [isClient]);
 
   const login = async (loginProvider = null) => {
     try {
@@ -243,22 +243,30 @@ export const Web3AuthProvider = ({ children }) => {
         throw new Error("Web3Auth not initialized");
       }
 
-      // Only detect mobile on client side
-      const isMobile = typeof window !== 'undefined' && 
-        (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768);
+      // Detect if mobile device for specific handling
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
+      // Check if we have a stored session that can be auto-connected
       if (hasStoredSession && !loggedIn) {
         console.log('📱 Auto-connecting with stored session...');
       } else {
         console.log('Connecting to Web3Auth...');
       }
 
-      // Configure login options - EXPLICITLY set redirectUrl to null
+      // Log state like demo app
+      console.log('state updated', { status: 'connecting' });
+
+      // Configure login options - NO redirectUrl as per Web3Auth docs
       let connectOptions = {
         loginProvider: loginProvider || undefined,
-        mfaLevel: "none",
-        redirectUrl: null, // Fix for domain whitelisting
+        mfaLevel: "none", // Disable MFA for smoother experience
+        // redirectUrl: undefined, // Let Web3Auth handle redirect automatically
       };
+
+      console.log('connecting with connector', {
+        connector: 'auth',
+        loginParams: connectOptions
+      });
 
       const web3authProvider = await web3auth.connect(connectOptions);
       if (!web3authProvider) {
@@ -266,12 +274,22 @@ export const Web3AuthProvider = ({ children }) => {
       }
 
       console.log('✅ Web3Auth connection successful');
+      console.log('connected connected auth');
+      
       setWeb3authProvider(web3authProvider);
       setLoggedIn(true);
       setHasStoredSession(true);
 
+      // Log state like demo app
+      console.log('state updated', {
+        status: 'connected',
+        modalVisibility: true,
+        postLoadingMessage: 'modal.post-loading.connected'
+      });
+
       const user = await web3auth.getUserInfo();
       setUser(user);
+      console.log('Getting user info connected auth');
       console.log('✅ User info retrieved:', {
         email: user?.email,
         name: user?.name,
@@ -304,6 +322,7 @@ export const Web3AuthProvider = ({ children }) => {
       return { user, address };
 
     } catch (error) {
+      // Handle user cancellation gracefully without logging as error
       const errorMsg = error.message?.toLowerCase() || '';
       const errorString = error?.toString()?.toLowerCase() || '';
       const errorCode = error.code;
@@ -327,12 +346,13 @@ export const Web3AuthProvider = ({ children }) => {
         errorString.includes('user cancelled') ||
         errorString.includes('user aborted') ||
         errorString.includes('user closed the modal') ||
-        errorCode === 4001 ||
+        errorCode === 4001 || // User rejected request
         errorCode === 'ACTION_REJECTED' ||
         errorCode === 'USER_CANCELLED';
 
       if (isUserCancellation) {
         console.log('ℹ️ User cancelled login process');
+        // Return a special object to indicate user cancellation
         return { success: false, error, shouldShowError: false };
       } else {
         console.error("❌ Login failed:", error);
@@ -341,6 +361,7 @@ export const Web3AuthProvider = ({ children }) => {
           code: error.code,
           stack: error.stack
         });
+        // Return error object for legitimate errors
         return { success: false, error, shouldShowError: true };
       }
     }
@@ -351,14 +372,17 @@ export const Web3AuthProvider = ({ children }) => {
       if (web3auth && web3auth.connected) {
         await web3auth.logout();
       }
+      // Always clear state regardless of Web3Auth status
       setWeb3authProvider(null);
       setUser(null);
       setLoggedIn(false);
       setHasStoredSession(false);
-      setCurrentChain('base');
+      setCurrentChain('base'); // Reset to default chain
 
+      // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
 
+      // Clear localStorage session
       if (typeof window !== 'undefined') {
         localStorage.removeItem('web3auth_session');
       }
@@ -366,14 +390,17 @@ export const Web3AuthProvider = ({ children }) => {
       console.log('Logout completed successfully');
     } catch (error) {
       console.error("Logout error:", error);
+      // Still clear state even if logout fails
       setWeb3authProvider(null);
       setUser(null);
       setLoggedIn(false);
       setHasStoredSession(false);
       setCurrentChain('base');
 
+      // Clear user cookie safely using react-cookie
       removeCookie('user', { path: '/' });
 
+      // Clear localStorage session on logout error
       if (typeof window !== 'undefined') {
         localStorage.removeItem('web3auth_session');
       }
@@ -408,6 +435,7 @@ export const Web3AuthProvider = ({ children }) => {
 
       console.log(`Switching to ${chainConfig.displayName}...`);
 
+      // Request to switch chain
       await web3authProvider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chainConfig.chainId }],
@@ -417,6 +445,7 @@ export const Web3AuthProvider = ({ children }) => {
       console.log(`Successfully switched to ${chainConfig.displayName}`);
       return true;
     } catch (error) {
+      // If chain doesn't exist, try to add it
       if (error.code === 4902) {
         try {
           const chainConfig = chainConfigs[chainKey];
