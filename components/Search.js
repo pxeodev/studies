@@ -189,7 +189,7 @@ const Search = ({ categories, collapsed }) => {
                 key={category}
                 onClick={() => {
                   closeModal();
-                  const categorySlug = slugify(category, { lower: true, strict: true })
+                  const categorySlug = slugify(category)
                   router.push(`/category/${categorySlug}`)}
                 }>
                 <span className={searchStyles.categoryOption}>{category}</span>
