@@ -140,16 +140,31 @@ export const Web3AuthProvider = ({ children }) => {
             enableLogging: isDevelopment,
             storageKey: "local",
             uiConfig: {
-              // Only show these login methods
-              loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
-              // Hide specific login methods
-              hideExternalWallets: false, // Allow external wallets like demo
+              // Only show these login methods - removed github, wechat, forecaster, reddit
+              loginMethodsOrder: ["google", "twitter", "apple", "email_passwordless"],
+              // Show external wallets for browser wallet detection
+              hideExternalWallets: false, // Show MetaMask, Coinbase Wallet, etc.
+              hideWalletIcons: false, // Show wallet icons
               modalZIndex: "99999",
               // Mobile-specific settings for better Twitter auth
               displayErrorsOnModal: false,
               logLevel: isDevelopment ? "debug" : "error",
               // Use popup mode for better mobile compatibility
               uxMode: "popup",
+              // Primary button should be social login, but also show wallets
+              primaryButton: "socialLogin",
+            },
+            // Configure WalletConnect with proper timeout settings
+            walletConnectV2: {
+              projectId: "your-walletconnect-project-id", // You'll need to get this from WalletConnect Cloud
+              metadata: {
+                name: "CoinRotator",
+                description: "Crypto screening and analysis platform",
+                url: typeof window !== 'undefined' ? window.location.origin : 'https://coinrotator.app',
+                icons: [typeof window !== 'undefined' ? `${window.location.origin}/favicon-32x32.png` : 'https://coinrotator.app/favicon-32x32.png']
+              },
+              // Increase timeout to prevent "Proposal expired" errors
+              timeout: 60000, // 60 seconds
             },
             // Add sessionTime to prevent session timeout issues
             sessionTime: 86400, // 24 hours
@@ -350,10 +365,25 @@ export const Web3AuthProvider = ({ children }) => {
         errorCode === 'ACTION_REJECTED' ||
         errorCode === 'USER_CANCELLED';
 
+      // Handle WalletConnect specific errors
+      const isWalletConnectError =
+        errorMsg.includes('proposal expired') ||
+        errorMsg.includes('walletconnect') ||
+        errorMsg.includes('session expired') ||
+        errorMsg.includes('connection timeout');
+
       if (isUserCancellation) {
         console.log('ℹ️ User cancelled login process');
         // Return a special object to indicate user cancellation
         return { success: false, error, shouldShowError: false };
+      } else if (isWalletConnectError) {
+        console.log('ℹ️ WalletConnect connection issue:', errorMsg);
+        // Return a special object for WalletConnect errors with user-friendly message
+        return {
+          success: false,
+          error: { ...error, message: 'Connection timeout. Please try again or use a different wallet.' },
+          shouldShowError: true
+        };
       } else {
         console.error("❌ Login failed:", error);
         console.error("Error details:", {
