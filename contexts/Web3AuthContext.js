@@ -15,7 +15,8 @@ export const useWeb3Auth = () => {
 };
 
 // Use different client IDs for development vs production
-const isDevelopment = process.env.NODE_ENV === 'development' || (typeof window !== 'undefined' && window.location.hostname === 'localhost');
+// Force production mode for Vercel deployments
+const isDevelopment = process.env.NODE_ENV === 'development' && (typeof window !== 'undefined' && window.location.hostname === 'localhost');
 
 // Development client ID (Sapphire Devnet) - works with localhost without domain whitelisting
 const developmentClientId = "BGkgGCsO6v6Uve1k6glWCNKU2ims2t1Ljc9tU9HKUO5me2OTlxXP-bhY9OU7PPuBeT0FQ8qAZPU_ArEoLpSeeEU";
@@ -138,7 +139,7 @@ export const Web3AuthProvider = ({ children }) => {
           const hasOAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('oauth_token') ||
                                 urlParams.has('oauth_verifier') || urlParams.has('access_token') ||
                                 window.location.hash.includes('access_token') || window.location.hash.includes('code');
-          
+
           if (hasOAuthParams) {
             console.log('🔄 OAuth redirect detected, Web3Auth will handle automatically');
           }
@@ -154,25 +155,50 @@ export const Web3AuthProvider = ({ children }) => {
             // CRITICAL: Add replaceUrlOnRedirect for mobile OAuth flow
             replaceUrlOnRedirect: true,
             uiConfig: {
-              // Only show these login methods
-              loginMethodsOrder: ["google", "twitter", "github", "apple", "email_passwordless"],
-              // Hide specific login methods
-              hideExternalWallets: true,
+              // Only show these login methods - removed github, wechat, forecaster, reddit
+              loginMethodsOrder: ["google", "twitter", "apple", "email_passwordless"],
+              // Show external wallets for browser wallet detection
+              hideExternalWallets: false, // Show MetaMask, Coinbase Wallet, etc.
+              hideWalletIcons: false, // Show wallet icons
               modalZIndex: "99999",
               // Mobile-specific settings for better Twitter auth
               displayErrorsOnModal: false,
               logLevel: isDevelopment ? "debug" : "error",
-              // Force redirect mode for all devices to ensure consistent behavior
-              uxMode: "redirect",
+              // Use popup mode for better mobile compatibility
+              uxMode: "popup",
+              // Primary button should be social login, but also show wallets
+              primaryButton: "socialLogin",
+            },
+            // Configure WalletConnect with proper timeout settings
+            walletConnectV2: {
+              projectId: "your-walletconnect-project-id", // You'll need to get this from WalletConnect Cloud
+              metadata: {
+                name: "CoinRotator",
+                description: "Crypto screening and analysis platform",
+                url: typeof window !== 'undefined' ? window.location.origin : 'https://coinrotator.app',
+                icons: [typeof window !== 'undefined' ? `${window.location.origin}/favicon-32x32.png` : 'https://coinrotator.app/favicon-32x32.png']
+              },
+              // Increase timeout to prevent "Proposal expired" errors
+              timeout: 60000, // 60 seconds
             },
             // Add sessionTime to prevent session timeout issues
             sessionTime: 86400, // 24 hours
           });
 
           console.log('Initializing Web3Auth modal...');
+
           await web3authInstance.init();
+          console.log('Web3Auth modal initialized successfully');
 
           setWeb3auth(web3authInstance);
+
+          // Log state like demo app
+          console.log('state updated', {
+            status: 'initialized',
+            web3authClientId: clientId,
+            web3authNetwork: isDevelopment ? 'sapphire_devnet' : 'sapphire_mainnet',
+            authBuildEnv: process.env.NODE_ENV
+          });
 
           // Check for existing session after initialization
           console.log('Checking for existing session...');
@@ -258,17 +284,20 @@ export const Web3AuthProvider = ({ children }) => {
         console.log('Connecting to Web3Auth...');
       }
 
-      // Configure login options based on device and provider
+      // Log state like demo app
+      console.log('state updated', { status: 'connecting' });
+
+      // Configure login options - NO redirectUrl as per Web3Auth docs
       let connectOptions = {
         loginProvider: loginProvider || undefined,
         mfaLevel: "none", // Disable MFA for smoother experience
+        // redirectUrl: undefined, // Let Web3Auth handle redirect automatically
       };
 
-      // For mobile devices, ensure we're using the correct redirect mode
-      if (isMobile) {
-        console.log('📱 Using mobile-optimized login flow with redirect mode');
-        // The redirectUrl and replaceUrlOnRedirect are already set in the Web3Auth config
-      }
+      console.log('connecting with connector', {
+        connector: 'auth',
+        loginParams: connectOptions
+      });
 
       const web3authProvider = await web3auth.connect(connectOptions);
       if (!web3authProvider) {
@@ -276,12 +305,22 @@ export const Web3AuthProvider = ({ children }) => {
       }
 
       console.log('✅ Web3Auth connection successful');
+      console.log('connected connected auth');
+
       setWeb3authProvider(web3authProvider);
       setLoggedIn(true);
       setHasStoredSession(true);
 
+      // Log state like demo app
+      console.log('state updated', {
+        status: 'connected',
+        modalVisibility: true,
+        postLoadingMessage: 'modal.post-loading.connected'
+      });
+
       const user = await web3auth.getUserInfo();
       setUser(user);
+      console.log('Getting user info connected auth');
       console.log('✅ User info retrieved:', {
         email: user?.email,
         name: user?.name,
@@ -342,10 +381,25 @@ export const Web3AuthProvider = ({ children }) => {
         errorCode === 'ACTION_REJECTED' ||
         errorCode === 'USER_CANCELLED';
 
+      // Handle WalletConnect specific errors
+      const isWalletConnectError =
+        errorMsg.includes('proposal expired') ||
+        errorMsg.includes('walletconnect') ||
+        errorMsg.includes('session expired') ||
+        errorMsg.includes('connection timeout');
+
       if (isUserCancellation) {
         console.log('ℹ️ User cancelled login process');
         // Return a special object to indicate user cancellation
         return { success: false, error, shouldShowError: false };
+      } else if (isWalletConnectError) {
+        console.log('ℹ️ WalletConnect connection issue:', errorMsg);
+        // Return a special object for WalletConnect errors with user-friendly message
+        return {
+          success: false,
+          error: { ...error, message: 'Connection timeout. Please try again or use a different wallet.' },
+          shouldShowError: true
+        };
       } else {
         console.error("❌ Login failed:", error);
         console.error("Error details:", {

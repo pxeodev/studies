@@ -219,7 +219,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
 
   // Get display text for button
   const getDisplayText = useCallback(async () => {
-    if (!loggedIn) return 'Connect';
+    if (!loggedIn) return 'Sign in';
 
     if (walletAddress) {
       if (collapsed) {
@@ -255,7 +255,7 @@ const Web3AuthConnectButton = ({ collapsed }) => {
     if (loggedIn) {
       getDisplayText().then(setDisplayText);
     } else {
-      setDisplayText('Connect');
+      setDisplayText('Sign in');
     }
   }, [loggedIn, walletAddress, collapsed, getDisplayText]);
 
@@ -265,8 +265,9 @@ const Web3AuthConnectButton = ({ collapsed }) => {
 
     // Don't show "Loading..." text - just show the appropriate button text
     if (initializationError) return 'Error';
-    if (!initializationComplete) return hasStoredSession ? 'Reconnect' : 'Connect';
-    if (hasStoredSession && !loggedIn) return 'Reconnect';
+    if (!initializationComplete) return 'Sign in';
+    // Always show "Sign in" when not logged in, regardless of stored session
+    if (!loggedIn) return 'Sign in';
     return displayText;
   };
 
