@@ -156,7 +156,7 @@ export const Web3AuthProvider = ({ children }) => {
             },
             // Configure WalletConnect with proper timeout settings
             walletConnectV2: {
-              projectId: "your-walletconnect-project-id", // You'll need to get this from WalletConnect Cloud
+              projectId: clientId, // You'll need to get this from WalletConnect Cloud
               metadata: {
                 name: "CoinRotator",
                 description: "Crypto screening and analysis platform",
