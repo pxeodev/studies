@@ -130,33 +130,15 @@ export const Web3AuthProvider = ({ children }) => {
           console.log('Starting Web3Auth initialization...');
           setInitializationError(null);
 
-          // Enhanced mobile detection with more comprehensive user agent check
-          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|mobi/i.test(navigator.userAgent) || window.innerWidth <= 768;
-          console.log('Device detected as:', isMobile ? 'Mobile' : 'Desktop');
-
-          // Enhanced OAuth redirect detection for mobile
-          const urlParams = new URLSearchParams(window.location.search);
-          const hasOAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('oauth_token') ||
-                                urlParams.has('oauth_verifier') || urlParams.has('access_token') ||
-                                window.location.hash.includes('access_token') || window.location.hash.includes('code');
-
-          if (hasOAuthParams) {
-            console.log('🔄 OAuth redirect detected, Web3Auth will handle automatically');
-          }
-
           const web3authInstance = new Web3Auth({
             clientId,
             web3AuthNetwork: isDevelopment ? WEB3AUTH_NETWORK.SAPPHIRE_DEVNET : WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
             chainConfig: defaultChainConfig,
             enableLogging: isDevelopment,
             storageKey: "local",
-            // Add redirectUrl for proper mobile redirect handling
-            redirectUrl: typeof window !== 'undefined' ? window.location.origin : undefined,
-            // CRITICAL: Add replaceUrlOnRedirect for mobile OAuth flow
-            replaceUrlOnRedirect: true,
             uiConfig: {
               // Only show these login methods - removed github, wechat, forecaster, reddit
-              loginMethodsOrder: ["google", "twitter", "apple", "email_passwordless"],
+              loginMethodsOrder: ["google", "twitter", "email_passwordless", "apple"],
               // Show external wallets for browser wallet detection
               hideExternalWallets: false, // Show MetaMask, Coinbase Wallet, etc.
               hideWalletIcons: false, // Show wallet icons
@@ -171,7 +153,7 @@ export const Web3AuthProvider = ({ children }) => {
             },
             // Configure WalletConnect with proper timeout settings
             walletConnectV2: {
-              projectId: "your-walletconnect-project-id", // You'll need to get this from WalletConnect Cloud
+              projectId: clientId, // You'll need to get this from WalletConnect Cloud
               metadata: {
                 name: "CoinRotator",
                 description: "Crypto screening and analysis platform",
@@ -273,9 +255,8 @@ export const Web3AuthProvider = ({ children }) => {
         throw new Error("Web3Auth not initialized");
       }
 
-      // Enhanced mobile detection with more comprehensive user agent check
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|mobi/i.test(navigator.userAgent) || window.innerWidth <= 768;
-      console.log('Device detected as:', isMobile ? 'Mobile' : 'Desktop');
+      // Detect if mobile device for specific handling
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
       // Check if we have a stored session that can be auto-connected
       if (hasStoredSession && !loggedIn) {

@@ -5031,16 +5031,16 @@
     jsonschema "^1.5.0"
     viem "^2.23.2"
 
-"@web3auth/modal@^10.0.4":
-  version "10.0.4"
-  resolved "https://registry.npmjs.org/@web3auth/modal/-/modal-10.0.4.tgz"
-  integrity sha512-N2n0mA8YHKOvF9/BMVNYwsjiERzl0gGfuUss0MighVyEfICOPok0zaFLIr6FBSd5O/Y1aDix5+ubd62SGqME8A==
+"@web3auth/modal@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@web3auth/modal/-/modal-10.1.0.tgz#6b269502f01bb53a898e0c2bd97c45212e133f54"
+  integrity sha512-BcpnauyiRrRL4EttQqMq4t17Sru+zpoQb4OED8wp68WrjmOFt/8zminDqb+5LqskjTZL+TWy4pCwZ9jj/oGp4A==
   dependencies:
     "@hcaptcha/react-hcaptcha" "^1.12.0"
     "@toruslabs/base-controllers" "^8.6.0"
     "@toruslabs/http-helpers" "^8.1.1"
     "@web3auth/auth" "^10.5.0"
-    "@web3auth/no-modal" "^10.0.4"
+    "@web3auth/no-modal" "^10.0.6"
     bowser "^2.11.0"
     classnames "^2.5.1"
     clsx "^2.1.1"
@@ -5052,10 +5052,10 @@
     react-qrcode-logo "^3.0.0"
     tailwind-merge "^3.3.1"
 
-"@web3auth/no-modal@^10.0.4":
-  version "10.0.4"
-  resolved "https://registry.npmjs.org/@web3auth/no-modal/-/no-modal-10.0.4.tgz"
-  integrity sha512-BoPgimaowgROKd7EZ86hDnmooZ0XLfnymEKa7FxMN6JggkWweHWSW39XKZvnH4nt13GgiqNagDalauqZ4moNZw==
+"@web3auth/no-modal@^10.0.6":
+  version "10.0.6"
+  resolved "https://registry.yarnpkg.com/@web3auth/no-modal/-/no-modal-10.0.6.tgz#03df022a99cdb869118ceb847251cb2ab2b8ca02"
+  integrity sha512-JMxVD6/et1vIhQa10zSDkX1THUs8Mv2fL2hjPDzy3XDVyAq6lgWiIijorU+uKSUH6FmXklpZU4CBCe4KPLSjeA==
   dependencies:
     "@ethereumjs/util" "^9.1.0"
     "@metamask/sdk" "^0.33.0"
