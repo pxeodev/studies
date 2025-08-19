@@ -140,6 +140,26 @@
       margin-bottom: 0;
     }
   }
+
+  // Custom link styling for better visibility
+  a {
+    color: var(--cr-primary-color) !important; // Use primary color for links
+    text-decoration: underline;
+
+    &:hover {
+      color: #7B95F7 !important; // Lighter shade for hover (better for dark theme)
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: #8B8DF0 !important; // Slightly different purple shade for visited links
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: var(--cr-primary-color) !important; // Keep primary color for active state
+    }
+  }
 }
 
 .userMessage {
