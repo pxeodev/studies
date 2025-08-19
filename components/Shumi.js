@@ -64,6 +64,12 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   // Helper for checking if AI is generating a response
   const isGenerating = status === 'streaming' || status === 'submitted';
 
+  // Show stop button only during initial submission, not during streaming
+  const showStopButton = status === 'submitted';
+
+  // Disable input only during initial submission, allow typing during streaming
+  const disableInput = status === 'submitted';
+
   // Store the processed messages
   const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -270,23 +276,23 @@ const Shumi = ({ isActive, initialSuggestions }) => {
               )}
               suffix={
                 <>
-                  {isGenerating ? (
+                  {showStopButton ? (
                     <Button type="primary" onClick={stop} className={shumiStyles.stopButton}>
                       Stop
                     </Button>
                   ) : (
-                    <Button type="primary" onClick={askAi} disabled={error != null} icon={<ArrowUpOutlined />} className={shumiStyles.sendButton} />
+                    <Button type="primary" onClick={askAi} disabled={error != null || isGenerating} icon={<ArrowUpOutlined />} className={shumiStyles.sendButton} />
                   )}
                   <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
                 </>
               }
-              value={input}
-              onChange={handleInputChange}
-              onPressEnter={askAi}
-              ref={aiInputRef} // Use the specific ref for AI input
-              spellCheck="false"
-              disabled={error != null} // Disable input on error
-              placeholder="Ask anything..."
+                          value={input}
+            onChange={handleInputChange}
+            onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
+            ref={aiInputRef} // Use the specific ref for AI input
+            spellCheck="false"
+            disabled={error != null || disableInput} // Disable input on error OR during submission
+            placeholder={disableInput ? "Generating response..." : "Ask anything..."}
             />
           </div>
         </div>
