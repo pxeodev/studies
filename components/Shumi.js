@@ -1,5 +1,5 @@
 import { Input, Button, Tag } from 'antd'
-import { MessageOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { MessageOutlined, PlusSquareOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
@@ -91,7 +91,10 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
   useEffect(() => {
     if (initialSuggestions) {
-      setCurrentSuggestions(initialSuggestions.split('\n').filter(s => s.trim() !== ''));
+      const suggestions = initialSuggestions.split('\n').filter(s => s.trim() !== '');
+      // Sort suggestions by length descending (longest first) for better line packing
+      const sortedSuggestions = suggestions.sort((a, b) => b.length - a.length);
+      setCurrentSuggestions(sortedSuggestions);
     } else {
       const fetchDynamicSuggestions = async () => {
         try {
@@ -100,7 +103,10 @@ const Shumi = ({ isActive, initialSuggestions }) => {
           if (!response.ok) throw new Error('Network response was not ok.');
           const data = await response.json();
           if (data.suggestions) {
-            setCurrentSuggestions(data.suggestions.split('\n').filter(s => s.trim() !== ''));
+            const suggestions = data.suggestions.split('\n').filter(s => s.trim() !== '');
+            // Sort suggestions by length descending (longest first) for better line packing
+            const sortedSuggestions = suggestions.sort((a, b) => b.length - a.length);
+            setCurrentSuggestions(sortedSuggestions);
           } else {
             setCurrentSuggestions([]); // Set to empty array if no suggestions
           }
@@ -222,28 +228,29 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 {/* Add the anchor element for CSS scroll pinning */}
                <div id="shumi-anchor" />
              </>
-           ) : (
-             <div className={shumiStyles.suggestions}>
-               <div className={shumiStyles.suggestionTitle}>Suggestions:</div>
-               {currentSuggestions.map((suggestion, index) => (
-                 <div
-                   key={index}
-                   className={shumiStyles.suggestionButton}
-                   onClick={() => setInput(suggestion)} // Use setInput directly
-                 >
-                   {suggestion}
-                 </div>
-               ))}
-             </div>
-           )}
+           ) : null}
         </div>
-        <div className={shumiStyles.inputArea}>
-          <Input
-            className={shumiStyles.aiInput}
-            allowClear
-            prefix={<>
-              <MessageOutlined className={shumiStyles.placeholderMagnifier}/>
-              {coinTag && (
+        <div className={classnames(shumiStyles.floatingContainer, {
+          [shumiStyles.floatingContainerCentered]: messages.length === 0
+        })}>
+          {messages.length === 0 && (
+            <div className={shumiStyles.suggestions}>
+              {currentSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className={shumiStyles.suggestionButton}
+                  onClick={() => setInput(suggestion)} // Use setInput directly
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className={shumiStyles.inputArea}>
+            <Input
+              className={shumiStyles.aiInput}
+              allowClear
+              prefix={coinTag && (
                 <Tag
                   className={shumiStyles.coinTag}
                   closable
@@ -252,29 +259,27 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                   {coinTag}
                 </Tag>
               )}
-            </>}
-            suffix={
-              <>
-                {isGenerating ? (
-                  <Button type="primary" onClick={stop} className={shumiStyles.stopButton}>
-                    Stop
-                  </Button>
-                ) : (
-                  <Button type="primary" onClick={askAi} disabled={error != null}>
-                    Ask Shumi
-                  </Button>
-                )}
-                <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
-              </>
-            }
-            value={input}
-            onChange={handleInputChange}
-            onPressEnter={askAi}
-            ref={aiInputRef} // Use the specific ref for AI input
-            spellCheck="false"
-            disabled={error != null} // Disable input on error
-            placeholder="Ask Shumi anything..."
-          />
+              suffix={
+                <>
+                  {isGenerating ? (
+                    <Button type="primary" onClick={stop} className={shumiStyles.stopButton}>
+                      Stop
+                    </Button>
+                  ) : (
+                    <Button type="primary" onClick={askAi} disabled={error != null} icon={<ArrowUpOutlined />} className={shumiStyles.sendButton} />
+                  )}
+                  <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
+                </>
+              }
+              value={input}
+              onChange={handleInputChange}
+              onPressEnter={askAi}
+              ref={aiInputRef} // Use the specific ref for AI input
+              spellCheck="false"
+              disabled={error != null} // Disable input on error
+              placeholder="Ask anything..."
+            />
+          </div>
         </div>
       </>
     );

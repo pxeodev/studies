@@ -7,8 +7,8 @@
   height: 28px; /* Adjusted height to match icon size */
   width: 210px;
   padding: 4px !important;
-  background-color: var(--cr-primary-bg);
-  border: 1px solid var(--cr-secondary-border);
+  background-color: var(--cr-primary-bg) !important; // Force same background as other buttons
+  border: 1px solid var(--cr-secondary-border); // Use secondary border to match Ant Design buttons
   position: relative;
   z-index: 1;
 
@@ -76,7 +76,8 @@
 
 .button[disabled], .button[disabled]:hover {
   color: var(--cr-primary-text);
-  border-color: var(--cr-secondary-border);
+  border-color: var(--cr-secondary-border); // Use consistent border
+  background-color: var(--cr-primary-bg) !important; // Ensure consistent background
 }
 
 .button[disabled]:hover {
