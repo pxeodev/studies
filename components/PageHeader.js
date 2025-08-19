@@ -3,8 +3,8 @@ import ExplainerModal from './ExplainerModal';
 
 const PageHeader = ({ title, explainer, showSource, prefix, postfix, lastUpdated }) => {
   // Replace mushroom emoji with Shumi logo for Shumi pages
-  const processedTitle = title?.replace(/🍄/g, '') || title;
-  const isShumiPage = title?.includes('Shumi') || title?.includes('🍄');
+  const processedTitle = typeof title === 'string' ? title.replace(/🍄/g, '') : title;
+  const isShumiPage = (typeof title === 'string' && title.includes('Shumi')) || (typeof title === 'string' && title.includes('🍄'));
 
   return (
     <div className={styles.header}>
