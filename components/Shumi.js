@@ -114,12 +114,52 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     setProcessedMessages(newProcessedMessages);
   }, [messages]);
 
+  // Helper function to create a mosaic-style arrangement
+  const createMosaicLayout = (suggestions) => {
+    // Separate suggestions into long and short categories
+    const longSuggestions = suggestions.filter(s => s.length > 30);
+    const shortSuggestions = suggestions.filter(s => s.length <= 30);
+
+    // Sort each category by length
+    longSuggestions.sort((a, b) => b.length - a.length);
+    shortSuggestions.sort((a, b) => a.length - b.length);
+
+    const result = [];
+    let longIndex = 0;
+    let shortIndex = 0;
+
+    // Create a pattern that intersperses long and short suggestions
+    // Pattern: long, short, short, long, short, long, long, short, etc.
+    const pattern = [1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1]; // 1 = long, 0 = short
+    let patternIndex = 0;
+
+    while (longIndex < longSuggestions.length || shortIndex < shortSuggestions.length) {
+      const useLong = pattern[patternIndex % pattern.length];
+
+      if (useLong && longIndex < longSuggestions.length) {
+        result.push(longSuggestions[longIndex++]);
+      } else if (!useLong && shortIndex < shortSuggestions.length) {
+        result.push(shortSuggestions[shortIndex++]);
+      } else if (longIndex < longSuggestions.length) {
+        // Fallback to long if no short available
+        result.push(longSuggestions[longIndex++]);
+      } else if (shortIndex < shortSuggestions.length) {
+        // Fallback to short if no long available
+        result.push(shortSuggestions[shortIndex++]);
+      }
+
+      patternIndex++;
+    }
+
+    return result;
+  };
+
   useEffect(() => {
     if (initialSuggestions) {
       const suggestions = initialSuggestions.split('\n').filter(s => s.trim() !== '');
-      // Sort suggestions by length descending (longest first) for better line packing
-      const sortedSuggestions = suggestions.sort((a, b) => b.length - a.length);
-      setCurrentSuggestions(sortedSuggestions);
+      // Create mosaic-style layout for better visual balance
+      const mosaicSuggestions = createMosaicLayout(suggestions);
+      setCurrentSuggestions(mosaicSuggestions);
     } else {
       const fetchDynamicSuggestions = async () => {
         try {
@@ -129,9 +169,9 @@ const Shumi = ({ isActive, initialSuggestions }) => {
           const data = await response.json();
           if (data.suggestions) {
             const suggestions = data.suggestions.split('\n').filter(s => s.trim() !== '');
-            // Sort suggestions by length descending (longest first) for better line packing
-            const sortedSuggestions = suggestions.sort((a, b) => b.length - a.length);
-            setCurrentSuggestions(sortedSuggestions);
+            // Create mosaic-style layout for better visual balance
+            const mosaicSuggestions = createMosaicLayout(suggestions);
+            setCurrentSuggestions(mosaicSuggestions);
           } else {
             setCurrentSuggestions([]); // Set to empty array if no suggestions
           }
