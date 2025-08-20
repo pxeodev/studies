@@ -89,7 +89,6 @@ export async function POST(req) {
           errorType: 'StreamResponseError',
           walletAddress,
           userMessage: userMessage?.content,
-          queryPlan,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
