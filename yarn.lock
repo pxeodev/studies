@@ -6397,8 +6397,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
-  version "2.4.4"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#513a45311d11237ecf8fe212ef9ff9dfe550d08b"
+  version "2.4.5"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#784e0d694a128462ccdb9486d58df2f166c0415a"
   dependencies:
     "@ai-sdk/anthropic" "^1.2.12"
     "@ai-sdk/google-vertex" "^2.2.27"
@@ -7873,9 +7873,9 @@ eventsource-parser@^3.0.0:
   integrity sha512-bSRG85ZrMdmWtm7qkF9He9TNRzc/Bm99gEJMaQoHJ9E6Kv9QBbsldh2oMj7iXmYNEAVvNgvv5vPorG6W+XtBhQ==
 
 exa-js@^1.8.20:
-  version "1.8.27"
-  resolved "https://registry.yarnpkg.com/exa-js/-/exa-js-1.8.27.tgz#8b32ff304966d1ff54be6f2937a064a338a04ed0"
-  integrity sha512-C0vsC3r5B1vhibXAxtJ9OlCwXTp+AaWFPk3ozLoUBV2VH+Xd+WhkKp8/30i9mkBVJopK/8+lDMv8MyRjkOWm5g==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/exa-js/-/exa-js-1.9.0.tgz#4ab83382b0f11e4eae63a3ba599c308ebffd8292"
+  integrity sha512-aqHl1WN/1lzaIyBAQWxcKRYvbiSclgkKD2PoEViixChbReLZ1C57GvF7Xa+XVMWmg7gGT/04ixGlW1z+HxRpEQ==
   dependencies:
     cross-fetch "~4.1.0"
     dotenv "~16.4.7"
@@ -11044,9 +11044,9 @@ openai@^4.47.3:
     node-fetch "^2.6.7"
 
 openai@^5.0.1:
-  version "5.12.2"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-5.12.2.tgz#512ab6b80eb8414837436e208f1b951442b97761"
-  integrity sha512-xqzHHQch5Tws5PcKR2xsZGX9xtch+JQFz5zb14dGqlshmmDAFBFEWmeIpf7wVqWV+w7Emj7jRgkNJakyKE0tYQ==
+  version "5.13.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-5.13.1.tgz#485e0a60a222256463af3a89d387140f3ac8919f"
+  integrity sha512-Jty97Apw40znKSlXZL2YDap1U2eN9NfXbqm/Rj1rExeOLEnhwezpKQ+v43kIqojavUgm30SR3iuvGlNEBR+AFg==
 
 openapi-fetch@^0.13.5:
   version "0.13.8"
