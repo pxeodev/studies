@@ -75,15 +75,16 @@
 }
 
 .button[disabled], .button[disabled]:hover {
-  color: var(--cr-primary-text);
-  border-color: var(--cr-secondary-border); // Use consistent border
+  color: var(--cr-primary-text) !important;
+  border-color: var(--cr-secondary-border) !important; // Use consistent border
   background-color: var(--cr-primary-bg) !important; // Ensure consistent background
+  opacity: 0.85; // Only change opacity to indicate disabled state
 }
 
 .button[disabled]:hover {
   .iconWrapper {
-    border-color: var(--cr-secondary-border);
-    color: var(--cr-primary-text);
+    border-color: var(--cr-secondary-border) !important;
+    color: var(--cr-primary-text) !important;
   }
 }
 
