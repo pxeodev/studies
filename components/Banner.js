@@ -2,6 +2,7 @@ import headerStyles from '../styles/header.module.less'
 import { Button } from 'antd'
 
 const Banner = () => {
+  return null;
   return (
     <div className={headerStyles.banner}>
       <span>$SHUMI launching on Virtuals August 22</span>
