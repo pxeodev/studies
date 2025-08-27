@@ -1,5 +1,5 @@
 import { Input, Button, Tag } from 'antd'
-import { MessageOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import { MessageOutlined, PlusSquareOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
@@ -9,6 +9,25 @@ import classnames from 'classnames'
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import shumiStyles from '../styles/shumi.module.less'
 import NotConnected from './gating/NotConnected'
+
+// Animated thinking indicator component
+const ThinkingIndicator = () => {
+  const [dots, setDots] = useState('.');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots(prev => {
+        if (prev === '.') return '..';
+        if (prev === '..') return '...';
+        return '.';
+      });
+    }, 400); // Switch every 400ms for a nice rhythm
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return `Thinking${dots}`;
+};
 
 // Helper function to generate session ID
 const generateSessionId = () => {
@@ -64,6 +83,12 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   // Helper for checking if AI is generating a response
   const isGenerating = status === 'streaming' || status === 'submitted';
 
+  // Show stop button only during initial submission, not during streaming
+  const showStopButton = status === 'submitted';
+
+  // Disable input only during initial submission, allow typing during streaming
+  const disableInput = status === 'submitted';
+
   // Store the processed messages
   const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -89,9 +114,52 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     setProcessedMessages(newProcessedMessages);
   }, [messages]);
 
+  // Helper function to create a mosaic-style arrangement
+  const createMosaicLayout = (suggestions) => {
+    // Separate suggestions into long and short categories
+    const longSuggestions = suggestions.filter(s => s.length > 30);
+    const shortSuggestions = suggestions.filter(s => s.length <= 30);
+
+    // Sort each category by length
+    longSuggestions.sort((a, b) => b.length - a.length);
+    shortSuggestions.sort((a, b) => a.length - b.length);
+
+    const result = [];
+    let longIndex = 0;
+    let shortIndex = 0;
+
+    // Create a pattern that intersperses long and short suggestions
+    // Pattern: long, short, short, long, short, long, long, short, etc.
+    const pattern = [1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1]; // 1 = long, 0 = short
+    let patternIndex = 0;
+
+    while (longIndex < longSuggestions.length || shortIndex < shortSuggestions.length) {
+      const useLong = pattern[patternIndex % pattern.length];
+
+      if (useLong && longIndex < longSuggestions.length) {
+        result.push(longSuggestions[longIndex++]);
+      } else if (!useLong && shortIndex < shortSuggestions.length) {
+        result.push(shortSuggestions[shortIndex++]);
+      } else if (longIndex < longSuggestions.length) {
+        // Fallback to long if no short available
+        result.push(longSuggestions[longIndex++]);
+      } else if (shortIndex < shortSuggestions.length) {
+        // Fallback to short if no long available
+        result.push(shortSuggestions[shortIndex++]);
+      }
+
+      patternIndex++;
+    }
+
+    return result;
+  };
+
   useEffect(() => {
     if (initialSuggestions) {
-      setCurrentSuggestions(initialSuggestions.split('\n').filter(s => s.trim() !== ''));
+      const suggestions = initialSuggestions.split('\n').filter(s => s.trim() !== '');
+      // Create mosaic-style layout for better visual balance
+      const mosaicSuggestions = createMosaicLayout(suggestions);
+      setCurrentSuggestions(mosaicSuggestions);
     } else {
       const fetchDynamicSuggestions = async () => {
         try {
@@ -100,7 +168,10 @@ const Shumi = ({ isActive, initialSuggestions }) => {
           if (!response.ok) throw new Error('Network response was not ok.');
           const data = await response.json();
           if (data.suggestions) {
-            setCurrentSuggestions(data.suggestions.split('\n').filter(s => s.trim() !== ''));
+            const suggestions = data.suggestions.split('\n').filter(s => s.trim() !== '');
+            // Create mosaic-style layout for better visual balance
+            const mosaicSuggestions = createMosaicLayout(suggestions);
+            setCurrentSuggestions(mosaicSuggestions);
           } else {
             setCurrentSuggestions([]); // Set to empty array if no suggestions
           }
@@ -193,7 +264,16 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                      </div>
                    )}
                    <div className={shumiStyles.messageContent}>
-                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                     <ReactMarkdown
+                       remarkPlugins={[remarkGfm]}
+                       components={{
+                         a: ({ href, children, ...props }) => (
+                           <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                             {children}
+                           </a>
+                         )
+                       }}
+                     >
                        {message.processedContent}
                      </ReactMarkdown>
                    </div>
@@ -203,7 +283,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
                   <div className={classnames(shumiStyles.messageContainer, shumiStyles.assistantMessage, shumiStyles.thinkingIndicator)}>
                     <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
-                    <div className={shumiStyles.messageContent}>Thinking...</div>
+                    <div className={shumiStyles.messageContent}><ThinkingIndicator /></div>
                   </div>
                ) : null}
 
@@ -222,28 +302,29 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 {/* Add the anchor element for CSS scroll pinning */}
                <div id="shumi-anchor" />
              </>
-           ) : (
-             <div className={shumiStyles.suggestions}>
-               <div className={shumiStyles.suggestionTitle}>Suggestions:</div>
-               {currentSuggestions.map((suggestion, index) => (
-                 <div
-                   key={index}
-                   className={shumiStyles.suggestionButton}
-                   onClick={() => setInput(suggestion)} // Use setInput directly
-                 >
-                   {suggestion}
-                 </div>
-               ))}
-             </div>
-           )}
+           ) : null}
         </div>
-        <div className={shumiStyles.inputArea}>
-          <Input
-            className={shumiStyles.aiInput}
-            allowClear
-            prefix={<>
-              <MessageOutlined className={shumiStyles.placeholderMagnifier}/>
-              {coinTag && (
+        <div className={classnames(shumiStyles.floatingContainer, {
+          [shumiStyles.floatingContainerCentered]: messages.length === 0
+        })}>
+          {messages.length === 0 && (
+            <div className={shumiStyles.suggestions}>
+              {currentSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className={shumiStyles.suggestionButton}
+                  onClick={() => setInput(suggestion)} // Use setInput directly
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className={shumiStyles.inputArea}>
+            <Input
+              className={shumiStyles.aiInput}
+              allowClear
+              prefix={coinTag && (
                 <Tag
                   className={shumiStyles.coinTag}
                   closable
@@ -252,29 +333,27 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                   {coinTag}
                 </Tag>
               )}
-            </>}
-            suffix={
-              <>
-                {isGenerating ? (
-                  <Button type="primary" onClick={stop} className={shumiStyles.stopButton}>
-                    Stop
-                  </Button>
-                ) : (
-                  <Button type="primary" onClick={askAi} disabled={error != null}>
-                    Ask Shumi
-                  </Button>
-                )}
-                <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
-              </>
-            }
-            value={input}
+              suffix={
+                <>
+                  {showStopButton ? (
+                    <Button type="primary" onClick={stop} className={shumiStyles.stopButton}>
+                      Stop
+                    </Button>
+                  ) : (
+                    <Button type="primary" onClick={askAi} disabled={error != null || isGenerating} icon={<ArrowUpOutlined />} className={shumiStyles.sendButton} />
+                  )}
+                  <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
+                </>
+              }
+                          value={input}
             onChange={handleInputChange}
-            onPressEnter={askAi}
+            onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
             ref={aiInputRef} // Use the specific ref for AI input
             spellCheck="false"
-            disabled={error != null} // Disable input on error
-            placeholder="Ask Shumi anything..."
-          />
+            disabled={error != null || disableInput} // Disable input on error OR during submission
+            placeholder="Ask anything..."
+            />
+          </div>
         </div>
       </>
     );

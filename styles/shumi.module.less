@@ -3,14 +3,17 @@
 
 // Wrapper for the entire AI tab content
 .aiTab {
+  position: relative; // Enable positioning for floating input
   display: flex;
   flex-direction: column;
   overflow: hidden; // Prevent overflow within the tab itself
   background-color: var(--cr-secondary-bg); // Consistent background
   height: calc(100% - 91px); // Default height for desktop
+  min-height: 400px; // Minimum height to ensure proper display in modals
 
   @media (max-width: @screen-lg) {
     height: calc(100vh - 52px - 91px); // Apply calc height only on smaller screens
+    min-height: 300px; // Smaller minimum height on mobile
   }
 }
 
@@ -29,6 +32,7 @@
   flex: 1; // Allow conversation area to grow and fill space
   overflow-y: auto; // Enable vertical scrolling for messages
   padding: 16px; // Reverted to match original .searchResults
+  padding-bottom: 100px; // Add space for floating input
   scroll-behavior: smooth;
   background-color: var(--cr-secondary-bg) !important;
   display: flex;
@@ -50,35 +54,66 @@
   height: 1px; // Must have size to work
 }
 
-// Styles for AI suggestions when chat history is empty
-.suggestions {
-  background-color: var(--cr-secondary-bg) !important; // Match chat area background
+// Floating container that holds both suggestions and input
+.aiTab .floatingContainer {
+  position: absolute !important;
+  bottom: 21px !important; // Default margin bottom when chat exists
+  left: 32px !important;
+  right: 32px !important;
+  max-width: 750px !important;
+  margin: 0 auto !important; // Center horizontally within the left/right constraints
+  z-index: 10 !important; // Ensure it floats above content
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important; // Space between suggestions and input
+
+  // Responsive margins for mobile
+  @media (max-width: @screen-lg) {
+    left: 16px !important; // Smaller side margins on mobile
+    right: 16px !important; // Smaller side margins on mobile
+    bottom: 46px !important; // Proper bottom margin on mobile
+  }
 }
 
-.suggestionTitle {
+// Modifier for centered container when no chat content
+.aiTab .floatingContainer.floatingContainerCentered {
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important; // Center vertically
+}
+
+// Styles for AI suggestions within the floating container
+.suggestions {
   background-color: var(--cr-secondary-bg) !important; // Match chat area background
-  color: #8C8C8C !important;
-  font-size: 16px;
-  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap; // Allow buttons to wrap to next line
+  gap: 8px; // Spacing between suggestion buttons (both horizontal and vertical)
+  align-items: flex-start; // Align buttons to the left
 }
 
 .suggestionButton {
-  padding: 12px;
+  padding: 9.6px 12px; // Increased vertical padding by 20% (8px * 1.2 = 9.6px)
   border: 1px solid var(--cr-primary-border);
-  border-radius: 4px;
+  border-radius: 8px; // More rounded corners
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px; // Closer to input size but still smaller than 16px
   color: #8C8C8C !important; // Use primary text color
   background-color: var(--cr-primary-bg); // Use primary background
   transition: background-color 0.2s;
   text-align: left;
+  width: fit-content; // Don't use full width
+  max-width: 280px; // Limit width to prevent overly long suggestions
+  line-height: 1.3; // Tighter line height for compactness
+  height: 56px; // Fixed height to accommodate 2 lines (14px * 1.3 * 2 + padding)
+  display: flex; // Use flexbox for centering
+  align-items: center; // Center text vertically
+  word-wrap: break-word; // Allow text to wrap
+  overflow-wrap: break-word; // Modern property for text wrapping
+  white-space: normal; // Allow text to wrap to multiple lines
+  overflow: hidden; // Hide any overflow
 
   &:hover {
     background-color: var(--cr-quintiary-bg);
-  }
-
-  &:not(:last-child) {
-    margin-bottom: 12px;
   }
 }
 
@@ -100,10 +135,38 @@
   width: fit-content;
   min-width: 0; // Helps prevent overflow in flex contexts
 
+  // Additional mobile overflow protection
+  @media (max-width: @screen-xl) {
+    max-width: calc(100vw - 64px); // Prevent overflow on mobile (32px margins each side)
+    box-sizing: border-box;
+  }
+
+
+
   p {
     margin-bottom: 4px; // Reduced margin-bottom from 8px to 4px
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  // Custom link styling for better visibility
+  a {
+    color: var(--cr-primary-color) !important; // Use primary color for links
+    text-decoration: underline;
+
+    &:hover {
+      color: #7B95F7 !important; // Lighter shade for hover (better for dark theme)
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: #8B8DF0 !important; // Slightly different purple shade for visited links
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: var(--cr-primary-color) !important; // Keep primary color for active state
     }
   }
 }
@@ -142,11 +205,12 @@
 }
 
 
-// Styles for the input area at the bottom
+// Styles for the input area within the floating container
 .inputArea {
-  border-top: 1px solid var(--cr-primary-border);
-  flex-shrink: 0; // Prevent input area from shrinking
   background-color: var(--cr-primary-bg);
+  border: 1px solid var(--cr-primary-border);
+  border-radius: 12px; // Rounded borders
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Add subtle shadow for floating effect
 }
 
 .aiInput {
@@ -154,10 +218,11 @@
   height: 48px !important;
   font-size: 16px;
   line-height: 24px;
-  border: 0 !important;
-  background-color: var(--cr-primary-bg) !important;
+  border: 0 !important; // Remove inner border since container has border
+  background-color: transparent !important; // Make transparent to show container background
   box-shadow: none !important;
   padding-left: 11px !important; // Align with search input padding
+  border-radius: 12px; // Match container border radius
 
   input {
     background-color: var(--cr-primary-bg) !important;
@@ -184,9 +249,7 @@
 }
 
 
-.stopButton {
-  // Inherit button styles, add specific overrides if needed
-}
+// .stopButton - inherits default button styles
 
 .retryButton {
   margin-top: 8px;
@@ -196,13 +259,14 @@
   // Specific styles if needed
   min-width: 32px; // Ensure button has a minimum width for icon only
   padding: 0 8px; // Adjust padding for icon button
+  border-radius: 4px !important; // Add border radius
 }
 
-.coinTag {
-  // margin-left: 8px; // Handled by prefix gap
-  // margin-right: 4px; // Handled by prefix gap
-  // Inherit Ant Design tag styles
+.sendButton {
+  border-radius: 4px !important; // Add border radius
 }
+
+// .coinTag - inherits Ant Design tag styles with prefix gap handling
 
 // Thinking indicator styles
 .thinkingIndicator {

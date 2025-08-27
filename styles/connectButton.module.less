@@ -7,8 +7,8 @@
   height: 28px; /* Adjusted height to match icon size */
   width: 210px;
   padding: 4px !important;
-  background-color: var(--cr-primary-bg);
-  border: 1px solid var(--cr-secondary-border);
+  background-color: var(--cr-primary-bg) !important; // Force same background as other buttons
+  border: 1px solid var(--cr-secondary-border); // Use secondary border to match Ant Design buttons
   position: relative;
   z-index: 1;
 
@@ -75,14 +75,16 @@
 }
 
 .button[disabled], .button[disabled]:hover {
-  color: var(--cr-primary-text);
-  border-color: var(--cr-secondary-border);
+  color: var(--cr-primary-text) !important;
+  border-color: var(--cr-secondary-border) !important; // Use consistent border
+  background-color: var(--cr-primary-bg) !important; // Ensure consistent background
+  opacity: 0.85; // Only change opacity to indicate disabled state
 }
 
 .button[disabled]:hover {
   .iconWrapper {
-    border-color: var(--cr-secondary-border);
-    color: var(--cr-primary-text);
+    border-color: var(--cr-secondary-border) !important;
+    color: var(--cr-primary-text) !important;
   }
 }
 

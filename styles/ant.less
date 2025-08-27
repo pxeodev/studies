@@ -25,6 +25,60 @@ body {
   margin-bottom: 0;
 }
 
+// Message component styling for dark mode - more specific selectors
+.ant-message .ant-message-notice {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+.ant-message .ant-message-notice .ant-message-notice-content {
+  color: var(--cr-primary-text) !important;
+  background-color: var(--cr-primary-bg) !important;
+  border: 1px solid var(--cr-primary-border) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 12px !important;
+}
+
+.ant-message .ant-message-notice .ant-message-custom-content {
+  color: var(--cr-primary-text) !important;
+  background-color: var(--cr-primary-bg) !important;
+  border-radius: 6px !important;
+}
+
+.ant-message .ant-message-success .anticon {
+  color: var(--cr-success-color) !important;
+}
+
+.ant-message .ant-message-error .anticon {
+  color: var(--cr-error-color) !important;
+}
+
+.ant-message .ant-message-info .anticon {
+  color: var(--cr-primary-color) !important;
+}
+
+.ant-message .ant-message-warning .anticon {
+  color: var(--cr-warning-color) !important;
+}
+
+// Additional fallback with higher specificity
+div.ant-message-notice {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+div.ant-message-notice div.ant-message-notice-content {
+  color: var(--cr-primary-text) !important;
+  background-color: var(--cr-primary-bg) !important;
+  border: 1px solid var(--cr-primary-border) !important;
+  border-radius: 6px !important;
+  padding: 12px !important;
+}
+
 .ant-card-body {
   padding: 16px;
 }

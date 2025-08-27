@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 
 const useDarkMode = () => {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
     const darkModeCheck = (e) => { e.matches ? setDarkMode(true) : setDarkMode(false); }
     useEffect(() => {
-        let initialMode = false;
-        if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            initialMode = true;
-        }
+        // Default to dark mode regardless of system preference
+        let initialMode = true;
         setDarkMode(initialMode);
         if (window.matchMedia) {
             const darkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
