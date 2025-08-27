@@ -6397,8 +6397,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
-  version "2.4.5"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#784e0d694a128462ccdb9486d58df2f166c0415a"
+  version "2.4.6"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#65004109d053b54c0887666f6b50fbfccae0ce50"
   dependencies:
     "@ai-sdk/anthropic" "^1.2.12"
     "@ai-sdk/google-vertex" "^2.2.27"
@@ -7873,9 +7873,9 @@ eventsource-parser@^3.0.0:
   integrity sha512-bSRG85ZrMdmWtm7qkF9He9TNRzc/Bm99gEJMaQoHJ9E6Kv9QBbsldh2oMj7iXmYNEAVvNgvv5vPorG6W+XtBhQ==
 
 exa-js@^1.8.20:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/exa-js/-/exa-js-1.9.0.tgz#4ab83382b0f11e4eae63a3ba599c308ebffd8292"
-  integrity sha512-aqHl1WN/1lzaIyBAQWxcKRYvbiSclgkKD2PoEViixChbReLZ1C57GvF7Xa+XVMWmg7gGT/04ixGlW1z+HxRpEQ==
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/exa-js/-/exa-js-1.9.2.tgz#f6878d2eaa430b2127a45f7415b66927dfcfacaa"
+  integrity sha512-KU5BojZ+OjkWd6JUrehblHClYkmP4QpKqZ0chifaavshcW3fdkoJFRaLkZY8ytbFpaJNoMNubWReXXRKKOFGFQ==
   dependencies:
     cross-fetch "~4.1.0"
     dotenv "~16.4.7"
@@ -11044,9 +11044,9 @@ openai@^4.47.3:
     node-fetch "^2.6.7"
 
 openai@^5.0.1:
-  version "5.13.1"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-5.13.1.tgz#485e0a60a222256463af3a89d387140f3ac8919f"
-  integrity sha512-Jty97Apw40znKSlXZL2YDap1U2eN9NfXbqm/Rj1rExeOLEnhwezpKQ+v43kIqojavUgm30SR3iuvGlNEBR+AFg==
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-5.16.0.tgz#a302d4ca92954598c79c72dd199c58994708130d"
+  integrity sha512-hoEH8ZNvg1HXjU9mp88L/ZH8O082Z8r6FHCXGiWAzVRrEv443aI57qhch4snu07yQydj+AUAWLenAiBXhu89Tw==
 
 openapi-fetch@^0.13.5:
   version "0.13.8"
@@ -14638,9 +14638,9 @@ zod@^3.22.4:
   integrity sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==
 
 zod@^4.0.5:
-  version "4.0.17"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-4.0.17.tgz#95931170715f73f7426c385c237b7477750d6c8d"
-  integrity sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.3.tgz#0057bf53f570fbb49bf2a216c7a1d43fc282c4b3"
+  integrity sha512-1neef4bMce1hNTrxvHVKxWjKfGDn0oAli3Wy1Uwb7TRO1+wEwoZUZNP1NXIEESybOBiFnBOhI6a4m6tCLE8dog==
 
 zustand@5.0.0:
   version "5.0.0"
