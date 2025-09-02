@@ -168,6 +168,8 @@ setTimeout(async () => {
 
     await sql`
       INSERT INTO "Global" (
+        "totalMarketCapUSD",
+        "totalMarketVolumeUSD",
         "totalMarketCap",
         "totalMarketVolume",
         "marketCapPercentage",
@@ -175,6 +177,8 @@ setTimeout(async () => {
       ) VALUES (
         ${globalData.total_market_cap_usd},
         ${globalData.total_volume_usd},
+        ${globalData.total_market_cap},
+        ${globalData.total_volume},
         ${globalData.market_cap_percentage},
         ${now}
       )
