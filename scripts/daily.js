@@ -17,7 +17,8 @@ import { getAllCoins } from '../lib/lunr.mjs'
 import { hasPlatforms } from '../utils/coingecko.mjs';
 import convertToDailySignals from '../utils/convertToDailySignals.mjs';
 import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
-import { overrideCoinCategories, aliasCoinCategories, createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
+import { overrideCoinCategories, aliasCoinCategories } from 'coinrotator-utils';
+import { createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
 
 dotenv.config();
 

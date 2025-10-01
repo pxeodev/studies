@@ -2,7 +2,8 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 import sql from '../lib/database.mjs'
-import { overrideCoinCategories, createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
+import { overrideCoinCategories } from 'coinrotator-utils';
+import { createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
 import findMatchingDropstabUrl from '../utils/findMatchingDropstabUrl.mjs';
 import retry from '../utils/retry.mjs';
 
