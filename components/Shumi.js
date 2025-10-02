@@ -9,6 +9,7 @@ import classnames from 'classnames'
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import shumiStyles from '../styles/shumi.module.less'
 import NotConnected from './gating/NotConnected'
+import ShumiCopyButton from './ShumiCopyButton'
 
 // Animated thinking indicator component
 const ThinkingIndicator = () => {
@@ -277,6 +278,16 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                        {message.processedContent}
                      </ReactMarkdown>
                    </div>
+                   {/* Only show copy button if message is not currently streaming */}
+                   {!(status === 'streaming' && index === messages.length - 1 && message.role === 'assistant') && (
+                     <div className={shumiStyles.messageCopyButton}>
+                       <ShumiCopyButton
+                         text={message.content || message.processedContent}
+                         position={message.role === 'assistant' ? 'left' : 'right'}
+                         className="shumi-copy-button"
+                       />
+                     </div>
+                   )}
                  </div>
                ))}
                {/* Show "Thinking..." indicator */}
