@@ -1,7 +1,9 @@
-const withLess = require("next-with-less");
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import withLess from "next-with-less";
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})
+});
 
 let moduleExports = {
   experimental: {
@@ -176,6 +178,6 @@ let moduleExports = {
   },
 }
 moduleExports = withLess(moduleExports)
-moduleExports = withBundleAnalyzer(moduleExports)
+moduleExports = bundleAnalyzer(moduleExports)
 
-module.exports = moduleExports;
+export default moduleExports;
