@@ -442,15 +442,6 @@ const CoinTable = ({
     )
   }
 
-  if (showLivePrice) {
-    columns.push({
-      width: 125,
-      title: 'Live Price',
-      dataIndex: 'price',
-      render: (price) => price ? currencyFormatter.format(price) : null
-    })
-  }
-
   columns.push(
   {
     width: 100,
