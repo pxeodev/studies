@@ -244,12 +244,6 @@ const PriceDataTab = ({ coin, screens, liveCoinData, price, shown }) => {
           <div className={coinStyles.data}>
             <Title level={3} className={coinStyles.label}>Open Interest (1h)</Title>
             <span className={coinStyles.value}>{currencyFormatter.format(openInterest)}</span>
-            <span className={classnames(coinStyles.percentageChange, {[coinStyles.percentageChangeNegative]: openInterestChangePercent1h < 0})}>
-              &nbsp;(
-              {openInterestChangePercent1h > 0 ? '+' : ''}
-              {openInterestChangePercent1h}%
-              )
-            </span>
           </div>
           {
             fundingRate ? (
