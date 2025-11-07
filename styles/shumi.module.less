@@ -287,25 +287,30 @@
     }
 }
 
-// Chain of Thought Thinking Block styles
+// Chain of Thought Thinking Block styles - Match message container style
 .thinkingBlock {
-  margin: 12px 0;
-  background-color: var(--cr-secondary-bg);
-  border: 1px solid var(--cr-primary-border);
-  border-radius: 8px;
-  padding: 8px;
-  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
   max-width: 80%;
+  border-radius: 4px; // Match message container
+  background-color: var(--cr-secondary-bg) !important; // Match assistant message
+  color: var(--cr-secondary-text) !important;
+  margin-bottom: 12px;
   align-self: flex-start;
-  
-  &:hover {
-    border-color: var(--cr-primary-color);
-  }
+  border: 0 !important; // No border, match assistant messages
 }
 
 .thinkingPanel {
+  :global(.ant-collapse-header) {
+    padding: 12px !important; // Match message padding
+  }
+  
   :global(.ant-collapse-content-box) {
-    padding: 8px 0 !important;
+    padding: 0 12px 12px 12px !important; // Match message padding
+  }
+  
+  :global(.ant-collapse-borderless) {
+    background: transparent !important;
   }
 }
 
@@ -315,98 +320,100 @@
   gap: 8px;
   user-select: none;
   cursor: pointer;
-  padding: 4px 0;
+  color: var(--cr-secondary-text);
+  font-size: 13px; // Match message font size
 }
 
 .thinkingIcon {
-  font-size: 16px;
-  color: var(--cr-primary-color);
+  font-size: 14px;
+  color: var(--cr-secondary-text);
   
-  // Pulse animation when thinking
-  animation: pulse 1.5s ease-in-out infinite;
+  // Subtle pulse animation when thinking
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
   }
   50% {
-    opacity: 0.6;
-    transform: scale(1.1);
+    opacity: 0.5;
   }
 }
 
 .thinkingTitle {
-  font-weight: 500;
-  color: var(--cr-primary-text);
-  font-size: 14px;
+  font-weight: normal; // Don't use bold
+  color: var(--cr-secondary-text);
+  font-size: 13px;
   flex: 1;
+  opacity: 0.8;
 }
 
 .stepCount {
   margin-left: auto;
-  background-color: var(--cr-quintiary-bg);
-  color: var(--cr-primary-color);
-  border: 1px solid var(--cr-primary-color);
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 4px;
+  color: var(--cr-secondary-text);
+  font-size: 11px;
+  opacity: 0.6;
+  // No border, no background - minimal
 }
 
 .expandIcon {
   color: var(--cr-secondary-text);
-  font-size: 12px;
+  font-size: 10px;
+  opacity: 0.5;
 }
 
 .timeline {
   margin-top: 8px;
-  padding-left: 8px;
+  padding-left: 0;
   
   :global(.ant-timeline-item-tail) {
-    border-left-color: var(--cr-primary-border);
+    border-left: 1px dashed var(--cr-secondary-text);
+    opacity: 0.2;
+  }
+  
+  :global(.ant-timeline-item-head) {
+    background-color: transparent !important;
+    border: none !important;
   }
   
   :global(.ant-timeline-item-content) {
-    margin-left: 24px;
+    margin-left: 20px;
+    margin-top: -4px;
   }
 }
 
 .timelineItem {
-  padding: 4px 0;
+  padding: 2px 0;
+  opacity: 0.8;
 }
 
 .stepTitle {
-  font-weight: 500;
-  color: var(--cr-primary-text);
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-weight: normal; // Match message style
+  color: var(--cr-secondary-text);
+  font-size: 13px;
+  margin-bottom: 2px;
 }
 
 .stepDescription {
   color: var(--cr-secondary-text);
-  font-size: 13px;
-  margin-bottom: 4px;
+  font-size: 12px;
+  margin-bottom: 2px;
+  opacity: 0.7;
 }
 
 .duration {
   font-size: 11px;
   color: var(--cr-secondary-text);
-  background-color: transparent;
-  border: 1px solid var(--cr-primary-border);
-  padding: 2px 6px;
-  border-radius: 3px;
+  opacity: 0.5;
   display: inline-block;
-  margin-top: 4px;
+  margin-top: 2px;
+  // No border, no background
 }
 
-// Dark theme adjustments
+// Dark theme - minimal adjustments needed since we use CSS variables
 :root[data-theme="theme-dark"] {
   .thinkingBlock {
-    background-color: var(--cr-tertiary-bg);
-  }
-  
-  .thinkingIcon {
-    filter: brightness(1.2);
+    // No special overrides needed, CSS variables handle it
   }
 }
