@@ -326,8 +326,8 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                    </div>
                  </div>
                ))}
-               {/* Show Chain of Thought thinking block while AI is processing */}
-               {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) && (
+               {/* Show Chain of Thought thinking block while AI is actively streaming */}
+               {(status === 'submitted' || status === 'streaming') && (
                  <ThinkingBlock 
                    thinking={mockThinking}
                    isStreaming={true}
