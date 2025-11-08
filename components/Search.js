@@ -9,7 +9,6 @@ import Fuse from 'fuse.js'
 import round from 'lodash/round'
 import searchStyles from '../styles/search.module.less'
 import Shumi from './Shumi'
-import useSocketStore from '../hooks/useSocketStore'
 
 const Search = ({ categories, collapsed }) => {
   const [coins, setCoins] = useState([])
@@ -20,9 +19,9 @@ const Search = ({ categories, collapsed }) => {
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
   const [modifierKey, setModifierKey] = useState('⌘')
-  const [prices, setPrices] = useState({})
-  const [trends, setTrends] = useState(null)
-  const socket = useSocketStore(state => state.socket)
+  const [coinData, setCoinData] = useState({}) // Stores fetched price/trend data by coin.id
+  const [loadingData, setLoadingData] = useState(false)
+  const coinDataCacheRef = useRef({}) // Cache with timestamps
 
   const router = useRouter()
   
@@ -115,77 +114,106 @@ const Search = ({ categories, collapsed }) => {
     } // Keep default '⌘' if detection fails or for other OS
   }, [])
 
-  // Load prices from localStorage on mount
-  useEffect(() => {
-    const cachedPrices = JSON.parse(localStorage.getItem("prices"))
-    if (cachedPrices) {
-      setPrices(cachedPrices)
+  // Fetch coin data from AI API (on-demand)
+  const fetchCoinData = useCallback(async (coinNames) => {
+    const CACHE_DURATION = 30000 // 30 seconds
+    const now = Date.now()
+    const newCoinData = {}
+    const coinsToFetch = []
+
+    // Check cache first
+    for (const name of coinNames) {
+      const cached = coinDataCacheRef.current[name]
+      if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+        newCoinData[cached.id] = cached.data
+      } else {
+        coinsToFetch.push(name)
+      }
     }
+
+    // Fetch uncached coins in parallel
+    if (coinsToFetch.length > 0) {
+      setLoadingData(true)
+      try {
+        const results = await Promise.all(
+          coinsToFetch.map(name =>
+            fetch(`https://coinrotator-ai.onrender.com/api/coin/name?name=${encodeURIComponent(name)}`)
+              .then(res => res.ok ? res.json() : null)
+              .catch(() => null)
+          )
+        )
+
+        results.forEach((result, index) => {
+          if (result && result.coin) {
+            const coinName = coinsToFetch[index]
+            const coinId = result.coin.id
+            
+            // Extract latest trend
+            const latestTrend = result.trends && result.trends.length > 0 
+              ? result.trends[result.trends.length - 1] 
+              : null
+
+            const data = {
+              price: result.coin.currentPrice,
+              trend: latestTrend ? latestTrend.trend : null,
+              streak: latestTrend ? latestTrend.streak : 0
+            }
+
+            newCoinData[coinId] = data
+            
+            // Update cache
+            coinDataCacheRef.current[coinName] = {
+              id: coinId,
+              data,
+              timestamp: now
+            }
+          }
+        })
+      } catch (error) {
+        console.error('Error fetching coin data:', error)
+      } finally {
+        setLoadingData(false)
+      }
+    }
+
+    setCoinData(prevData => ({ ...prevData, ...newCoinData }))
   }, [])
 
-  // Fetch trends via socket
-  const fetchTrends = useCallback(() => {
-    if (socket) {
-      let cache = sessionStorage.getItem(`trends_supertrend`)
-      cache = JSON.parse(cache)
-      if (cache) {
-        setTrends(cache)
-        socket.emit('get_trends', {
-          flavor: 'supertrend',
-          intervals: ['1d']
-        }, (trends) => {
-          sessionStorage.setItem(`trends_supertrend`, JSON.stringify(trends))
-          setTrends(trends)
-        })
-      } else {
-        socket.emit('get_trends', {
-          flavor: 'supertrend',
-          intervals: ['1d']
-        }, (trends) => {
-          sessionStorage.setItem(`trends_supertrend`, JSON.stringify(trends))
-          setTrends(trends)
-        })
-      }
-    }
-  }, [socket])
-
+  // Fetch coin data when filtered results change
   useEffect(() => {
-    fetchTrends()
-  }, [fetchTrends])
-
-  // Subscribe to socket events for live prices
-  useEffect(() => {
-    if (socket) {
-      socket.on("i", (newPrices) => {
-        for (const key in newPrices) {
-          if (Object.prototype.hasOwnProperty.call(newPrices, key)) {
-            newPrices[key] = Number(newPrices[key]);
-          }
-        }
-        setPrices(newPrices)
-        localStorage.setItem("prices", JSON.stringify(newPrices))
-      });
-
-      socket.on('p', (priceUpdates) => {
-        setPrices((prevPrices) => {
-          const newPrices = { ...prevPrices }
-          Object.entries(priceUpdates).forEach(([coinSymbol, price]) => {
-            newPrices[coinSymbol] = Number(price)
-          })
-          return newPrices
-        })
-      })
-
-      socket.on('new_trends', fetchTrends)
+    let filteredCoins
+    if (query?.length === 2) {
+      filteredCoins = coins.filter(coin => coin.name.toLowerCase().startsWith(query.toLowerCase()) || coin.symbol.toLowerCase().startsWith(query.toLowerCase()))
+    } else if (query?.length > 2) {
+      filteredCoins = new Fuse(
+        coins,
+        {
+          keys: [
+            { name: 'contract', weight: 0.1 },
+            { name: 'symbol', weight: 0.9 },
+            { name: 'name', weight: 0.1 }
+          ],
+          minMatchCharLength: 2,
+          threshold: 0.3,
+          distance: 0
+        },
+        fuseCoinIndex
+      ).search(query).map((result) => result.item)
     }
-    return () => {
-      if (socket) {
-        socket.off('i')
-        socket.off('p')
-        socket.off('new_trends')
-      }
+
+    if (filteredCoins && filteredCoins.length > 0) {
+      // Limit to top 5 for performance
+      const topCoins = filteredCoins.slice(0, 5)
+      const coinNames = topCoins.map(coin => coin.name)
+      
+      // Debounce the fetch to avoid too many requests
+      const timeoutId = setTimeout(() => {
+        fetchCoinData(coinNames)
+      }, 300)
+
+      return () => clearTimeout(timeoutId)
     }
-  }, [socket, fetchTrends])
+  }, [query, coins, fuseCoinIndex, fetchCoinData])
 
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
@@ -232,21 +260,26 @@ const Search = ({ categories, collapsed }) => {
       <>
         <div className={searchStyles.optionTitle}>Coins</div>
         {
-          filteredCoins.slice(0, 10).map((coin) => {
-            // Get live price for this coin
-            const price = prices[coin.symbol]
+          filteredCoins.slice(0, 5).map((coin) => {
+            // Get fetched data for this coin
+            const data = coinData[coin.id]
             
-            // CRITICAL: Use coin.id not coin.symbol for trend lookup
-            // Trends are keyed by coin ID (e.g., "bitcoin"), not symbol (e.g., "btc")
-            const dailyTrend = trends?.daily?.[coin.id]?.supersuperTrend || 
-                              trends?.['1d']?.[coin.id]?.supersuperTrend
+            // Parse price (comes as "$101981" from API)
+            let price = null
+            if (data?.price) {
+              const priceStr = data.price.replace(/[$,]/g, '')
+              price = parseFloat(priceStr)
+            }
+            
+            // Get trend from fetched data
+            const trendType = data?.trend
+            const streak = data?.streak || 0
             
             // Calculate trend indicator
             let trendIndicator = null
-            if (dailyTrend) {
-              const isUp = dailyTrend.trend === 'long'
-              const isDown = dailyTrend.trend === 'short'
-              const streak = dailyTrend.streak || 0
+            if (trendType && trendType !== 'HODL') {
+              const isUp = trendType === 'UP'
+              const isDown = trendType === 'DOWN'
               
               if (isUp || isDown) {
                 trendIndicator = (
@@ -278,7 +311,7 @@ const Search = ({ categories, collapsed }) => {
                     <Tag className={searchStyles.rankBadge}>#{coin.marketCapRank}</Tag>
                   )}
                   {trendIndicator}
-                  {price && (
+                  {price && !isNaN(price) && (
                     <span className={searchStyles.price}>
                       {currencyFormatter.format(price)}
                     </span>
