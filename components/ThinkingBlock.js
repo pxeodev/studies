@@ -14,28 +14,28 @@ const ThinkingBlock = ({ thinking = [], isStreaming = false }) => {
   
   if (!thinking || thinking.length === 0) return null;
   
-  // Animate progress while streaming
+  // Animate progress while streaming - slower for realistic timing
   useEffect(() => {
     if (!isStreaming) {
       setCurrentProgress(100);
       return;
     }
     
-    // Start from 10% and gradually increase
-    setCurrentProgress(10);
+    // Start from 5% and gradually increase
+    setCurrentProgress(5);
     
-    let progress = 10;
+    let progress = 5;
     let stepIndex = 0;
     
     const interval = setInterval(() => {
-      // Increment progress
-      progress += Math.random() * 8 + 2; // Random between 2-10% per tick
+      // Much slower increment: 1-3% per tick (was 2-10%)
+      progress += Math.random() * 2 + 1;
       
       if (progress >= 100) {
-        progress = 95; // Cap at 95% until truly complete
+        progress = 90; // Cap at 90% until truly complete
       }
       
-      setCurrentProgress(Math.min(progress, 95));
+      setCurrentProgress(Math.min(progress, 90));
       
       // Advance steps as progress increases
       const newStepIndex = Math.floor((progress / 100) * thinking.length);
@@ -43,7 +43,7 @@ const ThinkingBlock = ({ thinking = [], isStreaming = false }) => {
         stepIndex = newStepIndex;
         setCurrentStepIndex(stepIndex);
       }
-    }, 400); // Update every 400ms
+    }, 800); // Update every 800ms (was 400ms) for slower animation
     
     return () => clearInterval(interval);
   }, [isStreaming, thinking.length]);
@@ -53,14 +53,11 @@ const ThinkingBlock = ({ thinking = [], isStreaming = false }) => {
   
   return (
     <div className={shumiStyles.thinkingBlock}>
-      <Space direction="vertical" size={12} style={{ width: '100%' }}>
-        {/* Header with mushroom emoji */}
-        <Space>
-          <span style={{ fontSize: 20 }}>🍄</span>
-          <span className={shumiStyles.thinkingTitle}>
-            Shumi is cooking...
-          </span>
-        </Space>
+      <Space direction="vertical" size={10} style={{ width: '100%' }}>
+        {/* Header - professional, no emoji */}
+        <div className={shumiStyles.thinkingTitle}>
+          Analyzing...
+        </div>
         
         {/* Animated progress bar with gradient */}
         <Progress
@@ -71,15 +68,14 @@ const ThinkingBlock = ({ thinking = [], isStreaming = false }) => {
             '100%': '#ff8a8a',
           }}
           trailColor="rgba(255, 77, 77, 0.1)"
-          strokeWidth={6}
+          strokeWidth={4}
           style={{ margin: 0 }}
         />
         
-        {/* Current step */}
+        {/* Current step - no emoji */}
         {currentStep && (
           <div className={shumiStyles.currentStep}>
-            {currentStep.emoji && <span>{currentStep.emoji}</span>}
-            <span>{currentStep.title}</span>
+            {currentStep.title}
           </div>
         )}
       </Space>
