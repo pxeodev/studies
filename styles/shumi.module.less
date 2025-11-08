@@ -6,7 +6,7 @@
 // ========================================
 .shumiLoadingCard {
   background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
-  border: 1px solid rgba(255, 77, 77, 0.3);
+  border: 1px solid rgba(77, 148, 255, 0.3);
   border-radius: 12px;
   padding: 20px;
   min-width: 280px;
@@ -41,7 +41,7 @@
 
 .shumiProgressFill {
   height: 100%;
-  background: linear-gradient(90deg, #ff4d4d 0%, #ff8a8a 100%);
+  background: linear-gradient(90deg, #4d94ff 0%, #8ab4ff 100%);
   border-radius: 3px;
   transition: width 0.3s ease-out;
 }
@@ -63,9 +63,9 @@
   height: calc(100% - 91px); // Default height for desktop
   min-height: 400px; // Minimum height to ensure proper display in modals
 
-  // Override CSS variables for Shumi red branding
-  --shumi-border: rgba(255, 77, 77, 0.3);
-  --shumi-border-hover: rgba(255, 77, 77, 0.6);
+  // Override CSS variables for Shumi blue branding
+  --shumi-border: rgba(77, 148, 255, 0.3);
+  --shumi-border-hover: rgba(77, 148, 255, 0.6);
 
   @media (max-width: @screen-lg) {
     height: calc(100vh - 52px - 91px); // Apply calc height only on smaller screens
@@ -149,7 +149,7 @@
 
 .suggestionButton {
   padding: 9.6px 12px; // Increased vertical padding by 20% (8px * 1.2 = 9.6px)
-  border: 1px solid var(--shumi-border); // Red border for Shumi branding
+  border: 1px solid var(--shumi-border); // Blue border for Shumi branding
   border-radius: 8px; // More rounded corners
   cursor: pointer;
   font-size: 14px; // Closer to input size but still smaller than 16px
@@ -170,7 +170,7 @@
 
   &:hover {
     background-color: var(--cr-quintiary-bg);
-    border-color: var(--shumi-border-hover); // Brighter red on hover
+    border-color: var(--shumi-border-hover); // Brighter blue on hover
   }
 }
 
@@ -235,7 +235,7 @@
 .userMessage {
   align-self: flex-end;
   .messageContent {
-    border: 1px solid var(--shumi-border); // Red border for user messages
+    border: 1px solid var(--shumi-border); // Blue border for user messages
   }
 }
 
@@ -269,13 +269,13 @@
 // Styles for the input area within the floating container
 .inputArea {
   background-color: var(--cr-primary-bg);
-  border: 1px solid var(--shumi-border); // Red border for input
+  border: 1px solid var(--shumi-border); // Blue border for input
   border-radius: 12px; // Rounded borders
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Add subtle shadow for floating effect
   transition: border-color 0.2s ease;
   
   &:focus-within {
-    border-color: var(--shumi-border-hover); // Brighter red when focused
+    border-color: var(--shumi-border-hover); // Brighter blue when focused
   }
 }
 
