@@ -392,9 +392,6 @@ const Search = ({ categories, collapsed }) => {
                 <span className={searchStyles.coinName}>{coin.name}</span>
                 <div className={searchStyles.coinMetadata}>
                   <span className={searchStyles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
-                  {coin.marketCapRank && (
-                    <Tag className={searchStyles.rankBadge}>#{coin.marketCapRank}</Tag>
-                  )}
                   {trendIndicator}
                   {streakBadge}
                   {price && !isNaN(price) && (
@@ -406,6 +403,9 @@ const Search = ({ categories, collapsed }) => {
                     <span className={searchStyles.marketCap}>
                       {numberFormatter.format(coin.marketCap)}
                     </span>
+                  )}
+                  {coin.marketCapRank && (
+                    <Tag className={searchStyles.rankBadge}>#{coin.marketCapRank}</Tag>
                   )}
                 </div>
               </div>
