@@ -392,6 +392,22 @@ const Search = ({ categories, collapsed }) => {
                 <span className={searchStyles.coinName}>{coin.name}</span>
                 <div className={searchStyles.coinMetadata}>
                   <span className={searchStyles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
+                  {coin.change7d != null && (
+                    <span className={classnames(
+                      searchStyles.change7d,
+                      coin.change7d >= 0 ? searchStyles.positive : searchStyles.negative
+                    )}>
+                      {coin.change7d >= 0 ? '+' : ''}{round(coin.change7d, 1)}%
+                    </span>
+                  )}
+                  {coin.btcDelta != null && Math.abs(coin.btcDelta) > 0.5 && (
+                    <span className={classnames(
+                      searchStyles.btcDelta,
+                      coin.btcDelta >= 0 ? searchStyles.positive : searchStyles.negative
+                    )}>
+                      {coin.btcDelta >= 0 ? '+' : ''}{round(coin.btcDelta, 1)}%Δ
+                    </span>
+                  )}
                   {trendIndicator}
                   {streakBadge}
                   {price && !isNaN(price) && (
