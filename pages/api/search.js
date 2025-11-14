@@ -67,16 +67,29 @@ const handler = async (req, res) => {
 
         if (dates.length === 0) continue
 
+        // Helper function to get trends in correct order: [eth, btc, usd]
+        const getTrendsInOrder = (dateTrends) => {
+          const trendsByQuote = {}
+          dateTrends.forEach(t => {
+            trendsByQuote[t.quoteSymbol] = t.trend
+          })
+          return [
+            trendsByQuote['eth'] || '',
+            trendsByQuote['btc'] || '',
+            trendsByQuote['usd'] || ''
+          ]
+        }
+
         // Get latest date trend
         const latestDateTrends = trendsByDate[dates[0]]
-        const latestTrendValues = latestDateTrends.map(t => t.trend)
+        const latestTrendValues = getTrendsInOrder(latestDateTrends)
         const currentTrend = supersupertrend(latestTrendValues)
 
         // Calculate streak
         let streak = 1
         for (let i = 1; i < dates.length; i++) {
           const dateTrends = trendsByDate[dates[i]]
-          const trendValues = dateTrends.map(t => t.trend)
+          const trendValues = getTrendsInOrder(dateTrends)
           const dateSuperSupertrend = supersupertrend(trendValues)
 
           if (dateSuperSupertrend === currentTrend) {
