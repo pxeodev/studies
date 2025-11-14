@@ -13,21 +13,18 @@ const handler = async (req, res) => {
         "defaultPlatform",
         (images ->> 'small') AS image,
         "marketCapRank",
-        "marketCap",
-        "lunrPercentageChange24h",
-        "lunrPercentageChange1h",
-        "lunrCurrentPrice"
+        "marketCap"
       FROM "Coin"
       ORDER BY "marketCapRank" ASC
     `
-    
+
     // Clean up coin data
     for (const coin of coins) {
       coin.contract = coin.platforms?.[coin.defaultPlatform]
       delete coin.platforms
       delete coin.defaultPlatform
     }
-    
+
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
     res.status(200).json({ coins })
   }

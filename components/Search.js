@@ -6,7 +6,6 @@ import debounce from 'lodash/debounce'
 import classnames from 'classnames'
 import slugify from 'slugify'
 import Fuse from 'fuse.js'
-import round from 'lodash/round'
 import searchStyles from '../styles/search.module.less'
 import Shumi from './Shumi'
 import UpTag from './UpTag'
@@ -23,9 +22,7 @@ const Search = ({ categories, collapsed }) => {
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
   const [modifierKey, setModifierKey] = useState('⌘')
   const [categoryData, setCategoryData] = useState({}) // Stores market cap by category name
-  const [ohlcData, setOhlcData] = useState({}) // Stores 7d performance data by coin.id
   const categoryDataCacheRef = useRef({}) // Cache for category data
-  const ohlcDataCacheRef = useRef({}) // Cache for OHLC data
 
   const router = useRouter()
 
@@ -167,96 +164,6 @@ const Search = ({ categories, collapsed }) => {
     setCategoryData(prevData => ({ ...prevData, ...newCategoryData }))
   }, [])
 
-  // Fetch OHLC 7d performance data (on-demand)
-  const fetchOhlcData = useCallback(async (coinIds) => {
-    if (!coinIds || coinIds.length === 0) return
-
-    const CACHE_DURATION = 300000 // 5 minutes
-    const now = Date.now()
-    const newOhlcData = {}
-    const coinsToFetch = []
-
-    // Check cache first
-    for (const coinId of coinIds) {
-      const cached = ohlcDataCacheRef.current[coinId]
-      if (cached && (now - cached.timestamp) < CACHE_DURATION) {
-        newOhlcData[coinId] = cached.data
-      } else {
-        coinsToFetch.push(coinId)
-      }
-    }
-
-    // Fetch uncached OHLC data
-    if (coinsToFetch.length > 0) {
-      try {
-        const coinIdsParam = coinsToFetch.join(',')
-        const res = await fetch(`/api/coin-ohlc?coinIds=${coinIdsParam}`)
-
-        if (res.ok) {
-          const result = await res.json()
-
-          // Process results
-          for (const coinId of coinsToFetch) {
-            const data = result[coinId]
-
-            if (data) {
-              newOhlcData[coinId] = data
-
-              // Update cache
-              ohlcDataCacheRef.current[coinId] = {
-                data,
-                timestamp: now
-              }
-            } else {
-              // No data available for this coin
-              newOhlcData[coinId] = null
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching OHLC data:', error)
-      }
-    }
-
-    setOhlcData(prevData => ({ ...prevData, ...newOhlcData }))
-  }, [])
-
-
-  // Fetch OHLC data when filtered results change
-  useEffect(() => {
-    let filteredCoins
-    if (query?.length === 2) {
-      filteredCoins = coins.filter(coin => coin.name.toLowerCase().startsWith(query.toLowerCase()) || coin.symbol.toLowerCase().startsWith(query.toLowerCase()))
-    } else if (query?.length > 2) {
-      filteredCoins = new Fuse(
-        coins,
-        {
-          keys: [
-            { name: 'contract', weight: 0.1 },
-            { name: 'symbol', weight: 0.9 },
-            { name: 'name', weight: 0.1 }
-          ],
-          minMatchCharLength: 2,
-          threshold: 0.3,
-          distance: 0
-        },
-        fuseCoinIndex
-      ).search(query).map((result) => result.item)
-    }
-
-    if (filteredCoins && filteredCoins.length > 0) {
-      // Limit to top 5 for performance
-      const topCoins = filteredCoins.slice(0, 5)
-      const coinIds = topCoins.map(coin => coin.id)
-
-      // Debounce the fetch to avoid too many requests
-      const timeoutId = setTimeout(() => {
-        fetchOhlcData(coinIds)
-      }, 300)
-
-      return () => clearTimeout(timeoutId)
-    }
-  }, [query, coins, fuseCoinIndex, fetchOhlcData])
 
   // Fetch category data when filtered categories change
   useEffect(() => {
@@ -346,14 +253,6 @@ const Search = ({ categories, collapsed }) => {
                 <span className={searchStyles.coinName}>{coin.name}</span>
                 <div className={searchStyles.coinMetadata}>
                   <span className={searchStyles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
-                  {coin.lunrPercentageChange24h != null && (
-                    <span className={classnames(
-                      searchStyles.change24h,
-                      coin.lunrPercentageChange24h >= 0 ? searchStyles.positive : searchStyles.negative
-                    )}>
-                      {coin.lunrPercentageChange24h >= 0 ? '+' : ''}{round(coin.lunrPercentageChange24h, 1)}%
-                    </span>
-                  )}
                   {coin.marketCap && (
                     <span className={searchStyles.marketCap}>
                       {numberFormatter.format(coin.marketCap)}
