@@ -11,23 +11,58 @@ import shumiStyles from '../styles/shumi.module.less'
 import NotConnected from './gating/NotConnected'
 import ShumiCopyButton from './ShumiCopyButton'
 
-// Animated thinking indicator component
-const ThinkingIndicator = () => {
-  const [dots, setDots] = useState('.');
+// Shumi-branded loading block with progress animation
+const ShumiLoadingBlock = () => {
+  const [progress, setProgress] = useState(0);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  const steps = [
+    "Reading the signals",
+    "Fetching fresh market data",
+    "Checking the vibes (sentiment)",
+    "Finding the alpha 🍄"
+  ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDots(prev => {
-        if (prev === '.') return '..';
-        if (prev === '..') return '...';
-        return '.';
+    // Animate progress slowly (1-3% per tick, cap at 90%)
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        const increment = Math.random() * 2 + 1; // Random 1-3%
+        const newProgress = Math.min(90, prev + increment);
+        return newProgress;
       });
-    }, 400); // Switch every 400ms for a nice rhythm
+    }, 800); // Update every 800ms
 
-    return () => clearInterval(interval);
+    // Change step every 2-3 seconds
+    const stepInterval = setInterval(() => {
+      setCurrentStepIndex(prev => (prev + 1) % steps.length);
+    }, 2500);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(stepInterval);
+    };
   }, []);
 
-  return `Thinking${dots}`;
+  return (
+    <div className={shumiStyles.shumiLoadingCard}>
+      <div className={shumiStyles.shumiLoadingTitle}>
+        <span className={shumiStyles.shumiLoadingEmoji}>🍄</span>
+        <span>Shumi is working on it...</span>
+      </div>
+      
+      <div className={shumiStyles.shumiProgressContainer}>
+        <div 
+          className={shumiStyles.shumiProgressFill}
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      
+      <div className={shumiStyles.shumiLoadingStep}>
+        {steps[currentStepIndex]}
+      </div>
+    </div>
+  );
 };
 
 // Helper function to generate session ID
@@ -290,12 +325,9 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                    )}
                  </div>
                ))}
-               {/* Show "Thinking..." indicator */}
+               {/* Show Shumi loading block */}
                {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
-                  <div className={classnames(shumiStyles.messageContainer, shumiStyles.assistantMessage, shumiStyles.thinkingIndicator)}>
-                    <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
-                    <div className={shumiStyles.messageContent}><ThinkingIndicator /></div>
-                  </div>
+                  <ShumiLoadingBlock />
                ) : null}
 
                {/* Add error display */}
