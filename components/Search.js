@@ -342,7 +342,7 @@ const Search = ({ categories, collapsed }) => {
                     {streakBadge}
                     {data?.marketCap > 0 && (
                       <span className={searchStyles.categoryMarketCap}>
-                        {numberFormatter.format(data.marketCap)}
+                        ${numberFormatter.format(data.marketCap)}
                       </span>
                     )}
                   </div>

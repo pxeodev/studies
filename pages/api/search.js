@@ -36,51 +36,46 @@ const handler = async (req, res) => {
     `
     const latestDate = latestDateResult[0]?.latest_date
 
-    // Get trends for all coins at latest date
+    // Get trends for all coins - optimized single query with limited lookback
     let trendsByCoin = {}
     if (latestDate) {
       const coinIds = coins.map(c => c.id)
-      const trends = await sql`
+
+      // Limit lookback to 30 days for performance
+      const lookbackDate = new Date(latestDate)
+      lookbackDate.setDate(lookbackDate.getDate() - 30)
+
+      // Single query to get all trends with date filtering
+      const allTrends = await sql`
         SELECT "coinId", "quoteSymbol", trend, date
         FROM "SuperTrend"
         WHERE "coinId" IN ${sql(coinIds)}
           AND flavor = 'CoinRotator'
           AND weekly = false
-          AND date = ${latestDate}
-        ORDER BY "coinId", "quoteSymbol"
-      `
-
-      // Group by coinId and calculate supersupertrend
-      const trendsByCoinId = groupBy(trends, 'coinId')
-      for (const [coinId, coinTrends] of Object.entries(trendsByCoinId)) {
-        const trendValues = coinTrends.map(t => t.trend)
-        const superSupertrend = supersupertrend(trendValues)
-        trendsByCoin[coinId] = { trend: superSupertrend }
-      }
-
-      // Calculate streaks - get previous dates for each coin
-      const previousTrends = await sql`
-        SELECT "coinId", "quoteSymbol", trend, date
-        FROM "SuperTrend"
-        WHERE "coinId" IN ${sql(coinIds)}
-          AND flavor = 'CoinRotator'
-          AND weekly = false
-          AND date < ${latestDate}
+          AND date >= ${lookbackDate}
+          AND date <= ${latestDate}
         ORDER BY "coinId", date DESC, "quoteSymbol"
       `
 
-      // Group by coinId and date, calculate streaks
-      const trendsByCoinAndDate = groupBy(previousTrends, 'coinId')
-      for (const [coinId, coinTrendHistory] of Object.entries(trendsByCoinAndDate)) {
-        if (!trendsByCoin[coinId]) continue
+      // Group by coinId and date
+      const trendsByCoinAndDate = groupBy(allTrends, 'coinId')
 
-        const currentTrend = trendsByCoin[coinId].trend
-        const trendsByDate = groupBy(coinTrendHistory, 'date')
+      for (const [coinId, coinTrends] of Object.entries(trendsByCoinAndDate)) {
+        // Group by date
+        const trendsByDate = groupBy(coinTrends, 'date')
         const dates = Object.keys(trendsByDate).sort().reverse()
 
+        if (dates.length === 0) continue
+
+        // Get latest date trend
+        const latestDateTrends = trendsByDate[dates[0]]
+        const latestTrendValues = latestDateTrends.map(t => t.trend)
+        const currentTrend = supersupertrend(latestTrendValues)
+
+        // Calculate streak
         let streak = 1
-        for (const date of dates) {
-          const dateTrends = trendsByDate[date]
+        for (let i = 1; i < dates.length; i++) {
+          const dateTrends = trendsByDate[dates[i]]
           const trendValues = dateTrends.map(t => t.trend)
           const dateSuperSupertrend = supersupertrend(trendValues)
 
@@ -91,7 +86,7 @@ const handler = async (req, res) => {
           }
         }
 
-        trendsByCoin[coinId].streak = streak
+        trendsByCoin[coinId] = { trend: currentTrend, streak }
       }
     }
 
