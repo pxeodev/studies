@@ -46,6 +46,7 @@ const handler = async (req, res) => {
       lookbackDate.setDate(lookbackDate.getDate() - 30)
 
       // Single query to get all trends with date filtering
+      // Order by date ASC to match getTrends.mjs behavior
       const allTrends = await sql`
         SELECT "coinId", "quoteSymbol", trend, date
         FROM "SuperTrend"
@@ -54,52 +55,51 @@ const handler = async (req, res) => {
           AND weekly = false
           AND date >= ${lookbackDate}
           AND date <= ${latestDate}
-        ORDER BY "coinId", date DESC, "quoteSymbol"
+        ORDER BY "coinId", date ASC, "quoteSymbol"
       `
 
-      // Group by coinId and date
-      const trendsByCoinAndDate = groupBy(allTrends, 'coinId')
+      // Group by coinId
+      const trendsByCoinId = groupBy(allTrends, 'coinId')
 
-      for (const [coinId, coinTrends] of Object.entries(trendsByCoinAndDate)) {
-        // Group by date
-        const trendsByDate = groupBy(coinTrends, 'date')
-        const dates = Object.keys(trendsByDate).sort().reverse()
+      for (const [coinId, coinTrends] of Object.entries(trendsByCoinId)) {
+        // Group by quoteSymbol first (like getTrends.mjs does)
+        const trendsByQuote = groupBy(coinTrends, 'quoteSymbol')
 
-        if (dates.length === 0) continue
+        // Get trends for each quote symbol in chronological order
+        const ethTrends = (trendsByQuote['eth'] || []).map(t => t.trend)
+        const btcTrends = (trendsByQuote['btc'] || []).map(t => t.trend)
+        const usdTrends = (trendsByQuote['usd'] || []).map(t => t.trend)
 
-        // Helper function to get trends in correct order: [eth, btc, usd]
-        const getTrendsInOrder = (dateTrends) => {
-          const trendsByQuote = {}
-          dateTrends.forEach(t => {
-            trendsByQuote[t.quoteSymbol] = t.trend
-          })
-          return [
-            trendsByQuote['eth'] || '',
-            trendsByQuote['btc'] || '',
-            trendsByQuote['usd'] || ''
-          ]
+        // Calculate supersupertrend for each date (using zipWith logic)
+        const minLength = Math.min(ethTrends.length, btcTrends.length, usdTrends.length)
+        if (minLength === 0) continue
+
+        const supersuperTrends = []
+        for (let i = 0; i < minLength; i++) {
+          const superSupertrend = supersupertrend([
+            ethTrends[i] || '',
+            btcTrends[i] || '',
+            usdTrends[i] || ''
+          ])
+          supersuperTrends.push(superSupertrend)
         }
 
-        // Get latest date trend
-        const latestDateTrends = trendsByDate[dates[0]]
-        const latestTrendValues = getTrendsInOrder(latestDateTrends)
-        const currentTrend = supersupertrend(latestTrendValues)
+        // Get latest trend and streak (using getTrendStreak logic)
+        if (supersuperTrends.length === 0) continue
 
-        // Calculate streak
+        const lastTrend = supersuperTrends[supersuperTrends.length - 1]
         let streak = 1
-        for (let i = 1; i < dates.length; i++) {
-          const dateTrends = trendsByDate[dates[i]]
-          const trendValues = getTrendsInOrder(dateTrends)
-          const dateSuperSupertrend = supersupertrend(trendValues)
 
-          if (dateSuperSupertrend === currentTrend) {
+        // Count backwards from second-to-last
+        for (let i = supersuperTrends.length - 2; i >= 0; i--) {
+          if (lastTrend === supersuperTrends[i]) {
             streak++
           } else {
             break
           }
         }
 
-        trendsByCoin[coinId] = { trend: currentTrend, streak }
+        trendsByCoin[coinId] = { trend: lastTrend, streak }
       }
     }
 
