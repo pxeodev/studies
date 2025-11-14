@@ -234,6 +234,14 @@ const Search = ({ categories, collapsed }) => {
       fuseCoinIndex
     ).search(query).map((result) => result.item)
   }
+  // Sort by market cap rank (lower rank = higher market cap)
+  if (filteredCoins.length > 0) {
+    filteredCoins.sort((a, b) => {
+      const rankA = a.marketCapRank || Infinity
+      const rankB = b.marketCapRank || Infinity
+      return rankA - rankB
+    })
+  }
   if (filteredCoins.length > 0) {
     coinOptions = (
       <>
@@ -298,6 +306,14 @@ const Search = ({ categories, collapsed }) => {
         ignoreLocation: true
       },
       ).search(query).map((result) => result.item)
+  }
+  // Sort by market cap (descending - higher market cap first)
+  if (filteredCategories.length > 0) {
+    filteredCategories.sort((a, b) => {
+      const marketCapA = categoryData[a]?.marketCap || 0
+      const marketCapB = categoryData[b]?.marketCap || 0
+      return marketCapB - marketCapA
+    })
   }
   if (filteredCategories.length > 0) {
     categoryOptions = (
