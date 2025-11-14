@@ -252,6 +252,22 @@ const Search = ({ categories, collapsed }) => {
                 <img src={coin.image} alt={coin.name}/>
                 <span className={searchStyles.coinName}>{coin.name}</span>
                 <div className={searchStyles.coinMetadata}>
+                  {coin.dailySuperSuperTrend && (
+                    <>
+                      {coin.dailySuperSuperTrend === 'UP' && (
+                        <UpTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrend === 'DOWN' && (
+                        <DownTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrend === 'HODL' && (
+                        <HodlTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrendStreak > 1 && (
+                        <span className={searchStyles.streakBadge}>{coin.dailySuperSuperTrendStreak}</span>
+                      )}
+                    </>
+                  )}
                   {coin.marketCap && (
                     <span className={searchStyles.marketCap}>
                       ${numberFormatter.format(coin.marketCap)}
