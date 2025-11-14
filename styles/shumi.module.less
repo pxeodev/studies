@@ -269,13 +269,13 @@
 // Styles for the input area within the floating container
 .inputArea {
   background-color: var(--cr-primary-bg);
-  border: 1px solid var(--shumi-border); // Blue border for input
+  border: 1px solid var(--cr-secondary-border); // Use standard border color
   border-radius: 12px; // Rounded borders
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Add subtle shadow for floating effect
   transition: border-color 0.2s ease;
 
   &:focus-within {
-    border-color: var(--shumi-border-hover); // Brighter blue when focused
+    border-color: var(--cr-primary-border); // Use standard border color on focus
   }
 }
 
