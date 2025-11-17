@@ -1,7 +1,8 @@
 import { Input, Button, Tag } from 'antd'
 import { MessageOutlined, PlusSquareOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useChat } from '@ai-sdk/react'
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import classnames from 'classnames'
@@ -11,13 +12,21 @@ import shumiStyles from '../styles/shumi.module.less'
 import NotConnected from './gating/NotConnected'
 import ShumiCopyButton from './ShumiCopyButton'
 
-// Simple loading indicator - no fake progress, matches styleguide
-const ShumiLoadingBlock = () => {
+// Loading indicator with real progress updates
+const ShumiLoadingBlock = ({ progress }) => {
+  const getMessage = () => {
+    if (progress?.message) return progress.message;
+    if (progress?.phase === 'classifying') return 'Understanding your request...';
+    if (progress?.phase === 'executing') return 'Fetching data...';
+    if (progress?.phase === 'generating') return 'Generating response...';
+    return 'Shumi is thinking...';
+  };
+
   return (
     <div className={shumiStyles.shumiLoadingCard}>
       <div className={shumiStyles.shumiLoadingTitle}>
         <span className={shumiStyles.shumiLoadingEmoji}>🍄</span>
-        <span>Shumi is thinking...</span>
+        <span>{getMessage()}</span>
       </div>
       <div className={shumiStyles.shumiLoadingSpinner}>
         <div className={shumiStyles.spinnerDot}></div>
@@ -67,17 +76,97 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     fetchWalletAddress();
   }, [loggedIn, getAccounts]);
 
-  const { messages, input, handleInputChange, handleSubmit, stop, setMessages, setInput, error, reload, status } = useChat({
-    api: '/api/ai',
-    body: {
-      walletAddress
+  const [progress, setProgress] = useState(null);
+  const [input, setInput] = useState(''); // Manage input state manually in v5
+
+  // Create transport with current walletAddress - recreate when walletAddress changes
+  const transport = useMemo(() => {
+    return new DefaultChatTransport({
+      api: '/api/ai',
+      body: {
+        walletAddress
+      },
+      query: {
+        walletAddress // Add this to pass wallet address as query param
+      }
+    });
+  }, [walletAddress]);
+
+  const {
+    messages,
+    sendMessage,
+    stop,
+    setMessages,
+    error,
+    reload,
+    status
+  } = useChat({
+    transport,
+    onData: (data) => {
+      // Handle progress updates from the data stream
+      // The data comes as a stringified JSON object from the data stream
+      try {
+        let parsed;
+        if (typeof data === 'string') {
+          // If it's a string, it might be double-stringified (data field contains stringified JSON)
+          try {
+            parsed = JSON.parse(data);
+            // If the data field is a string, parse it again
+            if (parsed?.data && typeof parsed.data === 'string') {
+              try {
+                parsed = JSON.parse(parsed.data);
+              } catch {
+                // If parsing fails, use the original parsed object
+              }
+            }
+          } catch {
+            // If parsing fails, try to parse as direct JSON
+            parsed = JSON.parse(data);
+          }
+        } else {
+          parsed = data;
+        }
+
+        if (parsed?.type === 'progress') {
+          console.log('[DEBUG] Received progress update:', parsed);
+          setProgress(parsed);
+        } else {
+          // Log non-progress data for debugging (but only first few to avoid spam)
+          if (typeof parsed === 'object' && parsed !== null) {
+            console.log('[DEBUG] Received non-progress data:', Object.keys(parsed));
+          }
+        }
+      } catch (error) {
+        // Log parsing errors for debugging
+        console.warn('[DEBUG] Error parsing data in onData:', error, 'Data:', typeof data === 'string' ? data.substring(0, 100) : data);
+      }
     },
-    query: {
-      walletAddress // Add this to pass wallet address as query param
+
+    onError: (error) => {
+      console.error('[DEBUG] useChat error:', error);
     }
   })
   const messagesEndRef = useRef(null)
   const aiInputRef = useRef(null)
+
+  // Debug: Log error and status changes
+  useEffect(() => {
+    if (error) {
+      console.error('[DEBUG] Shumi error state changed:', {
+        error,
+        errorMessage: error?.message,
+        errorStack: error?.stack,
+        status,
+        messagesCount: messages.length,
+        lastMessage: messages[messages.length - 1]
+      });
+    }
+  }, [error, status, messages]);
+
+  // Debug: Log status changes
+  useEffect(() => {
+    console.log('[DEBUG] Shumi status changed:', status);
+  }, [status]);
 
   // Helper for checking if AI is generating a response
   const isGenerating = status === 'streaming' || status === 'submitted';
@@ -93,23 +182,38 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
   // Process messages once when they're received or changed
   useEffect(() => {
+    console.log('[DEBUG] Processing messages:', messages.length, messages);
+
     const newProcessedMessages = messages.map(message => {
-      if (message.role === 'assistant' && message.content) {
+      // Handle v5 format: messages may have parts[] instead of content
+      let content = message.content;
+      if (!content && message.parts && Array.isArray(message.parts)) {
+        // Extract text from parts array
+        content = message.parts
+          .filter(part => part.type === 'text')
+          .map(part => part.text)
+          .join('');
+      }
+
+      if (message.role === 'assistant' && content) {
         // Fix markdown headings after colons/periods only in assistant messages
         return {
           ...message,
+          content, // Ensure content is set
           // Only replace in content that actually has the pattern, which is rare
-          processedContent: message.content.includes(':#') || message.content.includes('.#')
-            ? message.content.replace(/([:.])(\s*)#/g, '$1\n\n#')
-            : message.content
+          processedContent: content.includes(':#') || content.includes('.#')
+            ? content.replace(/([:.])(\s*)#/g, '$1\n\n#')
+            : content
         };
       }
       return {
         ...message,
-        processedContent: message.content
+        content: content || message.content || '', // Ensure content exists
+        processedContent: content || message.content || ''
       };
     });
 
+    console.log('[DEBUG] Processed messages:', newProcessedMessages.length, newProcessedMessages);
     setProcessedMessages(newProcessedMessages);
   }, [messages]);
 
@@ -203,27 +307,45 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
   const clearChat = useCallback(() => {
     setMessages([])
-    setInput('')
+    setInput('') // Clear input manually
     const newSessionId = generateSessionId();
     setSessionId(newSessionId);
-  }, [setMessages, setInput])
+  }, [setMessages])
+
+  // Clear progress when starting a new request
+  useEffect(() => {
+    if (status === 'submitted') {
+      setProgress(null);
+    }
+  }, [status]);
 
   const askAi = useCallback((e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    setProgress(null); // Clear previous progress
 
     if (!input.trim() && !coinTag) return;
     const coinId = document.querySelector('meta[property="x-cr-coin-id"]')?.content;
     // Use browser's local time string with timezone
     const browserDateTimeWithTimezone = new Date().toString();
 
-    handleSubmit(e, {
-      data: {
-        browserDateTimeWithTimezone,
-        sessionId,
-        ...(coinTag && coinId ? { coinId } : {}) // Only include coinId if coinTag is set
+    // In v5, use sendMessage to send messages
+    // Pass walletAddress in the body options to ensure it's included with each request
+    sendMessage({
+      text: input.trim()
+    }, {
+      body: {
+        walletAddress, // Include walletAddress in the request body
+        data: {
+          browserDateTimeWithTimezone,
+          sessionId,
+          ...(coinTag && coinId ? { coinId } : {}) // Only include coinId if coinTag is set
+        }
       }
     });
-  }, [handleSubmit, input, coinTag, sessionId]);
+
+    // Clear input after submission in v5
+    setInput('');
+  }, [sendMessage, input, coinTag, sessionId]);
 
   // Handle removing the coin tag
   const handleRemoveCoinTag = useCallback(() => {
@@ -290,7 +412,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                ))}
                {/* Show Shumi loading block */}
                {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
-                  <ShumiLoadingBlock />
+                  <ShumiLoadingBlock progress={progress} />
                ) : null}
 
                {/* Add error display */}
@@ -299,6 +421,11 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                     <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
                     <div className={shumiStyles.messageContent}>
                      <div>Something went wrong. Please try again.</div>
+                     {process.env.NODE_ENV === 'development' && (
+                       <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+                         Error: {error?.message || String(error)}
+                       </div>
+                     )}
                      <Button type="primary" onClick={() => reload()} className={shumiStyles.retryButton}>
                        Try Again
                      </Button>
@@ -319,7 +446,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 <div
                   key={index}
                   className={shumiStyles.suggestionButton}
-                  onClick={() => setInput(suggestion)} // Use setInput directly
+                  onClick={() => setInput(suggestion)} // Set input manually
                 >
                   {suggestion}
                 </div>
@@ -352,7 +479,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 </>
               }
                           value={input}
-            onChange={handleInputChange}
+            onChange={(e) => setInput(e.target.value)}
             onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
             ref={aiInputRef} // Use the specific ref for AI input
             spellCheck="false"

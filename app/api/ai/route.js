@@ -67,6 +67,9 @@ export async function POST(req) {
     });
   }
 
+  // Extract content from userMessage (handle both v4 and v5 formats)
+  const userMessageContent = userMessage.content || (userMessage.parts?.[0]?.text);
+
   // Extract session ID from request data
   const sessionId = data?.sessionId;
   console.log('Session ID:', sessionId);
@@ -75,20 +78,67 @@ export async function POST(req) {
   if (userMessage) {
     trackMixpanelEvent('AI Prompt', {
       distinct_id: walletAddress || 'anonymous',
-      prompt: userMessage.content,
+      prompt: userMessageContent,
       messageCount: messages.length,
       time: Math.floor(Date.now() / 1000)
     }).catch(err => console.error('Mixpanel tracking error:', err));
   }
 
   try {
-    const response = await shumi({ messages, walletAddress, data });
-    const streamResponse = response.toDataStreamResponse({
-      getErrorMessage: (error) => {
+    // Progress callback that will be passed to shumi
+    // In v5, we'll need to handle progress updates differently
+    // For now, we'll collect them and the response stream will handle them
+    const progressUpdates = [];
+
+    const onProgress = (progress) => {
+      try {
+        // Map generic progress info to user-friendly messages
+        let message = 'Shumi is thinking...';
+        if (progress.phase === 'classifying') {
+          message = 'Understanding your request...';
+        } else if (progress.phase === 'executing') {
+          if (progress.level && progress.totalLevels) {
+            message = `Fetching data (${progress.level}/${progress.totalLevels})...`;
+          } else {
+            message = 'Fetching data...';
+          }
+        } else if (progress.phase === 'generating') {
+          message = 'Generating response...';
+        }
+
+        const progressData = {
+          type: 'progress',
+          ...progress,
+          message
+        };
+
+        progressUpdates.push(progressData);
+        console.log('[DEBUG] Progress update received:', progressData);
+      } catch (error) {
+        console.error('[DEBUG] Error processing progress update:', error);
+        // Don't throw - progress updates are non-critical
+      }
+    };
+
+    // Start shumi - it will call onProgress as it executes
+    const response = await shumi({ messages, walletAddress, data, onProgress });
+
+    // Check if shumi returned an error Response directly
+    if (response instanceof Response && !response.toUIMessageStreamResponse && !response.toDataStreamResponse) {
+      // This is an error response from shumi, return it directly
+      return response;
+    }
+
+    // In v5, use toUIMessageStreamResponse for useChat compatibility
+    // For now, return it directly - progress updates will be handled separately
+    // TODO: Integrate progress updates into the stream when v5 API is fully understood
+    const stream = response.toUIMessageStreamResponse({
+      onError: (error) => {
+        console.error('[DEBUG] Stream response error:', error);
         reportErrorToServer(error, {
           errorType: 'StreamResponseError',
           walletAddress,
-          userMessage: userMessage?.content,
+          userMessage: userMessageContent,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -98,7 +148,11 @@ export async function POST(req) {
         return "An error occurred while processing your request. Please try again later.";
       }
     });
-    return streamResponse;
+
+    console.log('[DEBUG] Progress updates collected:', progressUpdates.length);
+    // Note: Progress updates are collected but not yet integrated into stream
+    // This will be addressed once we confirm v5's data stream API
+    return stream;
   } catch(e) {
     console.error('API Error:', {
       name: e.name,
