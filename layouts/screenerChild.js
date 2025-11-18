@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Layout } from 'antd'
+import { Layout as AntLayout } from 'antd'
 import { createContext, useEffect } from "react"
 import { Client } from "react-hydration-provider";
 import { Web3AuthProvider } from '../contexts/Web3AuthContext'
@@ -19,21 +19,25 @@ export const NotificationContext = createContext(null);
 export default function ScreenerLayout({ page, pageProps }) {
   const darkMode = useDarkMode();
   const isDark = darkMode[0]
-  
+
   useEffect(() => {
-    const html = document.querySelector('html');
-    html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
+    if (typeof document !== 'undefined') {
+      const html = document.querySelector('html');
+      if (html) {
+        html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
+      }
+    }
   }, [isDark])
-  
+
   const screens = useBreakPoint();
-  const {topCategories, categories} = pageProps.appData
+  const {topCategories, categories} = pageProps?.appData || {}
 
   return (
     <>
       <Web3AuthProvider>
         <KeyPassProvider>
           <Banner />
-          <Layout className={baseStyles.outerLayout}>
+          <AntLayout className={baseStyles.outerLayout}>
             <SharedLayout pageProps={pageProps} />
             <Head>
               <title key="title">CoinRotator - Coin Screener for Bullish & Bearish Crypto Trends</title>
@@ -42,7 +46,7 @@ export default function ScreenerLayout({ page, pageProps }) {
             <Client>
               { screens.lg && <Sider topCategories={topCategories} categories={categories} /> }
             </Client>
-            <Layout className={baseStyles.innerLayout}>
+            <AntLayout className={baseStyles.innerLayout}>
               <Client>
                 <Header
                   categories={categories}
@@ -51,8 +55,8 @@ export default function ScreenerLayout({ page, pageProps }) {
                 />
               </Client>
               {page}
-            </Layout>
-          </Layout>
+            </AntLayout>
+          </AntLayout>
         </KeyPassProvider>
       </Web3AuthProvider>
     </>

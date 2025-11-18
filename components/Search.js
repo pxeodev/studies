@@ -1,6 +1,6 @@
 import { Modal, Input, Tag } from 'antd'
 import { SearchOutlined } from "@ant-design/icons";
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router'
 import debounce from 'lodash/debounce'
 import classnames from 'classnames'
@@ -8,6 +8,9 @@ import slugify from 'slugify'
 import Fuse from 'fuse.js'
 import searchStyles from '../styles/search.module.less'
 import Shumi from './Shumi'
+import UpTag from './UpTag'
+import DownTag from './DownTag'
+import HodlTag from './HodlTag'
 
 const Search = ({ categories, collapsed }) => {
   const [coins, setCoins] = useState([])
@@ -18,8 +21,16 @@ const Search = ({ categories, collapsed }) => {
   const searchInputRef = useRef(null)
   const [fuseCoinIndex, setFuseCoinIndex] = useState(undefined)
   const [modifierKey, setModifierKey] = useState('⌘')
+  const [categoryData, setCategoryData] = useState({}) // Stores market cap by category name
+  const categoryDataCacheRef = useRef({}) // Cache for category data
 
   const router = useRouter()
+
+  const numberFormatter = useMemo(() => new Intl.NumberFormat([], {
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: 2
+  }), [])
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -97,6 +108,92 @@ const Search = ({ categories, collapsed }) => {
     } // Keep default '⌘' if detection fails or for other OS
   }, [])
 
+
+  // Fetch category data from AI API (on-demand)
+  const fetchCategoryData = useCallback(async (categoryNames) => {
+    const CACHE_DURATION = 30000 // 30 seconds
+    const now = Date.now()
+    const newCategoryData = {}
+    const categoriesToFetch = []
+
+    // Check cache first
+    for (const name of categoryNames) {
+      const cached = categoryDataCacheRef.current[name]
+      if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+        newCategoryData[name] = cached.data
+      } else {
+        categoriesToFetch.push(name)
+      }
+    }
+
+    // Fetch uncached categories in parallel
+    if (categoriesToFetch.length > 0) {
+      try {
+        const results = await Promise.all(
+          categoriesToFetch.map(name =>
+            fetch(`https://coinrotator-ai.onrender.com/api/category?categoryName=${encodeURIComponent(name)}`)
+              .then(res => res.ok ? res.json() : null)
+              .catch(() => null)
+          )
+        )
+
+        results.forEach((result, index) => {
+          if (result) {
+            const categoryName = categoriesToFetch[index]
+
+            const data = {
+              trend: result.trend,
+              streak: result.streak || 0,
+              marketCap: result.marketCap || 0
+            }
+
+            newCategoryData[categoryName] = data
+
+            // Update cache
+            categoryDataCacheRef.current[categoryName] = {
+              data,
+              timestamp: now
+            }
+          }
+        })
+      } catch (error) {
+        console.error('Error fetching category data:', error)
+      }
+    }
+
+    setCategoryData(prevData => ({ ...prevData, ...newCategoryData }))
+  }, [])
+
+
+  // Fetch category data when filtered categories change
+  useEffect(() => {
+    let filteredCategories
+    if (query?.length === 2) {
+      filteredCategories = categories.filter(category => category.toLowerCase().startsWith(query.toLowerCase()))
+    } else if (query?.length > 2) {
+      filteredCategories = new Fuse(
+        categories,
+        {
+          minMatchCharLength: 3,
+          threshold: 0.1,
+          ignoreLocation: true
+        }
+      ).search(query).map((result) => result.item)
+    }
+
+    if (filteredCategories && filteredCategories.length > 0) {
+      // Limit to top 5 for performance
+      const topCategories = filteredCategories.slice(0, 5)
+
+      // Debounce the fetch
+      const timeoutId = setTimeout(() => {
+        fetchCategoryData(topCategories)
+      }, 300)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [query, categories, fetchCategoryData])
+
   let searchTrigger = <div onClick={openSearchModal} className={searchStyles.searchBarWrapper}>
     <Input
       className={searchStyles.searchBar}
@@ -137,12 +234,20 @@ const Search = ({ categories, collapsed }) => {
       fuseCoinIndex
     ).search(query).map((result) => result.item)
   }
+  // Sort by market cap rank (lower rank = higher market cap)
+  if (filteredCoins.length > 0) {
+    filteredCoins.sort((a, b) => {
+      const rankA = a.marketCapRank || Infinity
+      const rankB = b.marketCapRank || Infinity
+      return rankA - rankB
+    })
+  }
   if (filteredCoins.length > 0) {
     coinOptions = (
       <>
         <div className={searchStyles.optionTitle}>Coins</div>
         {
-          filteredCoins.slice(0, 10).map((coin) => {
+          filteredCoins.slice(0, 5).map((coin) => {
             return (
               <div
                 className={classnames(searchStyles.option, searchStyles.coinOption)}
@@ -154,7 +259,32 @@ const Search = ({ categories, collapsed }) => {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={coin.image} alt={coin.name}/>
                 <span className={searchStyles.coinName}>{coin.name}</span>
-                <span className={searchStyles.coinSymbol}>{coin.symbol.toUpperCase()}</span>
+                <div className={searchStyles.coinMetadata}>
+                  {coin.dailySuperSuperTrend && (
+                    <>
+                      {coin.dailySuperSuperTrend === 'UP' && (
+                        <UpTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrend === 'DOWN' && (
+                        <DownTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrend === 'HODL' && (
+                        <HodlTag className={searchStyles.trendTag} />
+                      )}
+                      {coin.dailySuperSuperTrendStreak > 1 && (
+                        <span className={searchStyles.streakBadge}>{coin.dailySuperSuperTrendStreak}</span>
+                      )}
+                    </>
+                  )}
+                  {coin.marketCap && (
+                    <span className={searchStyles.marketCap}>
+                      ${numberFormatter.format(coin.marketCap)}
+                    </span>
+                  )}
+                  {coin.marketCapRank && (
+                    <Tag className={searchStyles.rankBadge}>#{coin.marketCapRank}</Tag>
+                  )}
+                </div>
               </div>
             )
           })
@@ -177,12 +307,41 @@ const Search = ({ categories, collapsed }) => {
       },
       ).search(query).map((result) => result.item)
   }
+  // Sort by market cap (descending - higher market cap first)
+  if (filteredCategories.length > 0) {
+    filteredCategories.sort((a, b) => {
+      const marketCapA = categoryData[a]?.marketCap || 0
+      const marketCapB = categoryData[b]?.marketCap || 0
+      return marketCapB - marketCapA
+    })
+  }
   if (filteredCategories.length > 0) {
     categoryOptions = (
       <>
         <div className={searchStyles.optionTitle}>Categories</div>
         {
           filteredCategories.slice(0, 5).map((category) => {
+            // Get fetched data for this category
+            const data = categoryData[category]
+
+            // Calculate trend indicator using designed components
+            const trendType = data?.trend
+            const streak = data?.streak || 0
+
+            let trendIndicator = null
+            if (trendType === 'UP') {
+              trendIndicator = <UpTag className={searchStyles.trendTag} />
+            } else if (trendType === 'DOWN') {
+              trendIndicator = <DownTag className={searchStyles.trendTag} />
+            } else if (trendType === 'HODL') {
+              trendIndicator = <HodlTag className={searchStyles.trendTag} />
+            }
+
+            // Add streak number if > 1
+            const streakBadge = streak > 1 ? (
+              <span className={searchStyles.streakBadge}>{streak}</span>
+            ) : null
+
             return (
               <div
                 className={classnames(searchStyles.option, searchStyles.categoryOption)}
@@ -192,7 +351,18 @@ const Search = ({ categories, collapsed }) => {
                   const categorySlug = slugify(category)
                   router.push(`/category/${categorySlug}`)}
                 }>
-                <span className={searchStyles.categoryOption}>{category}</span>
+                <span className={searchStyles.categoryName}>{category}</span>
+                {(trendIndicator || streakBadge || data?.marketCap) && (
+                  <div className={searchStyles.categoryMetadata}>
+                    {trendIndicator}
+                    {streakBadge}
+                    {data?.marketCap > 0 && (
+                      <span className={searchStyles.categoryMarketCap}>
+                        ${numberFormatter.format(data.marketCap)}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             )
           })

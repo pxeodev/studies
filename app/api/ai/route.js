@@ -1,5 +1,6 @@
 import shumi, { reportErrorToServer } from 'coinrotator-utils/shumi.js';
 import { fetchWithTimeout } from 'coinrotator-utils/fetchWithTimeout.mjs';
+import { createUIMessageStream, createUIMessageStreamResponse } from 'ai';
 
 // Function to track events in Mixpanel using fetch (Edge runtime compatible)
 const trackMixpanelEvent = async (event, properties) => {
@@ -33,9 +34,6 @@ const trackMixpanelEvent = async (event, properties) => {
 
 export async function POST(req) {
   const { messages, walletAddress, data } = await req.json();
-  const userMessages = messages.filter(message => message.role === 'user');
-  console.log('Received POST request with user messages:', JSON.stringify(userMessages, null, 2));
-  console.log('Request data:', data);
 
   // AUTHENTICATION GATING: Require wallet address for Shumi AI access
   if (!walletAddress || !walletAddress.startsWith('0x')) {
@@ -67,28 +65,97 @@ export async function POST(req) {
     });
   }
 
+  // Extract content from userMessage (handle both v4 and v5 formats)
+  const userMessageContent = userMessage.content || (userMessage.parts?.[0]?.text);
+
   // Extract session ID from request data
   const sessionId = data?.sessionId;
-  console.log('Session ID:', sessionId);
 
   // Track the AI prompt in Mixpanel
   if (userMessage) {
     trackMixpanelEvent('AI Prompt', {
       distinct_id: walletAddress || 'anonymous',
-      prompt: userMessage.content,
+      prompt: userMessageContent,
       messageCount: messages.length,
       time: Math.floor(Date.now() / 1000)
     }).catch(err => console.error('Mixpanel tracking error:', err));
   }
 
   try {
-    const response = await shumi({ messages, walletAddress, data, promptVersion: 'playground' });
-    const streamResponse = response.toDataStreamResponse({
-      getErrorMessage: (error) => {
+    // Use createUIMessageStream for v5 custom data streaming
+    // Following AI SDK v5 best practices: use createUIMessageStream with writer.write() for custom data
+    const stream = createUIMessageStream({
+      execute: async ({ writer }) => {
+        const onProgress = (progress) => {
+          try {
+            // Map generic progress info to crypto/meme-friendly messages
+            let message = 'Shumi is thinking...';
+            if (progress.phase === 'classifying') {
+              message = 'Checking the vibes...';
+            } else if (progress.phase === 'executing') {
+              if (progress.level && progress.totalLevels) {
+                message = `Pulling market data (${progress.level}/${progress.totalLevels})...`;
+              } else {
+                message = 'Pulling market data...';
+              }
+            } else if (progress.phase === 'generating') {
+              message = 'Dropping some alpha...';
+            }
+
+            const progressData = {
+              ...progress,
+              message
+            };
+
+            // Write progress update as transient data part (v5 best practice)
+            // Transient parts are only available via onData callback, not in message history
+            writer.write({
+              type: 'data-progress',
+              id: 'progress-1', // Use fixed ID for reconciliation
+              data: progressData,
+              transient: true // Don't add to message history
+            });
+          } catch (error) {
+            console.error('[API] Error in onProgress:', error);
+            // Don't throw - progress updates are non-critical
+          }
+        };
+
+        // Start shumi - it will call onProgress as it executes
+        const response = await shumi({ messages, walletAddress, data, onProgress });
+
+        // Check if shumi returned an error Response directly
+        if (response instanceof Response && !response.toUIMessageStreamResponse && !response.toDataStreamResponse) {
+          // For error responses, write error to stream
+          writer.writeError(new Error('An error occurred while processing your request.'));
+          return;
+        }
+
+        // Get the UI message stream from the response and merge it into our writer
+        const messageStream = response.toUIMessageStream({
+          onError: (error) => {
+            reportErrorToServer(error, {
+              errorType: 'StreamResponseError',
+              walletAddress,
+              userMessage: userMessageContent,
+              messageCount: messages.length,
+              sessionId,
+              timestamp: new Date().toISOString()
+            }).catch(reportError => {
+              console.error('Failed to report stream response error:', reportError);
+            });
+            return "An error occurred while processing your request. Please try again later.";
+          }
+        });
+
+        // Merge the UI message stream into our writer (v5 approach)
+        writer.merge(messageStream);
+      },
+      onError: (error) => {
         reportErrorToServer(error, {
           errorType: 'StreamResponseError',
           walletAddress,
-          userMessage: userMessage?.content,
+          userMessage: userMessageContent,
           messageCount: messages.length,
           sessionId,
           timestamp: new Date().toISOString()
@@ -98,7 +165,9 @@ export async function POST(req) {
         return "An error occurred while processing your request. Please try again later.";
       }
     });
-    return streamResponse;
+
+    // Convert the stream to a Response using createUIMessageStreamResponse
+    return createUIMessageStreamResponse({ stream });
   } catch(e) {
     console.error('API Error:', {
       name: e.name,

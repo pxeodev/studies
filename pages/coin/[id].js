@@ -97,11 +97,51 @@ export default function Coin(coin) {
     }
   }, [socket, coin.id])
   const [price, setPrice] = useState(null)
+
   useEffect(() => {
     console.log('useeffect fetch trends')
     fetchTrends()
   }, [fetchTrends])
+
+  // Fetch live coin data from AI server
+  const fetchLiveCoinDataFromAI = useCallback(async () => {
+    try {
+      const response = await fetch(`https://coinrotator-ai.onrender.com/api/coin/name?name=${encodeURIComponent(coin.name)}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data && data.coin && data.coin.currentPrice) {
+          // Parse the price by removing the dollar sign and converting to number
+          const priceValue = parseFloat(data.coin.currentPrice.replace('$', ''))
+          setPrice(priceValue)
+        }
+        if (data && data.coin) {
+          // Transform the coin data to match the expected format for PriceDataTab
+          const transformedCoin = {
+            ...data.coin,
+            // Map futuresData properties to the expected format and parse numeric values
+            openInterest: data.coin.futuresData?.openInterest ?
+              parseFloat(data.coin.futuresData.openInterest.replace(/[$,]/g, '')) : undefined,
+            fundingRate: data.coin.futuresData?.fundingRate ?
+              parseFloat(data.coin.futuresData.fundingRate.replace('%', '')) : undefined,
+            futuresVolume24h: data.coin.futuresData?.futuresVolume24h ?
+              parseFloat(data.coin.futuresData.futuresVolume24h.replace(/[$,]/g, '')) : undefined,
+            // Note: openInterestChangePercent1h and openInterestByfuturesVolume24h are not in the AI response
+            // so they will be undefined, which is fine
+          }
+          setLiveCoinData([transformedCoin])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching live coin data from AI server:', error)
+    }
+  }, [coin.name])
+
+  const fetchLiveCoinData = useCallback(() => {
+    fetchLiveCoinDataFromAI()
+  }, [fetchLiveCoinDataFromAI])
+
   useEffect(() => {
+    // Try to get price from localStorage first
     const localPrices = JSON.parse(localStorage.getItem("prices"))
     if (localPrices) {
       const price = localPrices[coin.id] || localPrices[coin.symbol]
@@ -109,55 +149,26 @@ export default function Coin(coin) {
         setPrice(price)
       }
     }
-  }, [coin.symbol, coin.id, currencyFormatter])
+
+    // Fetch fresh data from AI server
+    fetchLiveCoinDataFromAI()
+
+    // Set up interval to refresh price data every 30 seconds
+    const interval = setInterval(fetchLiveCoinDataFromAI, 30000)
+
+    return () => clearInterval(interval)
+  }, [coin.symbol, coin.id, fetchLiveCoinDataFromAI])
+
   useEffect(() => {
     if (socket) {
-      socket.on("i", (prices) => {
-        const price = prices[coin.id] || prices[coin.symbol]
-        if (price) {
-          setPrice(price)
-        }
-        console.debug("Received initial prices", prices);
-      });
-
-      socket.on('p', (priceUpdates) => {
-        const priceUpdate = priceUpdates[coin.id] || priceUpdates[coin.symbol]
-        if (priceUpdate) {
-          setPrice(priceUpdate)
-        }
-      })
-
       socket.on('new_trends', fetchTrends)
     }
     return () => {
       if (socket) {
-        socket.off('i')
-        socket.off('p')
         socket.off('new_trends')
       }
     }
-  }, [socket, coin.symbol, currencyFormatter, fetchTrends])
-  const fetchLiveCoinData = useCallback(() => {
-    socket.emit('get_live_coin_data', (liveCoinData) => {
-      const data = liveCoinData.data
-      sessionStorage.setItem(`live_coin_data`, JSON.stringify(data))
-      setLiveCoinData(data)
-    })
-  }, [socket])
-  useEffect(() => {
-    const cache = JSON.parse(sessionStorage.getItem('live_coin_data'))
-    if (cache) {
-      setLiveCoinData(cache)
-    } else if (socket) {
-      fetchLiveCoinData()
-      socket.on('new_live_coin_data', fetchLiveCoinData)
-    }
-    return () => {
-      if (socket) {
-        socket.off('new_live_coin_data')
-      }
-    }
-  }, [socket, fetchLiveCoinData])
+  }, [socket, fetchTrends])
 
   const metaTitle = `${coin.name} (${coin.symbol.toUpperCase()}) | Daily Crypto Trend Screener`
   const metaDescription = `Daily insights on ${coin.name} (${coin.symbol.toUpperCase()})! Discover Coinrotator's comprehensive trend analysis for multiple timeframes.`
