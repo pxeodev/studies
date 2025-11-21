@@ -38,10 +38,10 @@
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.17"
 
-"@ai-sdk/gateway@2.0.12":
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-2.0.12.tgz#b82ca3bdeabdffd0b0ca6b8b6315ed8d70f142d4"
-  integrity sha512-W+cB1sOWvPcz9qiIsNtD+HxUrBUva2vWv2K1EFukuImX+HA0uZx3EyyOjhYQ9gtf/teqEG80M6OvJ7xx/VLV2A==
+"@ai-sdk/gateway@2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-2.0.13.tgz#c8e0f34fbb8d5f759f5af302f78c2b9dc4730a19"
+  integrity sha512-q8M+7+VEKp91I295cjNDgQ4LyGImKj5cDLVARDay7nBTXGjIRZOlthYE7K6Rbz2yHKFyTmKH7MMkYavAM7L/UQ==
   dependencies:
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.17"
@@ -76,9 +76,9 @@
     "@ai-sdk/provider-utils" "2.2.8"
 
 "@ai-sdk/openai@^2.0.0":
-  version "2.0.69"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.69.tgz#6cbd2899d82d5f76b8291df620e042ece537ce36"
-  integrity sha512-UF9qZ1qiVOpWdbj/FGf8jz+PciMI2zxt8ZNKjsvyFtUfk1E5PIG8GYR65maGblVhwKrRR5zAAJ5BumNyDt2v4Q==
+  version "2.0.71"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.71.tgz#3b03d53b7e4cfe7617431d1a151cd6d6e1313378"
+  integrity sha512-tg+gj+R0z/On9P4V7hy7/7o04cQPjKGayMCL3gzWD/aNGjAKkhEnaocuNDidSnghizt8g2zJn16cAuAolnW+qQ==
   dependencies:
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.17"
@@ -1572,16 +1572,16 @@
   integrity sha512-pavN0n/VdQP2qKxdjdL8lt0fJWK5N3AvH3veSM5UROZ06HZVURcqEt3T74vLUGRiRnIPbFO/YEJGt2cO2THwXg==
 
 "@openrouter/ai-sdk-provider@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@openrouter/ai-sdk-provider/-/ai-sdk-provider-1.2.3.tgz#9e173becd943de5840726124ac4a2c8e3d98ac5c"
-  integrity sha512-a6Nc8dPRHakRH9966YJ/HZJhLOds7DuPTscNZDoAr+Aw+tEFUlacSJMvb/b3gukn74mgbuaJRji9YOn62ipfVg==
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@openrouter/ai-sdk-provider/-/ai-sdk-provider-1.2.5.tgz#b0995973518254bfdd644dd299909c8444ce8e8e"
+  integrity sha512-NrvJFPvdEUo6DYUQIVWPGfhafuZ2PAIX7+CUMKGknv8TcTNVo0TyP1y5SU7Bgjf/Wup9/74UFKUB07icOhVZjQ==
   dependencies:
     "@openrouter/sdk" "^0.1.8"
 
 "@openrouter/sdk@^0.1.8":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@openrouter/sdk/-/sdk-0.1.17.tgz#57e2073635075598e8843e83742a4de79e0f4107"
-  integrity sha512-RFN0sfe83G85MirfpkZSuoX8hLLucemnwqrTr53vlrJmBJZ244CCnuZ33vpVUI8rLg+hP1i/smW6IExzYRDGDg==
+  version "0.1.23"
+  resolved "https://registry.yarnpkg.com/@openrouter/sdk/-/sdk-0.1.23.tgz#825d1c8799b40ce17bf064d7c899ed69b4784c3e"
+  integrity sha512-W1xx3zLqBKgtH3FMmN8av7DUKKjUwFgUrdn1vZM8gDb10CtI/w7YU3bsmIismd9Ppr7mx6Y9iw3eyKuU8/UZIA==
   dependencies:
     zod "^3.25.0 || ^4.0.0"
 
@@ -5362,11 +5362,11 @@ ai@^4.0.14:
     jsondiffpatch "0.6.0"
 
 ai@^5.0.0:
-  version "5.0.97"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.97.tgz#7b9728a85e618c0124e5dfe992136ec9face575f"
-  integrity sha512-8zBx0b/owis4eJI2tAlV8a1Rv0BANmLxontcAelkLNwEHhgfgXeKpDkhNB6OgV+BJSwboIUDkgd9312DdJnCOQ==
+  version "5.0.98"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.98.tgz#e507bfcf05a600c79056d264379cb8c12c9722df"
+  integrity sha512-RpMnwnml68Swblobvk6IdF7HLZrog72Ve6H5J3aN+A/JPg4y5CjCXeQyK1N4wJStyuTa6AoKYfJR5F4e/aVpHQ==
   dependencies:
-    "@ai-sdk/gateway" "2.0.12"
+    "@ai-sdk/gateway" "2.0.13"
     "@ai-sdk/provider" "2.0.0"
     "@ai-sdk/provider-utils" "3.0.17"
     "@opentelemetry/api" "1.9.0"
@@ -6441,8 +6441,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
-  version "2.12.0"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#fd7001c0d9609b6e34d8e27200ce1b0011594aad"
+  version "2.13.0"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#945d8dc916c89a12bbea5928874dd4042a1da9e3"
   dependencies:
     "@ai-sdk/anthropic" "^2.0.0"
     "@ai-sdk/google-vertex" "^2.2.27"
