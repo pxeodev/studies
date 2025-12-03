@@ -122,7 +122,7 @@ export async function POST(req) {
         };
 
         // Start shumi - it will call onProgress as it executes
-        const response = await shumi({ messages, walletAddress, data, archetype, onProgress });
+        const response = await shumi({ messages, walletAddress, data, archetype, onProgress, promptVersion: 'playground' });
 
         // Check if shumi returned an error Response directly
         if (response instanceof Response && !response.toUIMessageStreamResponse && !response.toDataStreamResponse) {
