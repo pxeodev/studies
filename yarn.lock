@@ -3194,6 +3194,11 @@
   resolved "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz"
   integrity sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==
 
+"@toon-format/toon@^1.0.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@toon-format/toon/-/toon-1.4.0.tgz#9ca6d3bb1452b4cd7cadd04f15e77f9ee329e918"
+  integrity sha512-bjdhhIPjnX2oVk+pKy/nD3bwuESDLX/5fwW0TxwpV7Q4PVNkiRSv1S0sPeuy9TI4PfAlulow1HShdmMTnYvoLg==
+
 "@tootallnate/once@2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
@@ -6455,8 +6460,8 @@ code-block-writer@^10.1.1:
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
-  version "2.14.3"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#a30af0d68d1b3fa8dff6cfbe048deefded30683b"
+  version "2.14.4"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#4ab6344d969824f6e5f9f7cf720a4136758db4f2"
   dependencies:
     "@ai-sdk/anthropic" "^2.0.0"
     "@ai-sdk/google-vertex" "^2.2.27"
@@ -6464,6 +6469,7 @@ code-block-writer@^10.1.1:
     "@lifeomic/attempt" "^3.1.0"
     "@memochou1993/json2markdown" "^0.0.15"
     "@openrouter/ai-sdk-provider" "^1.2.3"
+    "@toon-format/toon" "^1.0.0"
     "@urql/core" "^5.1.1"
     "@urql/exchange-retry" "^1.3.1"
     ai "^5.0.0"
