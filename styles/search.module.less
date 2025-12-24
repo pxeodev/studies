@@ -162,48 +162,195 @@
   align-items: center;
   height: 48px;
   border-radius: 4px;
-  background-color: var(--cr-secondary-bg) !important;
+  background-color: transparent !important;
   cursor: pointer;
   font-size: 16px;
   line-height: 24px;
-  padding: 0 8px; // Add padding for content spacing
+  padding: 0 8px;
 
   &:hover {
     background-color: var(--cr-primary-bg) !important;
     border: 1px solid var(--cr-primary-border) !important;
-     // Adjust padding slightly for border
-     padding: 0 7px;
+    padding: 0 7px;
   }
 }
 
 .coinOption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: 48px;
+  padding: 8px !important;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+
+  &:hover {
+    padding: 7px !important;
+  }
+
   img {
-    /* margin-left: 8px; // Removed, handled by padding */
-    height: 20px;
-    width: 20px;
-    flex-shrink: 0; // Prevent image shrinking
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
   }
 
   .coinName {
-    margin-left: 10px;
-    white-space: nowrap; // Prevent wrapping
-    overflow: hidden; // Hide overflow
-    text-overflow: ellipsis; // Add ellipsis
-    flex-grow: 1; // Allow name to take space
+    margin-left: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-weight: 500;
+  }
+
+  .coinMetadata {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-left: 22px;
+    font-size: 13px;
+    background-color: transparent;
+
+    @media screen and (max-width: @screen-sm) {
+      display: none;
+    }
   }
 
   .coinSymbol {
-    margin-left: 5px;
     color: @cr-gray-7;
-    flex-shrink: 0; // Prevent symbol shrinking
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .change24h {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+
+    &.positive {
+      color: #52c41a;
+      background-color: rgba(82, 196, 26, 0.1);
+    }
+
+    &.negative {
+      color: #ff4d4f;
+      background-color: rgba(255, 77, 79, 0.1);
+    }
+  }
+
+  .btcDelta {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 2px;
+    white-space: nowrap;
+    opacity: 0.85;
+
+    &.positive {
+      color: #52c41a;
+      background-color: rgba(82, 196, 26, 0.08);
+    }
+
+    &.negative {
+      color: #ff4d4f;
+      background-color: rgba(255, 77, 79, 0.08);
+    }
+  }
+
+  .rankBadge {
+    font-size: 11px;
+    padding: 0 6px;
+    height: 20px;
+    line-height: 20px;
+    background-color: var(--cr-quintiary-bg);
+    border: 1px solid var(--cr-secondary-border);
+    color: var(--cr-secondary-text);
+    margin: 0;
+  }
+
+  .trendTag {
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  .streakBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cr-secondary-text);
+    background-color: var(--cr-quintiary-bg);
+    border: 1px solid var(--cr-secondary-border);
+    border-radius: 2px;
+  }
+
+  .price {
+    color: var(--cr-primary-text);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .marketCap {
+    color: @cr-gray-7;
+    font-size: 12px;
+    margin-left: 12px;
   }
 }
 
 .categoryOption {
-  padding-left: 4px; // Keep specific padding if needed
-   white-space: nowrap; // Prevent wrapping
-    overflow: hidden; // Hide overflow
-    text-overflow: ellipsis; // Add ellipsis
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px !important;
+  gap: 8px;
+  height: auto;
+  min-height: 48px;
+  width: fit-content;
+  max-width: 100%;
+
+  &:hover {
+    padding: 7px !important;
+  }
+
+  .categoryName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-weight: 500;
+  }
+
+  .categoryMetadata {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-left: 22px; // Match coin metadata spacing
+    font-size: 13px;
+    background-color: transparent;
+
+    @media screen and (max-width: @screen-sm) {
+      display: none;
+    }
+  }
+
+  .categoryMarketCap {
+    color: @cr-gray-7;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 12px;
+  }
 }
 
 .tabs {

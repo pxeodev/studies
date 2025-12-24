@@ -1,6 +1,40 @@
 @import './base.module.less';
 @import './variables.module.less';
 
+// ========================================
+// Shumi Loading Block (with rotating messages)
+// ========================================
+.shumiLoadingContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 0;
+  align-self: flex-start; // Match assistant message alignment
+}
+
+.shumiLoadingMascot {
+  width: 18px;
+  height: 18px;
+  animation: shumiFade 1.5s ease-in-out infinite;
+  vertical-align: middle;
+  margin-bottom: 2px !important; // Slight adjustment to align with text baseline
+}
+
+.shumiLoadingText {
+  font-size: 14px;
+  color: var(--cr-secondary-text);
+}
+
+@keyframes shumiFade {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 // Wrapper for the entire AI tab content
 .aiTab {
   position: relative; // Enable positioning for floating input
@@ -32,7 +66,7 @@
   flex: 1; // Allow conversation area to grow and fill space
   overflow-y: auto; // Enable vertical scrolling for messages
   padding: 16px; // Reverted to match original .searchResults
-  padding-bottom: 100px; // Add space for floating input
+  padding-bottom: 180px; // Increased space to prevent overlap with floating input and loading card
   scroll-behavior: smooth;
   background-color: var(--cr-secondary-bg) !important;
   display: flex;
@@ -93,13 +127,13 @@
 
 .suggestionButton {
   padding: 9.6px 12px; // Increased vertical padding by 20% (8px * 1.2 = 9.6px)
-  border: 1px solid var(--cr-primary-border);
+  border: 1px solid var(--cr-secondary-border); // Use standard border color
   border-radius: 8px; // More rounded corners
   cursor: pointer;
   font-size: 14px; // Closer to input size but still smaller than 16px
   color: #8C8C8C !important; // Use primary text color
   background-color: var(--cr-primary-bg); // Use primary background
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   text-align: left;
   width: fit-content; // Don't use full width
   max-width: 280px; // Limit width to prevent overly long suggestions
@@ -114,6 +148,7 @@
 
   &:hover {
     background-color: var(--cr-quintiary-bg);
+    border-color: var(--cr-primary-border); // Use standard border color on hover
   }
 }
 
@@ -178,7 +213,7 @@
 .userMessage {
   align-self: flex-end;
   .messageContent {
-    border: 1px solid var(--cr-primary-border);
+    border: 1px solid var(--cr-secondary-border); // Use standard border color
   }
 }
 
@@ -212,9 +247,14 @@
 // Styles for the input area within the floating container
 .inputArea {
   background-color: var(--cr-primary-bg);
-  border: 1px solid var(--cr-primary-border);
+  border: 1px solid var(--cr-secondary-border); // Use standard border color
   border-radius: 12px; // Rounded borders
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Add subtle shadow for floating effect
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--cr-primary-border); // Use standard border color on focus
+  }
 }
 
 .aiInput {

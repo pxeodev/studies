@@ -56,15 +56,25 @@ const getOpenInterestPriceFactorUSD = (market, databaseCoins, coin) => {
     return 1 // EUR is always very close to USD and we don't have the price for EUR...
   }
   let openInterestDenominationPriceFactor = 1
-  if (coin.symbol.toUpperCase() === openInterestDenomination) {
+  // Normalize both sides to uppercase for case-insensitive comparison
+  const normalizedDenomination = openInterestDenomination.toUpperCase()
+  if (coin.symbol.toUpperCase() === normalizedDenomination) {
     openInterestDenominationPriceFactor = coin.currentPrice
   } else {
-    const openInterestDenominationCoin = databaseCoins.find(coin => coin.symbol.toUpperCase() === openInterestDenomination)
+    let openInterestDenominationCoin = databaseCoins.find(coin => coin.symbol.toUpperCase() === normalizedDenomination)
+
+    // If not found, try normalizing the symbol (remove common suffixes like 'x', 'X')
+    if (!openInterestDenominationCoin && normalizedDenomination.endsWith('X')) {
+      const normalizedSymbol = normalizedDenomination.slice(0, -1)
+      openInterestDenominationCoin = databaseCoins.find(coin => coin.symbol.toUpperCase() === normalizedSymbol)
+    }
+
     if (openInterestDenominationCoin) {
       openInterestDenominationPriceFactor = openInterestDenominationCoin.currentPrice
     } else {
-      console.log('No price for', openInterestDenomination)
-      throw(new Error('No price for ' + openInterestDenomination))
+      console.warn(`⚠️ No price found for open interest denomination "${openInterestDenomination}" (market: ${market.symbol}). Using default factor of 1.`)
+      // Return 1 as default instead of throwing - this allows the script to continue
+      return 1
     }
   }
   return openInterestDenominationPriceFactor

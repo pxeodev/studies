@@ -1,156 +1,137 @@
 import { Input, Button, Tag } from 'antd'
 import { MessageOutlined, PlusSquareOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useChat } from '@ai-sdk/react'
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import classnames from 'classnames'
 
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import shumiStyles from '../styles/shumi.module.less'
-import NotConnected from './gating/NotConnected'
 import ShumiCopyButton from './ShumiCopyButton'
 
-// All available loading expressions (top messages weighted higher, rest are alternates)
-// Original messages are at the top to maintain higher weight, followed by new expressions
-const LOADING_MESSAGES = [
-  // Original messages (maintained for consistency and higher weight)
-  "Reading the signals",
-  "Fetching fresh market data",
-  "Checking the vibes (sentiment)",
-  "Finding the alpha 🍄",
-  // New expressions (top favorites)
-  "sniffing for alpha",
-  "checking what chads are buying",
-  "scanning CT takes",
-  "reading the hopium charts",
-  "checking ser's bags",
-  "stalking whale wallets",
-  "measuring fud levels",
-  "checking if it's priced in",
-  "consulting the trend gods",
-  "scanning for exit liquidity",
-  "checking what's cooking on-chain",
-  "reading the tea leaves",
-  "aping into the data",
-  "hunting for gems",
-  // Additional expressions (alternates)
-  "scanning the trenches",
-  "checking order books",
-  "summoning the charts",
-  "asking the oracles nicely",
-  "convincing APIs to respond",
-  "bribing the data gods",
-  "checking if devs are awake",
-  "reading degen sentiment",
-  "checking the rotations",
-  "sniffing out narratives",
-  "scanning for momentum",
-  "checking what's trending",
-  "reading whale moves",
-  "measuring conviction",
-  "checking funding rates",
-  "scanning perp action",
-  "reading the orderflow",
-  "checking what pumped",
-  "sniffing catalysts",
-  "measuring memecoin season",
-  "checking altszn indicators",
-  "reading macro vibes",
-  "scanning fresh wallets",
-  "checking what's cooking",
-  "reading the sentiment tea",
-  "checking CT alpha",
-  "scanning for setups",
-  "measuring greed levels",
-  "checking what's rotating",
-  "reading smart money",
-  "scanning for confluences",
-  "checking trend strength",
-  "measuring fomo intensity",
-  "reading volume signals",
-  "checking what insiders bought",
-  "scanning for breakouts",
-  "measuring conviction scores"
-];
-
-// Helper function to randomly select messages with weighted preference for top messages
-// Top messages include original 4 + top 14 new expressions = 18 total higher-weighted
-const selectRandomMessages = (count) => {
-  const topMessages = LOADING_MESSAGES.slice(0, 18);
-  const alternateMessages = LOADING_MESSAGES.slice(18);
-  const selected = new Set();
-  
-  while (selected.size < count) {
-    // 70% chance to pick from top messages, 30% from alternates
-    const useTop = Math.random() < 0.7 || alternateMessages.length === 0;
-    const pool = useTop ? topMessages : alternateMessages;
-    
-    if (pool.length > 0) {
-      const randomIndex = Math.floor(Math.random() * pool.length);
-      selected.add(pool[randomIndex]);
-    }
-  }
-  
-  return Array.from(selected);
+// Helper function to capitalize first letter
+const capitalizeFirst = (str) => {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-// Shumi-branded loading block with progress animation
-const ShumiLoadingBlock = () => {
-  const [progress, setProgress] = useState(0);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [selectedSteps, setSelectedSteps] = useState(() => {
-    // Randomly decide whether to use 3 steps or 5 steps (50/50 chance)
-    const useThreeSteps = Math.random() < 0.5;
-    const stepCount = useThreeSteps ? 3 : 5;
-    const steps = selectRandomMessages(stepCount);
-    console.log(`[ShumiLoadingBlock] Selected ${stepCount}-step set:`, steps);
-    return steps;
-  });
+// Loading messages organized by phase
+const LOADING_MESSAGES_BY_PHASE = {
+  classifying: [
+    "Checking the vibes",
+    "Understanding your request",
+    "Reading the signals",
+    "Decoding your question",
+    "Analyzing what you need"
+  ],
+  executing: [
+    "Reading the signals",
+    "Fetching fresh market data",
+    "Sniffing for alpha",
+    "Checking what chads are buying",
+    "Scanning CT takes",
+    "Reading the hopium charts",
+    "Checking ser's bags",
+    "Stalking whale wallets",
+    "Measuring fud levels",
+    "Checking if it's priced in",
+    "Consulting the trend gods",
+    "Scanning for exit liquidity",
+    "Checking what's cooking on-chain",
+    "Reading the tea leaves",
+    "Aping into the data",
+    "Hunting for gems",
+    "Scanning the trenches",
+    "Checking order books",
+    "Summoning the charts",
+    "Asking the oracles nicely",
+    "Convincing APIs to respond",
+    "Bribing the data gods",
+    "Checking if devs are awake",
+    "Reading degen sentiment",
+    "Checking the rotations",
+    "Sniffing out narratives",
+    "Scanning for momentum",
+    "Checking what's trending",
+    "Reading whale moves",
+    "Measuring conviction",
+    "Checking funding rates",
+    "Scanning perp action",
+    "Reading the orderflow",
+    "Checking what pumped",
+    "Sniffing catalysts",
+    "Measuring memecoin season",
+    "Checking altszn indicators",
+    "Reading macro vibes",
+    "Scanning fresh wallets",
+    "Checking what's cooking",
+    "Reading the sentiment tea",
+    "Checking CT alpha",
+    "Scanning for setups",
+    "Measuring greed levels",
+    "Checking what's rotating",
+    "Reading smart money",
+    "Scanning for confluences",
+    "Checking trend strength",
+    "Measuring fomo intensity",
+    "Reading volume signals",
+    "Checking what insiders bought",
+    "Scanning for breakouts",
+    "Measuring conviction scores"
+  ],
+  generating: [
+    "Finding the alpha 🍄",
+    "Dropping some alpha",
+    "Crafting your response",
+    "Putting it all together",
+    "Writing the analysis"
+  ]
+};
 
-  useEffect(() => {
-    // Animate progress slowly (1-3% per tick, cap at 90%)
-    const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        const increment = Math.random() * 2 + 1; // Random 1-3%
-        const newProgress = Math.min(90, prev + increment);
-        return newProgress;
-      });
-    }, 800); // Update every 800ms
+// Helper function to get messages for a phase
+const getMessagesForPhase = (phase) => {
+  if (phase && LOADING_MESSAGES_BY_PHASE[phase]) {
+    return LOADING_MESSAGES_BY_PHASE[phase];
+  }
+  // Fallback to executing messages if phase is unknown
+  return LOADING_MESSAGES_BY_PHASE.executing;
+};
 
-    // Change step every 2-3 seconds
-    const stepInterval = setInterval(() => {
-      setCurrentStepIndex(prev => (prev + 1) % selectedSteps.length);
-    }, 2500);
+// Shumi-branded loading block with random message per phase
+const ShumiLoadingBlock = ({ progress, requestId }) => {
+  // Determine current phase from progress
+  const currentPhase = progress?.phase || 'executing';
 
-    return () => {
-      clearInterval(progressInterval);
-      clearInterval(stepInterval);
-    };
-  }, [selectedSteps.length]);
+  // Pick ONE random message for this phase (changes when requestId changes)
+  const displayMessage = useMemo(() => {
+    // Use custom message from progress if it contains specific info (like level/totalLevels)
+    if (progress?.level && progress?.totalLevels && progress?.message) {
+      return capitalizeFirst(progress.message);
+    }
 
-  const totalSteps = selectedSteps.length;
-  const currentStepNumber = currentStepIndex + 1;
+    // Pick a random message for this phase using requestId as seed
+    const phaseMessages = getMessagesForPhase(currentPhase);
+    // Use requestId + phase to ensure different messages for different requests
+    const seed = (requestId || 0) + (currentPhase || '').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const randomIndex = Math.floor(Math.abs(Math.sin(seed) * 10000) % phaseMessages.length);
+    const selectedMessage = phaseMessages[randomIndex] || 'Shumi is thinking...';
+    return capitalizeFirst(selectedMessage);
+  }, [currentPhase, requestId, progress?.level, progress?.totalLevels, progress?.message]);
+
+  const stepText = displayMessage;
 
   return (
-    <div className={shumiStyles.shumiLoadingCard}>
-      <div className={shumiStyles.shumiLoadingTitle}>
-        <span className={shumiStyles.shumiLoadingEmoji}>🍄</span>
-        <span>Shumi is working on it...</span>
-      </div>
-      
-      <div className={shumiStyles.shumiProgressContainer}>
-        <div 
-          className={shumiStyles.shumiProgressFill}
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      
-      <div className={shumiStyles.shumiLoadingStep}>
-        {selectedSteps && selectedSteps.length > 0 && selectedSteps[currentStepIndex] 
-          ? `${currentStepNumber}/${totalSteps} ${selectedSteps[currentStepIndex]}`
-          : 'Loading...'}
-      </div>
+    <div className={shumiStyles.shumiLoadingContainer}>
+      <img
+        className={shumiStyles.shumiLoadingMascot}
+        src="/shumi.png"
+        alt="Shumi"
+        width="18"
+        height="18"
+      />
+      <span className={shumiStyles.shumiLoadingText}>{stepText}</span>
     </div>
   );
 };
@@ -161,12 +142,13 @@ const generateSessionId = () => {
 };
 
 const Shumi = ({ isActive, initialSuggestions }) => {
-  const { loggedIn, getAccounts } = useWeb3Auth()
+  const { loggedIn, getAccounts, login } = useWeb3Auth()
   const [walletAddress, setWalletAddress] = useState(null)
   const [coinTag, setCoinTag] = useState(null);
   const [currentSuggestions, setCurrentSuggestions] = useState([]);
   const [sessionId, setSessionId] = useState(() => generateSessionId());
   const [isClient, setIsClient] = useState(false);
+  const [pendingPrompt, setPendingPrompt] = useState(null); // Store prompt to submit after login
 
   // Handle client-side hydration to prevent hydration mismatch
   useEffect(() => {
@@ -194,17 +176,72 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     fetchWalletAddress();
   }, [loggedIn, getAccounts]);
 
-  const { messages, input, handleInputChange, handleSubmit, stop, setMessages, setInput, error, reload, status } = useChat({
-    api: '/api/ai',
-    body: {
-      walletAddress
+  const [progress, setProgress] = useState(null);
+  const [input, setInput] = useState(''); // Manage input state manually in v5
+  const requestIdRef = useRef(0); // Track request ID for randomization
+  const progressRequestIdRef = useRef(0); // Track request ID for randomization
+
+  // Create transport with current walletAddress - recreate when walletAddress changes
+  const transport = useMemo(() => {
+    return new DefaultChatTransport({
+      api: '/api/ai',
+      body: {
+        walletAddress
+      },
+      query: {
+        walletAddress // Add this to pass wallet address as query param
+      }
+    });
+  }, [walletAddress]);
+
+  const {
+    messages,
+    sendMessage,
+    stop,
+    setMessages,
+    error,
+    reload,
+    status
+  } = useChat({
+    transport,
+    onError: (error) => {
+      console.error('Shumi error:', error);
     },
-    query: {
-      walletAddress // Add this to pass wallet address as query param
+    onData: (dataPart) => {
+      // Handle transient progress updates via onData callback (v5 best practice)
+      if (dataPart.type === 'data-progress') {
+        console.log('[Shumi] Progress update:', dataPart.data);
+        setProgress(dataPart.data);
+      }
     }
-  })
+  });
+
+  // Submit pending prompt after successful login
+  useEffect(() => {
+    if (walletAddress && pendingPrompt && sendMessage) {
+      // Wait a bit for wallet address to be fully set in transport
+      const timer = setTimeout(() => {
+        const { text, coinId, browserDateTimeWithTimezone } = pendingPrompt;
+        sendMessage({
+          text
+        }, {
+          body: {
+            walletAddress,
+            data: {
+              browserDateTimeWithTimezone,
+              sessionId,
+              ...(coinId ? { coinId } : {})
+            }
+          }
+        });
+        setPendingPrompt(null); // Clear pending prompt
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [walletAddress, pendingPrompt, sendMessage, sessionId]);
   const messagesEndRef = useRef(null)
   const aiInputRef = useRef(null)
+
 
   // Helper for checking if AI is generating a response
   const isGenerating = status === 'streaming' || status === 'submitted';
@@ -221,19 +258,31 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   // Process messages once when they're received or changed
   useEffect(() => {
     const newProcessedMessages = messages.map(message => {
-      if (message.role === 'assistant' && message.content) {
+      // Handle v5 format: messages may have parts[] instead of content
+      let content = message.content;
+      if (!content && message.parts && Array.isArray(message.parts)) {
+        // Extract text from parts array
+        content = message.parts
+          .filter(part => part.type === 'text')
+          .map(part => part.text)
+          .join('');
+      }
+
+      if (message.role === 'assistant' && content) {
         // Fix markdown headings after colons/periods only in assistant messages
         return {
           ...message,
+          content, // Ensure content is set
           // Only replace in content that actually has the pattern, which is rare
-          processedContent: message.content.includes(':#') || message.content.includes('.#')
-            ? message.content.replace(/([:.])(\s*)#/g, '$1\n\n#')
-            : message.content
+          processedContent: content.includes(':#') || content.includes('.#')
+            ? content.replace(/([:.])(\s*)#/g, '$1\n\n#')
+            : content
         };
       }
       return {
         ...message,
-        processedContent: message.content
+        content: content || message.content || '', // Ensure content exists
+        processedContent: content || message.content || ''
       };
     });
 
@@ -330,27 +379,77 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
   const clearChat = useCallback(() => {
     setMessages([])
-    setInput('')
+    setInput('') // Clear input manually
     const newSessionId = generateSessionId();
     setSessionId(newSessionId);
-  }, [setMessages, setInput])
+  }, [setMessages])
 
-  const askAi = useCallback((e) => {
-    e.preventDefault();
+  // Clear progress when the current assistant message (last message) has content
+  useEffect(() => {
+    // Only check the last message (the one currently being generated)
+    const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+    const hasCurrentAssistantContent = lastMessage && lastMessage.role === 'assistant' && (
+      (lastMessage.content && lastMessage.content.trim()) ||
+      (lastMessage.parts && lastMessage.parts.some(part => part.type === 'text' && part.text && part.text.trim()))
+    );
+
+    if (hasCurrentAssistantContent && progress) {
+      setProgress(null);
+    }
+  }, [messages, progress]);
+
+  const askAi = useCallback(async (e) => {
+    if (e) e.preventDefault();
+    setProgress(null); // Clear previous progress
+    requestIdRef.current += 1; // Increment request ID for new request
 
     if (!input.trim() && !coinTag) return;
+
+    // Check if user is logged in
+    if (!loggedIn || !walletAddress) {
+      // Store the prompt to submit after login
+      const coinId = document.querySelector('meta[property="x-cr-coin-id"]')?.content;
+      const browserDateTimeWithTimezone = new Date().toString();
+      setPendingPrompt({
+        text: input.trim(),
+        coinId: coinTag && coinId ? coinId : undefined,
+        browserDateTimeWithTimezone
+      });
+      // Clear input
+      setInput('');
+      // Trigger login
+      try {
+        await login();
+      } catch (error) {
+        console.error('Login failed:', error);
+        setPendingPrompt(null); // Clear pending prompt on login failure
+      }
+      return;
+    }
+
+    // User is logged in, proceed with normal submission
     const coinId = document.querySelector('meta[property="x-cr-coin-id"]')?.content;
     // Use browser's local time string with timezone
     const browserDateTimeWithTimezone = new Date().toString();
 
-    handleSubmit(e, {
-      data: {
-        browserDateTimeWithTimezone,
-        sessionId,
-        ...(coinTag && coinId ? { coinId } : {}) // Only include coinId if coinTag is set
+    // In v5, use sendMessage to send messages
+    // Pass walletAddress in the body options to ensure it's included with each request
+    sendMessage({
+      text: input.trim()
+    }, {
+      body: {
+        walletAddress, // Include walletAddress in the request body
+        data: {
+          browserDateTimeWithTimezone,
+          sessionId,
+          ...(coinTag && coinId ? { coinId } : {}) // Only include coinId if coinTag is set
+        }
       }
     });
-  }, [handleSubmit, input, coinTag, sessionId]);
+
+    // Clear input after submission in v5
+    setInput('');
+  }, [sendMessage, input, coinTag, sessionId, loggedIn, walletAddress, login]);
 
   // Handle removing the coin tag
   const handleRemoveCoinTag = useCallback(() => {
@@ -370,16 +469,26 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   // Show loading state during hydration to prevent hydration mismatch
   if (!isClient) {
     content = <div className={shumiStyles.gatingContainer}><div>Loading...</div></div>;
-  } else if (!walletAddress) {
-    content = <div className={shumiStyles.gatingContainer}><NotConnected feature='Shumi AI'/></div>;
   } else {
-    // All authenticated users now have access (no KeyPass check needed)
+    // Always show the Shumi interface, even when not logged in
+    // Sign-in will be triggered when user submits a prompt
     content = (
       <>
         <div className={shumiStyles.conversationArea} ref={messagesEndRef}>
           {messages.length > 0 ? (
              <>
-               {processedMessages.map((message, index) => (
+               {processedMessages
+                 .filter(message => {
+                   // Filter out empty assistant messages (they'll show up once content arrives)
+                   if (message.role === 'assistant') {
+                     const hasContent = (message.processedContent && message.processedContent.trim()) ||
+                                       (message.content && message.content.trim()) ||
+                                       (message.parts && message.parts.some(part => part.type === 'text' && part.text && part.text.trim()));
+                     return hasContent;
+                   }
+                   return true; // Always show user messages
+                 })
+                 .map((message, index) => (
                  <div key={index} className={classnames(shumiStyles.messageContainer, {
                    [shumiStyles.userMessage]: message.role === 'user',
                    [shumiStyles.assistantMessage]: message.role === 'assistant'
@@ -415,10 +524,17 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                    )}
                  </div>
                ))}
-               {/* Show Shumi loading block */}
-               {(status === 'submitted' || (status === 'streaming' && messages[messages.length - 1]?.role === 'user') || (status === 'streaming' && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content?.trim())) ? (
-                  <ShumiLoadingBlock />
-               ) : null}
+               {/* Show Shumi loading block when progress exists or when waiting for response */}
+               {(() => {
+                 // Check only the last message (the one currently being generated) for content
+                 const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+                 const hasCurrentAssistantContent = lastMessage && lastMessage.role === 'assistant' && (
+                   (lastMessage.content && lastMessage.content.trim()) ||
+                   (lastMessage.parts && lastMessage.parts.some(part => part.type === 'text' && part.text && part.text.trim()))
+                 );
+                 const shouldShow = (progress || (status === 'submitted' || status === 'streaming')) && !hasCurrentAssistantContent;
+                 return shouldShow ? <ShumiLoadingBlock progress={progress} requestId={requestIdRef.current} /> : null;
+               })()}
 
                {/* Add error display */}
                {error && (
@@ -426,6 +542,11 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                     <div className={shumiStyles.messageRole}><img className={shumiStyles.shumiAiIcon} src="/shumi.png" alt="Shumi" width="18" height="18" />Shumi</div>
                     <div className={shumiStyles.messageContent}>
                      <div>Something went wrong. Please try again.</div>
+                     {process.env.NODE_ENV === 'development' && (
+                       <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+                         Error: {error?.message || String(error)}
+                       </div>
+                     )}
                      <Button type="primary" onClick={() => reload()} className={shumiStyles.retryButton}>
                        Try Again
                      </Button>
@@ -446,7 +567,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 <div
                   key={index}
                   className={shumiStyles.suggestionButton}
-                  onClick={() => setInput(suggestion)} // Use setInput directly
+                  onClick={() => setInput(suggestion)} // Set input manually
                 >
                   {suggestion}
                 </div>
@@ -479,7 +600,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                 </>
               }
                           value={input}
-            onChange={handleInputChange}
+            onChange={(e) => setInput(e.target.value)}
             onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
             ref={aiInputRef} // Use the specific ref for AI input
             spellCheck="false"
