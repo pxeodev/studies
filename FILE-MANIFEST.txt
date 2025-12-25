@@ -1,0 +1,213 @@
+AI COMPARISON REPORT CARDS - FILE MANIFEST
+===========================================
+
+📦 Project Location: C:\Users\lakas\Downloads\ai-comparison-cards\
+
+---
+
+🎯 START HERE
+-------------
+index.html              - Open this file in your browser to start
+QUICK-START.txt         - 30-second guide to get going
+PROJECT-CONTEXT.md      - Full context for next session (READ THIS FIRST)
+README.txt              - Complete documentation
+
+---
+
+📊 INTERACTIVE SLIDES (7 total)
+--------------------------------
+index.html              - Navigation hub with menu + quick stats
+slide-overview.html     - Overall comparison (score bars, breakdown table)
+slide-q1.html           - Q1: AAVE -30% Outlook (87 vs 81)
+slide-q2.html           - Q2: Macro vs On-Chain (84 vs 78)
+slide-q3.html           - Q3: Mispositioned Traders (86 vs 75)
+slide-q4.html           - Q4: Compression Discipline (79 vs 88)
+slide-q5.html           - Q5: Originality (90 vs 76)
+slide-summary.html      - Key insights + final verdict
+
+---
+
+⚙️ DATA & LOGIC
+---------------
+data.js                 - 🔥 ALL COMPARISON DATA - EDIT THIS FILE
+question-template.js    - Dynamic question slide generator (Q2-Q5)
+shared.js               - Utility functions (data binding, helpers)
+navigation.js           - Keyboard shortcuts (arrow keys, ESC)
+
+---
+
+🎨 STYLING
+----------
+styles.css              - Complete visual styling (colors, layout, animations)
+
+---
+
+📁 ASSETS
+---------
+assets/                 - Folder for images/logos (currently empty)
+
+---
+
+📚 DOCUMENTATION
+----------------
+README.txt              - Full user guide
+QUICK-START.txt         - Fast start guide
+PROJECT-CONTEXT.md      - Project context for next session
+FILE-MANIFEST.txt       - This file
+
+---
+
+🔑 KEY FILES EXPLAINED
+----------------------
+
+**data.js** (MOST IMPORTANT)
+- Single source of truth for all content
+- Edit this to change: scores, questions, insights, taglines
+- Includes built-in validation (check browser console)
+- Structure:
+  - primaryAI / competitorAI (AI info)
+  - overallScores (85.2 vs 79.6)
+  - questions[] (5 questions with scores/analysis)
+  - keyInsights[] (5 insights with importance levels)
+  - winner (summary)
+  - taglines (footer text for each slide)
+
+**styles.css** (VISUAL DESIGN)
+- All colors, gradients, glows, animations
+- CSS variables at top for easy customization
+- No JavaScript needed for styling
+- Fully responsive grid layouts
+
+**index.html** (NAVIGATION HUB)
+- Menu with 7 slide links
+- Quick stats preview grid
+- Start Presentation button
+- Data-bound to data.js
+
+**question-template.js** (SMART RENDERING)
+- Q2-Q5 use this to avoid code duplication
+- Reads question index from HTML attribute
+- Dynamically builds slide from data.js
+- Auto-generates navigation links
+
+**navigation.js** (KEYBOARD SHORTCUTS)
+- Arrow keys for next/previous
+- ESC for menu/home
+- Automatically adds hints to footer
+
+---
+
+📊 CURRENT DATA SUMMARY
+-----------------------
+Comparison: Shumi AI vs BingX AI
+Questions: 5 (3 core + 2 qualitative)
+Overall: 85.2 vs 79.6 (+5.6 Shumi advantage)
+Winner: Shumi AI (consistent but not massive gap)
+Key Insight: Both legit, serve different trader types
+
+Question Breakdown:
+  Q1 - AAVE -30% Outlook:          87 vs 81 (Shumi wins)
+  Q2 - Macro vs On-Chain:          84 vs 78 (Shumi wins)
+  Q3 - Mispositioned Traders:      86 vs 75 (Shumi wins)
+  Q4 - Compression Discipline:     79 vs 88 (BingX wins)
+  Q5 - Originality:                90 vs 76 (Shumi wins)
+
+---
+
+🎨 COLOR SCHEME
+---------------
+Shumi AI:    #00ff88 (neon green)
+BingX AI:    #ff6b35 (orange)
+Winner:      #ffd700 (gold)
+Highlights:  #00d4ff (cyan)
+Background:  Dark gradient (0f0f23 → 1a1a2e → 16213e)
+
+---
+
+🔧 TECH STACK
+-------------
+- Pure HTML/CSS/JavaScript
+- No frameworks, no build tools
+- No server required
+- Runs locally in browser
+- Works offline (except Google Fonts on first load)
+- Fonts: Orbitron, JetBrains Mono, Inter (from Google Fonts CDN)
+
+---
+
+✅ VALIDATION
+-------------
+- Data validation runs automatically on page load
+- Check browser console (F12) for errors/warnings
+- Validates: required fields, score ranges, percentage totals
+
+---
+
+🚀 NEXT STEPS
+-------------
+1. Open index.html in browser
+2. Click around to see all slides
+3. Press F11 for fullscreen presentation mode
+4. Use arrow keys to navigate
+5. Share with colleagues!
+
+To update data:
+1. Edit data.js in any text editor
+2. Save file
+3. Refresh browser (Ctrl+F5)
+
+---
+
+📦 TOTAL FILE COUNT
+-------------------
+HTML Files:     8
+JavaScript:     4
+CSS Files:      1
+Docs:           4
+Folders:        1 (assets)
+Total:          18 files
+
+---
+
+🎯 PROJECT STATUS
+-----------------
+Status:         ✅ Complete & Production-Ready
+Version:        1.0.0
+Created:        December 2025
+Last Updated:   December 19, 2025
+Tested:         Yes (all slides work)
+Ready to share: Yes
+
+---
+
+💡 QUICK TIPS
+-------------
+- Edit data.js for content changes
+- Edit styles.css for visual changes
+- All slides auto-update from data.js
+- Keyboard shortcuts work on all slides
+- Data validation in console helps catch errors
+- Add more competitors by extending data.js structure
+
+---
+
+📞 FOR NEXT SESSION
+-------------------
+1. Read PROJECT-CONTEXT.md first
+2. Open index.html to see current state
+3. Edit data.js to update content
+4. Check console for validation results
+
+Current comparison: Shumi AI (85.2) vs BingX AI (79.6)
+Questions: 3 core + 2 qualitative = 5 total
+Winner: Shumi AI (+5.6 consistent advantage)
+
+---
+
+🏆 PROJECT COMPLETE
+-------------------
+All files created and working.
+Ready to present to colleagues.
+Fully vibecoded in one session.
+
+Powered by CoinRotator • Shumi AI • Claude Code

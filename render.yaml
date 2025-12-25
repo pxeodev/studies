@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-comparison-cards
+    env: static
+    buildCommand: echo "Skipping npm install for static site"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+
+

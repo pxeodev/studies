@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison Report - Shumi vs Competitors</title>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+          <div class="cr-avatar cr-avatar-shumi">
+            <div class="avatar-text">AI</div>
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">
+              <span data-bind="reportTitle">AI COMPARISON REPORT</span>
+            </h1>
+            <p class="cr-subtitle" data-bind="reportSubtitle">SHUMI AI VS COMPETITORS</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+          <div class="cr-score-pill">
+            <span class="score-label">overall winner</span>
+            <div class="score-value winner-shumi" data-bind="primaryAI.name">Shumi AI</div>
+            <span class="score-gap" data-bind="winner.scoreGap">+5.6 points</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen cr-screen-menu">
+        <div class="cr-menu">
+          <h2 class="cr-menu-title">select comparison</h2>
+          <p class="cr-menu-note">
+            Choose which AI competitor to compare against Shumi AI.
+          </p>
+
+          <!-- Competitor Selection -->
+          <div class="competitor-selection">
+            <a href="index-bingx.html" class="competitor-card">
+              <div class="competitor-header">
+                <h3 class="competitor-name">Shumi vs BingX AI</h3>
+                <span class="competitor-badge">10 questions</span>
+              </div>
+              <p class="competitor-desc">Exchange-Native Analysis • Deep dive across trading questions and qualitative metrics</p>
+              <div class="competitor-stats">
+                <span class="stat-item">Shumi: 86.5</span>
+                <span class="stat-item gap">BingX: 79.8</span>
+                <span class="stat-item winner">+6.7 gap</span>
+              </div>
+            </a>
+
+            <a href="index-nansen.html" class="competitor-card">
+              <div class="competitor-header">
+                <h3 class="competitor-name">Shumi vs Nansen AI</h3>
+                <span class="competitor-badge">5 questions</span>
+              </div>
+              <p class="competitor-desc">On-Chain Analytics Intelligence • Focused comparison on market analysis</p>
+              <div class="competitor-stats">
+                <span class="stat-item">Shumi: 89.2</span>
+                <span class="stat-item gap">Nansen: 74.4</span>
+                <span class="stat-item winner">+14.8 gap</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick stats preview -->
+        <div class="cr-quick-stats">
+          <h3 class="stats-title">quick overview</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-label">Shumi AI Average</div>
+              <div class="stat-value shumi-color" data-bind="overallScores.shumi">85.2</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">BingX AI Average</div>
+              <div class="stat-value bingx-color" data-bind="overallScores.bingx">79.6</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Performance Gap</div>
+              <div class="stat-value gap-color" data-bind="overallScores.gap">+5.6</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Questions Tested</div>
+              <div class="stat-value" id="question-count">9</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="slide-overview.html" class="cr-nav-btn">Start Presentation →</a>
+      </div>
+
+      <footer class="cr-footer">
+        <span class="tagline" data-bind="tagline-index">AI performance benchmarking • Shumi vs competitors</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      // Auto-populate from data.js
+      document.addEventListener('DOMContentLoaded', function() {
+        // Simple text bindings
+        document.querySelectorAll('[data-bind]').forEach(el => {
+          const key = el.getAttribute('data-bind');
+          const keys = key.split('.');
+
+          let value = CARD_DATA;
+          for (let k of keys) {
+            value = value?.[k];
+          }
+
+          if (value !== undefined && value !== null) {
+            el.textContent = value;
+          }
+        });
+
+        // Tagline binding
+        const taglineEl = document.querySelector('[data-bind="tagline-index"]');
+        if (taglineEl && CARD_DATA.taglines) {
+          taglineEl.textContent = CARD_DATA.taglines.index;
+        }
+
+        // Question count
+        const countEl = document.getElementById('question-count');
+        if (countEl && CARD_DATA.questions) {
+          countEl.textContent = CARD_DATA.questions.length;
+        }
+      });
+    </script>
+  </body>
+</html>

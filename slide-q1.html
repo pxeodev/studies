@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison - Q1: AAVE Outlook</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+          <div class="cr-avatar cr-avatar-shumi">
+            <div class="avatar-text">Q1</div>
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">HYPE OUTLOOK</h1>
+            <p class="cr-subtitle">HYPERLIQUID ANALYSIS & MARKET POSITIONING</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+                    </div>
+          
+            <span class="score-label">winner</span>
+            <div class="score-value winner-shumi">Shumi AI</div>
+            <span class="score-gap">87 vs 81</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen">
+        <!-- Question -->
+        <section class="cr-question">
+          <div class="question-label">Question</div>
+          <p class="question-text" id="question-text"></p>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- AI Comparison -->
+        <section class="cr-ai-comparison">
+          <!-- Shumi AI -->
+          <article class="ai-analysis">
+            <div class="ai-analysis-header">
+              <h3 class="ai-analysis-name shumi-color">Shumi AI</h3>
+              <div class="ai-analysis-score shumi-color" id="shumi-score">87</div>
+            </div>
+
+            <div class="analysis-section">
+              <h4 class="analysis-title">✅ Strengths</h4>
+              <ul class="analysis-list" id="shumi-strengths"></ul>
+            </div>
+
+            <div class="analysis-section">
+              <h4 class="analysis-title">⚠️ Weaknesses</h4>
+              <ul class="analysis-list weakness-list" id="shumi-weaknesses"></ul>
+            </div>
+
+            <div class="analysis-verdict">
+              <div class="verdict-label">Verdict</div>
+              <p class="verdict-text" id="shumi-verdict"></p>
+            </div>
+
+            <div id="shumi-raw-response"></div>
+          </article>
+
+          <!-- BingX AI -->
+          <article class="ai-analysis">
+            <div class="ai-analysis-header">
+              <h3 class="ai-analysis-name bingx-color">BingX AI</h3>
+              <div class="ai-analysis-score bingx-color" id="bingx-score">81</div>
+            </div>
+
+            <div class="analysis-section">
+              <h4 class="analysis-title">✅ Strengths</h4>
+              <ul class="analysis-list" id="bingx-strengths"></ul>
+            </div>
+
+            <div class="analysis-section">
+              <h4 class="analysis-title">⚠️ Weaknesses</h4>
+              <ul class="analysis-list weakness-list" id="bingx-weaknesses"></ul>
+            </div>
+
+            <div class="analysis-verdict">
+              <div class="verdict-label">Verdict</div>
+              <p class="verdict-text" id="bingx-verdict"></p>
+            </div>
+
+            <div id="bingx-raw-response"></div>
+          </article>
+        </section>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="slide-overview.html" class="cr-nav-btn cr-nav-btn-back">← Overview</a>
+        <a href="slide-q2.html" class="cr-nav-btn">Next: Q2 →</a>
+      </div>
+    
+      <footer class="cr-footer">
+        <span class="tagline">AI performance benchmarking • 7 competitors tested • 70 questions analyzed</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const questionData = CARD_DATA.questions[0]; // Q1
+
+        // Question text
+        document.getElementById('question-text').textContent = questionData.prompt;
+
+        // Scores
+        document.getElementById('shumi-score').textContent = questionData.scores.shumi;
+        document.getElementById('bingx-score').textContent = questionData.scores.bingx;
+
+        // Shumi strengths
+        const shumiStrengthsEl = document.getElementById('shumi-strengths');
+        questionData.shumi.strengths.forEach(strength => {
+          const li = document.createElement('li');
+          li.textContent = strength;
+          shumiStrengthsEl.appendChild(li);
+        });
+
+        // Shumi weaknesses
+        const shumiWeaknessesEl = document.getElementById('shumi-weaknesses');
+        questionData.shumi.weaknesses.forEach(weakness => {
+          const li = document.createElement('li');
+          li.textContent = weakness;
+          shumiWeaknessesEl.appendChild(li);
+        });
+
+        // Shumi verdict
+        document.getElementById('shumi-verdict').textContent = questionData.shumi.verdict;
+
+        // BingX strengths
+        const bingxStrengthsEl = document.getElementById('bingx-strengths');
+        questionData.bingx.strengths.forEach(strength => {
+          const li = document.createElement('li');
+          li.textContent = strength;
+          bingxStrengthsEl.appendChild(li);
+        });
+
+        // BingX weaknesses
+        const bingxWeaknessesEl = document.getElementById('bingx-weaknesses');
+        questionData.bingx.weaknesses.forEach(weakness => {
+          const li = document.createElement('li');
+          li.textContent = weakness;
+          bingxWeaknessesEl.appendChild(li);
+        });
+
+        // BingX verdict
+        document.getElementById('bingx-verdict').textContent = questionData.bingx.verdict;
+
+        // Shumi raw response
+        if (questionData.shumi.rawResponse) {
+          document.getElementById('shumi-raw-response').innerHTML = `
+            <div class="raw-response-section">
+              <button class="raw-response-toggle" onclick="toggleRawResponse(this)">
+                <span class="toggle-icon">▶</span>
+                <span class="toggle-text">View Raw Shumi AI Response</span>
+              </button>
+              <div class="raw-response-content" style="display: none;">
+                <pre class="raw-response-text">${questionData.shumi.rawResponse}</pre>
+              </div>
+            </div>
+          `;
+        }
+
+        // BingX raw response
+        if (questionData.bingx.rawResponse) {
+          document.getElementById('bingx-raw-response').innerHTML = `
+            <div class="raw-response-section">
+              <button class="raw-response-toggle" onclick="toggleRawResponse(this)">
+                <span class="toggle-icon">▶</span>
+                <span class="toggle-text">View Raw BingX AI Response</span>
+              </button>
+              <div class="raw-response-content" style="display: none;">
+                <pre class="raw-response-text">${questionData.bingx.rawResponse}</pre>
+              </div>
+            </div>
+          `;
+        }
+
+        // Tagline
+        document.getElementById('tagline').textContent = CARD_DATA.taglines.q1;
+      });
+
+      function toggleRawResponse(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.toggle-icon');
+        if (content.style.display === 'none') {
+          content.style.display = 'block';
+          icon.textContent = '▼';
+          button.classList.add('active');
+        } else {
+          content.style.display = 'none';
+          icon.textContent = '▶';
+          button.classList.remove('active');
+        }
+      }
+    </script>
+  </body>
+</html>

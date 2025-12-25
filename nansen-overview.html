@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Shumi vs Nansen - Overview</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+                                        <div class="cr-avatar cr-avatar-shumi">
+            <img src="shumi-avatar.png" alt="Shumi" />
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">OVERALL COMPARISON</h1>
+            <p class="cr-subtitle">SHUMI AI VS NANSEN AI</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+                    </div>
+          
+            <span class="score-label">overall winner</span>
+            <div class="score-value winner-shumi">Shumi AI</div>
+            <span class="score-gap">+13.9 points</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen">
+        <!-- Meta strip -->
+        <section class="cr-meta-strip">
+          <div class="cr-meta-item">
+            <span class="meta-label">comparison date</span>
+            <span class="meta-value">December 2025</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">questions tested</span>
+            <span class="meta-value">9</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">score gap</span>
+            <span class="meta-pill winner">+13.9</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">confidence</span>
+            <span class="meta-value">high</span>
+          </div>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- Score comparison -->
+        <section class="cr-comparison">
+          <h2 class="section-title">Overall Performance</h2>
+
+          <div class="score-bars">
+            <div class="score-bar-item">
+              <div class="score-bar-header">
+                <span class="ai-name shumi-color">Shumi AI</span>
+                <span class="ai-score shumi-color">90.1</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill shumi-fill" style="width: 90.1%"></div>
+              </div>
+              <p class="ai-tagline">CoinRotator's Trend Intelligence</p>
+            </div>
+
+            <div class="score-bar-item">
+              <div class="score-bar-header">
+                <span class="ai-name nansen-color">Nansen AI</span>
+                <span class="ai-score nansen-color">76.2</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill nansen-fill" style="width: 76.2%"></div>
+              </div>
+              <p class="ai-tagline">On-Chain Analytics Intelligence</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- Question-by-question breakdown -->
+        <section class="cr-breakdown">
+          <h2 class="section-title">Question-by-Question Breakdown</h2>
+          <div class="breakdown-table" id="breakdown-table">
+            <!-- Populated by JavaScript -->
+          </div>
+        </section>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="index-nansen.html" class="cr-nav-btn cr-nav-btn-back">← Back to Menu</a>
+        <a href="nansen-q1.html" class="cr-nav-btn">Next: Q1 →</a>
+      </div>
+    
+      <footer class="cr-footer">
+        <span class="tagline">AI performance benchmarking • Shumi vs Nansen • Brutally honest comparison</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const tableEl = document.getElementById('breakdown-table');
+
+        CARD_DATA_NANSEN.questions.forEach((q, idx) => {
+          const row = document.createElement('a');
+          row.href = `nansen-q${q.id}.html`;
+          row.className = 'breakdown-row breakdown-row-clickable';
+
+          const shumiWin = q.scores.shumi > q.scores.nansen;
+          const diff = q.scores.shumi - q.scores.nansen;
+
+          row.innerHTML = `
+            <div class="breakdown-question">
+              <span class="q-number">Q${q.id}</span>
+              <span class="q-title">${q.title}</span>
+            </div>
+            <div class="breakdown-scores">
+              <span class="breakdown-score ${shumiWin ? 'score-winner' : ''} shumi-color">${q.scores.shumi}</span>
+              <span class="breakdown-vs">vs</span>
+              <span class="breakdown-score ${!shumiWin ? 'score-winner' : ''} nansen-color">${q.scores.nansen}</span>
+            </div>
+            <div class="breakdown-diff ${diff > 0 ? 'diff-positive' : 'diff-negative'}">
+              ${diff > 0 ? '+' : ''}${diff}
+            </div>
+          `;
+
+          tableEl.appendChild(row);
+        });
+      });
+    </script>
+  </body>
+</html>

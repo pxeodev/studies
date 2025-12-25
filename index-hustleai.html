@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison Report - Shumi vs HustleAI</title>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+                                        <div class="cr-avatar cr-avatar-shumi">
+            <img src="shumi-avatar.png" alt="Shumi" />
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">
+              <span data-bind="reportTitle">SHUMI VS HUSTLEAI</span>
+            </h1>
+            <p class="cr-subtitle" data-bind="reportSubtitle">SHUMI AI VS HUSTLEAI AI</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+          <div class="cr-score-pill">
+            <span class="score-label">overall winner</span>
+            <div class="score-value winner-shumi" data-bind="primaryAI.name">Shumi AI</div>
+            <span class="score-gap" data-bind="winner.scoreGap">+8.5 points</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen cr-screen-menu">
+        <div class="cr-menu">
+          <h2 class="cr-menu-title">REPORT NAVIGATOR</h2>
+          <p class="cr-menu-note">
+            Jump to any section of the comparison report.
+          </p>
+          <ul class="cr-menu-list">
+            <li><a href="hustleai-overview.html">1. Overall Comparison</a></li>
+            <li><a href="hustleai-q1.html">2. Q1: HYPE Outlook</a></li>
+            <li><a href="hustleai-q2.html">3. Q2: BTC Next 7 Days</a></li>
+            <li><a href="hustleai-q3.html">4. Q3: Hidden Risks</a></li>
+            <li><a href="hustleai-q4.html">5. Q4: Weekly Narrative</a></li>
+            <li><a href="hustleai-q5.html">6. Q5: Next 48h Trading</a></li>
+            <li><a href="hustleai-q6.html">7. Q6: AAVE -30% Outlook</a></li>
+            <li><a href="hustleai-q7.html">8. Q7: Macro vs On-Chain</a></li>
+            <li><a href="hustleai-q8.html">9. Q8: Mispositioned Traders</a></li>
+            <li><a href="hustleai-q9.html">10. Q9: ONE Trusted Metric</a></li>
+            <li><a href="hustleai-q10.html">11. Q10: Originality</a></li>
+            <li><a href="hustleai-summary.html">12. Final Summary</a></li>
+          </ul>
+        </div>
+
+        <!-- Quick stats preview -->
+        <div class="cr-quick-stats">
+          <h3 class="stats-title">quick overview</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-label">Shumi AI Average</div>
+              <div class="stat-value shumi-color" data-bind="overallScores.shumi">86.5</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">HustleAI AI Average</div>
+              <div class="stat-value hustleai-color" data-bind="overallScores.hustleai">79.8</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Performance Gap</div>
+              <div class="stat-value gap-color" data-bind="overallScores.gap">+6.7</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Questions Tested</div>
+              <div class="stat-value" id="question-count">10</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="index.html" class="cr-nav-btn cr-nav-btn-back">← Back to Selection</a>
+        <a href="hustleai-overview.html" class="cr-nav-btn">Start Presentation →</a>
+      </div>
+    
+      <footer class="cr-footer">
+        <span class="tagline">AI performance benchmarking • Shumi vs HustleAI</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      // Auto-populate from data.js
+      document.addEventListener('DOMContentLoaded', function() {
+        // Simple text bindings
+        document.querySelectorAll('[data-bind]').forEach(el => {
+          const key = el.getAttribute('data-bind');
+          const keys = key.split('.');
+
+          let value = CARD_DATA_HUSTLEAI;
+          for (let k of keys) {
+            value = value?.[k];
+          }
+
+          if (value !== undefined && value !== null) {
+            el.textContent = value;
+          }
+        });
+
+        // Tagline binding
+        const taglineEl = document.querySelector('[data-bind="tagline-index"]');
+        if (taglineEl && CARD_DATA_HUSTLEAI.taglines) {
+          taglineEl.textContent = CARD_DATA_HUSTLEAI.taglines.index;
+        }
+
+        // Question count
+        const countEl = document.getElementById('question-count');
+        if (countEl && CARD_DATA_HUSTLEAI.questions) {
+          countEl.textContent = CARD_DATA_HUSTLEAI.questions.length;
+        }
+      });
+    </script>
+  </body>
+</html>

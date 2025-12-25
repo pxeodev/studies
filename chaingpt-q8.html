@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison - Q7: Macro vs On-Chain</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    <script src="data-chaingpt.js">
+      function toggleRawResponse(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.toggle-icon');
+        if (content.style.display === 'none') {
+          content.style.display = 'block';
+          icon.textContent = '▼';
+          button.classList.add('active');
+        } else {
+          content.style.display = 'none';
+          icon.textContent = '▶';
+          button.classList.remove('active');
+        }
+      }
+</script>
+    
+    
+  </head>
+  <body>
+    <div class="cr-card question-card" data-question-index="7"></div>
+
+    <script src="chaingpt-question-template.js">
+      function toggleRawResponse(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.toggle-icon');
+        if (content.style.display === 'none') {
+          content.style.display = 'block';
+          icon.textContent = '▼';
+          button.classList.add('active');
+        } else {
+          content.style.display = 'none';
+          icon.textContent = '▶';
+          button.classList.remove('active');
+        }
+      }
+</script>
+  </body>
+</html>

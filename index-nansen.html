@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison Report - Shumi vs Nansen</title>
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+          <div class="cr-avatar cr-avatar-shumi">
+            <img src="shumi-avatar.png" alt="Shumi" />
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">
+              <span>SHUMI VS NANSEN</span>
+            </h1>
+            <p class="cr-subtitle">SHUMI AI VS NANSEN AI</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+          <div class="cr-score-pill">
+            <span class="score-label">overall winner</span>
+            <div class="score-value winner-shumi">Shumi AI</div>
+            <span class="score-gap">+13.3 points</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen cr-screen-menu">
+        <div class="cr-menu">
+          <h2 class="cr-menu-title">REPORT NAVIGATOR</h2>
+          <p class="cr-menu-note">
+            Jump to any section of the comparison report.
+          </p>
+          <ul class="cr-menu-list">
+            <li><a href="nansen-overview.html">1. Overall Comparison</a></li>
+            <li><a href="nansen-q1.html">2. Q1: HYPE Outlook</a></li>
+            <li><a href="nansen-q2.html">3. Q2: BTC Next 7 Days</a></li>
+            <li><a href="nansen-q3.html">4. Q3: Hidden Risks</a></li>
+            <li><a href="nansen-q4.html">5. Q4: Weekly Narrative</a></li>
+            <li><a href="nansen-q5.html">6. Q5: Next 48h Trading</a></li>
+            <li><a href="nansen-q6.html">7. Q6: AAVE Outlook</a></li>
+            <li><a href="nansen-q7.html">8. Q7: Macro vs On-Chain</a></li>
+            <li><a href="nansen-q8.html">9. Q8: Mispositioned Traders</a></li>
+            <li><a href="nansen-q9.html">10. Q9: ONE Trusted Metric</a></li>
+            <li><a href="nansen-q10.html">11. Q10: Originality & Replaceability</a></li>
+            <li><a href="nansen-summary.html">12. Final Summary</a></li>
+          </ul>
+        </div>
+
+        <!-- Quick stats preview -->
+        <div class="cr-quick-stats">
+          <h3 class="stats-title">quick overview</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-label">Shumi AI Average</div>
+              <div class="stat-value shumi-color">90.1</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Nansen AI Average</div>
+              <div class="stat-value nansen-color">76.2</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Performance Gap</div>
+              <div class="stat-value gap-color">+13.9</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Questions Tested</div>
+              <div class="stat-value">10</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="index.html" class="cr-nav-btn cr-nav-btn-back">← Back to Selection</a>
+        <a href="nansen-overview.html" class="cr-nav-btn">Start Presentation →</a>
+      </div>
+    
+      <footer class="cr-footer">
+        <span class="tagline">AI performance benchmarking • Shumi vs Nansen • Brutally honest comparison</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      // Auto-populate from data-nansen.js
+      document.addEventListener('DOMContentLoaded', function() {
+        // Data is loaded from CARD_DATA_NANSEN
+        const countEl = document.getElementById('question-count');
+        if (countEl && CARD_DATA_NANSEN.questions) {
+          countEl.textContent = CARD_DATA_NANSEN.questions.length;
+        }
+      });
+    </script>
+  </body>
+</html>

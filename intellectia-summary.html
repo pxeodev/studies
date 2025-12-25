@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Comparison - Summary & Insights</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;700i&family=Orbitron:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js"></script>
+    
+    
+    
+  </head>
+  <body>
+    <div class="cr-card">
+      <header class="cr-header">
+        <div class="cr-header-left">
+          <div class="cr-avatar cr-avatar-shumi">
+            <div class="avatar-text">📊</div>
+          </div>
+          <div class="cr-header-text">
+            <h1 class="cr-title">KEY INSIGHTS & SUMMARY</h1>
+            <p class="cr-subtitle">WHAT THE DATA TELLS US</p>
+          </div>
+        </div>
+
+        <div class="cr-header-right">
+          <div class="cr-score-pill">
+            <span class="score-label">final verdict</span>
+            <div class="score-value winner-shumi" data-bind="winner.name">Shumi AI</div>
+            <span class="score-gap" data-bind="winner.scoreGap">+34.3 points</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cr-accent-bar"></div>
+
+      <main class="cr-screen">
+        <!-- Meta strip -->
+        <section class="cr-meta-strip">
+          <div class="cr-meta-item">
+            <span class="meta-label">shumi average</span>
+            <span class="meta-pill shumi" data-bind="overallScores.shumi">90.4</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">intellectia average</span>
+            <span class="meta-pill intellectia" data-bind="overallScores.intellectia">56.1</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">shumi record</span>
+            <span class="meta-value" id="shumi-record">-</span>
+          </div>
+          <div class="cr-meta-item">
+            <span class="meta-label">confidence</span>
+            <span class="meta-pill winner" data-bind="winner.confidence">high</span>
+          </div>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- Key Insights -->
+        <section class="cr-insights">
+          <h2 class="section-title">Key Insights</h2>
+          <div class="insights-grid" id="insights-grid">
+            <!-- Populated by JavaScript -->
+          </div>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- Head-to-Head Breakdown -->
+        <section class="cr-breakdown">
+          <h2 class="section-title">Head-to-Head Breakdown</h2>
+          <div class="breakdown-table" id="h2h-breakdown-table">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <!-- Performance Summary -->
+          <div class="bingx-wins-section" style="margin-top: 24px;">
+            <button class="bingx-wins-toggle" id="intellectia-performance-toggle">
+              <span class="toggle-text">Performance Summary</span>
+              <span class="toggle-icon">▼</span>
+            </button>
+            <div class="bingx-wins-content" id="intellectia-performance-content">
+              <div class="bingx-win-cards">
+                <div class="bingx-win-card" style="text-align: center; padding: 32px;">
+                  <p style="font-size: 1.1rem; color: var(--c-text-secondary); margin: 0;">
+                    <strong>Perfect Sweep:</strong> Shumi AI won all 10 questions. Intellectia's only bright spots were Q3 (Hidden Risks, 81/100) and Q4 (Weekly Narrative, 78/100), but 8 out of 10 responses were template-driven filler or had critical data errors. Quality varied wildly (81 → 35 → 81 → 78 → 25), making it 90% replaceable by free tools.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="cr-divider"></div>
+
+        <!-- Winner summary -->
+        <section class="cr-winner-summary">
+          <h2 class="section-title">Final Verdict</h2>
+          <div class="winner-card">
+            <div class="winner-header">
+              <div class="winner-badge">🏆 WINNER</div>
+              <h3 class="winner-name" data-bind="winner.name">Shumi AI</h3>
+            </div>
+            <p class="winner-tagline" data-bind="winner.tagline">
+              Consistent edge across trader psychology, reflexivity, and originality
+            </p>
+            <div class="winner-stats">
+              <div class="winner-stat">
+                <span class="stat-label">Average Score</span>
+                <span class="stat-value shumi-color" data-bind="overallScores.shumi">85.2</span>
+              </div>
+              <div class="winner-stat">
+                <span class="stat-label">Advantage</span>
+                <span class="stat-value gap-color" data-bind="winner.scoreGap">+38.9</span>
+              </div>
+              <div class="winner-stat">
+                <span class="stat-label">Win Rate</span>
+                <span class="stat-value" id="win-rate">100%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div class="cr-nav-buttons">
+        <a href="intellectia-q7.html" class="cr-nav-btn cr-nav-btn-back">← Previous</a>
+        <a href="index-intellectia.html" class="cr-nav-btn">Back to Menu</a>
+      </div>
+    
+      <footer class="cr-footer">
+        <span class="tagline">AI performance benchmarking • Shumi vs Intellectia</span>
+        <span class="url">coinrotator.app • AI comparison report</span>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Simple text bindings
+        document.querySelectorAll('[data-bind]').forEach(el => {
+          const key = el.getAttribute('data-bind');
+          const keys = key.split('.');
+
+          let value = CARD_DATA_INTELLECTIA;
+          for (let k of keys) {
+            value = value?.[k];
+          }
+
+          if (value !== undefined && value !== null) {
+            el.textContent = value;
+          }
+        });
+
+        // Tagline
+        const taglineEl = document.querySelector('[data-bind="tagline-summary"]');
+        if (taglineEl && CARD_DATA_INTELLECTIA.taglines) {
+          taglineEl.textContent = CARD_DATA_INTELLECTIA.taglines.summary;
+        }
+
+        // Build head-to-head breakdown table
+        const h2hTableEl = document.getElementById('h2h-breakdown-table');
+        if (h2hTableEl && CARD_DATA_INTELLECTIA.questions) {
+          let shumiWins = 0;
+          let IntellectiaWins = 0;
+
+          CARD_DATA_INTELLECTIA.questions.forEach((q, idx) => {
+            const row = document.createElement('a');
+            row.href = `intellectia-q${q.id}.html`;
+            row.className = 'breakdown-row breakdown-row-clickable';
+
+            const shumiWin = q.scores.shumi > q.scores.intellectia;
+            const diff = q.scores.shumi - q.scores.intellectia;
+
+            if (shumiWin) shumiWins++;
+            else IntellectiaWins++;
+
+            row.innerHTML = `
+              <div class="breakdown-question">
+                <span class="q-number">Q${q.id}</span>
+                <span class="q-title">${q.title}</span>
+              </div>
+              <div class="breakdown-scores">
+                <span class="breakdown-score ${shumiWin ? 'score-winner' : ''} shumi-color">${q.scores.shumi}</span>
+                <span class="breakdown-vs">vs</span>
+                <span class="breakdown-score ${!shumiWin ? 'score-winner' : ''} intellectia-color">${q.scores.intellectia}</span>
+              </div>
+              <div class="breakdown-diff ${diff > 0 ? 'diff-positive' : 'diff-negative'}">
+                ${diff > 0 ? '+' : ''}${diff}
+              </div>
+            `;
+
+            h2hTableEl.appendChild(row);
+          });
+
+          // Calculate win rate
+          const winRate = Math.round((shumiWins / CARD_DATA_INTELLECTIA.questions.length) * 100);
+          const winRateEl = document.getElementById('win-rate');
+          if (winRateEl) {
+            winRateEl.textContent = winRate + '%';
+          }
+
+          // Update Shumi record dynamically
+          const shumiRecordEl = document.getElementById('shumi-record');
+          if (shumiRecordEl) {
+            shumiRecordEl.textContent = `${shumiWins} wins / ${IntellectiaWins} losses`;
+          }
+        }
+
+        // Collapsible Intellectia wins section
+        const toggleBtn = document.getElementById('intellectia-performance-toggle');
+        const content = document.getElementById('intellectia-performance-content');
+
+        if (toggleBtn && content) {
+          const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+
+          toggleBtn.addEventListener('click', function() {
+          const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+          if (isExpanded) {
+            content.style.maxHeight = '0px';
+            content.style.opacity = '0';
+            toggleIcon.textContent = '▼';
+            toggleBtn.classList.remove('expanded');
+          } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            content.style.opacity = '1';
+            toggleIcon.textContent = '▲';
+            toggleBtn.classList.add('expanded');
+          }
+        });
+        }
+
+        // Build insights grid
+        const insightsEl = document.getElementById('insights-grid');
+        if (insightsEl && CARD_DATA_INTELLECTIA.keyInsights) {
+          CARD_DATA_INTELLECTIA.keyInsights.forEach(insight => {
+            const card = document.createElement('div');
+            card.className = `insight-card insight-${insight.importance}`;
+
+            card.innerHTML = `
+              <div class="insight-header">
+                <h4 class="insight-title">${insight.title}</h4>
+                <span class="insight-badge">${insight.importance}</span>
+              </div>
+              <p class="insight-text">${insight.insight}</p>
+            `;
+
+            insightsEl.appendChild(card);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

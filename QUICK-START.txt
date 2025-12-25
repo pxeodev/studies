@@ -1,0 +1,38 @@
+🚀 QUICK START GUIDE
+====================
+
+FASTEST WAY TO VIEW YOUR COMPARISON REPORT:
+
+1. Double-click "index.html"
+2. Your browser opens with the navigation menu
+3. Click "Start Presentation →"
+4. Use arrow keys to navigate slides
+
+
+TO UPDATE WITH YOUR OWN DATA:
+
+1. Open "data.js" in Notepad
+2. Find the line: coinSymbol: "BTC"
+3. Change scores, names, insights as needed
+4. Save file
+5. Refresh browser (F5)
+
+
+CURRENT DATA:
+-------------
+✅ Shumi AI vs BingX AI
+✅ 5 questions tested
+✅ Overall: 85.2 vs 79.6 (+5.6 advantage)
+✅ All slides populated with your comparison data
+
+
+KEYBOARD SHORTCUTS:
+------------------
+→   Next slide
+←   Previous slide
+ESC Menu/Home
+
+
+That's it! Open index.html and you're ready to present.
+
+Full documentation in README.txt
