@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: coinrotator
+    env: node
+    buildCommand: npm install && npm run vercel-build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+
