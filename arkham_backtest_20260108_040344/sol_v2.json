@@ -1,0 +1,17 @@
+{
+  "coin": "SOL",
+  "status": "OK",
+  "token_transfers": 2,
+  "signal": "NEUTRAL",
+  "accumulation": {
+    "count": 0,
+    "total_usd": 0,
+    "top": []
+  },
+  "distribution": {
+    "count": 0,
+    "total_usd": 0,
+    "top": []
+  },
+  "net_accumulation_usd": 0
+}

@@ -1,0 +1,30 @@
+{
+  "coin": "BONK",
+  "status": "OK",
+  "signal": "NEUTRAL",
+  "accumulation": {
+    "count": 18,
+    "total_usd": 2787534,
+    "top": [
+      {
+        "name": "Aerodrome Finance",
+        "usd": 1787534
+      },
+      {
+        "name": "Circle",
+        "usd": 999999
+      }
+    ]
+  },
+  "distribution": {
+    "count": 14,
+    "total_usd": 2742578,
+    "top": [
+      {
+        "name": "Aerodrome Finance",
+        "usd": 2742578
+      }
+    ]
+  },
+  "net": 44955
+}
