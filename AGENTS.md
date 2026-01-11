@@ -40,3 +40,10 @@ After loading, organize the tasks by their `List` property to understand the cur
 
 **Note**: If a task needs more detail, fetch its page content using `mcp_notion_API-retrieve-a-page` and `mcp_notion_API-get-block-children` to see any additional notes or requirements.
 
+### Relationship between coinrotator repositoies
+
+The git repositories `coinrotator` and `coinrotator-ai` are closely related. The `coinrotator` repository is the main repository for the coinrotator frontend and the `coinrotator-ai` repository is the main repository for the backend.
+
+Both import the `coinrotator-utils` repository for shared utilities, including the Shumi Engine.
+
+Whenever you change something in the `coinrotator-utils` repository, you should also update the package.json version of `coinrotator-utils`, then git push it and then update the package.json version of `coinrotator-utils` in the `coinrotator` and `coinrotator-ai` repositories to use the new version. Do the update by using `yarn upgrade coinrotator-utils --latest`.
