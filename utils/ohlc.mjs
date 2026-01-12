@@ -3,7 +3,7 @@ import { defaultAtrPeriods, defaultMultiplier, classicAtrPeriods, classicMultipl
 import supertrend from 'coinrotator-utils/supertrend.mjs';
 import convertToWeeklySignals from './convertToWeeklySignals.mjs';
 import { subDays } from 'date-fns';
-import convertToDailySignals from './convertToDailySignals.mjs';
+import convertToDailySignals from 'coinrotator-utils/convertToDailySignals.mjs';
 
 export const convertOhlcsToSuperTrends = (ohlcs, coinId, quoteSymbol, flavor, weekly = false) => {
   if (weekly) {

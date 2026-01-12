@@ -38,14 +38,14 @@ export default function ScreenerLayout(page, pageProps) {
     const html = document.querySelector('html');
     html.dataset.theme = isDark ? 'theme-dark' : 'theme-light';
   }, [isDark])
-  const [api, contextHolder] = notification.useNotification();
+  // In Ant Design v4, notification is a static object, not a hook
+  // We provide it via context for consistency, but no contextHolder is needed
 
   return (
     <HydrationProvider>
       <DarkModeContext.Provider value={darkMode}>
           <CookiesProvider defaultSetOptions={{ path: '/' }}>
-              <NotificationContext.Provider value={api}>
-                {contextHolder}
+              <NotificationContext.Provider value={notification}>
                 <ScreenerChild pageProps={pageProps} page={page} />
               </NotificationContext.Provider>
           </CookiesProvider>

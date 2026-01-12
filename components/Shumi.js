@@ -1,6 +1,7 @@
-import { Input, Button, Tag } from 'antd'
-import { MessageOutlined, PlusSquareOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Input, Button, Tag, Dropdown, Menu } from 'antd'
+import { EditOutlined, ArrowUpOutlined, DownOutlined } from "@ant-design/icons";
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/router'
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import ReactMarkdown from 'react-markdown'
@@ -142,9 +143,11 @@ const generateSessionId = () => {
 };
 
 const Shumi = ({ isActive, initialSuggestions }) => {
+  const router = useRouter()
   const { loggedIn, getAccounts, login } = useWeb3Auth()
   const [walletAddress, setWalletAddress] = useState(null)
   const [coinTag, setCoinTag] = useState(null);
+  const [archetype, setArchetype] = useState(null);
   const [currentSuggestions, setCurrentSuggestions] = useState([]);
   const [sessionId, setSessionId] = useState(() => generateSessionId());
   const [isClient, setIsClient] = useState(false);
@@ -181,18 +184,19 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   const requestIdRef = useRef(0); // Track request ID for randomization
   const progressRequestIdRef = useRef(0); // Track request ID for randomization
 
-  // Create transport with current walletAddress - recreate when walletAddress changes
+  // Create transport with current walletAddress and archetype - recreate when they change
   const transport = useMemo(() => {
     return new DefaultChatTransport({
       api: '/api/ai',
       body: {
-        walletAddress
+        walletAddress,
+        ...(archetype ? { archetype } : {})
       },
       query: {
         walletAddress // Add this to pass wallet address as query param
       }
     });
-  }, [walletAddress]);
+  }, [walletAddress, archetype]);
 
   const {
     messages,
@@ -227,6 +231,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
         }, {
           body: {
             walletAddress,
+            ...(archetype ? { archetype } : {}),
             data: {
               browserDateTimeWithTimezone,
               sessionId,
@@ -238,7 +243,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [walletAddress, pendingPrompt, sendMessage, sessionId]);
+  }, [walletAddress, pendingPrompt, sendMessage, sessionId, archetype]);
   const messagesEndRef = useRef(null)
   const aiInputRef = useRef(null)
 
@@ -377,9 +382,19 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     // Re-check when route changes (simulated by isActive for now, better would be router event)
   }, [isActive]); // Dependency on isActive simulates route change check for now
 
+  // Auto-select archetype from URL query parameter
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (router.query.archetype === 'perpdex') {
+      setArchetype('deltaneutral');
+    }
+  }, [router.isReady, router.query.archetype]);
+
   const clearChat = useCallback(() => {
     setMessages([])
     setInput('') // Clear input manually
+    setArchetype(null) // Clear archetype
     const newSessionId = generateSessionId();
     setSessionId(newSessionId);
   }, [setMessages])
@@ -433,12 +448,13 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     const browserDateTimeWithTimezone = new Date().toString();
 
     // In v5, use sendMessage to send messages
-    // Pass walletAddress in the body options to ensure it's included with each request
+    // Pass walletAddress and archetype in the body options to ensure they're included with each request
     sendMessage({
       text: input.trim()
     }, {
       body: {
         walletAddress, // Include walletAddress in the request body
+        ...(archetype ? { archetype } : {}), // Include archetype if set
         data: {
           browserDateTimeWithTimezone,
           sessionId,
@@ -449,12 +465,37 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
     // Clear input after submission in v5
     setInput('');
-  }, [sendMessage, input, coinTag, sessionId, loggedIn, walletAddress, login]);
+  }, [sendMessage, input, coinTag, archetype, sessionId, loggedIn, walletAddress, login]);
 
   // Handle removing the coin tag
   const handleRemoveCoinTag = useCallback(() => {
     setCoinTag(null);
   }, []);
+
+  // Handle removing the archetype tag
+  const handleRemoveArchetypeTag = useCallback(() => {
+    setArchetype(null);
+  }, []);
+
+  // Handle archetype selection from dropdown - toggle if already active
+  const handleArchetypeSelect = useCallback((key) => {
+    if (key === 'deltaneutral') {
+      // Toggle: if already active, deactivate; otherwise activate
+      setArchetype(archetype === 'deltaneutral' ? null : 'deltaneutral');
+    }
+  }, [archetype]);
+
+  // Create dropdown menu for archetype selection
+  const archetypeMenu = useMemo(() => ({
+    items: [
+      {
+        key: 'deltaneutral',
+        label: 'Perp Dex',
+        className: archetype === 'deltaneutral' ? 'archetypeMenuItemActive' : ''
+      }
+    ],
+    onClick: ({ key }) => handleArchetypeSelect(key)
+  }), [handleArchetypeSelect, archetype]);
 
   // Scroll to bottom when new messages are added
   useEffect(() => {
@@ -578,15 +619,44 @@ const Shumi = ({ isActive, initialSuggestions }) => {
             <Input
               className={shumiStyles.aiInput}
               allowClear
-              prefix={coinTag && (
-                <Tag
-                  className={shumiStyles.coinTag}
-                  closable
-                  onClose={handleRemoveCoinTag}
-                >
-                  {coinTag}
-                </Tag>
-              )}
+              prefix={
+                <>
+                  {router.isReady && router.query.archetype === 'perpdex' && (
+                    <Dropdown
+                      menu={archetypeMenu}
+                      placement="topLeft"
+                      trigger={['click']}
+                      popupClassName={shumiStyles.archetypeDropdown}
+                    >
+                      <Button
+                        type="text"
+                        className={shumiStyles.archetypeButton}
+                      >
+                        <span>Archetype</span>
+                        <DownOutlined />
+                      </Button>
+                    </Dropdown>
+                  )}
+                  {archetype && (
+                    <Tag
+                      className={shumiStyles.archetypeTag}
+                      closable
+                      onClose={handleRemoveArchetypeTag}
+                    >
+                      Perp Dex
+                    </Tag>
+                  )}
+                  {coinTag && (
+                    <Tag
+                      className={shumiStyles.coinTag}
+                      closable
+                      onClose={handleRemoveCoinTag}
+                    >
+                      {coinTag}
+                    </Tag>
+                  )}
+                </>
+              }
               suffix={
                 <>
                   {showStopButton ? (
@@ -596,16 +666,16 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                   ) : (
                     <Button type="primary" onClick={askAi} disabled={error != null || isGenerating} icon={<ArrowUpOutlined />} className={shumiStyles.sendButton} />
                   )}
-                  <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<PlusSquareOutlined />} />
+                  <Button disabled={isGenerating || !messages.length || error != null} onClick={clearChat} className={shumiStyles.clearChatButton} icon={<EditOutlined />} />
                 </>
               }
-                          value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
-            ref={aiInputRef} // Use the specific ref for AI input
-            spellCheck="false"
-            disabled={error != null || disableInput} // Disable input on error OR during submission
-            placeholder="Ask anything..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onPressEnter={disableInput ? undefined : askAi} // Disable Enter key only during submission
+              ref={aiInputRef} // Use the specific ref for AI input
+              spellCheck="false"
+              disabled={error != null || disableInput} // Disable input on error OR during submission
+              placeholder="Ask anything..."
             />
           </div>
         </div>

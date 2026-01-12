@@ -1,4 +1,3 @@
-import csv from 'csvtojson'
 import flow from 'lodash/fp/flow.js'
 import uniq from 'lodash/fp/uniq.js'
 import flatMap from 'lodash/fp/flatMap.js'
@@ -8,51 +7,10 @@ import { Langfuse } from 'langfuse'
 
 import sql from '../lib/database.mjs'
 import strapi from 'coinrotator-utils/strapi.mjs'
+import { getCategoriesFromCoinTable, getCategoryStats, filterCategories } from 'coinrotator-utils'
 
-let overrides, aliases
-
-export async function getCategoryOverrides() {
-  overrides ||= await csv().fromFile('lib/CategoryOverride.csv');
-
-  return overrides
-}
-
-export async function getCategoryAliases() {
-  aliases ||= await csv().fromFile('lib/CategoryAliases.csv');
-
-  return aliases
-}
-
-export async function overrideCoinCategories(name, symbol, categories) {
-  await getCategoryOverrides();
-
-  const matchingOverrides = overrides.filter((coin) => {
-    return coin.CoinSymbol.toLowerCase() === symbol.toLowerCase() && coin.CoinName.toLowerCase() === name.toLowerCase()
-  })
-
-  for (const override of matchingOverrides) {
-    const overrideCategory = override.Category
-    if (override.addORremove === 'remove') {
-      categories = categories?.filter((category) => category !== overrideCategory)
-    } else if (override.addORremove === 'add' && !categories?.includes(overrideCategory)) {
-      categories ||= []
-      categories.push(overrideCategory)
-    }
-  }
-
-  return categories
-}
-
-export async function aliasCoinCategories(categories) {
-  await getCategoryAliases();
-
-  const aliasedCategories = categories.map((category) => {
-    const matchingAlias = aliases.find(alias => alias.CategoryNameCoingecko === category)
-    return matchingAlias ? matchingAlias.CategoryNameDropstab : category
-  })
-
-  return aliasedCategories
-}
+// Re-export the functions from coinrotator-utils for backward compatibility
+export { getCategoryOverrides, getCategoryAliases, overrideCoinCategories, aliasCoinCategories } from 'coinrotator-utils'
 
 export async function getCategories() {
   const { data } = await strapi.query(
@@ -120,30 +78,9 @@ export async function createCategoriesPromptInLangfuse(options = {}) {
     config = { model: 'gpt-4o', temperature: 0.7, supported_languages: ['en'] },
   } = options;
 
-  // Fetch all categories, coingeckoCategories, and volume from the Coin table
-  let coins = await sql`SELECT "categories", "coingeckoCategories", "volume" FROM "Coin"`;
-  // Map: category name -> { totalVolume, coinCount }
-  const categoryStatsMap = new Map();
-
-  for (const coin of coins) {
-    coin.categories ||= [];
-    coin.coingeckoCategories ||= [];
-    const allCategories = [...coin.categories, ...coin.coingeckoCategories];
-    for (const category of allCategories) {
-      if (!category) continue;
-
-      const currentStats = categoryStatsMap.get(category) || { totalVolume: 0, coinCount: 0 };
-      currentStats.totalVolume += Number(coin.volume || 0);
-      currentStats.coinCount += 1;
-      categoryStatsMap.set(category, currentStats);
-    }
-  }
-
-  // Only include categories with total volume >= 1,000,000 and coin count >= 3
-  let filteredCategories = Array.from(categoryStatsMap.entries())
-    .filter(([_, stats]) => stats.totalVolume >= 1000000 && stats.coinCount >= 3)
-    .map(([category]) => category)
-    .sort((a, b) => a.localeCompare(b));
+  // Use centralized functions to get category stats
+  const categoryStats = await getCategoryStats(sql);
+  const filteredCategories = filterCategories(categoryStats, 1000000, 3);
 
   // Build the prompt string
   const prompt = filteredCategories.map(cat => `- "${cat}"`).join('\n');

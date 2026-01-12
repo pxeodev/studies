@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 import sql from '../lib/database.mjs'
-import convertToDailySignals from '../utils/convertToDailySignals.mjs';
+import convertToDailySignals from 'coinrotator-utils/convertToDailySignals.mjs';
 import { saveDailyOhlcsToSupertrends } from '../utils/ohlc.mjs';
 
 dotenv.config();

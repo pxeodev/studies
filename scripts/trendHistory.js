@@ -8,7 +8,7 @@ import { promises as fs } from 'fs';
 
 import sql from '../lib/database.mjs'
 import supertrend from '../utils/supertrend.mjs'
-import convertToDailySignals from '../utils/convertToDailySignals.mjs';
+import convertToDailySignals from 'coinrotator-utils/convertToDailySignals.mjs';
 import { defaultAtrPeriods, defaultMultiplier } from 'coinrotator-utils/variables.mjs'
 import supersupertrend from 'coinrotator-utils/supersupertrend.mjs';
 import { signals } from 'coinrotator-utils/variables.mjs';

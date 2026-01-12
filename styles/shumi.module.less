@@ -276,7 +276,8 @@
   :global(.ant-input-prefix) {
       display: flex;
       align-items: center;
-      margin-right: 4px; // Space between prefix and text
+      gap: 4px; // Space between prefix elements
+      margin-right: 12px; // More space between prefix and placeholder text
   }
 
   .placeholderMagnifier {
@@ -308,6 +309,91 @@
 
 .sendButton {
   border-radius: 4px !important; // Add border radius
+}
+
+// Archetype button styles
+.archetypeButton {
+  min-width: 32px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--cr-secondary-text);
+
+  &:hover {
+    color: var(--cr-primary-color);
+    background-color: var(--cr-quintiary-bg);
+  }
+}
+
+// Archetype dropdown styles - match other dropdowns in the design system
+.archetypeDropdown {
+  background-color: var(--cr-tertiary-bg) !important;
+  border: 1px solid var(--cr-secondary-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+
+  // Override all nested elements to ensure dark mode compatibility
+  &,
+  * {
+    background-color: var(--cr-tertiary-bg) !important;
+  }
+
+  :global(.ant-dropdown-menu) {
+    background-color: var(--cr-tertiary-bg) !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
+    box-shadow: none !important;
+  }
+
+  :global(.ant-dropdown-menu-item) {
+    color: var(--cr-secondary-text) !important;
+    background-color: var(--cr-tertiary-bg) !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    transition: background-color 0.2s ease !important;
+
+    &,
+    & > * {
+      color: var(--cr-secondary-text) !important;
+      background-color: var(--cr-tertiary-bg) !important;
+    }
+
+    &:hover {
+      background-color: var(--cr-quintiary-bg) !important;
+
+      &,
+      & > * {
+        background-color: var(--cr-quintiary-bg) !important;
+      }
+    }
+  }
+
+  // Active state for selected archetype item - darker background
+  :global(.ant-dropdown-menu-item.archetypeMenuItemActive) {
+    background-color: var(--cr-quintiary-bg) !important;
+
+    &,
+    & > * {
+      background-color: var(--cr-quintiary-bg) !important;
+      color: var(--cr-secondary-text) !important;
+    }
+
+    &:hover {
+      background-color: var(--cr-quartery-bg) !important;
+
+      &,
+      & > * {
+        background-color: var(--cr-quartery-bg) !important;
+      }
+    }
+  }
+}
+
+// Archetype tag styles - similar to coinTag
+.archetypeTag {
+  margin-right: 0; // No margin since gap handles spacing
 }
 
 // .coinTag - inherits Ant Design tag styles with prefix gap handling

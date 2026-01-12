@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 
 import sql from '../lib/database.mjs'
-import convertToDailySignals from '../utils/convertToDailySignals.mjs';
+import convertToDailySignals from 'coinrotator-utils/convertToDailySignals.mjs';
 import { convertOhlcsToSuperTrends } from '../utils/ohlc.mjs';
 import { SUPERTREND_FLAVOR } from 'coinrotator-utils/variables.mjs';
 

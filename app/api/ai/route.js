@@ -33,7 +33,7 @@ const trackMixpanelEvent = async (event, properties) => {
 };
 
 export async function POST(req) {
-  const { messages, walletAddress, data } = await req.json();
+  const { messages, walletAddress, data, archetype } = await req.json();
 
   // AUTHENTICATION GATING: Require wallet address for Shumi AI access
   if (!walletAddress || !walletAddress.startsWith('0x')) {
@@ -115,7 +115,7 @@ export async function POST(req) {
         };
 
         // Start shumi - it will call onProgress as it executes
-        const response = await shumi({ messages, walletAddress, data, onProgress });
+        const response = await shumi({ messages, walletAddress, data, archetype, onProgress, promptVersion: 'playground' });
 
         // Check if shumi returned an error Response directly
         if (response instanceof Response && !response.toUIMessageStreamResponse && !response.toDataStreamResponse) {

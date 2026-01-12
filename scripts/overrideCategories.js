@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 import sql from '../lib/database.mjs'
-import { getCategoryOverrides, overrideCoinCategories } from '../utils/categories.mjs'
+import { getCategoryOverrides, overrideCoinCategories } from 'coinrotator-utils'
 
 dotenv.config();
 

@@ -1,7 +1,9 @@
-const withLess = require("next-with-less");
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import withLess from "next-with-less";
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})
+});
 
 let moduleExports = {
   experimental: {
@@ -167,15 +169,10 @@ let moduleExports = {
         destination: '/category/Internet-of-Things-%28IOT%29',
         permanent: true,
       },
-      {
-        source: '/Shumi',
-        destination: '/shumi',
-        permanent: true,
-      },
     ]
   },
 }
 moduleExports = withLess(moduleExports)
-moduleExports = withBundleAnalyzer(moduleExports)
+moduleExports = bundleAnalyzer(moduleExports)
 
-module.exports = moduleExports;
+export default moduleExports;
