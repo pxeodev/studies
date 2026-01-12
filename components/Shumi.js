@@ -10,6 +10,7 @@ import classnames from 'classnames'
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import shumiStyles from '../styles/shumi.module.less'
 import ShumiCopyButton from './ShumiCopyButton'
+import { Suggestion, Suggestions } from './ai-elements/suggestion'
 
 // Loading indicator with real progress updates
 const ShumiLoadingBlock = ({ progress }) => {
@@ -29,6 +30,7 @@ const ShumiLoadingBlock = ({ progress }) => {
         alt="Shumi"
         width="18"
         height="18"
+        style={{ width: '18px', height: '18px', maxWidth: '18px', maxHeight: '18px' }}
       />
       <span className={shumiStyles.shumiLoadingText}>{getMessage()}</span>
     </div>
@@ -45,6 +47,7 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   const [walletAddress, setWalletAddress] = useState(null)
   const [coinTag, setCoinTag] = useState(null);
   const [currentSuggestions, setCurrentSuggestions] = useState([]);
+  const [aiGeneratedSuggestions, setAiGeneratedSuggestions] = useState(null); // Store AI-generated suggestions for last message
   const [sessionId, setSessionId] = useState(() => generateSessionId());
   const [isClient, setIsClient] = useState(false);
   const [pendingPrompt, setPendingPrompt] = useState(null); // Store prompt to submit after login
@@ -108,6 +111,10 @@ const Shumi = ({ isActive, initialSuggestions }) => {
       // Handle transient progress updates via onData callback (v5 best practice)
       if (dataPart.type === 'data-progress') {
         setProgress(dataPart.data);
+      } else if (dataPart.type === 'data-suggestions') {
+        // Store AI-generated suggestions for the last assistant message
+        console.log('[Shumi] Received suggestions data:', dataPart.data);
+        setAiGeneratedSuggestions(dataPart.data.suggestions);
       }
     }
   });
@@ -137,6 +144,9 @@ const Shumi = ({ isActive, initialSuggestions }) => {
   }, [walletAddress, pendingPrompt, sendMessage, sessionId]);
   const messagesEndRef = useRef(null)
   const aiInputRef = useRef(null)
+  const hasScrolledToSuggestionsRef = useRef(false) // Track if we've scrolled to suggestions to prevent multiple scrolls
+  const lastMessageCountRef = useRef(0) // Track message count to detect new messages
+  const userScrolledAfterStreamingRef = useRef(false) // Track if user manually scrolled after streaming completed
 
 
   // Helper for checking if AI is generating a response
@@ -165,14 +175,28 @@ const Shumi = ({ isActive, initialSuggestions }) => {
       }
 
       if (message.role === 'assistant' && content) {
+        // Strip JSON suggestions block from content if present (including partial blocks during streaming)
+        // Try multiple patterns to catch complete and partial JSON blocks
+        let cleanedContent = content
+          // Remove complete JSON blocks with code fences
+          .replace(/```json\s*\{[\s\S]*?"suggestions"[\s\S]*?\}\s*```/g, '')
+          // Remove any text starting with ```json (catches partial blocks during streaming)
+          .replace(/```json[\s\S]*$/g, '')
+          // Remove any remaining JSON-like structures with "suggestions" (even if incomplete)
+          .replace(/\{[\s\S]*?"suggestions"[\s\S]*?\}/g, '')
+          // Also catch if content ends with partial JSON (e.g., just ```json or ```json\n{)
+          .replace(/```json\s*\{?\s*$/g, '')
+          .trim();
+
         // Fix markdown headings after colons/periods only in assistant messages
+        cleanedContent = cleanedContent.includes(':#') || cleanedContent.includes('.#')
+          ? cleanedContent.replace(/([:.])(\s*)#/g, '$1\n\n#')
+          : cleanedContent;
+
         return {
           ...message,
-          content, // Ensure content is set
-          // Only replace in content that actually has the pattern, which is rare
-          processedContent: content.includes(':#') || content.includes('.#')
-            ? content.replace(/([:.])(\s*)#/g, '$1\n\n#')
-            : content
+          content, // Keep original content
+          processedContent: cleanedContent
         };
       }
       return {
@@ -294,9 +318,31 @@ const Shumi = ({ isActive, initialSuggestions }) => {
     }
   }, [messages, progress]);
 
+  // Track previous status to avoid unnecessary updates
+  const previousStatusRef = useRef(status);
+
+  // Clear AI suggestions when streaming starts (new message being generated)
+  useEffect(() => {
+    const prevStatus = previousStatusRef.current;
+    const currentStatus = status;
+    previousStatusRef.current = currentStatus;
+
+    // Only clear if status changed TO streaming/submitted FROM a non-streaming state
+    // This prevents clearing on every status update
+    const justStartedStreaming = (currentStatus === 'streaming' || currentStatus === 'submitted') &&
+                                  prevStatus !== 'streaming' && prevStatus !== 'submitted';
+
+    if (justStartedStreaming && aiGeneratedSuggestions) {
+      console.log('[Shumi] Clearing suggestions because streaming started, status:', currentStatus);
+      setAiGeneratedSuggestions(null);
+    }
+  }, [status, aiGeneratedSuggestions]); // Include aiGeneratedSuggestions to avoid stale closure
+
   const askAi = useCallback(async (e) => {
     if (e) e.preventDefault();
     setProgress(null); // Clear previous progress
+    setAiGeneratedSuggestions(null); // Clear previous AI suggestions when sending new message
+    hasScrolledToSuggestionsRef.current = false; // Reset scroll flag when sending new message
 
     if (!input.trim() && !coinTag) return;
 
@@ -353,11 +399,97 @@ const Shumi = ({ isActive, initialSuggestions }) => {
 
   // Scroll to bottom when new messages are added
   useEffect(() => {
+    const currentMessageCount = messages.length;
+    const previousMessageCount = lastMessageCountRef.current;
+
+    // If message count increased, user sent a new message - reset scroll tracking
+    if (currentMessageCount > previousMessageCount) {
+      console.log('[Shumi] New message detected, resetting scroll tracking. Previous:', previousMessageCount, 'Current:', currentMessageCount);
+      hasScrolledToSuggestionsRef.current = false;
+      lastMessageCountRef.current = currentMessageCount;
+    }
+
     if (messagesEndRef.current) {
         // Simple scroll to bottom - relies on CSS overflow-anchor for pinning
         messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   }, [messages]); // Run whenever messages change
+
+  // Scroll to show suggestions when they appear (only if user is near bottom and streaming is complete)
+  useEffect(() => {
+    // Only scroll when streaming is complete and suggestions are available
+    const isStreamingComplete = !(status === 'streaming' || status === 'submitted');
+
+    console.log('[Shumi] Suggestions scroll effect:', {
+      hasSuggestions: !!aiGeneratedSuggestions,
+      suggestionsCount: aiGeneratedSuggestions?.length || 0,
+      isStreamingComplete,
+      status,
+      hasContainer: !!messagesEndRef.current,
+      hasScrolledAlready: hasScrolledToSuggestionsRef.current
+    });
+
+    // Reset scroll flag when suggestions are cleared
+    if (!aiGeneratedSuggestions || aiGeneratedSuggestions.length === 0) {
+      hasScrolledToSuggestionsRef.current = false;
+      return;
+    }
+
+    if (aiGeneratedSuggestions && aiGeneratedSuggestions.length > 0 && isStreamingComplete && messagesEndRef.current) {
+      const container = messagesEndRef.current;
+      const scrollHeight = container.scrollHeight;
+      const scrollTop = container.scrollTop;
+      const clientHeight = container.clientHeight;
+      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+
+      // Check if user is near the bottom (within 200px) before auto-scrolling
+      // Increase threshold to be more permissive - if user just finished reading streamed content,
+      // they're likely near the bottom even if scrollTop is 0 (content might not have fully rendered yet)
+      const isNearBottom = distanceFromBottom < 200;
+
+      // Also check if scrollTop is very low (0 or near 0) - this means content just finished rendering
+      // and user hasn't scrolled up manually, so we should scroll to show suggestions
+      const isAtTop = scrollTop < 50;
+
+      console.log('[Shumi] Scroll check:', {
+        scrollHeight,
+        scrollTop,
+        clientHeight,
+        distanceFromBottom,
+        isNearBottom,
+        isAtTop,
+        hasScrolledAlready: hasScrolledToSuggestionsRef.current
+      });
+
+      // Always scroll the first time suggestions appear for a new message
+      // The flag is reset when a new message is sent, so this ensures we scroll for new conversations
+      if (!hasScrolledToSuggestionsRef.current) {
+        console.log('[Shumi] Scrolling to show suggestions (first time for this message)...');
+        hasScrolledToSuggestionsRef.current = true; // Mark as scrolled
+
+        // Use requestAnimationFrame to ensure DOM has updated, then scroll
+        requestAnimationFrame(() => {
+          if (container) {
+            // Small delay to ensure suggestions are fully rendered in DOM
+            setTimeout(() => {
+              if (container) {
+                const newScrollHeight = container.scrollHeight;
+                container.scrollTop = newScrollHeight;
+                console.log('[Shumi] ✓ Scrolled to show suggestions:', {
+                  scrollTop: container.scrollTop,
+                  scrollHeight: newScrollHeight,
+                  clientHeight: container.clientHeight,
+                  finalDistanceFromBottom: newScrollHeight - container.scrollTop - container.clientHeight
+                });
+              }
+            }, 300); // Delay to ensure DOM is ready
+          }
+        });
+      } else {
+        console.log('[Shumi] Not scrolling - already scrolled to these suggestions');
+      }
+    }
+  }, [aiGeneratedSuggestions, status]); // Run when suggestions appear or status changes
 
   // Render gating or chat UI
   let content;
@@ -419,6 +551,32 @@ const Shumi = ({ isActive, initialSuggestions }) => {
                    )}
                  </div>
                ))}
+               {/* Display AI-generated suggestions below the last assistant message */}
+               {(() => {
+                 const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+                 const isLastAssistant = lastMessage && lastMessage.role === 'assistant';
+                 const isStreamingComplete = !(status === 'streaming' || status === 'submitted');
+
+                 if (isLastAssistant && isStreamingComplete && aiGeneratedSuggestions && aiGeneratedSuggestions.length > 0) {
+                   return (
+                     <div className={shumiStyles.aiSuggestionsContainer}>
+                       <Suggestions>
+                         {aiGeneratedSuggestions.map((suggestion, index) => (
+                           <Suggestion
+                             key={index}
+                             suggestion={suggestion}
+                             onClick={(suggestion) => {
+                               setInput(suggestion);
+                               // Optionally auto-submit: sendMessage({ text: suggestion }, {...})
+                             }}
+                           />
+                         ))}
+                       </Suggestions>
+                     </div>
+                   );
+                 }
+                 return null;
+               })()}
                {/* Show Shumi loading block when progress exists or when waiting for response */}
                {(() => {
                  // Check only the last message (the one currently being generated) for content
@@ -457,17 +615,15 @@ const Shumi = ({ isActive, initialSuggestions }) => {
           [shumiStyles.floatingContainerCentered]: messages.length === 0
         })}>
           {messages.length === 0 && (
-            <div className={shumiStyles.suggestions}>
+            <Suggestions>
               {currentSuggestions.map((suggestion, index) => (
-                <div
+                <Suggestion
                   key={index}
-                  className={shumiStyles.suggestionButton}
-                  onClick={() => setInput(suggestion)} // Set input manually
-                >
-                  {suggestion}
-                </div>
+                  suggestion={suggestion}
+                  onClick={(suggestion) => setInput(suggestion)}
+                />
               ))}
-            </div>
+            </Suggestions>
           )}
           <div className={shumiStyles.inputArea}>
             <Input

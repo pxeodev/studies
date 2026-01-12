@@ -122,7 +122,7 @@ export async function POST(req) {
         };
 
         // Start shumi - it will call onProgress as it executes
-        const response = await shumi({ messages, walletAddress, data, onProgress, promptVersion: 'sandbox' });
+        const response = await shumi({ messages, walletAddress, data, onProgress, promptVersion: 'sandbox', enableSuggestions: true });
 
         // Check if shumi returned an error Response directly
         if (response instanceof Response && !response.toUIMessageStreamResponse && !response.toDataStreamResponse) {
@@ -130,6 +130,58 @@ export async function POST(req) {
           writer.writeError(new Error('An error occurred while processing your request.'));
           return;
         }
+
+        // Parse suggestions from full text after stream completes
+        // Use response.text which is a promise that resolves to the full text
+        response.text.then((fullText) => {
+          if (fullText) {
+            try {
+              console.log('[API] Parsing suggestions from response text, length:', fullText.length);
+              // Try multiple regex patterns to catch different JSON block formats
+              const patterns = [
+                /```json\s*(\{[\s\S]*?"suggestions"[\s\S]*?\})\s*```/,
+                /```\s*json\s*(\{[\s\S]*?"suggestions"[\s\S]*?\})\s*```/,
+                /\{[\s\S]*?"suggestions"[\s\S]*?\}/
+              ];
+
+              let jsonMatch = null;
+              for (const pattern of patterns) {
+                jsonMatch = fullText.match(pattern);
+                if (jsonMatch) break;
+              }
+
+              if (jsonMatch) {
+                try {
+                  const parsed = JSON.parse(jsonMatch[1]);
+                  if (parsed.suggestions && Array.isArray(parsed.suggestions) && parsed.suggestions.length > 0) {
+                    // Send suggestions as metadata
+                    writer.write({
+                      type: 'data-suggestions',
+                      id: 'suggestions-1',
+                      data: { suggestions: parsed.suggestions },
+                      transient: false
+                    });
+                    console.log('[API] ✓ Sent suggestions:', parsed.suggestions);
+                  } else {
+                    console.log('[API] Parsed JSON but no valid suggestions array:', parsed);
+                  }
+                } catch (parseError) {
+                  console.error('[API] Failed to parse suggestions JSON:', parseError, 'JSON string:', jsonMatch[1].substring(0, 200));
+                }
+              } else {
+                // Log last 500 chars to see what the response ends with
+                const lastChars = fullText.slice(-500);
+                console.log('[API] No suggestions JSON block found. Response ends with:', lastChars);
+              }
+            } catch (error) {
+              console.error('[API] Error processing suggestions:', error);
+            }
+          } else {
+            console.log('[API] No full text available from response');
+          }
+        }).catch((error) => {
+          console.error('[API] Error getting full text from response:', error);
+        });
 
         // Get the UI message stream from the response and merge it into our writer
         const messageStream = response.toUIMessageStream({

@@ -75,7 +75,7 @@ const ShumiCopyButton = ({ text, className = "", position = "right" }) => {
           visibility: visible;
           position: absolute;
           top: 8px;
-          ${position === "left" ? "left: 8px;" : "right: 8px;"}
+          ${position === "left" ? "left: 4px;" : "right: 4px;"}
           z-index: 10;
         }
 
@@ -144,6 +144,14 @@ const ShumiCopyButton = ({ text, className = "", position = "right" }) => {
         /* Specific styling for Shumi chat messages */
         .chatgpt-copy-button.shumi-copy-button {
           right: -1px;
+        }
+
+        /* Mobile adjustments for better spacing */
+        @media (max-width: 992px) {
+          .chatgpt-copy-button.shumi-copy-button {
+            top: 4px; // Closer to message content on mobile
+            right: 4px; // Slightly adjust right position
+          }
         }
       `}</style>
     </>

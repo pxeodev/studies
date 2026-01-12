@@ -31,20 +31,20 @@
     "@ai-sdk/provider-utils" "2.2.8"
 
 "@ai-sdk/anthropic@^2.0.0":
-  version "2.0.53"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/anthropic/-/anthropic-2.0.53.tgz#bf361ef25bb3f6018fb09824ac88007c9a0ed67d"
-  integrity sha512-ih7NV+OFSNWZCF+tYYD7ovvvM+gv7TRKQblpVohg2ipIwC9Y0TirzocJVREzZa/v9luxUwFbsPji++DUDWWxsg==
+  version "2.0.57"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/anthropic/-/anthropic-2.0.57.tgz#e013b1ad994249d7df4dd775cc55f1658b6e4989"
+  integrity sha512-DREpYqW2pylgaj69gZ+K8u92bo9DaMgFdictYnY+IwYeY3bawQ4zI7l/o1VkDsBDljAx8iYz5lPURwVZNu+Xpg==
   dependencies:
-    "@ai-sdk/provider" "2.0.0"
-    "@ai-sdk/provider-utils" "3.0.18"
+    "@ai-sdk/provider" "2.0.1"
+    "@ai-sdk/provider-utils" "3.0.20"
 
-"@ai-sdk/gateway@2.0.18":
-  version "2.0.18"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-2.0.18.tgz#7e81bdedddb7363af2c38d2cf7f34ac2d5e5eaa7"
-  integrity sha512-sDQcW+6ck2m0pTIHW6BPHD7S125WD3qNkx/B8sEzJp/hurocmJ5Cni0ybExg6sQMGo+fr/GWOwpHF1cmCdg5rQ==
+"@ai-sdk/gateway@2.0.25":
+  version "2.0.25"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-2.0.25.tgz#75dde5354ff0723a4ad4df5370b02c683fe5f9a7"
+  integrity sha512-Rq+FX55ne7lMiqai7NcvvDZj4HLsr+hg77WayqmySqc6zhw3tIOLxd4Ty6OpwNj0C0bVMi3iCl2zvJIEirh9XA==
   dependencies:
-    "@ai-sdk/provider" "2.0.0"
-    "@ai-sdk/provider-utils" "3.0.18"
+    "@ai-sdk/provider" "2.0.1"
+    "@ai-sdk/provider-utils" "3.0.20"
     "@vercel/oidc" "3.0.5"
 
 "@ai-sdk/gateway@2.0.9":
@@ -76,12 +76,12 @@
     "@ai-sdk/provider-utils" "2.2.8"
 
 "@ai-sdk/openai@^2.0.0":
-  version "2.0.80"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.80.tgz#8ef191866e5bf451a8195c2eb9ef7a0e3021541e"
-  integrity sha512-tNHuraF11db+8xJEDBoU9E3vMcpnHFKRhnLQ3DQX2LnEzfPB9DksZ8rE+yVuDN1WRW9cm2OWAhgHFgVKs7ICuw==
+  version "2.0.89"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-2.0.89.tgz#54bcb7b232d9727cf27f1bf7c6f8ac820dfd6d89"
+  integrity sha512-4+qWkBCbL9HPKbgrUO/F2uXZ8GqrYxHa8SWEYIzxEJ9zvWw3ISr3t1/27O1i8MGSym+PzEyHBT48EV4LAwWaEw==
   dependencies:
-    "@ai-sdk/provider" "2.0.0"
-    "@ai-sdk/provider-utils" "3.0.18"
+    "@ai-sdk/provider" "2.0.1"
+    "@ai-sdk/provider-utils" "3.0.20"
 
 "@ai-sdk/provider-utils@2.2.8":
   version "2.2.8"
@@ -101,12 +101,12 @@
     "@standard-schema/spec" "^1.0.0"
     eventsource-parser "^3.0.6"
 
-"@ai-sdk/provider-utils@3.0.18":
-  version "3.0.18"
-  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-3.0.18.tgz#fc7757ad7eb48a48ce1976da3025f0b9215b1aff"
-  integrity sha512-ypv1xXMsgGcNKUP+hglKqtdDuMg68nWHucPPAhIENrbFAI+xCHiqPVN8Zllxyv1TNZwGWUghPxJXU+Mqps0YRQ==
+"@ai-sdk/provider-utils@3.0.20":
+  version "3.0.20"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider-utils/-/provider-utils-3.0.20.tgz#61d7741065550833eae3ac6440d943e9d3d25120"
+  integrity sha512-iXHVe0apM2zUEzauqJwqmpC37A5rihrStAih5Ks+JE32iTe4LZ58y17UGBjpQQTCRw9YxMeo2UFLxLpBluyvLQ==
   dependencies:
-    "@ai-sdk/provider" "2.0.0"
+    "@ai-sdk/provider" "2.0.1"
     "@standard-schema/spec" "^1.0.0"
     eventsource-parser "^3.0.6"
 
@@ -121,6 +121,13 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-2.0.0.tgz#b853c739d523b33675bc74b6c506b2c690bc602b"
   integrity sha512-6o7Y2SeO9vFKB8lArHXehNuusnpddKPk7xqL7T2/b+OvXMRIXUO1rR4wcv1hAFUAT9avGZshty3Wlua/XA7TvA==
+  dependencies:
+    json-schema "^0.4.0"
+
+"@ai-sdk/provider@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/provider/-/provider-2.0.1.tgz#4aba415f1815da33a7a81e5f41a0219af53278c0"
+  integrity sha512-KCUwswvsC5VsW2PWFqF8eJgSCu5Ysj7m1TxiHTVA6g7k360bk0RNQENT8KTMAYEs+8fWPD3Uu4dEmzGHc+jGng==
   dependencies:
     json-schema "^0.4.0"
 
@@ -1581,9 +1588,9 @@
   integrity sha512-E72abpUPT41DmgOmteTbcuiyRW0lY+3i9lq0drOjr1LApUJs+/HTa3W6K1qAGwZ6vn0XDOdYyG5jhFGzNl1pOg==
 
 "@openrouter/ai-sdk-provider@^1.2.3":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@openrouter/ai-sdk-provider/-/ai-sdk-provider-1.5.0.tgz#5b784234f03c1e694d35ba31b90af8062508657a"
-  integrity sha512-2ii9sDriH6piPIcxzBfdfsg5JTpxYY2GXh1lv151xB4j00YXMGWbjj4ilvltyck5h4PtiYd9Q44mSBeXsdv+og==
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@openrouter/ai-sdk-provider/-/ai-sdk-provider-1.5.4.tgz#440b874b8dde8de650f3be4b2e68b267c7c8280f"
+  integrity sha512-xrSQPUIH8n9zuyYZR0XK7Ba0h2KsjJcMkxnwaYfmv13pKs3sDkjPzVPPhlhzqBGddHb5cFEwJ9VFuFeDcxCDSw==
   dependencies:
     "@openrouter/sdk" "^0.1.27"
 
@@ -3058,9 +3065,9 @@
     "@stablelib/wipe" "^1.0.1"
 
 "@standard-schema/spec@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.0.0.tgz#f193b73dc316c4170f2e82a881da0f550d551b9c"
-  integrity sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
+  integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
 "@swc/cli@^0.1.62":
   version "0.1.65"
@@ -5391,13 +5398,13 @@ ai@^4.0.14:
     jsondiffpatch "0.6.0"
 
 ai@^5.0.0:
-  version "5.0.108"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.108.tgz#b1b6e66b705baabcf98370336b03ebaacbf1874f"
-  integrity sha512-Jex3Lb7V41NNpuqJHKgrwoU6BCLHdI1Pg4qb4GJH4jRIDRXUBySJErHjyN4oTCwbiYCeb/8II9EnqSRPq9EifA==
+  version "5.0.119"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-5.0.119.tgz#efa420938050bbb9be537c137ac3c413b2f7727c"
+  integrity sha512-HUOwhc17fl2SZTJGZyA/99aNu706qKfXaUBCy9vgZiXBwrxg2eTzn2BCz7kmYDsfx6Fg2ACBy2icm41bsDXCTw==
   dependencies:
-    "@ai-sdk/gateway" "2.0.18"
-    "@ai-sdk/provider" "2.0.0"
-    "@ai-sdk/provider-utils" "3.0.18"
+    "@ai-sdk/gateway" "2.0.25"
+    "@ai-sdk/provider" "2.0.1"
+    "@ai-sdk/provider-utils" "3.0.20"
     "@opentelemetry/api" "1.9.0"
 
 ajv@8.6.3:
@@ -6474,9 +6481,9 @@ code-block-writer@^10.1.1:
   resolved "https://registry.npmjs.org/code-block-writer/-/code-block-writer-10.1.1.tgz"
   integrity sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==
 
-"coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
-  version "2.14.4"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#4ab6344d969824f6e5f9f7cf720a4136758db4f2"
+"coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
+  version "2.15.0"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#23ff6cbee0132b49c2fdefac2a5b265b63f7161b"
   dependencies:
     "@ai-sdk/anthropic" "^2.0.0"
     "@ai-sdk/google-vertex" "^2.2.27"
@@ -14706,9 +14713,9 @@ yocto-queue@^0.1.0:
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
 zod-to-json-schema@^3.20.0:
-  version "3.25.0"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.25.0.tgz#df504c957c4fb0feff467c74d03e6aab0b013e1c"
-  integrity sha512-HvWtU2UG41LALjajJrML6uQejQhNJx+JBO9IflpSja4R03iNWfKXrj6W2h7ljuLyc1nKS+9yDyL/9tD1U/yBnQ==
+  version "3.25.1"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.25.1.tgz#7f24962101a439ddade2bf1aeab3c3bfec7d84ba"
+  integrity sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==
 
 zod-to-json-schema@^3.22.3:
   version "3.24.5"
@@ -14746,9 +14753,9 @@ zod@^3.22.4:
   integrity sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==
 
 "zod@^3.25.0 || ^4.0.0", zod@^4.0.5:
-  version "4.1.13"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.13.tgz#93699a8afe937ba96badbb0ce8be6033c0a4b6b1"
-  integrity sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.3.5.tgz#aeb269a6f9fc259b1212c348c7c5432aaa474d2a"
+  integrity sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==
 
 zod@^4.1.8:
   version "4.1.12"
