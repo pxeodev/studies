@@ -25,7 +25,9 @@
     "debbb": "node scripts/daily.mjs",
     "fix-db-schema": "node scripts/fix-database-schema.js",
     "check-db-schema": "node scripts/check-database-schema.js",
-    "test-web3auth-api": "node scripts/test-web3auth-api.js"
+    "test-web3auth-api": "node scripts/test-web3auth-api.js",
+    "logs:ai:watch": "node scripts/watch-ai-logs.js",
+    "shumi:health": "node scripts/shumi-health-check.js"
   },
   "dependencies": {
     "@ai-sdk/react": "^2.0.0",
@@ -104,6 +106,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@vercel/sdk": "^1.0.0",
     "assert": "^2.1.0",
     "browserify-zlib": "^0.2.0",
     "domain-browser": "^4.22.0",
