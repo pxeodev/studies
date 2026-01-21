@@ -22,6 +22,19 @@ import { createCategoriesPromptInLangfuse } from '../utils/categories.mjs';
 
 dotenv.config();
 
+const MAX_NUMERIC_VALUE = 10 ** 35 - 1; // Maximum for NUMERIC(65,30)
+
+// Helper to log numeric values that might exceed database limits
+const logNumericValue = (fieldName, value, coinId) => {
+  if (value === null || value === undefined) return value;
+  const numValue = Number(value);
+  if (isNaN(numValue) || !isFinite(numValue)) return value;
+  if (Math.abs(numValue) > MAX_NUMERIC_VALUE) {
+    console.error(`[NUMERIC OVERFLOW DETECTED] coinId: ${coinId}, field: ${fieldName}, value: ${numValue}, string representation: ${String(value)}`);
+  }
+  return value;
+};
+
 const fetchOhlcDays = 30
 const excludedSymbols = ['usdt', 'dai', 'ust', 'weth', 'wbtc', 'usdc', 'busd', 'ceth', 'steth', 'cdai', 'cusdc', 'tusd', 'hbtc', 'renbtc', 'seth', 'xsushi', 'husd', 'usdp', 'cusdt', 'lusd', 'usdn', 'sbtc', 'vai', 'xsgd', 'fei', 'frax', 'tribe', 'gusd', 'usdx', 'eurt', 'tryb', 'itl', 'usds', 'xchf', 'xaur', 'eosdt', 'dgx', 'bitcny', 'idrt', 'ousd', 'usdk', 'rsv', 'qc', 'dgd', 'eurs', 'susd', 'sai', 'cusd', 'alusd', 'seur', 'eeur', 'eth2x-fli', 'dfuk']
 const excludedTokens = ['thorchain-erc20']
@@ -69,6 +82,25 @@ const fetchCoinDataCoingecko = async (coinId) => {
   const tickers = uniqBy(coinData.tickers, ticker => `${ticker.base}${ticker.target}${ticker.market.name}`)
   let categories = await overrideCoinCategories(coinData.name, symbol, coinData.categories)
   categories = await aliasCoinCategories(categories)
+
+  // Log all numeric values before inserting to identify overflow
+  const ath = coinData.market_data.ath.usd || coinData.market_data.current_price?.usd
+  const atl = coinData.market_data.atl.usd || coinData.market_data.current_price?.usd
+  const fullyDilutedValuation = coinData.market_data.fully_diluted_valuation.usd ?? null
+  const currentPrice = coinData.market_data.current_price?.usd || null
+  const circulatingSupply = coinData.market_data.circulating_supply
+  const totalSupply = coinData.market_data.total_supply
+  const maxSupply = coinData.market_data.max_supply
+
+  console.log(`[PROCESSING COIN] coinId: ${coinId}, symbol: ${symbol}`);
+  logNumericValue('ath', ath, coinId);
+  logNumericValue('atl', atl, coinId);
+  logNumericValue('fullyDilutedValuation', fullyDilutedValuation, coinId);
+  logNumericValue('currentPrice', currentPrice, coinId);
+  logNumericValue('circulatingSupply', circulatingSupply, coinId);
+  logNumericValue('totalSupply', totalSupply, coinId);
+  logNumericValue('maxSupply', maxSupply, coinId);
+
   const dbCoinData = {
     symbol,
     name: coinData.name,
@@ -79,53 +111,63 @@ const fetchCoinDataCoingecko = async (coinId) => {
     homepage: coinData.links.homepage[0] || null,
     twitter: coinData.links.twitter_screen_name || '',
     twitterFollowers: coinData.community_data.twitter_followers || null,
-    ath: coinData.market_data.ath.usd || coinData.market_data.current_price?.usd,
-    atl: coinData.market_data.atl.usd || coinData.market_data.current_price?.usd,
+    ath,
+    atl,
     marketCap,
     volume,
     marketCapRank: coinData.market_data.market_cap_rank,
-    fullyDilutedValuation: coinData.market_data.fully_diluted_valuation.usd ?? null,
-    currentPrice: coinData.market_data.current_price?.usd || null,
-    circulatingSupply: coinData.market_data.circulating_supply,
-    totalSupply: coinData.market_data.total_supply,
-    maxSupply: coinData.market_data.max_supply,
+    fullyDilutedValuation,
+    currentPrice,
+    circulatingSupply,
+    totalSupply,
+    maxSupply,
     tickers: tickers,
     coingeckoCategories: categories,
   }
 
-  await sql`
-    INSERT INTO "Coin" (
-      id, symbol, name, "defaultPlatform", platforms, images, description, homepage, twitter, "twitterFollowers",
-      ath, atl, "marketCap", "marketCapRank", "fullyDilutedValuation", "currentPrice", "circulatingSupply", "totalSupply",
-      "maxSupply", tickers, "coingeckoCategories", "volume"
-    ) VALUES (
-      ${coinId}, ${dbCoinData.symbol}, ${dbCoinData.name}, ${dbCoinData.defaultPlatform}, ${dbCoinData.platforms}, ${dbCoinData.images},
-      ${dbCoinData.description}, ${dbCoinData.homepage}, ${dbCoinData.twitter}, ${dbCoinData.twitterFollowers}, ${dbCoinData.ath}, ${dbCoinData.atl},
-      ${dbCoinData.marketCap}, ${dbCoinData.marketCapRank}, ${dbCoinData.fullyDilutedValuation}, ${dbCoinData.currentPrice}, ${dbCoinData.circulatingSupply},
-      ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}, ${dbCoinData.volume}
-    ) ON CONFLICT (id) DO UPDATE SET
-      symbol = EXCLUDED.symbol,
-      name = EXCLUDED.name,
-      "defaultPlatform" = EXCLUDED."defaultPlatform",
-      platforms = EXCLUDED.platforms,
-      images = EXCLUDED.images,
-      description = EXCLUDED.description,
-      homepage = EXCLUDED.homepage,
-      twitter = EXCLUDED.twitter,
-      "twitterFollowers" = EXCLUDED."twitterFollowers",
-      ath = EXCLUDED.ath,
-      atl = EXCLUDED.atl,
-      "marketCap" = EXCLUDED."marketCap",
-      "marketCapRank" = EXCLUDED."marketCapRank",
-      "fullyDilutedValuation" = EXCLUDED."fullyDilutedValuation",
-      "currentPrice" = EXCLUDED."currentPrice",
-      "circulatingSupply" = EXCLUDED."circulatingSupply",
-      "totalSupply" = EXCLUDED."totalSupply",
-      "maxSupply" = EXCLUDED."maxSupply",
-      tickers = EXCLUDED.tickers,
-      "coingeckoCategories" = EXCLUDED."coingeckoCategories",
-      "volume" = EXCLUDED."volume"
-  `
+  try {
+    console.log(`[INSERTING COIN] coinId: ${coinId}`);
+    await sql`
+      INSERT INTO "Coin" (
+        id, symbol, name, "defaultPlatform", platforms, images, description, homepage, twitter, "twitterFollowers",
+        ath, atl, "marketCap", "marketCapRank", "fullyDilutedValuation", "currentPrice", "circulatingSupply", "totalSupply",
+        "maxSupply", tickers, "coingeckoCategories", "volume"
+      ) VALUES (
+        ${coinId}, ${dbCoinData.symbol}, ${dbCoinData.name}, ${dbCoinData.defaultPlatform}, ${dbCoinData.platforms}, ${dbCoinData.images},
+        ${dbCoinData.description}, ${dbCoinData.homepage}, ${dbCoinData.twitter}, ${dbCoinData.twitterFollowers}, ${dbCoinData.ath}, ${dbCoinData.atl},
+        ${dbCoinData.marketCap}, ${dbCoinData.marketCapRank}, ${dbCoinData.fullyDilutedValuation}, ${dbCoinData.currentPrice}, ${dbCoinData.circulatingSupply},
+        ${dbCoinData.totalSupply}, ${dbCoinData.maxSupply}, ${dbCoinData.tickers}, ${dbCoinData.coingeckoCategories}, ${dbCoinData.volume}
+      ) ON CONFLICT (id) DO UPDATE SET
+        symbol = EXCLUDED.symbol,
+        name = EXCLUDED.name,
+        "defaultPlatform" = EXCLUDED."defaultPlatform",
+        platforms = EXCLUDED.platforms,
+        images = EXCLUDED.images,
+        description = EXCLUDED.description,
+        homepage = EXCLUDED.homepage,
+        twitter = EXCLUDED.twitter,
+        "twitterFollowers" = EXCLUDED."twitterFollowers",
+        ath = EXCLUDED.ath,
+        atl = EXCLUDED.atl,
+        "marketCap" = EXCLUDED."marketCap",
+        "marketCapRank" = EXCLUDED."marketCapRank",
+        "fullyDilutedValuation" = EXCLUDED."fullyDilutedValuation",
+        "currentPrice" = EXCLUDED."currentPrice",
+        "circulatingSupply" = EXCLUDED."circulatingSupply",
+        "totalSupply" = EXCLUDED."totalSupply",
+        "maxSupply" = EXCLUDED."maxSupply",
+        tickers = EXCLUDED.tickers,
+        "coingeckoCategories" = EXCLUDED."coingeckoCategories",
+        "volume" = EXCLUDED."volume"
+    `
+    console.log(`[COIN INSERTED SUCCESSFULLY] coinId: ${coinId}`);
+  } catch (error) {
+    console.error(`[COIN INSERT FAILED] coinId: ${coinId}, error:`, error.message);
+    console.error(`[COIN INSERT FAILED] coinId: ${coinId}, error code:`, error.code);
+    console.error(`[COIN INSERT FAILED] coinId: ${coinId}, error detail:`, error.detail);
+    console.error(`[COIN INSERT FAILED] coinId: ${coinId}, dbCoinData:`, JSON.stringify(dbCoinData, null, 2));
+    throw error;
+  }
 
   await sql`INSERT INTO "CoinTime" ("coinId", "date", "marketCap", "volume") VALUES (${coinId}, ${new Date()}, ${marketCap}, ${volume})`
 
@@ -160,12 +202,23 @@ const fetchOhlcData = async (coinId, symbol) => {
       }
       ohlcData = response.data.map((frame) => {
         const closeTime = new Date(frame[0])
+        const open = frame[1]
+        const high = frame[2]
+        const low = frame[3]
+        const close = frame[4]
+
+        // Log OHLC values that might overflow
+        logNumericValue('ohlc.open', open, coinId);
+        logNumericValue('ohlc.high', high, coinId);
+        logNumericValue('ohlc.low', low, coinId);
+        logNumericValue('ohlc.close', close, coinId);
+
         return {
           closeTime,
-          open: frame[1],
-          high: frame[2],
-          low: frame[3],
-          close: frame[4],
+          open,
+          high,
+          low,
+          close,
           coinId,
           quoteSymbol
         }
@@ -176,9 +229,18 @@ const fetchOhlcData = async (coinId, symbol) => {
   }
 
   if (ohlcs.length) {
-    await sql`INSERT INTO "Ohlc" ${sql(ohlcs)} ON CONFLICT DO NOTHING`
-    const dailyOhlcs = convertToDailySignals(ohlcs, true)
-    await saveDailyOhlcsToSupertrends(dailyOhlcs, coinId)
+    try {
+      console.log(`[INSERTING OHLC] coinId: ${coinId}, count: ${ohlcs.length}`);
+      await sql`INSERT INTO "Ohlc" ${sql(ohlcs)} ON CONFLICT DO NOTHING`
+      console.log(`[OHLC INSERTED SUCCESSFULLY] coinId: ${coinId}`);
+      const dailyOhlcs = convertToDailySignals(ohlcs, true)
+      await saveDailyOhlcsToSupertrends(dailyOhlcs, coinId)
+    } catch (error) {
+      console.error(`[OHLC INSERT FAILED] coinId: ${coinId}, error:`, error.message);
+      console.error(`[OHLC INSERT FAILED] coinId: ${coinId}, error code:`, error.code);
+      console.error(`[OHLC INSERT FAILED] coinId: ${coinId}, error detail:`, error.detail);
+      throw error;
+    }
   }
 }
 

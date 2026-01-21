@@ -1,0 +1,50 @@
+{
+  "mcpServers": {
+    "langfuse-prompts": {
+      "command": "node",
+      "args": [
+        "/Users/saschamayr/Projects/mcp-server-langfuse/build/index.js"
+      ],
+      "env": {
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-213796de-adde-46a0-b03f-25369faab775",
+        "LANGFUSE_SECRET_KEY": "sk-lf-5a8a03ec-474a-4e92-882c-3f7d26abf76c",
+        "LANGFUSE_BASEURL": "https://cloud.langfuse.com"
+      }
+    },
+    "render": {
+      "url": "https://mcp.render.com/mcp",
+      "headers": {
+        "Authorization": "Bearer rnd_b9Ca8GS8Q4c5oPlIuN6lzuQtgshg"
+      }
+    },
+    "vercel": {
+      "url": "https://mcp.vercel.com",
+      "headers": {}
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "env": {}
+    },
+    "bugsnag": {
+      "command": "npx",
+      "args": ["-y", "bugsnag-mcp-server"],
+      "env": {
+        "BUGSNAG_API_KEY": "54cb14b9-27de-4a76-b7f5-d59707a5b784"
+      }
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_TOKEN": "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"
+      }
+    },
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer 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"
+      }
+    }
+  }
+}

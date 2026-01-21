@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(source .env.local)",
+      "Bash(source .env)",
+      "Bash(LANGFUSE_SECRET_KEY=\"sk-lf-5a8a03ec-474a-4e92-882c-3f7d26abf76c\" LANGFUSE_PUBLIC_KEY=\"pk-lf-213796de-adde-46a0-b03f-25369faab775\" node:*)",
+      "Bash(node scripts/test-sandbox-queries.mjs:*)",
+      "Bash(node:*)",
+      "Bash(yarn)"
+    ]
+  }
+}
