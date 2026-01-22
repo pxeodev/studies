@@ -10,3 +10,7 @@ dist/**
 # Local Netlify folder
 .netlify
 .env*.local
+
+# Claude Code settings
+.claude/
+langfuse-prompts/
