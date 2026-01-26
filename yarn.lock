@@ -5860,9 +5860,9 @@ axios@^1.5.0, axios@^1.6.2:
     proxy-from-env "^1.1.0"
 
 axios@^1.7.9:
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
-  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.3.tgz#f123e77356630a22b0163920662556944f2be1a1"
+  integrity sha512-ERT8kdX7DZjtUm7IitEyV7InTHAF42iJuMArIiDIV5YtPanJkgw4hw5Dyg9fh0mihdWNn1GKaeIWErfe56UQ1g==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
@@ -6548,7 +6548,7 @@ code-block-writer@^10.1.1:
 
 "coinrotator-utils@git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git":
   version "3.1.2"
-  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#ed79fc5102dcc6bdd1e3d7c1b10c93dc918c2935"
+  resolved "git+https://mayrsascha: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@github.com/mayrsascha/coinrotator-utils.git#e76f30d3eb9ca748b2273b57ba425a4753a6cd93"
   dependencies:
     "@ai-sdk/anthropic" "^2.0.0"
     "@ai-sdk/google-vertex" "^2.2.27"
@@ -6567,7 +6567,7 @@ code-block-writer@^10.1.1:
     date-fns "^3.6.0"
     dotenv "^16.5.0"
     exa-js "^1.8.20"
-    langfuse "^3.38.4"
+    langfuse "^3.38.6"
     lodash "^4.17.21"
     mathjs "^13.0.3"
     zod "^4.0.5"
@@ -9966,7 +9966,7 @@ langfuse@^3.37.5:
   dependencies:
     langfuse-core "^3.37.5"
 
-langfuse@^3.38.4:
+langfuse@^3.38.6:
   version "3.38.6"
   resolved "https://registry.yarnpkg.com/langfuse/-/langfuse-3.38.6.tgz#67098d7ceace2aef0a36fc0416043e1dd741c5d8"
   integrity sha512-mtwfsNGIYvObRh+NYNGlJQJDiBN+Wr3Hnr++wN25mxuOpSTdXX+JQqVCyAqGL5GD2TAXRZ7COsN42Vmp9krYmg==
