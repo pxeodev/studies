@@ -3,7 +3,14 @@
     "allow": [
       "mcp__postgres__list_schemas",
       "mcp__postgres__list_objects",
-      "mcp__postgres__get_object_details"
+      "mcp__postgres__get_object_details",
+      "Read(//Users/saschamayr/Projects/**)",
+      "mcp__notion__API-post-search",
+      "mcp__notion__API-get-block-children",
+      "mcp__bugsnag__list_errors",
+      "mcp__bugsnag__list_organizations",
+      "mcp__bugsnag__list_projects",
+      "mcp__bugsnag__search_issues"
     ]
   },
   "mcpServers": {
