@@ -127,3 +127,7 @@ The script will automatically connect to Vercel and stream logs.
 - **Route**: `/app/api/ai/route.js` - The actual API implementation
 
 **Important:** Vercel's runtime logs API only supports **streaming (live mode)**, not historical queries. The dashboard shows historical logs, but for programmatic access, use `logs:ai:watch` to stream logs in real-time.
+
+### Tasks
+
+There's a list of tasks marked on files in the `/tasks` folder here in the root folder. Whenever you're working on something, check out the tasks because they contain stored memory of ongoing work between the developers.
