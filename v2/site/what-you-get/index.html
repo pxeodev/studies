@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study 005 — What You Actually Get</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/snd-lib/snd-lib@v1.2.4/dist/browser/snd.js?kit=01"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #09090B; color: #A1A1AA;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden; width: 100vw; height: 100vh;
+  }
+  .film { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
+  .demo-area {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 60px 48px 24px; position: relative;
+  }
+  .term {
+    background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 8px;
+    width: 100%; max-width: 960px; overflow: hidden;
+    position: absolute; opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
+  }
+  .term.active { opacity: 1; pointer-events: auto; }
+  .term-bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #1E1E22; }
+  .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .term-title { font-family: 'Geist Mono', monospace; font-size: 12px; color: #27272A; margin-left: 12px; }
+  .term-body { padding: 24px 28px; font-family: 'Geist Mono', monospace; font-size: 16px; line-height: 2.2; }
+  .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
+  .term-line.show { opacity: 1; transform: translateY(0); }
+  .t-prompt { color: #22D3EE; } .t-path { color: #60A5FA; } .t-caret { color: #FACC15; }
+  .t-cmd { color: #A1A1AA; } .t-dim { color: #27272A; } .t-out { color: #52525B; }
+  .t-ok { color: #5CB87A; } .t-red { color: #C45B4F; } .t-warn { color: #D4A843; }
+  .t-tool { color: #A78BFA; } .t-comment { color: #3F3F46; font-style: italic; }
+  .title-card {
+    position: absolute; text-align: center;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  .title-card.active { opacity: 1; }
+  .title-mono { font-family: 'Geist Mono', monospace; font-size: 14px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 24px; }
+  .title-big { font-size: 56px; font-weight: 600; color: #E8E4DE; line-height: 1.2; letter-spacing: -0.03em; }
+  .title-big .sub { font-size: 28px; font-weight: 400; color: #52525B; margin-top: 16px; display: block; }
+  .title-mid { font-size: 36px; font-weight: 600; color: #E8E4DE; line-height: 1.3; letter-spacing: -0.02em; max-width: 800px; }
+  .title-quote { font-size: 44px; font-weight: 500; color: #E8E4DE; line-height: 1.3; letter-spacing: -0.02em; font-style: italic; max-width: 800px; }
+  .line-reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .line-reveal.show { opacity: 1; transform: translateY(0); }
+  .narration-area {
+    height: 160px; flex-shrink: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 16px 48px 48px; text-align: center; border-top: 1px solid #1E1E22;
+  }
+  .narration-label {
+    font-family: 'Geist Mono', monospace; font-size: 12px; color: #3F3F46;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .narration-label.show { opacity: 1; }
+  .narration-text {
+    font-size: 24px; font-weight: 600; color: #E8E4DE;
+    line-height: 1.4; max-width: 900px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .narration-text.show { opacity: 1; transform: translateY(0); }
+  .narration-text .hi { color: #D4A843; }
+  .narration-text .red { color: #C45B4F; }
+  .narration-text .green { color: #5CB87A; }
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 24px; right: 32px; font-family: 'Geist Mono', monospace; font-size: 14px; color: #1E1E22; letter-spacing: 0.06em; z-index: 100; }
+  .start-screen {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #09090B; cursor: pointer; transition: opacity 0.8s ease;
+  }
+  .start-screen.hidden { opacity: 0; pointer-events: none; }
+  .play-btn {
+    width: 100px; height: 100px; border-radius: 50%; border: 1px solid #27272A;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .start-screen:hover .play-btn { border-color: #D4A843; transform: scale(1.05); }
+  .play-btn svg { margin-left: 6px; }
+  .start-label { font-family: 'Geist Mono', monospace; font-size: 14px; color: #27272A; letter-spacing: 0.12em; }
+</style>
+</head>
+<body>
+
+<div class="start-screen" id="startScreen" onclick="startFilm()">
+  <div class="start-label" style="margin-bottom:32px">STUDY 005</div>
+  <div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#52525B"/></svg></div>
+  <div class="start-label">PRESS TO PLAY</div>
+</div>
+
+<div class="film">
+  <div class="demo-area">
+
+    <div class="title-card" id="tc0">
+      <div class="title-mono line-reveal">STUDY 005</div>
+      <div class="title-big line-reveal">What You Actually Get</div>
+    </div>
+
+    <div class="title-card" id="tc_hours">
+      <div class="title-mid line-reveal" style="color:#52525B">Hundreds of engineering hours.</div>
+      <div class="title-mid line-reveal" style="margin-top:16px">Thousands of Claude sessions.</div>
+      <div class="title-mid line-reveal" style="margin-top:16px;color:#D4A843">Not to build a chatbot.</div>
+    </div>
+
+    <div class="title-card" id="tc_components">
+      <div class="title-big line-reveal">Data components.<span class="sub">Tested. Iterable. Mix and match.</span></div>
+    </div>
+
+    <div class="title-card" id="tc_not">
+      <div class="title-mid line-reveal" style="color:#52525B">Not a dashboard.</div>
+      <div class="title-mid line-reveal" style="margin-top:8px;color:#52525B">Not a screener.</div>
+      <div class="title-mid line-reveal" style="margin-top:8px;color:#52525B">Not another wrapper.</div>
+    </div>
+
+    <div class="title-card" id="tc_bridge">
+      <div class="title-big line-reveal">We bridge the gaps<span class="sub">between raw data and what you actually need to know.</span></div>
+    </div>
+
+    <div class="title-card" id="tc_confluence">
+      <div class="title-mid line-reveal" style="color:#52525B">Standalone win rate: 35-40%</div>
+      <div class="title-mid line-reveal" style="margin-top:16px;color:#5CB87A">Combined confluence: 57-73%</div>
+      <div class="title-mid line-reveal" style="margin-top:24px;color:#3F3F46">That discovery took six months of backtesting.</div>
+    </div>
+
+    <div class="title-card" id="tc_walkforward">
+      <div class="title-mid line-reveal" style="color:#5CB87A">90% out-of-sample win rate.</div>
+      <div class="title-mid line-reveal" style="margin-top:8px;color:#52525B">Real funding costs included.</div>
+      <div class="title-mid line-reveal" style="margin-top:8px;color:#52525B">Published with the failures.</div>
+    </div>
+
+    <div class="title-card" id="tc_personalize">
+      <div class="title-big line-reveal">Your data needs.<span class="sub">Not ours.</span></div>
+    </div>
+
+    <div class="title-card" id="tc_studies">
+      <div class="title-mid line-reveal">Every study is a receipt.</div>
+      <div class="title-mid line-reveal" style="margin-top:16px;color:#52525B">Every failure is a finding.</div>
+    </div>
+
+    <div class="title-card" id="tc_close">
+      <div class="title-big line-reveal" style="color:#D4A843">shumi.ai</div>
+      <div style="font-size:24px;color:#3F3F46;margin-top:24px" class="line-reveal">The work is the product.</div>
+    </div>
+
+    <!-- Terminal: the component inventory -->
+    <div class="term" id="term_inv">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div><span class="term-title">component inventory</span></div>
+      <div class="term-body" id="tb_inv"></div>
+    </div>
+
+    <!-- Terminal: the surfaces -->
+    <div class="term" id="term_surfaces">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div><span class="term-title">surfaces — same engine, different rooms</span></div>
+      <div class="term-body" id="tb_surfaces"></div>
+    </div>
+
+    <!-- Terminal: the discovery -->
+    <div class="term" id="term_discovery">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div><span class="term-title">simulation-engine — confluence discovery</span></div>
+      <div class="term-body" id="tb_discovery"></div>
+    </div>
+
+    <!-- Terminal: the widget -->
+    <div class="term" id="term_widget">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div><span class="term-title">shumi-chat — embeddable widget</span></div>
+      <div class="term-body" id="tb_widget"></div>
+    </div>
+
+  </div>
+
+  <div class="narration-area">
+    <div class="narration-label" id="nLabel"></div>
+    <div class="narration-text" id="nText"></div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+var snd = new Snd(); snd.load(Snd.KITS.SND01);
+
+var scenes = [
+  // TITLE
+  { title:'tc0', dur:3500,
+    label:'', narr:'' },
+
+  // THE INVESTMENT
+  { title:'tc_hours', dur:5000,
+    label:'THE INVESTMENT', narr:'This is what the hours went into.' },
+
+  // WHAT IT IS
+  { title:'tc_components', dur:4000,
+    label:'', narr:'Building blocks for <span class="hi">your</span> data needs.' },
+
+  // THE INVENTORY
+  { term:'term_inv', tb:'tb_inv', dur:6500, lines:[
+    '<span class="t-ok">signals</span>      <span class="t-out">RSI Bands HTF · KAMA Bands · SuperTrend regime</span>',
+    '<span class="t-ok">sentiment</span>    <span class="t-out">narrative scoring · cross-source validation</span>',
+    '<span class="t-ok">futures</span>      <span class="t-out">funding rate · OI confluence · carry detection</span>',
+    '<span class="t-ok">widgets</span>      <span class="t-out">embeddable chat · universal renderer · signal console</span>',
+    '<span class="t-ok">modes</span>        <span class="t-out">signal seeker · deep research · delta neutral · pair trading</span>',
+    '<span class="t-warn">algos</span>       <span class="t-out">walk-forward tested · funding costs included · failures published</span>',
+  ], label:'COMPONENTS', narr:'Each one tested independently. <span class="hi">Composed for your use case.</span>' },
+
+  // WHAT IT ISN'T
+  { title:'tc_not', dur:3500,
+    label:'', narr:'Those already exist. We built something else.' },
+
+  // SURFACES
+  { term:'term_surfaces', tb:'tb_surfaces', dur:5500, lines:[
+    '<span class="t-warn">web</span>         <span class="t-out">shumi.ai/app — conversational interface</span>',
+    '<span class="t-warn">console</span>     <span class="t-out">coinrotator.app — signal-first briefing</span>',
+    '<span class="t-warn">telegram</span>    <span class="t-out">@shumi_bot — alerts, digests, /ask</span>',
+    '<span class="t-warn">widget</span>      <span class="t-out">shumi-chat npm — embed in your own site</span>',
+    '<span class="t-warn">api</span>         <span class="t-out">REST endpoints — plug into your own stack</span>',
+    '',
+    '<span class="t-dim">  same data. same engine. different rooms.</span>',
+  ], label:'SURFACES', narr:'Five ways in. <span class="hi">Same intelligence layer underneath.</span>' },
+
+  // THE BRIDGE
+  { title:'tc_bridge', dur:4500,
+    label:'', narr:'' },
+
+  // THE DISCOVERY
+  { term:'term_discovery', tb:'tb_discovery', dur:6000, lines:[
+    '<span class="t-dim">  // RSI Bands HTF + KAMA Bands confluence</span>',
+    '',
+    '<span class="t-out">  standalone RSI Bands:</span>    <span class="t-red">~37% win rate</span>',
+    '<span class="t-out">  standalone KAMA Bands:</span>   <span class="t-red">~39% win rate</span>',
+    '',
+    '<span class="t-out">  combined confluence:</span>     <span class="t-ok">57-73% win rate</span>',
+    '<span class="t-out">  ETH:</span> <span class="t-red">-88%</span> <span class="t-dim">→</span> <span class="t-ok">+73%</span>  <span class="t-comment">← same asset, add one filter</span>',
+  ], label:'DISCOVERY', narr:'One filter changed everything. <span class="hi">Six months of backtesting to find it.</span>' },
+
+  // WALK-FORWARD
+  { title:'tc_confluence', dur:4500,
+    label:'VERIFIED', narr:'' },
+
+  { title:'tc_walkforward', dur:4500,
+    label:'WALK-FORWARD', narr:'Published with the <span class="hi">methodology and the misses.</span>' },
+
+  // WIDGET
+  { term:'term_widget', tb:'tb_widget', dur:5000, lines:[
+    '<span class="t-prompt">shumi</span> <span class="t-path">~/your-site</span> <span class="t-caret">❯</span> <span class="t-cmd">npm install shumi-chat</span>',
+    '',
+    '<span class="t-out">  &lt;ShumiChat</span>',
+    '<span class="t-out">    mode="signal-seeker"</span>',
+    '<span class="t-out">    theme="warm"</span>',
+    '<span class="t-out">  /&gt;</span>',
+    '',
+    '<span class="t-dim">  // your site. your users. our intelligence layer.</span>',
+  ], label:'EMBEDDABLE', narr:'Drop it into your own product. <span class="hi">Pick the mode. Pick the skin.</span>' },
+
+  // PERSONALIZE
+  { title:'tc_personalize', dur:3500,
+    label:'', narr:'Mix the components. Match your workflow.' },
+
+  // RECEIPTS
+  { title:'tc_studies', dur:4000,
+    label:'PROOF OF WORK', narr:'The studies page is the audit trail.' },
+
+  // CLOSE
+  { title:'tc_close', dur:5000, sound:'celebration',
+    label:'', narr:'' },
+];
+
+var current = -1, running = false;
+var total = scenes.length;
+
+function clearAll() {
+  document.querySelectorAll('.term').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.title-card').forEach(function(t) { t.classList.remove('active'); });
+}
+
+function showNarr(label, html) {
+  var nl = document.getElementById('nLabel');
+  var nt = document.getElementById('nText');
+  nl.classList.remove('show'); nt.classList.remove('show');
+  setTimeout(function() {
+    nl.textContent = label || '';
+    nt.innerHTML = html || '';
+    if (label) nl.classList.add('show');
+    if (html) nt.classList.add('show');
+  }, 200);
+}
+
+function startFilm() {
+  document.getElementById('startScreen').classList.add('hidden');
+  running = true; nextScene();
+}
+
+function nextScene() {
+  if (!running) return;
+  clearAll();
+  current++;
+  if (current >= total) { running = false; showNarr('',''); return; }
+  var s = scenes[current];
+  document.getElementById('counter').textContent = String(current+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((current+1)/total*100)+'%';
+
+  try { snd.play(Snd.SOUNDS.TRANSITION_UP,{volume:0.35}); } catch(e) {}
+  if (s.sound === 'caution') try { setTimeout(function() { snd.play(Snd.SOUNDS.CAUTION); }, 300); } catch(e) {}
+  if (s.sound === 'notification') try { setTimeout(function() { snd.play(Snd.SOUNDS.NOTIFICATION); }, 300); } catch(e) {}
+  if (s.sound === 'celebration') try { setTimeout(function() { snd.play(Snd.SOUNDS.CELEBRATION); }, 300); } catch(e) {}
+
+  showNarr(s.label, s.narr);
+
+  if (s.title) {
+    var tc = document.getElementById(s.title);
+    tc.classList.add('active');
+    tc.querySelectorAll('.line-reveal').forEach(function(r,i) {
+      setTimeout(function() { r.classList.add('show'); try { snd.play(Snd.SOUNDS.TAP,{volume:0.2}); } catch(e) {} }, 300+i*500);
+    });
+  }
+
+  if (s.term) {
+    var term = document.getElementById(s.term);
+    term.classList.add('active');
+    var b = document.getElementById(s.tb); b.innerHTML = '';
+    s.lines.forEach(function(l,i) {
+      var d = document.createElement('div');
+      d.className = 'term-line';
+      d.innerHTML = l || '&nbsp;';
+      b.appendChild(d);
+      setTimeout(function() {
+        d.classList.add('show');
+        if (l) try { snd.play(Snd.SOUNDS.TYPE,{volume:0.25}); } catch(e) {}
+      }, 600+i*600);
+    });
+  }
+
+  setTimeout(nextScene, s.dur);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.code==='Space') { e.preventDefault(); if (current<0) startFilm(); }
+});
+</script>
+</body>
+</html>
