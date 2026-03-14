@@ -516,10 +516,8 @@
   </div>
   <span id="audioLabel">AMBIENT</span>
 </button>
-<audio id="bgMusic" loop>
-  <!-- Drop ambient.mp3 on Desktop and uncomment: -->
-  <!-- <source src="ambient.mp3" type="audio/mpeg"> -->
-</audio>
+<!-- YouTube player (hidden) -->
+<div id="ytPlayer" style="position:fixed;bottom:-200px;left:0;width:1px;height:1px;overflow:hidden;pointer-events:none;"></div>
 
 <script>
 const scenes = [
@@ -579,6 +577,12 @@ const total = scenes.length;
 function startFilm() {
   document.getElementById('startScreen').classList.add('hidden');
   running = true;
+  // Auto-start music
+  if (ytReady && !audioOn) {
+    player.playVideo();
+    audioOn = true;
+    document.getElementById('audioBtn').classList.add('on');
+  }
   nextScene();
 }
 
@@ -629,16 +633,40 @@ function nextScene() {
   setTimeout(nextScene, s.dur);
 }
 
-// Audio
+// YouTube IFrame API
+let ytReady = false;
+let player = null;
 let audioOn = false;
+
+const tag = document.createElement('script');
+tag.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(tag);
+
+window.onYouTubeIframeAPIReady = function() {
+  player = new YT.Player('ytPlayer', {
+    height: '1',
+    width: '1',
+    videoId: 'uxTdTaNIUxo',
+    playerVars: {
+      autoplay: 0,
+      loop: 1,
+      playlist: 'uxTdTaNIUxo',
+      controls: 0,
+    },
+    events: {
+      onReady: function() { ytReady = true; },
+    },
+  });
+};
+
 function toggleAudio() {
-  const a = document.getElementById('bgMusic');
   const btn = document.getElementById('audioBtn');
+  if (!ytReady) return;
   if (audioOn) {
-    a.pause();
+    player.pauseVideo();
     btn.classList.remove('on');
   } else {
-    a.play().catch(() => {});
+    player.playVideo();
     btn.classList.add('on');
   }
   audioOn = !audioOn;
