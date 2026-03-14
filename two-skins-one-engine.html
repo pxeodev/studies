@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-width: thin; scrollbar-color: #1E1E22 #09090B; }
   body {
     background: #09090B;
     color: #A1A1AA;
@@ -16,260 +17,103 @@
     height: 100vh;
     width: 100vw;
   }
+  .film { position: relative; width: 100vw; height: 100vh; }
 
-  /* ═══ PLAYBACK CONTAINER ═══ */
-  .film {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  /* ═══ SCENES ═══ */
   .scene {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 1.2s ease;
-    pointer-events: none;
-    padding: 0 80px;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 1.2s ease; pointer-events: none; padding: 0 80px;
   }
-  .scene.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .scene.active { opacity: 1; pointer-events: auto; }
 
-  /* ═══ START SCREEN ═══ */
   .start-screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    cursor: pointer;
-    transition: opacity 0.8s ease;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 50; cursor: pointer; transition: opacity 0.8s ease;
   }
   .start-screen.hidden { opacity: 0; pointer-events: none; }
-
   .play-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 1px solid #27272A;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 32px;
-    transition: border-color 0.3s, transform 0.3s;
+    width: 80px; height: 80px; border-radius: 50%; border: 1px solid #27272A;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px; transition: border-color 0.3s, transform 0.3s;
   }
-  .start-screen:hover .play-btn {
-    border-color: #EF4444;
-    transform: scale(1.05);
-  }
+  .start-screen:hover .play-btn { border-color: #EF4444; transform: scale(1.05); }
   .play-btn svg { margin-left: 4px; }
-
-  .start-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: #27272A;
-    letter-spacing: 0.12em;
-  }
-
-  /* ═══ TYPOGRAPHY ═══ */
-  .typed {
-    overflow: hidden;
-    white-space: nowrap;
-    width: 0;
-    border-right: 2px solid transparent;
-    display: inline-block;
-  }
-  .typed.typing {
-    border-right-color: #3F3F46;
-    animation: blink 0.7s step-end infinite;
-  }
-  .typed.done { border-right-color: transparent; }
-
-  @keyframes blink { 50% { border-color: transparent; } }
+  .start-label { font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A; letter-spacing: 0.12em; }
 
   .line-reveal {
-    opacity: 0;
-    transform: translateY(8px);
+    opacity: 0; transform: translateY(8px);
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .line-reveal.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .line-reveal.show { opacity: 1; transform: translateY(0); }
 
-  .scene-text {
-    font-size: 22px;
-    color: #71717A;
-    line-height: 1.7;
-    max-width: 640px;
-    text-align: center;
-  }
-  .scene-text em {
-    color: #E8E4DE;
-    font-style: normal;
-    font-weight: 500;
-  }
+  .scene-text { font-size: 20px; color: #71717A; line-height: 1.8; max-width: 640px; text-align: center; }
+  .scene-text em { color: #E8E4DE; font-style: normal; font-weight: 500; }
+  .scene-text .red { color: #EF4444; }
+  .scene-text .green { color: #22C55E; }
+  .scene-text .amber { color: #F59E0B; }
+  .scene-text .warm { color: #E5484D; }
+  .scene-text .dim { color: #3F3F46; }
 
   .big-text {
-    font-size: 42px;
-    font-weight: 600;
-    color: #E8E4DE;
-    line-height: 1.2;
-    letter-spacing: -0.03em;
-    text-align: center;
-    max-width: 700px;
+    font-size: 42px; font-weight: 600; color: #E8E4DE; line-height: 1.2;
+    letter-spacing: -0.03em; text-align: center; max-width: 700px;
   }
+  .big-text .sub { font-size: 20px; font-weight: 400; color: #52525B; margin-top: 16px; display: block; }
 
   .quote-text {
-    font-size: 32px;
-    font-weight: 500;
-    color: #E8E4DE;
-    line-height: 1.4;
-    letter-spacing: -0.02em;
-    text-align: center;
-    max-width: 600px;
-    font-style: italic;
+    font-size: 28px; font-weight: 500; color: #E8E4DE; line-height: 1.4;
+    letter-spacing: -0.02em; text-align: center; max-width: 560px; font-style: italic;
   }
 
-  .mono-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: #27272A;
-    letter-spacing: 0.12em;
-    margin-bottom: 24px;
-  }
+  .mono-label { font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 24px; }
+  .time-label { font-family: 'Geist Mono', monospace; font-size: 11px; color: #3F3F46; letter-spacing: 0.06em; margin-bottom: 32px; }
 
-  .time-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-    color: #3F3F46;
-    letter-spacing: 0.06em;
-    margin-bottom: 32px;
-  }
-
-  /* ═══ TERMINAL ═══ */
+  /* Terminal */
   .term {
-    background: #0C0C0E;
-    border: 1px solid #1E1E22;
-    border-radius: 4px;
-    width: 100%;
-    max-width: 640px;
-    margin-top: 32px;
-    overflow: hidden;
+    background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 4px;
+    width: 100%; max-width: 640px; margin-top: 32px; overflow: hidden;
   }
-  .term-bar {
-    display: flex;
-    gap: 6px;
-    padding: 10px 14px;
-    border-bottom: 1px solid #1E1E22;
-  }
+  .term-bar { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid #1E1E22; }
   .term-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .term-body {
-    padding: 16px 20px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 12px;
-    line-height: 2.2;
-    min-height: 200px;
-  }
-  .term-line {
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.3s, transform 0.3s;
-  }
+  .term-body { padding: 16px 20px; font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 2.2; min-height: 80px; }
+  .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
   .term-line.show { opacity: 1; transform: translateY(0); }
-  .t-prompt { color: #3F3F46; }
-  .t-cmd { color: #A1A1AA; }
-  .t-dim { color: #27272A; }
-  .t-out { color: #52525B; }
-  .t-ok { color: #22C55E; }
-  .t-red { color: #EF4444; }
-  .t-warn { color: #F59E0B; }
+  .t-prompt { color: #3F3F46; } .t-cmd { color: #A1A1AA; } .t-dim { color: #27272A; }
+  .t-out { color: #52525B; } .t-ok { color: #22C55E; } .t-red { color: #EF4444; } .t-warn { color: #F59E0B; }
 
-  /* ═══ SWATCH COMPARISON ═══ */
-  .swatches {
-    display: flex;
-    gap: 2px;
-    max-width: 640px;
-    width: 100%;
-    margin-top: 32px;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .swatch-col {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .swatch-col.warm { background: #0A0A0B; }
-  .swatch-col.cold { background: #0C0C0E; }
-  .sw-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-  .sw-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-  }
-  .sw-chip {
-    width: 16px; height: 16px; border-radius: 2px; flex-shrink: 0;
-  }
+  /* Swatches */
+  .swatches { display: flex; gap: 2px; max-width: 640px; width: 100%; margin-top: 32px; border-radius: 4px; overflow: hidden; }
+  .swatch-col { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .swatch-col.warm { background: #0A0A0B; } .swatch-col.cold { background: #0C0C0E; }
+  .sw-label { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .sw-row { display: flex; align-items: center; gap: 8px; font-family: 'Geist Mono', monospace; font-size: 11px; }
+  .sw-chip { width: 16px; height: 16px; border-radius: 2px; flex-shrink: 0; }
 
-  /* ═══ PROGRESS ═══ */
-  .progress-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    background: #EF4444;
-    z-index: 100;
-    transition: width 0.3s linear;
-  }
+  /* Signal demo */
+  .signal-demo { width: 100%; max-width: 640px; margin-top: 24px; border: 1px solid #1E1E22; border-radius: 4px; overflow: hidden; background: #0C0C0E; }
+  .signal-row { display: flex; align-items: center; padding: 10px 16px; gap: 12px; border-bottom: 1px solid #141416; font-family: 'Geist Mono', monospace; font-size: 12px; }
+  .sr-time { color: #3F3F46; font-size: 10px; width: 36px; flex-shrink: 0; }
+  .sr-ticker { color: #A1A1AA; font-weight: 600; width: 42px; flex-shrink: 0; }
+  .sr-detail { color: #52525B; font-size: 10px; }
+  .sr-change { margin-left: auto; font-size: 10px; }
 
-  /* ═══ SCENE COUNTER ═══ */
-  .counter {
-    position: fixed;
-    bottom: 16px;
-    right: 20px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: #1E1E22;
-    letter-spacing: 0.06em;
-    z-index: 100;
-  }
+  /* Data card demo */
+  .data-card { width: 100%; max-width: 480px; margin-top: 24px; border-radius: 10px; overflow: hidden; background: #111113; border: 1px solid rgba(255,255,255,0.06); }
+  .dc-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; }
+  .dc-price { font-size: 22px; font-weight: 600; color: #E8E4DE; letter-spacing: -0.02em; }
+  .dc-pct { font-family: 'Geist Mono', monospace; font-size: 12px; color: #30A46C; margin-left: 10px; }
+  .dc-label { font-family: 'Geist Mono', monospace; font-size: 11px; color: #6B6B6F; }
+  .dc-divider { height: 1px; background: rgba(255,255,255,0.04); }
 
-  /* ═══ AUDIO ═══ */
+  /* Progress + UI */
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 2px; background: #EF4444; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 16px; right: 20px; font-family: 'Geist Mono', monospace; font-size: 10px; color: #1E1E22; letter-spacing: 0.06em; z-index: 100; }
   .audio-btn {
-    position: fixed;
-    bottom: 14px;
-    left: 20px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: #27272A;
-    letter-spacing: 0.06em;
-    z-index: 100;
-    cursor: pointer;
-    border: none;
-    background: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.3s;
+    position: fixed; bottom: 14px; left: 20px;
+    font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A;
+    letter-spacing: 0.06em; z-index: 100; cursor: pointer; border: none; background: none;
+    display: flex; align-items: center; gap: 6px; transition: color 0.3s;
   }
   .audio-btn:hover { color: #52525B; }
   .eq-bars { display: flex; gap: 2px; align-items: flex-end; height: 10px; }
@@ -279,228 +123,314 @@
   .audio-btn.on .eq-bar:nth-child(2) { animation: eq 0.5s infinite alternate 0.1s; }
   .audio-btn.on .eq-bar:nth-child(3) { animation: eq 0.8s infinite alternate 0.2s; }
   @keyframes eq { from { height: 2px; } to { height: 10px; } }
-
-  /* ═══ SCREENSHOT SLOT ═══ */
-  .shot-slot {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 32px;
-    border: 1px solid #1E1E22;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #0C0C0E;
-  }
-  .shot-slot .inner {
-    padding: 48px;
-    text-align: center;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-    color: #1E1E22;
-  }
-  .shot-slot img { width: 100%; display: block; }
-  .shot-slot .cap {
-    padding: 8px 14px;
-    border-top: 1px solid #1E1E22;
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: #27272A;
-  }
 </style>
 </head>
 <body>
-
 <div class="film" id="film">
 
-  <!-- START SCREEN -->
+  <!-- START -->
   <div class="start-screen" id="startScreen" onclick="startFilm()">
     <div class="mono-label">STUDY 001</div>
-    <div class="play-btn">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M8 5v14l11-7L8 5z" fill="#52525B"/>
-      </svg>
-    </div>
+    <div class="play-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#52525B"/></svg></div>
     <div class="start-label">PRESS TO PLAY</div>
   </div>
 
-  <!-- SCENE: TITLE -->
+  <!-- 0: TITLE -->
   <div class="scene" id="s0">
     <div class="mono-label line-reveal">STUDY 001</div>
-    <div class="big-text line-reveal">Two Skins, One Engine</div>
+    <div class="big-text line-reveal">Two Skins, One Engine<span class="sub">A design session from screenshot to running code.</span></div>
   </div>
 
-  <!-- SCENE: DATE -->
+  <!-- 1: DATE -->
   <div class="scene" id="s1">
-    <div class="time-label line-reveal">2026-03-14 · 18:29</div>
-    <div class="scene-text line-reveal">A screenshot lands in the conversation.</div>
-    <div class="scene-text line-reveal" style="margin-top:16px">Four words.</div>
+    <div class="time-label line-reveal">2026-03-14 · 18:29 UTC</div>
+    <div class="scene-text line-reveal">A screenshot of the Shumi chat interface lands in the conversation.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">The request is four words.</div>
   </div>
 
-  <!-- SCENE: NEEDS WORK -->
+  <!-- 2: NEEDS WORK -->
   <div class="scene" id="s2">
     <div class="big-text line-reveal">This needs some work.</div>
   </div>
 
-  <!-- SCENE: PROBLEMS -->
+  <!-- 3: DIAGNOSIS -->
   <div class="scene" id="s3">
-    <div class="scene-text line-reveal">Twelve icons in a sidebar fighting for attention.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">Market data buried in paragraphs.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">A promotional banner eating prime real estate.</div>
-    <div class="scene-text line-reveal" style="margin-top:24px; color:#3F3F46">The landing page had a point of view.<br>The chat interface was generic.</div>
+    <div class="scene-text line-reveal">Twelve sidebar icons competing for attention.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">A <em>$SHUMI now trading on Virtuals</em> banner eating prime real estate.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">BTC price, band positions, breadth data — all buried in paragraphs.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">The landing page had a point of view. The chat was generic.</span></div>
   </div>
 
-  <!-- SCENE: PAPER -->
+  <!-- 4: OPEN PAPER -->
   <div class="scene" id="s4">
-    <div class="time-label line-reveal">18:35</div>
-    <div class="scene-text line-reveal">We opened Paper.</div>
+    <div class="time-label line-reveal">18:32</div>
+    <div class="scene-text line-reveal">We opened Paper. An 18-artboard design file with landing pages, progressive disclosure studies, and a screener IDE concept.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">None of them were the chat interface.</div>
+  </div>
+
+  <!-- 5: DESIGN BRIEF -->
+  <div class="scene" id="s5">
+    <div class="scene-text line-reveal">Before writing any HTML, a design brief:</div>
     <div class="term line-reveal">
-      <div class="term-bar">
-        <div class="term-dot" style="background:#EF4444"></div>
-        <div class="term-dot" style="background:#F59E0B"></div>
-        <div class="term-dot" style="background:#22C55E"></div>
-      </div>
-      <div class="term-body" id="term1"></div>
+      <div class="term-bar"><div class="term-dot" style="background:#EF4444"></div><div class="term-dot" style="background:#F59E0B"></div><div class="term-dot" style="background:#22C55E"></div></div>
+      <div class="term-body" id="t_brief"></div>
     </div>
   </div>
 
-  <!-- SCENE: SCANNABLE -->
-  <div class="scene" id="s5">
-    <div class="scene-text line-reveal">Market data should be <em>scannable</em>, not readable.</div>
-    <div class="scene-text line-reveal" style="margin-top:16px">Numbers first. Context second.</div>
-  </div>
-
-  <!-- SCENE: PIVOT -->
+  <!-- 6: BUILD ON PAPER -->
   <div class="scene" id="s6">
-    <div class="time-label line-reveal">18:50</div>
-    <div class="scene-text line-reveal">Then we looked at the console.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">coinrotator.app was serving <em>raw JSON</em>.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">The concept was a screener table.</div>
+    <div class="time-label line-reveal">18:35</div>
+    <div class="scene-text line-reveal">Built the sidebar first. <em>Three icons, not twelve.</em></div>
+    <div class="scene-text line-reveal" style="margin-top:8px">New chat. Search. History.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Everything else is noise.</div>
   </div>
 
-  <!-- SCENE: STICKY -->
+  <!-- 7: DATA CARDS -->
   <div class="scene" id="s7">
-    <div class="quote-text line-reveal">People don't really care about screener table views. We have almost no sticky users.</div>
+    <div class="scene-text line-reveal">Then the response. Not a wall of text. <em>Structured data panels.</em></div>
+    <div class="data-card line-reveal">
+      <div class="dc-row">
+        <div><span class="dc-price">$70,675</span><span class="dc-pct">+2.4%</span></div>
+        <div class="dc-label">BTC · holding near highs</div>
+      </div>
+      <div class="dc-divider"></div>
+      <div class="dc-row">
+        <span class="dc-label">Bands</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="dc-label" style="color:#4A4A4E">$67.7k</span>
+          <div style="width:100px;height:4px;background:#1C1C1F;border-radius:2px"><div style="width:80%;height:4px;background:rgba(48,164,108,0.4);border-radius:2px"></div></div>
+          <span class="dc-label" style="color:#4A4A4E">$71.7k</span>
+        </div>
+        <span class="dc-label">upper half</span>
+      </div>
+    </div>
   </div>
 
-  <!-- SCENE: KILLED -->
+  <!-- 8: SCANNABLE -->
   <div class="scene" id="s8">
-    <div class="scene-text line-reveal">Screener tables are <em>commoditized</em>.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">CoinGecko. CoinMarketCap. TradingView.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">They all do it better.</div>
-    <div class="scene-text line-reveal" style="margin-top:32px; color:#E8E4DE; font-weight:500">So we killed the table.</div>
+    <div class="scene-text line-reveal">Market data should be <em>scannable</em>, not readable.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Numbers first. Context second.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px"><span class="dim">That's how traders actually process information.</span></div>
   </div>
 
-  <!-- SCENE: SIGNAL FIRST -->
+  <!-- 9: SYNTHESIS -->
   <div class="scene" id="s9">
-    <div class="big-text line-reveal">Signal-first.</div>
-    <div class="scene-text line-reveal" style="margin-top:24px">Not "here's everything."</div>
-    <div class="scene-text line-reveal" style="margin-top:8px"><em>What changed since I last looked?</em></div>
+    <div class="scene-text line-reveal">Each synthesis dimension gets a <em>color-coded indicator bar</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px"><span class="warm">Red</span> = bearish signal. <span class="amber">Amber</span> = caution. <span class="green">Green</span> = constructive.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">The headline is scannable at a glance. The body text is there if you want depth.</div>
   </div>
 
-  <!-- SCENE: METALLIC -->
+  <!-- 10: CONSOLE -->
   <div class="scene" id="s10">
-    <div class="time-label line-reveal">19:10</div>
-    <div class="scene-text line-reveal">The first console was soft. Rounded cards. Generous padding.</div>
-    <div class="scene-text line-reveal" style="margin-top:12px">It looked like a consumer app.</div>
+    <div class="time-label line-reveal">18:50</div>
+    <div class="scene-text line-reveal">Chat redesign done. Now the console.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">coinrotator.app was serving <em>raw JSON</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">No UI. No console. Just a data dump.</div>
   </div>
 
-  <!-- SCENE: HARD QUOTE -->
+  <!-- 11: EXISTING CONCEPT -->
   <div class="scene" id="s11">
+    <div class="scene-text line-reveal">An existing concept on Paper: <em>Screener IDE</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Asset table with confidence dots. Regime badges. Terminal panel.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Tabs like <span class="dim">screener.live</span>, <span class="dim">trend-flips.log</span>, <span class="dim">shumi.chat</span>.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px">But then the question:</div>
+  </div>
+
+  <!-- 12: STICKY -->
+  <div class="scene" id="s12">
+    <div class="quote-text line-reveal">I feel like people don't really care about screener table views. We have almost no sticky users.</div>
+  </div>
+
+  <!-- 13: COMMODITIZED -->
+  <div class="scene" id="s13">
+    <div class="scene-text line-reveal">Screener tables are <em>completely commoditized</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">CoinGecko. CoinMarketCap. TradingView.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">They all do it with more data, more assets, more features.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">There's no reason to come back to yours for that.</span></div>
+  </div>
+
+  <!-- 14: INTELLIGENCE -->
+  <div class="scene" id="s14">
+    <div class="scene-text line-reveal">What makes this different is the <em>intelligence layer</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Confluence signals where RSI Bands HTF + KAMA Bands align.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Standalone win rate: <span class="dim">35-40%</span>. Combined: <em>57-73%</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">A table can't surface that.</div>
+  </div>
+
+  <!-- 15: KILLED -->
+  <div class="scene" id="s15">
+    <div class="big-text line-reveal">So we killed the table.</div>
+  </div>
+
+  <!-- 16: SIGNAL FIRST -->
+  <div class="scene" id="s16">
+    <div class="scene-text line-reveal">Signal-first briefing.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Not "here's everything."</div>
+    <div class="scene-text line-reveal" style="margin-top:16px; font-size:24px"><em>What changed since I last looked?</em></div>
+  </div>
+
+  <!-- 17: SOFT V1 -->
+  <div class="scene" id="s17">
+    <div class="time-label line-reveal">19:00</div>
+    <div class="scene-text line-reveal">The first signal console. Soft. Card-based. Rounded corners.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Situation bar at top: regime, BTC dominance, fear/greed, breadth.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Signal cards below. Shumi chat panel on the right.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">It looked like a consumer app.</span></div>
+  </div>
+
+  <!-- 18: METALLIC -->
+  <div class="scene" id="s18">
     <div class="quote-text line-reveal">Make it metallic hard and yearning for excellence.</div>
   </div>
 
-  <!-- SCENE: TRANSFORM -->
-  <div class="scene" id="s12">
+  <!-- 19: TRANSFORM TERMINAL -->
+  <div class="scene" id="s19">
     <div class="term line-reveal">
-      <div class="term-bar">
-        <div class="term-dot" style="background:#EF4444"></div>
-        <div class="term-dot" style="background:#F59E0B"></div>
-        <div class="term-dot" style="background:#22C55E"></div>
-      </div>
-      <div class="term-body" id="term2"></div>
+      <div class="term-bar"><div class="term-dot" style="background:#EF4444"></div><div class="term-dot" style="background:#F59E0B"></div><div class="term-dot" style="background:#22C55E"></div></div>
+      <div class="term-body" id="t_transform"></div>
     </div>
   </div>
 
-  <!-- SCENE: 7 ROWS -->
-  <div class="scene" id="s13">
-    <div class="scene-text line-reveal">Seven signal rows.</div>
-    <div class="scene-text line-reveal" style="margin-top:8px">Color-coded left borders.</div>
-    <div class="scene-text line-reveal" style="margin-top:8px"><em>"ALL CAUGHT UP"</em> at the bottom.</div>
-    <div class="scene-text line-reveal" style="margin-top:24px; color:#3F3F46">That's the whole product.</div>
+  <!-- 20: LEFT BORDER -->
+  <div class="scene" id="s20">
+    <div class="scene-text line-reveal">A 2px colored left border does <em>all the heavy lifting</em>.</div>
+    <div class="signal-demo line-reveal">
+      <div class="signal-row" style="border-left:2px solid #EF4444"><span class="sr-time">13:45</span><span class="sr-ticker">ETH</span><span class="t-red" style="font-size:11px">confluence triggered</span><span class="sr-detail">RSI Bands HTF + KAMA</span><span class="sr-change" style="color:#22C55E">+1.1%</span></div>
+      <div class="signal-row" style="border-left:2px solid #22C55E"><span class="sr-time">14:32</span><span class="sr-ticker">LINK</span><span class="t-ok" style="font-size:11px">flipped UP</span><span class="sr-detail">was DOWN 12d</span><span class="sr-change" style="color:#22C55E">+4.2%</span></div>
+      <div class="signal-row" style="border-left:2px solid #F59E0B"><span class="sr-time">14:30</span><span class="sr-ticker">ARB</span><span class="t-warn" style="font-size:11px">streak 5d DOWN</span><span class="sr-detail">weekly support</span><span class="sr-change" style="color:#22C55E">+1.9%</span></div>
+      <div class="signal-row" style="border-left:2px solid #27272A;border-bottom:none"><span class="sr-time">11:31</span><span class="sr-ticker" style="color:#52525B">MKT</span><span class="sr-detail">BTC.D rising +0.3% last 4h</span></div>
+    </div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">You learn it in ten seconds.</span></div>
   </div>
 
-  <!-- SCENE: TWO SKINS -->
-  <div class="scene" id="s14">
+  <!-- 21: CAUGHT UP -->
+  <div class="scene" id="s21">
+    <div class="scene-text line-reveal" style="font-family:'Geist Mono',monospace;font-size:11px;color:#27272A;letter-spacing:0.12em">ALL CAUGHT UP</div>
+    <div class="scene-text line-reveal" style="margin-top:32px">The most important UX moment.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">It says: <em>you've seen everything that matters. You can leave.</em></div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Paradoxically, this <em>increases</em> return visits.</div>
+  </div>
+
+  <!-- 22: TWO SURFACES -->
+  <div class="scene" id="s22">
     <div class="time-label line-reveal">19:20</div>
-    <div class="scene-text line-reveal">Should both surfaces look identical?</div>
+    <div class="scene-text line-reveal">Two artboards on the canvas. Two completely different designs.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Same market data. Same intelligence layer.</div>
+    <div class="scene-text line-reveal" style="margin-top:16px">Should they look identical?</div>
   </div>
 
-  <!-- SCENE: TREASURE -->
-  <div class="scene" id="s15">
+  <!-- 23: TREASURE -->
+  <div class="scene" id="s23">
     <div class="quote-text line-reveal">I don't want identical. I want people to feel like they're wandering through a treasure hunt of useful environments.</div>
   </div>
 
-  <!-- SCENE: SWATCHES -->
-  <div class="scene" id="s16">
+  <!-- 24: ROOMS -->
+  <div class="scene" id="s24">
+    <div class="scene-text line-reveal">Each surface is a <em>room</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Shumi is the warm conversational guide.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">CoinRotator is the cold precision instrument.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">Same data. Same engine. Different costume.</span></div>
+  </div>
+
+  <!-- 25: SWATCHES -->
+  <div class="scene" id="s25">
     <div class="swatches line-reveal">
-      <div class="swatch-col warm" style="border-right: 1px solid #1E1E22">
-        <div class="sw-label" style="color:#6B6B6F">SHUMI · THE WARM ROOM</div>
-        <div class="sw-row"><div class="sw-chip" style="background:#E8E4DE"></div><span style="color:#E8E4DE">#E8E4DE</span></div>
-        <div class="sw-row"><div class="sw-chip" style="background:#E5484D"></div><span style="color:#E5484D">#E5484D</span></div>
-        <div class="sw-row"><div class="sw-chip" style="background:#30A46C"></div><span style="color:#30A46C">#30A46C</span></div>
-        <div class="sw-row"><span style="color:#52525B">10px · sans · generous</span></div>
+      <div class="swatch-col warm" style="border-right:1px solid #1E1E22">
+        <div class="sw-label" style="color:#6B6B6F">SHUMI</div>
+        <div class="sw-row"><div class="sw-chip" style="background:#E8E4DE"></div><span style="color:#E8E4DE">#E8E4DE</span><span style="color:#3F3F46">warm</span></div>
+        <div class="sw-row"><div class="sw-chip" style="background:#E5484D"></div><span style="color:#E5484D">#E5484D</span><span style="color:#3F3F46">crimson</span></div>
+        <div class="sw-row"><div class="sw-chip" style="background:#30A46C"></div><span style="color:#30A46C">#30A46C</span><span style="color:#3F3F46">muted</span></div>
+        <div class="sw-row"><span style="color:#3F3F46">10px · sans · generous</span></div>
       </div>
       <div class="swatch-col cold">
-        <div class="sw-label" style="color:#52525B">COINROTATOR · THE COLD COCKPIT</div>
-        <div class="sw-row"><div class="sw-chip" style="background:#A1A1AA"></div><span style="color:#A1A1AA">#A1A1AA</span></div>
-        <div class="sw-row"><div class="sw-chip" style="background:#EF4444"></div><span style="color:#EF4444">#EF4444</span></div>
-        <div class="sw-row"><div class="sw-chip" style="background:#22C55E"></div><span style="color:#22C55E">#22C55E</span></div>
-        <div class="sw-row"><span style="color:#52525B">2px · mono · tight</span></div>
+        <div class="sw-label" style="color:#52525B">COINROTATOR</div>
+        <div class="sw-row"><div class="sw-chip" style="background:#A1A1AA"></div><span style="color:#A1A1AA">#A1A1AA</span><span style="color:#3F3F46">zinc</span></div>
+        <div class="sw-row"><div class="sw-chip" style="background:#EF4444"></div><span style="color:#EF4444">#EF4444</span><span style="color:#3F3F46">sharp</span></div>
+        <div class="sw-row"><div class="sw-chip" style="background:#22C55E"></div><span style="color:#22C55E">#22C55E</span><span style="color:#3F3F46">neon</span></div>
+        <div class="sw-row"><span style="color:#3F3F46">2px · mono · tight</span></div>
       </div>
     </div>
-    <div class="scene-text line-reveal" style="margin-top:32px">Same data. Different costume.</div>
   </div>
 
-  <!-- SCENE: BUILD -->
-  <div class="scene" id="s17">
-    <div class="time-label line-reveal">19:45 · CODE</div>
+  <!-- 26: CONSTITUTION -->
+  <div class="scene" id="s26">
+    <div class="time-label line-reveal">19:30</div>
+    <div class="scene-text line-reveal">We wrote a <em>Design Constitution</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Not guidelines. Laws.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Saved to persistent memory. Every future session loads it.</div>
+  </div>
+
+  <!-- 27: SHARED DNA -->
+  <div class="scene" id="s27">
+    <div class="scene-text line-reveal">Shared DNA across both surfaces:</div>
     <div class="term line-reveal">
-      <div class="term-bar">
-        <div class="term-dot" style="background:#EF4444"></div>
-        <div class="term-dot" style="background:#F59E0B"></div>
-        <div class="term-dot" style="background:#22C55E"></div>
-      </div>
-      <div class="term-body" id="term3"></div>
+      <div class="term-bar"><div class="term-dot" style="background:#EF4444"></div><div class="term-dot" style="background:#F59E0B"></div><div class="term-dot" style="background:#22C55E"></div></div>
+      <div class="term-body" id="t_dna"></div>
     </div>
   </div>
 
-  <!-- SCENE: LESSON 1 -->
-  <div class="scene" id="s18">
+  <!-- 28: PLEASANT -->
+  <div class="scene" id="s28">
+    <div class="scene-text line-reveal">One more constraint. Not trying to impress.</div>
+    <div class="quote-text line-reveal" style="margin-top:24px">Just something low intensity but pleasant to stay a while.</div>
+  </div>
+
+  <!-- 29: BUILD TERMINAL -->
+  <div class="scene" id="s29">
+    <div class="time-label line-reveal">19:45 · FROM DESIGN TO CODE</div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#EF4444"></div><div class="term-dot" style="background:#F59E0B"></div><div class="term-dot" style="background:#22C55E"></div></div>
+      <div class="term-body" id="t_build"></div>
+    </div>
+  </div>
+
+  <!-- 30: BOTH RUNNING -->
+  <div class="scene" id="s30">
+    <div class="scene-text line-reveal">Two routes. Same Next.js app. Two completely different rooms.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px"><span style="font-family:'Geist Mono',monospace;font-size:14px;color:#52525B">/console</span> — the cold cockpit</div>
+    <div class="scene-text line-reveal" style="margin-top:4px"><span style="font-family:'Geist Mono',monospace;font-size:14px;color:#52525B">/chat</span> — the warm room</div>
+    <div class="scene-text line-reveal" style="margin-top:24px">CSS custom properties drive the theming.<br><span class="dim">--cr-console-* for the cockpit. --cr-shumi-* for the warm room.</span></div>
+  </div>
+
+  <!-- 31: CRYPTOPANIC -->
+  <div class="scene" id="s31">
+    <div class="time-label line-reveal">20:20</div>
+    <div class="scene-text line-reveal">Someone pulls up CryptoPanic for comparison.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Every headline, every language, every coin tag, promo popups, price tickers, trending carousels, signup CTAs — <em>all competing simultaneously</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">The design constitution makes that structurally impossible.</span></div>
+  </div>
+
+  <!-- 32: LESSON 1 -->
+  <div class="scene" id="s32">
     <div class="scene-text line-reveal"><em>Tables are commoditized.</em></div>
-    <div class="scene-text line-reveal" style="margin-top:12px">The edge is in the intelligence layer.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">The edge is in the intelligence layer. Confluence signals, regime detection, synthesis across sources.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px"><span class="dim">A table can't surface that.</span></div>
   </div>
 
-  <!-- SCENE: LESSON 2 -->
-  <div class="scene" id="s19">
+  <!-- 33: LESSON 2 -->
+  <div class="scene" id="s33">
     <div class="scene-text line-reveal"><em>"All caught up" is a feature.</em></div>
-    <div class="scene-text line-reveal" style="margin-top:12px">Respecting the user's time increases return visits.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Respecting the user's time increases return visits.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px"><span class="dim">Twitter's infinite scroll keeps you trapped. This says: come back when something happens.</span></div>
   </div>
 
-  <!-- SCENE: LESSON 3 -->
-  <div class="scene" id="s20">
-    <div class="scene-text line-reveal"><em>Design constitutions prevent noise.</em></div>
-    <div class="scene-text line-reveal" style="margin-top:12px">When the law says "signal-first," you can't build a wall of everything.</div>
+  <!-- 34: LESSON 3 -->
+  <div class="scene" id="s34">
+    <div class="scene-text line-reveal"><em>Surfaces are rooms, not clones.</em></div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Shared data shapes with themed skins create a constellation.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Each room has a reason to visit and a feeling you get when you're there.</div>
   </div>
 
-  <!-- SCENE: LOW INTENSITY -->
-  <div class="scene" id="s21">
+  <!-- 35: FINAL -->
+  <div class="scene" id="s35">
     <div class="big-text line-reveal">Low intensity.<br>Pleasant to stay a while.</div>
   </div>
 
-  <!-- SCENE: END -->
-  <div class="scene" id="s22">
+  <!-- 36: END -->
+  <div class="scene" id="s36">
     <div class="mono-label line-reveal">END OF STUDY</div>
-    <div class="scene-text line-reveal" style="color:#27272A; margin-top:12px">shumi.ai · coinrotator.app</div>
-    <div class="scene-text line-reveal" style="color:#1E1E22; margin-top:4px; font-size:13px">2026-03-14</div>
+    <div class="scene-text line-reveal" style="color:#27272A;margin-top:16px;font-size:16px">shumi.ai · coinrotator.app</div>
+    <div class="scene-text line-reveal" style="color:#1E1E22;margin-top:4px;font-size:12px;font-family:'Geist Mono',monospace">Session duration: ~2 hours · 2026-03-14</div>
   </div>
 
 </div>
@@ -509,161 +439,120 @@
 <div class="progress-bar" id="progressBar"></div>
 <div class="counter" id="counter"></div>
 <button class="audio-btn" id="audioBtn" onclick="toggleAudio()">
-  <div class="eq-bars">
-    <div class="eq-bar" style="height:3px"></div>
-    <div class="eq-bar" style="height:5px"></div>
-    <div class="eq-bar" style="height:4px"></div>
-  </div>
-  <span id="audioLabel">AMBIENT</span>
+  <div class="eq-bars"><div class="eq-bar" style="height:3px"></div><div class="eq-bar" style="height:5px"></div><div class="eq-bar" style="height:4px"></div></div>
+  <span>AMBIENT</span>
 </button>
-<!-- YouTube player (off-screen iframe) -->
-<iframe
-  id="ytFrame"
-  style="position:fixed;bottom:0;left:0;width:300px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;"
-  src=""
-  allow="autoplay; encrypted-media"
-  frameborder="0"
-></iframe>
+<iframe id="ytFrame" style="position:fixed;bottom:0;left:0;width:300px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;" src="" allow="autoplay; encrypted-media" frameborder="0"></iframe>
 
 <script>
+const ytSrc = 'https://www.youtube.com/embed/uxTdTaNIUxo?autoplay=1&loop=1&playlist=uxTdTaNIUxo&controls=0&showinfo=0&rel=0&modestbranding=1';
+
 const scenes = [
-  { id: 's0',  dur: 4000 },
-  { id: 's1',  dur: 5000 },
-  { id: 's2',  dur: 3500 },
-  { id: 's3',  dur: 7000 },
-  { id: 's4',  dur: 8000, term: 'term1', lines: [
-    '<span class="t-prompt">paper</span> <span class="t-cmd">create_artboard</span> <span class="t-dim">"Shumi / Chat Redesign" 1440x900</span>',
-    '<span class="t-prompt">paper</span> <span class="t-cmd">write_html</span> <span class="t-dim">→ Sidebar (56px, 3 icons)</span>',
-    '<span class="t-prompt">paper</span> <span class="t-cmd">write_html</span> <span class="t-dim">→ BTC Price Card</span>',
-    '<span class="t-prompt">paper</span> <span class="t-cmd">write_html</span> <span class="t-dim">→ Breadth Card</span>',
-    '<span class="t-prompt">paper</span> <span class="t-cmd">write_html</span> <span class="t-dim">→ Synthesis (3 items)</span>',
-    '<span class="t-prompt">paper</span> <span class="t-cmd">get_screenshot</span>',
-    '<span class="t-ok">✓ Artboard rendered</span>',
+  { id:'s0', dur:4500 },
+  { id:'s1', dur:5000 },
+  { id:'s2', dur:3500 },
+  { id:'s3', dur:7500 },
+  { id:'s4', dur:5500 },
+  { id:'s5', dur:7000, term:'t_brief', lines:[
+    '<span class="t-dim">// design brief</span>',
+    '<span class="t-cmd">palette:</span> <span class="t-out">#0A0A0B bg · #111113 cards · #E8E4DE text · #E5484D accent</span>',
+    '<span class="t-cmd">type:</span> <span class="t-out">Geist sans + Geist Mono for data</span>',
+    '<span class="t-cmd">spacing:</span> <span class="t-out">16px base · 24px groups · 40px sections</span>',
+    '<span class="t-cmd">direction:</span> <span class="t-out">Terminal-grade data clarity meets editorial restraint</span>',
   ]},
-  { id: 's5',  dur: 4500 },
-  { id: 's6',  dur: 5500 },
-  { id: 's7',  dur: 5000 },
-  { id: 's8',  dur: 6000 },
-  { id: 's9',  dur: 5000 },
-  { id: 's10', dur: 5000 },
-  { id: 's11', dur: 4000 },
-  { id: 's12', dur: 8000, term: 'term2', lines: [
+  { id:'s6', dur:5000 },
+  { id:'s7', dur:6000 },
+  { id:'s8', dur:5000 },
+  { id:'s9', dur:5500 },
+  { id:'s10', dur:5000 },
+  { id:'s11', dur:6000 },
+  { id:'s12', dur:5000 },
+  { id:'s13', dur:6000 },
+  { id:'s14', dur:6500 },
+  { id:'s15', dur:3500 },
+  { id:'s16', dur:5000 },
+  { id:'s17', dur:6000 },
+  { id:'s18', dur:4000 },
+  { id:'s19', dur:8000, term:'t_transform', lines:[
     '<span class="t-dim">// stripping it down</span>',
     '<span class="t-out">border-radius: 10px</span> <span class="t-dim">→</span> <span class="t-cmd">2px</span>',
     '<span class="t-out">padding: 16px</span> <span class="t-dim">→</span> <span class="t-cmd">10px</span>',
     '<span class="t-out">cards</span> <span class="t-dim">→</span> <span class="t-cmd">log rows</span>',
-    '<span class="t-out">Geist sans</span> <span class="t-dim">→</span> <span class="t-cmd">Geist Mono</span>',
-    '<span class="t-dim">// left border = visual hierarchy</span>',
-    '<span class="t-red">red</span> <span class="t-dim">=</span> confluence · <span class="t-ok">green</span> <span class="t-dim">=</span> flip · <span class="t-warn">amber</span> <span class="t-dim">=</span> streak',
+    '<span class="t-out">Geist sans</span> <span class="t-dim">→</span> <span class="t-cmd">Geist Mono wall-to-wall</span>',
+    '<span class="t-out">rgba borders</span> <span class="t-dim">→</span> <span class="t-cmd">solid #1E1E22</span>',
+    '<span class="t-out">#E8E4DE warm</span> <span class="t-dim">→</span> <span class="t-cmd">#A1A1AA zinc</span>',
   ]},
-  { id: 's13', dur: 5500 },
-  { id: 's14', dur: 3500 },
-  { id: 's15', dur: 6000 },
-  { id: 's16', dur: 6000 },
-  { id: 's17', dur: 8000, term: 'term3', lines: [
+  { id:'s20', dur:7000 },
+  { id:'s21', dur:6000 },
+  { id:'s22', dur:5000 },
+  { id:'s23', dur:6000 },
+  { id:'s24', dur:5500 },
+  { id:'s25', dur:5000 },
+  { id:'s26', dur:5000 },
+  { id:'s27', dur:7000, term:'t_dna', lines:[
+    '<span class="t-cmd">fonts:</span> <span class="t-out">Geist + Geist Mono only. No exceptions.</span>',
+    '<span class="t-cmd">theme:</span> <span class="t-out">dark-first. no light mode.</span>',
+    '<span class="t-red">red</span> <span class="t-dim">=</span> <span class="t-out">action / confluence / bearish</span>',
+    '<span class="t-ok">green</span> <span class="t-dim">=</span> <span class="t-out">positive / flip / constructive</span>',
+    '<span class="t-warn">amber</span> <span class="t-dim">=</span> <span class="t-out">caution / watch / streak</span>',
+    '<span class="t-cmd">philosophy:</span> <span class="t-out">signal-first. respect the user\'s time.</span>',
+  ]},
+  { id:'s28', dur:5500 },
+  { id:'s29', dur:8000, term:'t_build', lines:[
+    '<span class="t-prompt">$</span> <span class="t-cmd">cd coinrotator-frontend-sandbox</span>',
     '<span class="t-prompt">$</span> <span class="t-cmd">npm run build</span>',
     '<span class="t-out">Route (app)</span>',
     '<span class="t-out">├ ○ /chat</span> <span class="t-dim">← shumi warm skin</span>',
     '<span class="t-out">├ ○ /console</span> <span class="t-dim">← coinrotator cold skin</span>',
     '<span class="t-ok">✓ Build passed</span> <span class="t-dim">· 0 errors</span>',
-    '<span class="t-prompt">$</span> <span class="t-cmd">open http://localhost:3002/console</span>',
-    '<span class="t-ok">● LIVE</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">curl -s -o /dev/null -w "%{http_code}" localhost:3002/console</span>',
+    '<span class="t-ok">200</span>',
   ]},
-  { id: 's18', dur: 4500 },
-  { id: 's19', dur: 4500 },
-  { id: 's20', dur: 5000 },
-  { id: 's21', dur: 5000 },
-  { id: 's22', dur: 6000 },
+  { id:'s30', dur:6500 },
+  { id:'s31', dur:7000 },
+  { id:'s32', dur:5500 },
+  { id:'s33', dur:6000 },
+  { id:'s34', dur:5500 },
+  { id:'s35', dur:5000 },
+  { id:'s36', dur:8000 },
 ];
 
-let current = -1;
-let running = false;
+let current = -1, running = false;
 const total = scenes.length;
 
 function startFilm() {
   document.getElementById('startScreen').classList.add('hidden');
   running = true;
-  // Auto-start music
-  if (!audioOn) {
-    document.getElementById('ytFrame').src = ytSrc;
-    audioOn = true;
-    document.getElementById('audioBtn').classList.add('on');
-  }
+  if (!audioOn) { document.getElementById('ytFrame').src = ytSrc; audioOn = true; document.getElementById('audioBtn').classList.add('on'); }
   nextScene();
 }
 
 function nextScene() {
   if (!running) return;
-
-  // Hide previous
-  if (current >= 0) {
-    const prev = document.getElementById(scenes[current].id);
-    prev.classList.remove('active');
-  }
-
+  if (current >= 0) document.getElementById(scenes[current].id).classList.remove('active');
   current++;
   if (current >= total) { running = false; return; }
-
   const s = scenes[current];
   const el = document.getElementById(s.id);
   el.classList.add('active');
-
-  // Update counter
-  document.getElementById('counter').textContent =
-    String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
-
-  // Progress
-  document.getElementById('progressBar').style.width =
-    ((current + 1) / total * 100) + '%';
-
-  // Reveal lines with stagger
-  const reveals = el.querySelectorAll('.line-reveal');
-  reveals.forEach((r, i) => {
-    setTimeout(() => r.classList.add('show'), 300 + i * 500);
-  });
-
-  // Terminal playback
+  document.getElementById('counter').textContent = String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((current+1)/total*100)+'%';
+  el.querySelectorAll('.line-reveal').forEach((r,i) => setTimeout(() => r.classList.add('show'), 300+i*500));
   if (s.term && s.lines) {
-    const termBody = document.getElementById(s.term);
-    termBody.innerHTML = '';
-    s.lines.forEach((line, i) => {
-      const div = document.createElement('div');
-      div.className = 'term-line';
-      div.innerHTML = line;
-      termBody.appendChild(div);
-      setTimeout(() => div.classList.add('show'), 800 + i * 700);
-    });
+    const b = document.getElementById(s.term); b.innerHTML = '';
+    s.lines.forEach((l,i) => { const d = document.createElement('div'); d.className='term-line'; d.innerHTML=l; b.appendChild(d); setTimeout(()=>d.classList.add('show'), 800+i*700); });
   }
-
-  // Auto-advance
   setTimeout(nextScene, s.dur);
 }
 
-// Audio via YouTube embed iframe
 let audioOn = false;
-const ytSrc = 'https://www.youtube.com/embed/uxTdTaNIUxo?autoplay=1&loop=1&playlist=uxTdTaNIUxo&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=0';
-
 function toggleAudio() {
-  const frame = document.getElementById('ytFrame');
-  const btn = document.getElementById('audioBtn');
-  if (audioOn) {
-    frame.src = '';
-    btn.classList.remove('on');
-  } else {
-    frame.src = ytSrc;
-    btn.classList.add('on');
-  }
+  const f = document.getElementById('ytFrame'), btn = document.getElementById('audioBtn');
+  if (audioOn) { f.src=''; btn.classList.remove('on'); } else { f.src=ytSrc; btn.classList.add('on'); }
   audioOn = !audioOn;
 }
 
-// Keyboard: space to start/pause
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space') {
-    e.preventDefault();
-    if (current < 0) startFilm();
-  }
-});
+document.addEventListener('keydown', e => { if (e.code==='Space') { e.preventDefault(); if (current<0) startFilm(); } });
 </script>
-
 </body>
 </html>
