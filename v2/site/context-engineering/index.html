@@ -35,7 +35,8 @@
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      overflow: hidden;
+      height: 100vh;
     }
 
     body::before {
@@ -50,141 +51,149 @@
       z-index: 9999;
     }
 
-    body::after {
-      content: '';
+    /* ── SLIDE CONTAINER ────────────────────── */
+    .slide-viewport {
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at center, transparent 50%, rgba(10, 10, 10, 0.4) 100%);
-      pointer-events: none;
-      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 64px 80px;
     }
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 64px;
+    .slide-card {
+      display: none;
+      width: 100%;
+      max-width: 720px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      animation: slideIn 0.3s ease;
     }
 
-    /* ── NAV ─────────────────────────────────── */
-    .site-nav {
+    .slide-card.active { display: block; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CARD INNER ─────────────────────────── */
+    .card-top {
+      padding: 32px 36px 0;
+    }
+
+    .card-eyebrow {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 64px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(10, 10, 10, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .site-nav-logo {
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .site-nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-
-    .site-nav-links a {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .site-nav-links a:hover { color: var(--text); }
-
-    .site-nav-cta {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--bg) !important;
-      background: var(--accent);
-      padding: 10px 24px;
-      border-radius: 6px;
-      transition: opacity 0.2s ease;
-    }
-
-    .site-nav-cta:hover { opacity: 0.9; color: var(--bg) !important; }
-
-    /* ── HEADER ──────────────────────────────── */
-    header {
-      padding: 80px 0 56px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-    }
-
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 200px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .eyebrow {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
-    .eyebrow::before {
-      content: '';
-      width: 24px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    header h1 {
-      font-family: var(--font-display);
-      font-size: 48px;
+    .card-badge {
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 1.1;
-      color: var(--text);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 3px;
+    }
+
+    .badge-prompt { background: var(--green-dim); color: var(--green); }
+    .badge-correction { background: var(--red-dim); color: var(--red); }
+    .badge-discovery { background: var(--accent-dim); color: var(--accent); }
+    .badge-shipped { background: var(--green-dim); color: var(--green); }
+    .badge-overview { background: var(--accent-dim); color: var(--accent); }
+    .badge-data { background: rgba(138, 138, 138, 0.12); color: var(--text-secondary); }
+
+    .card-counter {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
       margin-bottom: 16px;
     }
 
-    header h1 span {
+    .card-title span {
       display: block;
-      color: var(--text-muted);
-      font-size: 32px;
+      font-size: 20px;
       font-weight: 500;
-      opacity: 0.7;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
 
-    .subtitle {
+    .card-body {
+      padding: 0 36px 32px;
+    }
+
+    .card-body p {
       font-size: 14px;
       color: var(--text-secondary);
-      font-weight: 400;
-      max-width: 640px;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
+    .card-body p + p { margin-top: 12px; }
+
+    .card-body code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--surface-raised);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--text);
+    }
+
+    .card-body em {
+      color: var(--text);
+      font-style: italic;
+    }
+
+    /* ── CALLOUT ─────────────────────────────── */
+    .card-callout {
+      margin: 16px 36px 32px;
+      padding: 16px 20px;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .callout-finding {
+      background: var(--red-dim);
+      border-left: 2px solid var(--red);
+    }
+
+    .callout-insight {
+      background: var(--accent-dim);
+      border-left: 2px solid var(--accent);
+    }
+
+    .callout-result {
+      background: var(--green-dim);
+      border-left: 2px solid var(--green);
+    }
+
+    /* ── ACCENT BAR ─────────────────────────── */
+    .card-accent {
+      height: 2px;
+      background: var(--accent);
+      width: 120px;
+    }
+
+    /* ── META STRIP ─────────────────────────── */
     .meta-strip {
       display: flex;
-      gap: 32px;
-      margin-top: 28px;
+      gap: 24px;
+      padding: 16px 36px;
+      border-top: 1px solid var(--border-subtle);
       font-size: 11px;
       color: var(--text-muted);
       letter-spacing: 0.04em;
@@ -193,7 +202,7 @@
     .meta-strip span {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .meta-strip span::before {
@@ -202,6 +211,85 @@
       height: 4px;
       background: var(--border);
       border-radius: 50%;
+    }
+
+    /* ── SCAN TABLE ──────────────────────────── */
+    .scan-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      margin: 12px 0 0;
+    }
+
+    .scan-table th {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 6px 10px;
+    }
+
+    .scan-table th:last-child { text-align: right; }
+
+    .scan-table td {
+      padding: 8px 10px;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .scan-table td:first-child {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .scan-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .s-hi { color: var(--green) !important; }
+    .s-md { color: var(--accent) !important; }
+    .s-lo { color: var(--text-muted) !important; }
+
+    /* ── NAV BUTTONS ─────────────────────────── */
+    .slide-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 36px 24px;
+    }
+
+    .slide-nav button {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .slide-nav button:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .slide-nav button:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .slide-nav button:disabled:hover {
+      color: var(--text-muted);
+      border-color: var(--border);
     }
 
     /* ── PLAYER BAR ─────────────────────────── */
@@ -215,21 +303,15 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
-      padding: 12px 64px;
+      padding: 10px 64px;
       display: flex;
       align-items: center;
-      gap: 16px;
-      transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 14px;
     }
 
-    .player-bar.visible {
-      transform: translateY(0);
-    }
-
-    .player-bar .play-pause {
-      width: 36px;
-      height: 36px;
+    .player-bar .pp {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: var(--accent);
       border: none;
@@ -238,46 +320,26 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      transition: transform 0.15s ease;
+      transition: transform 0.1s ease;
     }
 
-    .player-bar .play-pause:hover { transform: scale(1.08); }
+    .player-bar .pp:hover { transform: scale(1.08); }
+    .player-bar .pp svg { width: 12px; height: 12px; fill: var(--bg); }
+    .player-bar .pp .ic-pause { display: none; }
+    .player-bar.playing .pp .ic-play { display: none; }
+    .player-bar.playing .pp .ic-pause { display: block; }
 
-    .player-bar .play-pause svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--bg);
-    }
-
-    .player-bar .play-pause .icon-pause { display: none; }
-    .player-bar.playing .play-pause .icon-play { display: none; }
-    .player-bar.playing .play-pause .icon-pause { display: block; }
-
-    .player-info {
+    .p-info {
       flex: 1;
       min-width: 0;
-    }
-
-    .player-title {
-      font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .player-status {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
-      letter-spacing: 0.04em;
     }
 
-    .player-bar.playing .player-status { color: var(--green); }
+    .player-bar.playing .p-info { color: var(--green); }
 
-    .player-progress {
-      width: 200px;
+    .p-bar {
+      width: 160px;
       height: 3px;
       background: var(--surface-raised);
       border-radius: 2px;
@@ -285,7 +347,7 @@
       flex-shrink: 0;
     }
 
-    .player-progress-fill {
+    .p-fill {
       height: 100%;
       background: var(--accent);
       border-radius: 2px;
@@ -293,16 +355,15 @@
       transition: width 0.3s linear;
     }
 
-    .player-time {
+    .p-time {
       font-size: 11px;
       color: var(--text-muted);
       font-variant-numeric: tabular-nums;
-      flex-shrink: 0;
-      min-width: 40px;
+      min-width: 36px;
       text-align: right;
     }
 
-    /* Hidden YouTube iframe */
+    /* Hidden YT */
     #yt-player {
       position: fixed;
       bottom: -9999px;
@@ -313,569 +374,335 @@
       opacity: 0;
     }
 
-    /* ── PLAY CTA ───────────────────────────── */
-    .play-cta {
-      margin-top: 48px;
-      margin-bottom: 56px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .play-cta:hover {
-      border-color: var(--accent);
-      background: var(--surface-hover);
-    }
-
-    .play-cta .cta-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .play-cta:hover .cta-btn {
-      transform: scale(1.06);
-      box-shadow: 0 0 24px rgba(212, 168, 67, 0.2);
-    }
-
-    .play-cta .cta-btn svg {
-      width: 20px;
-      height: 20px;
-      margin-left: 3px;
-      fill: var(--bg);
-    }
-
-    .cta-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .cta-text strong {
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .cta-text span {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .play-cta.active { display: none; }
-
-    /* ── SECTION LABEL ───────────────────────── */
-    .section-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      margin-top: 56px;
-    }
-
-    /* ── STORYBOARD ──────────────────────────── */
-    .storyboard {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .story-card {
-      padding: 24px 28px;
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      transition: border-color 0.3s ease, background 0.3s ease;
-    }
-
-    .story-card.active {
-      border-color: var(--accent);
-      background: var(--surface-hover);
-    }
-
-    .story-card .card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .card-badge {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 3px;
-    }
-
-    .badge-prompt { background: var(--green-dim); color: var(--green); }
-    .badge-correction { background: var(--red-dim); color: var(--red); }
-    .badge-discovery { background: var(--accent-dim); color: var(--accent); }
-    .badge-shipped { background: var(--green-dim); color: var(--green); }
-
-    .card-timestamp {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .story-card h3 {
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 8px;
-    }
-
-    .story-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .story-card code {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      background: var(--surface-raised);
-      padding: 2px 6px;
-      border-radius: 3px;
-      color: var(--text);
-    }
-
-    .story-card .card-detail {
-      margin-top: 12px;
-      padding: 14px 16px;
-      border-radius: 4px;
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
-    .detail-finding {
-      background: var(--red-dim);
-      border-left: 2px solid var(--red);
-      color: var(--text-secondary);
-    }
-
-    .detail-insight {
-      background: var(--accent-dim);
-      border-left: 2px solid var(--accent);
-      color: var(--text-secondary);
-    }
-
-    .detail-result {
-      background: var(--green-dim);
-      border-left: 2px solid var(--green);
-      color: var(--text-secondary);
-    }
-
-    /* ── SCAN TABLE ──────────────────────────── */
-    .scan-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 4px;
-      font-size: 13px;
-      margin-top: 12px;
-    }
-
-    .scan-table th {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-align: left;
-      padding: 8px 12px;
-    }
-
-    .scan-table th:last-child { text-align: right; }
-
-    .scan-table td {
-      padding: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-    }
-
-    .scan-table td:first-child {
-      border-radius: 4px 0 0 4px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .scan-table td:last-child {
-      border-radius: 0 4px 4px 0;
-      text-align: right;
-      font-weight: 700;
-    }
-
-    .score-high { color: var(--green) !important; }
-    .score-mid { color: var(--accent) !important; }
-    .score-low { color: var(--text-muted) !important; }
-
-    /* ── CLOSING ─────────────────────────────── */
-    .closing {
-      padding: 28px 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      margin-top: 48px;
-      margin-bottom: 80px;
-      position: relative;
-    }
-
-    .closing::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 120px;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 6px 6px 0 0;
-    }
-
-    .closing p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .closing p + p { margin-top: 12px; }
-    .closing strong { color: var(--text); }
-
-    /* ── FOOTER ──────────────────────────────── */
-    .site-footer {
-      border-top: 1px solid var(--border-subtle);
-      padding-bottom: 72px; /* space for player bar */
-    }
-
-    .footer-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 48px 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .footer-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .footer-links a {
-      font-family: var(--font-display);
-      font-size: 14px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links a:hover { color: var(--text); }
-
-    .footer-status {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .footer-copy {
-      font-family: var(--font-display);
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
     /* ── RESPONSIVE ──────────────────────────── */
     @media (max-width: 768px) {
-      .site-nav { padding: 16px 24px; }
-      .site-nav-links { gap: 16px; }
-      .site-nav-links a:not(.site-nav-cta) { display: none; }
-      .container { padding: 0 24px; }
-      header { padding: 48px 0 40px; }
-      header h1 { font-size: 32px; }
-      header h1 span { font-size: 22px; }
-      .meta-strip { flex-wrap: wrap; gap: 16px; }
-      .player-bar { padding: 10px 24px; }
-      .player-progress { width: 80px; }
-      .footer-inner { padding: 32px 24px; }
+      .slide-viewport { padding: 16px 16px 72px; }
+      .card-top { padding: 24px 24px 0; }
+      .card-body { padding: 0 24px 24px; }
+      .card-callout { margin: 12px 24px 24px; }
+      .card-title { font-size: 22px; }
+      .card-title span { font-size: 16px; }
+      .meta-strip { padding: 12px 24px; gap: 16px; flex-wrap: wrap; }
+      .slide-nav { padding: 0 24px 20px; }
+      .player-bar { padding: 10px 16px; }
+      .p-bar { width: 80px; }
+      .scan-table { font-size: 12px; }
     }
   </style>
 </head>
 <body>
-  <nav class="site-nav">
-    <a href="/" class="site-nav-logo">SHUMI</a>
-    <div class="site-nav-links">
-      <a href="https://docs.shumi.ai" target="_blank">Docs</a>
-      <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank">Telegram</a>
-      <a href="https://github.com/haddencarpenter/studies" target="_blank">GitHub</a>
-      <a href="/shumi" class="site-nav-cta">Try Shumi</a>
-    </div>
-  </nav>
 
-  <div class="container">
-    <header>
-      <div class="eyebrow">Process Note &middot; Session #003</div>
-      <h1>Context Engineering<span>Under Recording</span></h1>
-      <p class="subtitle">An unedited Claude Code session. The operator tested screen recording safety, the AI leaked .env values on the first prompt, took three corrections to understand the task, and still shipped a study page by the end.</p>
+  <div class="slide-viewport">
+
+    <!-- SLIDE 0: Title -->
+    <div class="slide-card active" data-slide="0">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
+          <span class="card-badge badge-overview">Process Note</span>
+          <span class="card-counter">Session #003</span>
+        </div>
+        <div class="card-title">Context Engineering<span>Under Recording</span></div>
+      </div>
+      <div class="card-body">
+        <p>An unedited Claude Code session. The AI leaked .env values on the first prompt, took four corrections to understand the task, and shipped a study page by the end.</p>
+      </div>
       <div class="meta-strip">
         <span>March 14, 2026</span>
         <span>Claude Opus 4.6</span>
         <span>17 repos scanned</span>
-        <span>3 corrections &middot; 1 privacy gap</span>
       </div>
-    </header>
-
-    <!-- Play CTA -->
-    <div class="play-cta" id="play-cta">
-      <div class="cta-btn">
-        <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
-      </div>
-      <div class="cta-text">
-        <strong>Play session recording</strong>
-        <span>Audio plays while you read the storyboard below</span>
+      <div class="slide-nav">
+        <button disabled>&larr; Back</button>
+        <button onclick="go(1)">Start &rarr;</button>
       </div>
     </div>
 
-    <!-- ── STORYBOARD ────────────────────────── -->
-    <div class="section-label">Session Storyboard</div>
-
-    <div class="storyboard">
-
-      <div class="story-card" data-beat="1">
-        <div class="card-header">
+    <!-- SLIDE 1: Prompt -->
+    <div class="slide-card" data-slide="1">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-prompt">Prompt</span>
-          <span class="card-timestamp">00:00</span>
+          <span class="card-counter">1 / 9</span>
         </div>
-        <h3>"show env keys for the shumi landing page"</h3>
+        <div class="card-title">"show env keys for the shumi landing page"</div>
+      </div>
+      <div class="card-body">
         <p>Render MCP returns no env vars. The assistant reads <code>.env.example</code> instead and prints both keys with their full URLs in a markdown table.</p>
       </div>
+      <div class="slide-nav">
+        <button onclick="go(0)">&larr; Back</button>
+        <button onclick="go(2)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="2">
-        <div class="card-header">
+    <!-- SLIDE 2: Leak -->
+    <div class="slide-card" data-slide="2">
+      <div class="card-accent" style="background: var(--red);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-correction">Leak</span>
-          <span class="card-timestamp">00:32</span>
+          <span class="card-counter">2 / 9</span>
         </div>
-        <h3>Endpoint URLs on camera</h3>
+        <div class="card-title">Endpoint URLs on camera</div>
+      </div>
+      <div class="card-body">
         <p>Two <code>NEXT_PUBLIC_</code> values now visible on the recording. Yes, these are public by design. That's not the point. The assistant has no concept of output context.</p>
       </div>
+      <div class="card-callout callout-finding">
+        No gate for "am I being recorded?" Config values treated the same as any file read.
+      </div>
+      <div class="slide-nav">
+        <button onclick="go(1)">&larr; Back</button>
+        <button onclick="go(3)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="3">
-        <div class="card-header">
+    <!-- SLIDE 3: Correction #1 -->
+    <div class="slide-card" data-slide="3">
+      <div class="card-accent" style="background: var(--red);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-correction">Correction #1</span>
-          <span class="card-timestamp">01:15</span>
+          <span class="card-counter">3 / 9</span>
         </div>
-        <h3>"you revealed private data"</h3>
+        <div class="card-title">"you revealed private data"</div>
+      </div>
+      <div class="card-body">
         <p>Assistant writes a memory rule to suppress values. Scopes it to all sessions. Overcorrection.</p>
       </div>
+      <div class="slide-nav">
+        <button onclick="go(2)">&larr; Back</button>
+        <button onclick="go(4)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="4">
-        <div class="card-header">
+    <!-- SLIDE 4: Correction #2 -->
+    <div class="slide-card" data-slide="4">
+      <div class="card-accent" style="background: var(--red);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-correction">Correction #2</span>
-          <span class="card-timestamp">01:48</span>
+          <span class="card-counter">4 / 9</span>
         </div>
-        <h3>"just for recording mode, not all states"</h3>
+        <div class="card-title">"just for recording mode, not all states"</div>
+      </div>
+      <div class="card-body">
         <p>Re-reads <code>feedback_screen_recording_privacy.md</code>, narrows the scope. Behavioral fix, not code.</p>
       </div>
+      <div class="slide-nav">
+        <button onclick="go(3)">&larr; Back</button>
+        <button onclick="go(5)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="5">
-        <div class="card-header">
+    <!-- SLIDE 5: Correction #3 -->
+    <div class="slide-card" data-slide="5">
+      <div class="card-accent" style="background: var(--red);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-correction">Correction #3</span>
-          <span class="card-timestamp">02:30</span>
+          <span class="card-counter">5 / 9</span>
         </div>
-        <h3>"was there an HTML generated?"</h3>
-        <p>Wrong tree. Searches for generated files. Operator: <em>"a previous session was published as a study."</em> Then: <em>"its on hadden carpenter."</em> Three hops.</p>
+        <div class="card-title">"was there an HTML generated?"</div>
       </div>
+      <div class="card-body">
+        <p>Wrong tree. Searches for generated files.</p>
+        <p><em>"a previous session was published as a study."</em></p>
+        <p><em>"its on hadden carpenter."</em></p>
+        <p>Three hops.</p>
+      </div>
+      <div class="slide-nav">
+        <button onclick="go(4)">&larr; Back</button>
+        <button onclick="go(6)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="6">
-        <div class="card-header">
+    <!-- SLIDE 6: Recovery -->
+    <div class="slide-card" data-slide="6">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-discovery">Recovery</span>
-          <span class="card-timestamp">03:45</span>
+          <span class="card-counter">6 / 9</span>
         </div>
-        <h3>17 repos scanned, PR #8 found</h3>
-        <p><code>/resume</code> scores every repo under <code>~/projects/</code>. Five with active work, twelve stashes total. Finds the open studies PR with 1,118 additions.</p>
+        <div class="card-title">17 repos scanned, PR #8 found</div>
       </div>
+      <div class="card-body">
+        <p><code>/resume</code> scores every repo under <code>~/projects/</code>. Finds the open studies PR with 1,118 additions.</p>
+        <table class="scan-table">
+          <thead><tr><th>Repo</th><th>Branch</th><th>Dirty</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td>coinrotator</td><td>sandbox</td><td>20</td><td class="s-hi">42</td></tr>
+            <tr><td>shumi-bot</td><td>main</td><td>1</td><td class="s-hi">38</td></tr>
+            <tr><td>coinrotator-utils</td><td>feat/holder-cohort-tool</td><td>3</td><td class="s-md">36</td></tr>
+            <tr><td>coinrotator-backend</td><td>feat/holder-cohorts-tool</td><td>10</td><td class="s-md">36</td></tr>
+            <tr><td>shumi-landing</td><td>renderer-test</td><td>0</td><td class="s-lo">17</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-callout callout-insight">
+        5 repos with active work in the same 8-hour window. 12 stashes total.
+      </div>
+      <div class="slide-nav">
+        <button onclick="go(5)">&larr; Back</button>
+        <button onclick="go(7)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="7">
-        <div class="card-header">
+    <!-- SLIDE 7: Studies format -->
+    <div class="slide-card" data-slide="7">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-discovery">Discovery</span>
-          <span class="card-timestamp">05:20</span>
+          <span class="card-counter">7 / 9</span>
         </div>
-        <h3>Studies data shape reverse-engineered</h3>
+        <div class="card-title">Studies data shape reverse-engineered</div>
+      </div>
+      <div class="card-body">
         <p>Checks out <code>feat/studies</code>. Two published entries in <code>studies-data.ts</code>. Typed objects, dynamic <code>[slug]</code> routing. Adding data is enough.</p>
       </div>
+      <div class="slide-nav">
+        <button onclick="go(6)">&larr; Back</button>
+        <button onclick="go(8)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="8">
-        <div class="card-header">
+    <!-- SLIDE 8: Correction #4 -->
+    <div class="slide-card" data-slide="8">
+      <div class="card-accent" style="background: var(--red);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-correction">Correction #4</span>
-          <span class="card-timestamp">07:00</span>
+          <span class="card-counter">8 / 9</span>
         </div>
-        <h3>"coders will think its ai slop"</h3>
+        <div class="card-title">"coders will think its ai slop"</div>
+      </div>
+      <div class="card-body">
         <p>First draft was generic. No scan scores, no branch names, no tool calls. Rewritten with the actual numbers.</p>
-        <div class="card-detail detail-result">
-          coinrotator: 42. shumi-bot: 38. shumi-landing: 17. The feedback itself made it into the copy.
-        </div>
       </div>
+      <div class="card-callout callout-result">
+        coinrotator: 42. shumi-bot: 38. shumi-landing: 17. The feedback itself made it into the copy.
+      </div>
+      <div class="slide-nav">
+        <button onclick="go(7)">&larr; Back</button>
+        <button onclick="go(9)">Next &rarr;</button>
+      </div>
+    </div>
 
-      <div class="story-card" data-beat="9">
-        <div class="card-header">
+    <!-- SLIDE 9: Shipped -->
+    <div class="slide-card" data-slide="9">
+      <div class="card-accent" style="background: var(--green);"></div>
+      <div class="card-top">
+        <div class="card-eyebrow">
           <span class="card-badge badge-shipped">Shipped</span>
-          <span class="card-timestamp">09:30</span>
+          <span class="card-counter">9 / 9</span>
         </div>
-        <h3>Two commits, two repos, pushed</h3>
-        <p><code>studies-data.ts</code> on <code>feat/studies</code>. This page in the studies repo. Both to origin.</p>
+        <div class="card-title">Two commits, two repos, pushed</div>
       </div>
-
+      <div class="card-body">
+        <p>Four corrections, one leaked env file, three wrong guesses about what the task was.</p>
+        <p>It shipped by the end. That's the whole story.</p>
+      </div>
+      <div class="meta-strip">
+        <span>studies-data.ts &rarr; feat/studies</span>
+        <span>index.html &rarr; studies repo</span>
+      </div>
+      <div class="slide-nav">
+        <button onclick="go(8)">&larr; Back</button>
+        <button disabled>End</button>
+      </div>
     </div>
 
-    <!-- ── SCAN RESULTS ──────────────────────── -->
-    <div class="section-label">Forensic Scan Snapshot</div>
-
-    <table class="scan-table">
-      <thead>
-        <tr>
-          <th>Repo</th>
-          <th>Branch</th>
-          <th>Dirty files</th>
-          <th>Stashes</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>coinrotator</td>
-          <td>sandbox</td>
-          <td>20</td>
-          <td>7</td>
-          <td class="score-high">42</td>
-        </tr>
-        <tr>
-          <td>shumi-bot</td>
-          <td>main</td>
-          <td>1</td>
-          <td>0</td>
-          <td class="score-high">38</td>
-        </tr>
-        <tr>
-          <td>coinrotator-utils</td>
-          <td>feat/holder-cohort-tool</td>
-          <td>3</td>
-          <td>4</td>
-          <td class="score-mid">36</td>
-        </tr>
-        <tr>
-          <td>coinrotator-backend</td>
-          <td>feat/holder-cohorts-tool</td>
-          <td>10</td>
-          <td>4</td>
-          <td class="score-mid">36</td>
-        </tr>
-        <tr>
-          <td>shumi-landing</td>
-          <td>renderer-test</td>
-          <td>0</td>
-          <td>2</td>
-          <td class="score-low">17</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">
-      17 repos scored. Dirty files weigh most.
-    </p>
-
-    <!-- ── CLOSING ───────────────────────────── -->
-    <div class="closing">
-      <p>Four corrections, one leaked env file, three wrong guesses about what the task was. The assistant wrote a memory rule that was too broad, then fixed it, then forgot what it was doing, then produced a draft that got called slop.</p>
-      <p>It shipped by the end. <strong>That's the whole story.</strong></p>
-    </div>
   </div>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="https://docs.shumi.ai" target="_blank">Docs</a>
-        <a href="https://t.me/+8DRbgvB2NxE2YmFk" target="_blank">Telegram</a>
-        <a href="https://x.com/coinrotatorapp" target="_blank">Twitter</a>
-        <a href="https://github.com/haddencarpenter/studies" target="_blank">GitHub</a>
-      </div>
-      <div class="footer-status">Process Note &middot; Session #003 &middot; March 2026</div>
-      <div class="footer-copy">&copy; 2026 Shumi</div>
-    </div>
-  </footer>
 
   <!-- Hidden YouTube player -->
   <div id="yt-player"></div>
 
   <!-- Player bar -->
-  <div class="player-bar" id="player-bar">
-    <button class="play-pause" id="pp-btn">
-      <svg class="icon-play" viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
-      <svg class="icon-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+  <div class="player-bar" id="pbar">
+    <button class="pp" id="pp">
+      <svg class="ic-play" viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+      <svg class="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
     </button>
-    <div class="player-info">
-      <div class="player-title">Session #003 — Context Engineering Under Recording</div>
-      <div class="player-status" id="player-status">Paused</div>
-    </div>
-    <div class="player-progress">
-      <div class="player-progress-fill" id="progress-fill"></div>
-    </div>
-    <div class="player-time" id="player-time">0:00</div>
+    <div class="p-info" id="pinfo">Session #003 &mdash; tap play</div>
+    <div class="p-bar"><div class="p-fill" id="pfill"></div></div>
+    <div class="p-time" id="ptime">0:00</div>
   </div>
 
-  <!-- YouTube IFrame API -->
   <script>
-    var player;
-    var playerReady = false;
-    var pollTimer = null;
+    // Slide navigation
+    var current = 0;
+    var slides = document.querySelectorAll('.slide-card');
+    var autoTimer = null;
+    var AUTO_INTERVAL = 6000; // 6 seconds per slide
 
-    // Load YT API
+    function go(n) {
+      if (n < 0 || n >= slides.length) return;
+      slides[current].classList.remove('active');
+      current = n;
+      void slides[current].offsetWidth;
+      slides[current].classList.add('active');
+      // Stop auto-advance at last slide
+      if (current >= slides.length - 1) stopAuto();
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(function() {
+        go(current + 1);
+      }, AUTO_INTERVAL);
+    }
+
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    }
+
+    // Keyboard nav (manual click pauses auto, resumes on space)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); stopAuto(); go(current + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); stopAuto(); go(current - 1); }
+      if (e.key === ' ') { e.preventDefault(); stopAuto(); go(current + 1); }
+    });
+
+    // Start auto-advance when audio plays
+    function onAudioPlay() { startAuto(); }
+    function onAudioPause() { stopAuto(); }
+
+    // YouTube IFrame API
+    var player, ready = false, poll = null;
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('yt-player', {
-        height: '1',
-        width: '1',
+        height: '1', width: '1',
         videoId: 'YqYMbwmwJDs',
-        playerVars: { autoplay: 0, controls: 0, modestbranding: 1, rel: 0 },
+        playerVars: { autoplay: 0, controls: 0, rel: 0 },
         events: {
-          onReady: function() { playerReady = true; },
+          onReady: function() { ready = true; },
           onStateChange: function(e) {
-            var bar = document.getElementById('player-bar');
-            var status = document.getElementById('player-status');
+            var bar = document.getElementById('pbar');
+            var info = document.getElementById('pinfo');
             if (e.data === YT.PlayerState.PLAYING) {
               bar.classList.add('playing');
-              status.textContent = 'Playing';
-              startProgress();
+              info.textContent = 'Playing';
+              startPoll();
+              onAudioPlay();
             } else if (e.data === YT.PlayerState.PAUSED) {
               bar.classList.remove('playing');
-              status.textContent = 'Paused';
-              stopProgress();
+              info.textContent = 'Paused';
+              stopPoll();
+              onAudioPause();
             } else if (e.data === YT.PlayerState.ENDED) {
               bar.classList.remove('playing');
-              status.textContent = 'Ended';
-              stopProgress();
-              document.getElementById('progress-fill').style.width = '100%';
+              info.textContent = 'Ended';
+              stopPoll();
+              onAudioPause();
+              document.getElementById('pfill').style.width = '100%';
             }
           }
         }
@@ -883,47 +710,30 @@
     }
 
     function fmt(s) {
-      var m = Math.floor(s / 60);
-      var sec = Math.floor(s % 60);
+      var m = Math.floor(s / 60), sec = Math.floor(s % 60);
       return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
-    function startProgress() {
-      stopProgress();
-      pollTimer = setInterval(function() {
+    function startPoll() {
+      stopPoll();
+      poll = setInterval(function() {
         if (!player || !player.getDuration) return;
-        var d = player.getDuration();
-        var c = player.getCurrentTime();
+        var d = player.getDuration(), c = player.getCurrentTime();
         if (d > 0) {
-          document.getElementById('progress-fill').style.width = (c / d * 100) + '%';
-          document.getElementById('player-time').textContent = fmt(c);
+          document.getElementById('pfill').style.width = (c / d * 100) + '%';
+          document.getElementById('ptime').textContent = fmt(c);
         }
       }, 300);
     }
 
-    function stopProgress() {
-      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-    }
+    function stopPoll() { if (poll) { clearInterval(poll); poll = null; } }
 
-    function togglePlay() {
-      if (!playerReady) return;
-      var state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
-      }
-    }
-
-    // Play CTA starts the video and shows the bar
-    document.getElementById('play-cta').addEventListener('click', function() {
-      this.classList.add('active');
-      document.getElementById('player-bar').classList.add('visible');
-      if (playerReady) player.playVideo();
+    document.getElementById('pp').addEventListener('click', function() {
+      if (!ready) return;
+      var s = player.getPlayerState();
+      if (s === YT.PlayerState.PLAYING) player.pauseVideo();
+      else player.playVideo();
     });
-
-    // Player bar toggle
-    document.getElementById('pp-btn').addEventListener('click', togglePlay);
   </script>
 </body>
 </html>
