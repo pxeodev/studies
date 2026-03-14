@@ -12,7 +12,7 @@
     background: #09090B; color: #A1A1AA;
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
-    overflow: hidden; width: 1080px; height: 1920px;
+    overflow: hidden; width: 100vw; height: 100vh;
   }
   .film { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
 
@@ -86,9 +86,9 @@
 
   /* ── BOTTOM: NARRATION ───────────────────── */
   .narration-area {
-    height: 480px; flex-shrink: 0;
+    height: 160px; flex-shrink: 0;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 32px 64px 120px; text-align: center;
+    padding: 16px 48px 48px; text-align: center;
     border-top: 1px solid #1E1E22;
   }
 
@@ -100,7 +100,7 @@
   .narration-label.show { opacity: 1; }
 
   .narration-text {
-    font-size: 36px; font-weight: 600; color: #E8E4DE;
+    font-size: 24px; font-weight: 600; color: #E8E4DE;
     line-height: 1.4; max-width: 900px;
     opacity: 0; transform: translateY(8px);
     transition: opacity 0.4s ease, transform 0.4s ease;
