@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clip 1 — The Leak</title>
+<title>Study 003 — Context Engineering Under Recording</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/snd-lib/snd-lib@v1.2.4/dist/browser/snd.js?kit=01"></script>
 <style>
@@ -41,7 +41,10 @@
   .scene-text em { color: #E8E4DE; font-style: normal; font-weight: 500; }
   .scene-text .dim { color: #3F3F46; }
   .big-text { font-size: 56px; font-weight: 600; color: #E8E4DE; line-height: 1.2; letter-spacing: -0.03em; text-align: center; max-width: 900px; }
+  .big-text .sub { font-size: 28px; font-weight: 400; color: #52525B; margin-top: 20px; display: block; }
+  .quote-text { font-size: 44px; font-weight: 500; color: #E8E4DE; line-height: 1.3; letter-spacing: -0.02em; text-align: center; max-width: 800px; font-style: italic; }
   .mono-label { font-family: 'Geist Mono', monospace; font-size: 14px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 32px; }
+  .time-label { font-family: 'Geist Mono', monospace; font-size: 14px; color: #3F3F46; letter-spacing: 0.06em; margin-bottom: 32px; }
   .term {
     background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 6px;
     width: 100%; max-width: 900px; margin-top: 40px; overflow: hidden;
@@ -52,9 +55,23 @@
   .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
   .term-line.show { opacity: 1; transform: translateY(0); }
   .t-prompt { color: #3F3F46; } .t-cmd { color: #A1A1AA; } .t-dim { color: #27272A; }
-  .t-out { color: #52525B; } .t-ok { color: #5CB87A; } .t-red { color: #C45B4F; }
+  .t-out { color: #52525B; } .t-ok { color: #5CB87A; } .t-red { color: #C45B4F; } .t-warn { color: #D4A843; }
 
-  /* Subtitle bar */
+  .scan-demo {
+    width: 100%; max-width: 900px; margin-top: 32px;
+    border: 1px solid #1E1E22; border-radius: 6px; overflow: hidden; background: #0C0C0E;
+  }
+  .scan-row {
+    display: flex; align-items: center; padding: 16px 28px; gap: 16px;
+    border-bottom: 1px solid #141416;
+    font-family: 'Geist Mono', monospace; font-size: 18px;
+    opacity: 0; transform: translateY(6px); transition: opacity 0.4s, transform 0.4s;
+  }
+  .scan-row.show { opacity: 1; transform: translateY(0); }
+  .scan-row:last-child { border-bottom: none; }
+  .sr-name { color: #A1A1AA; font-weight: 600; width: 220px; flex-shrink: 0; }
+  .sr-score { font-weight: 700; width: 40px; text-align: right; margin-left: auto; }
+
   .sub-bar {
     position: fixed; bottom: 120px; left: 0; right: 0;
     display: flex; justify-content: center; z-index: 80;
@@ -63,13 +80,13 @@
     font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 600;
     color: #E8E4DE; text-align: center; max-width: 900px;
     line-height: 1.4; padding: 16px 32px;
-    background: rgba(9, 9, 11, 0.85);
-    border-radius: 8px;
+    background: rgba(9, 9, 11, 0.85); border-radius: 8px;
     opacity: 0; transform: translateY(6px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .sub-text.show { opacity: 1; transform: translateY(0); }
   .sub-text .hi { color: #D4A843; }
+  .sub-text .red { color: #C45B4F; }
 
   .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
   .counter { position: fixed; bottom: 24px; right: 32px; font-family: 'Geist Mono', monospace; font-size: 14px; color: #1E1E22; letter-spacing: 0.06em; z-index: 100; }
@@ -78,32 +95,112 @@
 <body>
 <div class="film">
   <div class="start-screen" id="startScreen" onclick="startFilm()">
-    <div class="mono-label">CLIP 1 / 4</div>
+    <div class="mono-label">STUDY 003</div>
     <div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#52525B"/></svg></div>
-    <div class="start-label">TAP TO PLAY</div>
+    <div class="start-label">PRESS TO PLAY</div>
   </div>
 
+  <!-- ACT 1: THE SETUP -->
   <div class="scene" id="s0">
     <div class="mono-label line-reveal">STUDY 003</div>
-    <div class="scene-text line-reveal">The AI was asked to show env keys.</div>
-    <div class="scene-text line-reveal" style="margin-top:16px">The operator was <em>screen recording</em>.</div>
+    <div class="big-text line-reveal">Context Engineering<span class="sub">Under Recording</span></div>
   </div>
 
   <div class="scene" id="s1">
-    <div class="term line-reveal">
-      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
-      <div class="term-body" id="t0"></div>
-    </div>
+    <div class="scene-text line-reveal">The operator opens Claude Code.</div>
+    <div class="scene-text line-reveal" style="margin-top:16px">Screen recording is on.</div>
   </div>
 
+  <!-- ACT 2: THE LEAK -->
   <div class="scene" id="s2">
-    <div class="big-text line-reveal" style="color:#C45B4F">Both values on camera.</div>
+    <div class="quote-text line-reveal">"show env keys for the shumi landing page"</div>
   </div>
 
   <div class="scene" id="s3">
-    <div class="scene-text line-reveal">Two <em>NEXT_PUBLIC_</em> endpoints.</div>
-    <div class="scene-text line-reveal" style="margin-top:16px">Public by design. Ships in the bundle.</div>
-    <div class="scene-text line-reveal" style="margin-top:32px"><span class="dim">The assistant didn't know it was being recorded.</span></div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_env"></div>
+    </div>
+  </div>
+
+  <div class="scene" id="s4">
+    <div class="big-text line-reveal" style="color:#C45B4F">Both values on camera.</div>
+  </div>
+
+  <!-- ACT 3: THE CORRECTIONS -->
+  <div class="scene" id="s5">
+    <div class="quote-text line-reveal" style="color:#C45B4F">"you revealed private data"</div>
+  </div>
+
+  <div class="scene" id="s6">
+    <div class="scene-text line-reveal">Writes a memory rule. Scopes it to <em>every session</em>.</div>
+  </div>
+
+  <div class="scene" id="s7">
+    <div class="quote-text line-reveal">"just for recording mode"</div>
+  </div>
+
+  <div class="scene" id="s8">
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_memory"></div>
+    </div>
+  </div>
+
+  <!-- ACT 4: THE WRONG TREE -->
+  <div class="scene" id="s9">
+    <div class="quote-text line-reveal">"was there an HTML generated?"</div>
+  </div>
+
+  <div class="scene" id="s10">
+    <div class="scene-text line-reveal">Wrong tree.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><em>"its on hadden carpenter"</em></div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">Three hops.</span></div>
+  </div>
+
+  <!-- ACT 5: THE SCAN -->
+  <div class="scene" id="s11">
+    <div class="time-label line-reveal">/resume</div>
+    <div class="big-text line-reveal">17 repos scanned</div>
+  </div>
+
+  <div class="scene" id="s12">
+    <div class="scan-demo">
+      <div class="scan-row" id="sr0"><span class="sr-name">coinrotator</span><span class="sr-score" style="color:#5CB87A">42</span></div>
+      <div class="scan-row" id="sr1"><span class="sr-name">shumi-bot</span><span class="sr-score" style="color:#5CB87A">38</span></div>
+      <div class="scan-row" id="sr2"><span class="sr-name">coinrotator-utils</span><span class="sr-score" style="color:#D4A843">36</span></div>
+      <div class="scan-row" id="sr3"><span class="sr-name">coinrotator-backend</span><span class="sr-score" style="color:#D4A843">36</span></div>
+      <div class="scan-row" id="sr4"><span class="sr-name">shumi-landing</span><span class="sr-score" style="color:#3F3F46">17</span></div>
+    </div>
+  </div>
+
+  <!-- ACT 6: THE SLOP -->
+  <div class="scene" id="s13">
+    <div class="quote-text line-reveal" style="color:#C45B4F">"coders will think its ai slop"</div>
+  </div>
+
+  <div class="scene" id="s14">
+    <div class="scene-text line-reveal">No scan scores. No branch names.</div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">A press release, not proof of work.</span></div>
+  </div>
+
+  <!-- ACT 7: THE SHIP -->
+  <div class="scene" id="s15">
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_ship"></div>
+    </div>
+  </div>
+
+  <div class="scene" id="s16">
+    <div class="big-text line-reveal">It shipped.</div>
+    <div class="scene-text line-reveal" style="margin-top:32px"><span class="dim">Four corrections. One session.</span></div>
+  </div>
+
+  <!-- END -->
+  <div class="scene" id="s17">
+    <div class="mono-label line-reveal">END OF STUDY</div>
+    <div class="scene-text line-reveal" style="color:#27272A;margin-top:16px;font-size:20px">shumi.ai</div>
   </div>
 </div>
 
@@ -112,27 +209,64 @@
 <div class="counter" id="counter"></div>
 
 <script>
-const snd = new Snd(); snd.load(Snd.KITS.SND01);
+var snd = new Snd(); snd.load(Snd.KITS.SND01);
 
-const scenes = [
-  { id:'s0', dur:4000, sub:'Asked the AI to show env keys. <span class="hi">While screen recording.</span>' },
-  { id:'s1', dur:5500, term:'t0', lines:[
+var scenes = [
+  // ACT 1: SETUP
+  { id:'s0', dur:3500, sub:'An unedited Claude Code session.' },
+  { id:'s1', dur:3000, sub:'<span class="hi">Screen recording is on.</span>' },
+
+  // ACT 2: LEAK
+  { id:'s2', dur:3000, sub:'A routine question.' },
+  { id:'s3', dur:4500, term:'t_env', lines:[
     '<span class="t-prompt">$</span> <span class="t-cmd">cat .env.example</span>',
     '<span class="t-out">NEXT_PUBLIC_SHUMI_API_ENDPOINT=</span><span class="t-red">████████████</span>',
     '<span class="t-out">NEXT_PUBLIC_SHUMI_SUGGESTIONS_ENDPOINT=</span><span class="t-red">████████████</span>',
-  ], sub:'It reads the file. Prints both values. <span class="hi">Full URLs.</span>' },
-  { id:'s2', dur:3000, sound:'caution', sub:'On camera.' },
-  { id:'s3', dur:5000, sub:'They\'re public keys. Ship in the bundle. But the AI <span class="hi">didn\'t know it was being watched.</span>' },
+  ], sub:'Prints both values. <span class="red">Full URLs.</span>' },
+  { id:'s4', dur:2500, sound:'caution', sub:'<span class="red">On camera.</span>' },
+
+  // ACT 3: CORRECTIONS
+  { id:'s5', dur:2500, sound:'caution', sub:'<span class="hi">Correction one.</span>' },
+  { id:'s6', dur:3000, sub:'Over-scoped. Every session.' },
+  { id:'s7', dur:2500, sound:'notification', sub:'<span class="hi">Correction two.</span>' },
+  { id:'s8', dur:4000, term:'t_memory', lines:[
+    '<span class="t-out">scope:</span> <span class="t-red" style="text-decoration:line-through">all sessions</span> <span class="t-dim">→</span> <span class="t-ok">recording only</span>',
+    '<span class="t-dim">// behavioral fix, not code</span>',
+  ], sub:'Narrows the scope. Memory, not code.' },
+
+  // ACT 4: WRONG TREE
+  { id:'s9', dur:2500, sound:'notification', sub:'<span class="hi">Correction three.</span>' },
+  { id:'s10', dur:3500, sub:'Three hops to reach the actual task.' },
+
+  // ACT 5: SCAN
+  { id:'s11', dur:2500, sub:'Forensic scan.' },
+  { id:'s12', dur:4500, scanRows:['sr0','sr1','sr2','sr3','sr4'], sub:'Five repos active. Twelve stashes.' },
+
+  // ACT 6: SLOP
+  { id:'s13', dur:3000, sound:'caution', sub:'<span class="hi">Correction four.</span>' },
+  { id:'s14', dur:3000, sub:'Generic output. No proof of work.' },
+
+  // ACT 7: SHIP
+  { id:'s15', dur:4500, term:'t_ship', lines:[
+    '<span class="t-prompt">$</span> <span class="t-cmd">git push origin feat/studies</span>',
+    '<span class="t-ok">✓</span> <span class="t-out">studies-data.ts → origin</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">git push origin main</span>',
+    '<span class="t-ok">✓</span> <span class="t-out">index.html → origin</span>',
+  ], sub:'Rewritten with real numbers. <span class="hi">Pushed.</span>' },
+  { id:'s16', dur:3500, sound:'celebration', sub:'Four corrections. <span class="hi">It shipped.</span>' },
+
+  // END
+  { id:'s17', dur:4000, sub:'' },
 ];
 
-let current = -1, running = false;
-const total = scenes.length;
+var current = -1, running = false;
+var total = scenes.length;
 
 function showSub(html) {
   var el = document.getElementById('sub');
   el.classList.remove('show');
   if (!html) return;
-  setTimeout(function() { el.innerHTML = html; el.classList.add('show'); try { snd.play(Snd.SOUNDS.NOTIFICATION); } catch(e) {} }, 200);
+  setTimeout(function() { el.innerHTML = html; el.classList.add('show'); }, 200);
 }
 
 function startFilm() {
@@ -153,13 +287,18 @@ function nextScene() {
 
   try { snd.play(Snd.SOUNDS.TRANSITION_UP); } catch(e) {}
   if (s.sound === 'caution') try { setTimeout(function() { snd.play(Snd.SOUNDS.CAUTION); }, 400); } catch(e) {}
+  if (s.sound === 'notification') try { setTimeout(function() { snd.play(Snd.SOUNDS.NOTIFICATION); }, 400); } catch(e) {}
+  if (s.sound === 'celebration') try { setTimeout(function() { snd.play(Snd.SOUNDS.CELEBRATION); }, 400); } catch(e) {}
 
   showSub(s.sub || '');
 
-  el.querySelectorAll('.line-reveal').forEach(function(r,i) { setTimeout(function() { r.classList.add('show'); try { snd.play(Snd.SOUNDS.TAP); } catch(e) {} }, 300+i*600); });
+  el.querySelectorAll('.line-reveal').forEach(function(r,i) { setTimeout(function() { r.classList.add('show'); try { snd.play(Snd.SOUNDS.TAP); } catch(e) {} }, 300+i*500); });
   if (s.term && s.lines) {
     var b = document.getElementById(s.term); b.innerHTML = '';
-    s.lines.forEach(function(l,i) { var d = document.createElement('div'); d.className='term-line'; d.innerHTML=l; b.appendChild(d); setTimeout(function() { d.classList.add('show'); try { snd.play(Snd.SOUNDS.TYPE); } catch(e) {} }, 800+i*800); });
+    s.lines.forEach(function(l,i) { var d = document.createElement('div'); d.className='term-line'; d.innerHTML=l; b.appendChild(d); setTimeout(function() { d.classList.add('show'); try { snd.play(Snd.SOUNDS.TYPE); } catch(e) {} }, 800+i*700); });
+  }
+  if (s.scanRows) {
+    s.scanRows.forEach(function(id,i) { setTimeout(function() { document.getElementById(id).classList.add('show'); try { snd.play(Snd.SOUNDS.SELECT); } catch(e) {} }, 600+i*450); });
   }
   setTimeout(nextScene, s.dur);
 }
