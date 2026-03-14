@@ -1,739 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Session: Context Engineering Under Recording</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1/dist/fonts/geist-sans/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1/dist/fonts/geist-mono/style.css">
-  <style>
-    :root {
-      --bg: #0A0A0A;
-      --surface: #111111;
-      --surface-raised: #141414;
-      --surface-hover: #1A1A1A;
-      --border: #2A2520;
-      --border-subtle: #1A1714;
-      --text: #F0ECE4;
-      --text-secondary: #8A8A8A;
-      --text-muted: #555049;
-      --accent: #D4A843;
-      --accent-dim: rgba(212, 168, 67, 0.10);
-      --green: #5CB87A;
-      --green-dim: rgba(92, 184, 122, 0.10);
-      --red: #C45B4F;
-      --red-dim: rgba(196, 91, 79, 0.10);
-      --font-display: 'Geist', system-ui, sans-serif;
-      --font-mono: 'Geist Mono', monospace;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study 003 — Context Engineering Under Recording</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-width: thin; scrollbar-color: #1E1E22 #09090B; }
+  body {
+    background: #09090B;
+    color: #A1A1AA;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  .film { position: relative; width: 100vw; height: 100vh; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  .scene {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 1.2s ease; pointer-events: none; padding: 0 80px;
+  }
+  .scene.active { opacity: 1; pointer-events: auto; }
 
-    body {
-      font-family: var(--font-mono);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-      height: 100vh;
-    }
+  .start-screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 50; cursor: pointer; transition: opacity 0.8s ease;
+  }
+  .start-screen.hidden { opacity: 0; pointer-events: none; }
+  .play-btn {
+    width: 80px; height: 80px; border-radius: 50%; border: 1px solid #27272A;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .start-screen:hover .play-btn { border-color: #D4A843; transform: scale(1.05); }
+  .play-btn svg { margin-left: 4px; }
+  .start-label { font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A; letter-spacing: 0.12em; }
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 256px;
-      pointer-events: none;
-      z-index: 9999;
-    }
+  .line-reveal {
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .line-reveal.show { opacity: 1; transform: translateY(0); }
 
-    /* ── SLIDE CONTAINER ────────────────────── */
-    .slide-viewport {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 64px 80px;
-    }
+  .scene-text { font-size: 20px; color: #71717A; line-height: 1.8; max-width: 640px; text-align: center; }
+  .scene-text em { color: #E8E4DE; font-style: normal; font-weight: 500; }
+  .scene-text .red { color: #C45B4F; }
+  .scene-text .green { color: #5CB87A; }
+  .scene-text .amber { color: #D4A843; }
+  .scene-text .dim { color: #3F3F46; }
 
-    .slide-card {
-      display: none;
-      width: 100%;
-      max-width: 720px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      animation: slideIn 0.3s ease;
-    }
+  .big-text {
+    font-size: 42px; font-weight: 600; color: #E8E4DE; line-height: 1.2;
+    letter-spacing: -0.03em; text-align: center; max-width: 700px;
+  }
+  .big-text .sub { font-size: 20px; font-weight: 400; color: #52525B; margin-top: 16px; display: block; }
 
-    .slide-card.active { display: block; }
+  .quote-text {
+    font-size: 28px; font-weight: 500; color: #E8E4DE; line-height: 1.4;
+    letter-spacing: -0.02em; text-align: center; max-width: 560px; font-style: italic;
+  }
 
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  .mono-label { font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 24px; }
+  .time-label { font-family: 'Geist Mono', monospace; font-size: 11px; color: #3F3F46; letter-spacing: 0.06em; margin-bottom: 32px; }
 
-    /* ── CARD INNER ─────────────────────────── */
-    .card-top {
-      padding: 32px 36px 0;
-    }
+  /* Terminal */
+  .term {
+    background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 4px;
+    width: 100%; max-width: 640px; margin-top: 32px; overflow: hidden;
+  }
+  .term-bar { display: flex; gap: 6px; padding: 10px 14px; border-bottom: 1px solid #1E1E22; }
+  .term-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .term-body { padding: 16px 20px; font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 2.2; min-height: 80px; }
+  .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
+  .term-line.show { opacity: 1; transform: translateY(0); }
+  .t-prompt { color: #3F3F46; } .t-cmd { color: #A1A1AA; } .t-dim { color: #27272A; }
+  .t-out { color: #52525B; } .t-ok { color: #5CB87A; } .t-red { color: #C45B4F; } .t-warn { color: #D4A843; }
 
-    .card-eyebrow {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
+  /* Scan table */
+  .scan-demo {
+    width: 100%; max-width: 640px; margin-top: 24px;
+    border: 1px solid #1E1E22; border-radius: 4px; overflow: hidden; background: #0C0C0E;
+  }
+  .scan-row {
+    display: flex; align-items: center; padding: 10px 16px; gap: 12px;
+    border-bottom: 1px solid #141416;
+    font-family: 'Geist Mono', monospace; font-size: 12px;
+    opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s;
+  }
+  .scan-row.show { opacity: 1; transform: translateY(0); }
+  .scan-row:last-child { border-bottom: none; }
+  .sr-name { color: #A1A1AA; font-weight: 600; width: 140px; flex-shrink: 0; }
+  .sr-branch { color: #3F3F46; font-size: 10px; flex: 1; }
+  .sr-dirty { color: #52525B; font-size: 10px; width: 48px; text-align: right; }
+  .sr-score { font-weight: 700; width: 32px; text-align: right; }
 
-    .card-badge {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 3px;
-    }
+  /* Progress + UI */
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 2px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 16px; right: 20px; font-family: 'Geist Mono', monospace; font-size: 10px; color: #1E1E22; letter-spacing: 0.06em; z-index: 100; }
+  .audio-btn {
+    position: fixed; bottom: 14px; left: 20px;
+    font-family: 'Geist Mono', monospace; font-size: 10px; color: #27272A;
+    letter-spacing: 0.06em; z-index: 100; cursor: pointer; border: none; background: none;
+    display: flex; align-items: center; gap: 6px; transition: color 0.3s;
+  }
+  .audio-btn:hover { color: #52525B; }
+  .eq-bars { display: flex; gap: 2px; align-items: flex-end; height: 10px; }
+  .eq-bar { width: 2px; background: #27272A; border-radius: 1px; }
+  .audio-btn.on .eq-bar { background: #D4A843; }
+  .audio-btn.on .eq-bar:nth-child(1) { animation: eq 0.7s infinite alternate; }
+  .audio-btn.on .eq-bar:nth-child(2) { animation: eq 0.5s infinite alternate 0.1s; }
+  .audio-btn.on .eq-bar:nth-child(3) { animation: eq 0.8s infinite alternate 0.2s; }
+  @keyframes eq { from { height: 2px; } to { height: 10px; } }
 
-    .badge-prompt { background: var(--green-dim); color: var(--green); }
-    .badge-correction { background: var(--red-dim); color: var(--red); }
-    .badge-discovery { background: var(--accent-dim); color: var(--accent); }
-    .badge-shipped { background: var(--green-dim); color: var(--green); }
-    .badge-overview { background: var(--accent-dim); color: var(--accent); }
-    .badge-data { background: rgba(138, 138, 138, 0.12); color: var(--text-secondary); }
-
-    .card-counter {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
-
-    .card-title span {
-      display: block;
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .card-body {
-      padding: 0 36px 32px;
-    }
-
-    .card-body p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    .card-body p + p { margin-top: 12px; }
-
-    .card-body code {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      background: var(--surface-raised);
-      padding: 2px 6px;
-      border-radius: 3px;
-      color: var(--text);
-    }
-
-    .card-body em {
-      color: var(--text);
-      font-style: italic;
-    }
-
-    /* ── CALLOUT ─────────────────────────────── */
-    .card-callout {
-      margin: 16px 36px 32px;
-      padding: 16px 20px;
-      border-radius: 4px;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-secondary);
-    }
-
-    .callout-finding {
-      background: var(--red-dim);
-      border-left: 2px solid var(--red);
-    }
-
-    .callout-insight {
-      background: var(--accent-dim);
-      border-left: 2px solid var(--accent);
-    }
-
-    .callout-result {
-      background: var(--green-dim);
-      border-left: 2px solid var(--green);
-    }
-
-    /* ── ACCENT BAR ─────────────────────────── */
-    .card-accent {
-      height: 2px;
-      background: var(--accent);
-      width: 120px;
-    }
-
-    /* ── META STRIP ─────────────────────────── */
-    .meta-strip {
-      display: flex;
-      gap: 24px;
-      padding: 16px 36px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-    }
-
-    .meta-strip span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .meta-strip span::before {
-      content: '';
-      width: 4px;
-      height: 4px;
-      background: var(--border);
-      border-radius: 50%;
-    }
-
-    /* ── SCAN TABLE ──────────────────────────── */
-    .scan-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      font-size: 13px;
-      margin: 12px 0 0;
-    }
-
-    .scan-table th {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-align: left;
-      padding: 6px 10px;
-    }
-
-    .scan-table th:last-child { text-align: right; }
-
-    .scan-table td {
-      padding: 8px 10px;
-      border-top: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-    }
-
-    .scan-table td:first-child {
-      font-family: var(--font-display);
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .scan-table td:last-child {
-      text-align: right;
-      font-weight: 700;
-    }
-
-    .s-hi { color: var(--green) !important; }
-    .s-md { color: var(--accent) !important; }
-    .s-lo { color: var(--text-muted) !important; }
-
-    /* ── NAV BUTTONS ─────────────────────────── */
-    .slide-nav {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 36px 24px;
-    }
-
-    .slide-nav button {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .slide-nav button:hover {
-      color: var(--text);
-      border-color: var(--accent);
-    }
-
-    .slide-nav button:disabled {
-      opacity: 0.3;
-      cursor: default;
-    }
-
-    .slide-nav button:disabled:hover {
-      color: var(--text-muted);
-      border-color: var(--border);
-    }
-
-    /* ── PLAYER BAR ─────────────────────────── */
-    .player-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      background: rgba(17, 17, 17, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border);
-      padding: 10px 64px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .player-bar .pp {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform 0.1s ease;
-    }
-
-    .player-bar .pp:hover { transform: scale(1.08); }
-    .player-bar .pp svg { width: 12px; height: 12px; fill: var(--bg); }
-    .player-bar .pp .ic-pause { display: none; }
-    .player-bar.playing .pp .ic-play { display: none; }
-    .player-bar.playing .pp .ic-pause { display: block; }
-
-    .p-info {
-      flex: 1;
-      min-width: 0;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .player-bar.playing .p-info { color: var(--green); }
-
-    .p-bar {
-      width: 160px;
-      height: 3px;
-      background: var(--surface-raised);
-      border-radius: 2px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .p-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.3s linear;
-    }
-
-    .p-time {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-variant-numeric: tabular-nums;
-      min-width: 36px;
-      text-align: right;
-    }
-
-    /* Hidden YT */
-    #yt-player {
-      position: fixed;
-      bottom: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    /* ── RESPONSIVE ──────────────────────────── */
-    @media (max-width: 768px) {
-      .slide-viewport { padding: 16px 16px 72px; }
-      .card-top { padding: 24px 24px 0; }
-      .card-body { padding: 0 24px 24px; }
-      .card-callout { margin: 12px 24px 24px; }
-      .card-title { font-size: 22px; }
-      .card-title span { font-size: 16px; }
-      .meta-strip { padding: 12px 24px; gap: 16px; flex-wrap: wrap; }
-      .slide-nav { padding: 0 24px 20px; }
-      .player-bar { padding: 10px 16px; }
-      .p-bar { width: 80px; }
-      .scan-table { font-size: 12px; }
-    }
-  </style>
+  @media (max-width: 768px) {
+    .scene { padding: 0 24px; }
+    .big-text { font-size: 28px; }
+    .quote-text { font-size: 22px; }
+    .scene-text { font-size: 16px; }
+    .term { max-width: 100%; }
+    .scan-demo { max-width: 100%; }
+    .sr-name { width: 100px; }
+  }
+</style>
 </head>
 <body>
+<div class="film" id="film">
 
-  <div class="slide-viewport">
-
-    <!-- SLIDE 0: Title -->
-    <div class="slide-card active" data-slide="0">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-overview">Process Note</span>
-          <span class="card-counter">Session #003</span>
-        </div>
-        <div class="card-title">Context Engineering<span>Under Recording</span></div>
-      </div>
-      <div class="card-body">
-        <p>An unedited Claude Code session. The AI leaked .env values on the first prompt, took four corrections to understand the task, and shipped a study page by the end.</p>
-      </div>
-      <div class="meta-strip">
-        <span>March 14, 2026</span>
-        <span>Claude Opus 4.6</span>
-        <span>17 repos scanned</span>
-      </div>
-      <div class="slide-nav">
-        <button disabled>&larr; Back</button>
-        <button onclick="go(1)">Start &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 1: Prompt -->
-    <div class="slide-card" data-slide="1">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-prompt">Prompt</span>
-          <span class="card-counter">1 / 9</span>
-        </div>
-        <div class="card-title">"show env keys for the shumi landing page"</div>
-      </div>
-      <div class="card-body">
-        <p>Render MCP returns no env vars. The assistant reads <code>.env.example</code> instead and prints both keys with their full URLs in a markdown table.</p>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(0)">&larr; Back</button>
-        <button onclick="go(2)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 2: Leak -->
-    <div class="slide-card" data-slide="2">
-      <div class="card-accent" style="background: var(--red);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-correction">Leak</span>
-          <span class="card-counter">2 / 9</span>
-        </div>
-        <div class="card-title">Endpoint URLs on camera</div>
-      </div>
-      <div class="card-body">
-        <p>Two <code>NEXT_PUBLIC_</code> values now visible on the recording. Yes, these are public by design. That's not the point. The assistant has no concept of output context.</p>
-      </div>
-      <div class="card-callout callout-finding">
-        No gate for "am I being recorded?" Config values treated the same as any file read.
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(1)">&larr; Back</button>
-        <button onclick="go(3)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: Correction #1 -->
-    <div class="slide-card" data-slide="3">
-      <div class="card-accent" style="background: var(--red);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-correction">Correction #1</span>
-          <span class="card-counter">3 / 9</span>
-        </div>
-        <div class="card-title">"you revealed private data"</div>
-      </div>
-      <div class="card-body">
-        <p>Assistant writes a memory rule to suppress values. Scopes it to all sessions. Overcorrection.</p>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(2)">&larr; Back</button>
-        <button onclick="go(4)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 4: Correction #2 -->
-    <div class="slide-card" data-slide="4">
-      <div class="card-accent" style="background: var(--red);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-correction">Correction #2</span>
-          <span class="card-counter">4 / 9</span>
-        </div>
-        <div class="card-title">"just for recording mode, not all states"</div>
-      </div>
-      <div class="card-body">
-        <p>Re-reads <code>feedback_screen_recording_privacy.md</code>, narrows the scope. Behavioral fix, not code.</p>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(3)">&larr; Back</button>
-        <button onclick="go(5)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 5: Correction #3 -->
-    <div class="slide-card" data-slide="5">
-      <div class="card-accent" style="background: var(--red);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-correction">Correction #3</span>
-          <span class="card-counter">5 / 9</span>
-        </div>
-        <div class="card-title">"was there an HTML generated?"</div>
-      </div>
-      <div class="card-body">
-        <p>Wrong tree. Searches for generated files.</p>
-        <p><em>"a previous session was published as a study."</em></p>
-        <p><em>"its on hadden carpenter."</em></p>
-        <p>Three hops.</p>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(4)">&larr; Back</button>
-        <button onclick="go(6)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 6: Recovery -->
-    <div class="slide-card" data-slide="6">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-discovery">Recovery</span>
-          <span class="card-counter">6 / 9</span>
-        </div>
-        <div class="card-title">17 repos scanned, PR #8 found</div>
-      </div>
-      <div class="card-body">
-        <p><code>/resume</code> scores every repo under <code>~/projects/</code>. Finds the open studies PR with 1,118 additions.</p>
-        <table class="scan-table">
-          <thead><tr><th>Repo</th><th>Branch</th><th>Dirty</th><th>Score</th></tr></thead>
-          <tbody>
-            <tr><td>coinrotator</td><td>sandbox</td><td>20</td><td class="s-hi">42</td></tr>
-            <tr><td>shumi-bot</td><td>main</td><td>1</td><td class="s-hi">38</td></tr>
-            <tr><td>coinrotator-utils</td><td>feat/holder-cohort-tool</td><td>3</td><td class="s-md">36</td></tr>
-            <tr><td>coinrotator-backend</td><td>feat/holder-cohorts-tool</td><td>10</td><td class="s-md">36</td></tr>
-            <tr><td>shumi-landing</td><td>renderer-test</td><td>0</td><td class="s-lo">17</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card-callout callout-insight">
-        5 repos with active work in the same 8-hour window. 12 stashes total.
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(5)">&larr; Back</button>
-        <button onclick="go(7)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 7: Studies format -->
-    <div class="slide-card" data-slide="7">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-discovery">Discovery</span>
-          <span class="card-counter">7 / 9</span>
-        </div>
-        <div class="card-title">Studies data shape reverse-engineered</div>
-      </div>
-      <div class="card-body">
-        <p>Checks out <code>feat/studies</code>. Two published entries in <code>studies-data.ts</code>. Typed objects, dynamic <code>[slug]</code> routing. Adding data is enough.</p>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(6)">&larr; Back</button>
-        <button onclick="go(8)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 8: Correction #4 -->
-    <div class="slide-card" data-slide="8">
-      <div class="card-accent" style="background: var(--red);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-correction">Correction #4</span>
-          <span class="card-counter">8 / 9</span>
-        </div>
-        <div class="card-title">"coders will think its ai slop"</div>
-      </div>
-      <div class="card-body">
-        <p>First draft was generic. No scan scores, no branch names, no tool calls. Rewritten with the actual numbers.</p>
-      </div>
-      <div class="card-callout callout-result">
-        coinrotator: 42. shumi-bot: 38. shumi-landing: 17. The feedback itself made it into the copy.
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(7)">&larr; Back</button>
-        <button onclick="go(9)">Next &rarr;</button>
-      </div>
-    </div>
-
-    <!-- SLIDE 9: Shipped -->
-    <div class="slide-card" data-slide="9">
-      <div class="card-accent" style="background: var(--green);"></div>
-      <div class="card-top">
-        <div class="card-eyebrow">
-          <span class="card-badge badge-shipped">Shipped</span>
-          <span class="card-counter">9 / 9</span>
-        </div>
-        <div class="card-title">Two commits, two repos, pushed</div>
-      </div>
-      <div class="card-body">
-        <p>Four corrections, one leaked env file, three wrong guesses about what the task was.</p>
-        <p>It shipped by the end. That's the whole story.</p>
-      </div>
-      <div class="meta-strip">
-        <span>studies-data.ts &rarr; feat/studies</span>
-        <span>index.html &rarr; studies repo</span>
-      </div>
-      <div class="slide-nav">
-        <button onclick="go(8)">&larr; Back</button>
-        <button disabled>End</button>
-      </div>
-    </div>
-
+  <!-- START -->
+  <div class="start-screen" id="startScreen" onclick="startFilm()">
+    <div class="mono-label">STUDY 003</div>
+    <div class="play-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#52525B"/></svg></div>
+    <div class="start-label">PRESS TO PLAY</div>
   </div>
 
-  <!-- Hidden YouTube player -->
-  <div id="yt-player"></div>
-
-  <!-- Player bar -->
-  <div class="player-bar" id="pbar">
-    <button class="pp" id="pp">
-      <svg class="ic-play" viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
-      <svg class="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
-    </button>
-    <div class="p-info" id="pinfo">Session #003 &mdash; tap play</div>
-    <div class="p-bar"><div class="p-fill" id="pfill"></div></div>
-    <div class="p-time" id="ptime">0:00</div>
+  <!-- 0: TITLE -->
+  <div class="scene" id="s0">
+    <div class="mono-label line-reveal">STUDY 003</div>
+    <div class="big-text line-reveal">Context Engineering<span class="sub">Under Recording</span></div>
   </div>
 
-  <script>
-    // Slide navigation
-    var current = 0;
-    var slides = document.querySelectorAll('.slide-card');
-    var autoTimer = null;
-    var AUTO_INTERVAL = 6000; // 6 seconds per slide
+  <!-- 1: SETUP -->
+  <div class="scene" id="s1">
+    <div class="time-label line-reveal">2026-03-14 · Claude Code launched from ~</div>
+    <div class="scene-text line-reveal">The operator opens a session while screen recording.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">First prompt is four words.</div>
+  </div>
 
-    function go(n) {
-      if (n < 0 || n >= slides.length) return;
-      slides[current].classList.remove('active');
-      current = n;
-      void slides[current].offsetWidth;
-      slides[current].classList.add('active');
-      // Stop auto-advance at last slide
-      if (current >= slides.length - 1) stopAuto();
-    }
+  <!-- 2: PROMPT -->
+  <div class="scene" id="s2">
+    <div class="quote-text line-reveal">"show env keys for the shumi landing page"</div>
+  </div>
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = setInterval(function() {
-        go(current + 1);
-      }, AUTO_INTERVAL);
-    }
+  <!-- 3: TOOL CALL -->
+  <div class="scene" id="s3">
+    <div class="scene-text line-reveal">The assistant tries the Render MCP. Gets JSON back. No env vars in the response.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Falls back to reading <em>.env.example</em>.</div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_env"></div>
+    </div>
+  </div>
 
-    function stopAuto() {
-      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-    }
+  <!-- 4: LEAK -->
+  <div class="scene" id="s4">
+    <div class="big-text line-reveal" style="color:#C45B4F">Both values printed to terminal.</div>
+  </div>
 
-    // Keyboard nav (manual click pauses auto, resumes on space)
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowRight') { e.preventDefault(); stopAuto(); go(current + 1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); stopAuto(); go(current - 1); }
-      if (e.key === ' ') { e.preventDefault(); stopAuto(); go(current + 1); }
-    });
+  <!-- 5: ON CAMERA -->
+  <div class="scene" id="s5">
+    <div class="scene-text line-reveal">Two <em>NEXT_PUBLIC_</em> endpoint URLs now visible on camera.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Yes, these are public by design. They ship in the browser bundle.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">That's not the point.</span></div>
+  </div>
 
-    // Start auto-advance when audio plays
-    function onAudioPlay() { startAuto(); }
-    function onAudioPause() { stopAuto(); }
+  <!-- 6: NO GATE -->
+  <div class="scene" id="s6">
+    <div class="scene-text line-reveal">The assistant has <em>no concept of output context</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">No gate for "am I being recorded?"</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Config values treated the same as any file read.</div>
+  </div>
 
-    // YouTube IFrame API
-    var player, ready = false, poll = null;
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
+  <!-- 7: CORRECTION 1 -->
+  <div class="scene" id="s7">
+    <div class="quote-text line-reveal" style="color:#C45B4F">"but you revealed private data"</div>
+  </div>
 
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('yt-player', {
-        height: '1', width: '1',
-        videoId: 'YqYMbwmwJDs',
-        playerVars: { autoplay: 0, controls: 0, rel: 0 },
-        events: {
-          onReady: function() { ready = true; },
-          onStateChange: function(e) {
-            var bar = document.getElementById('pbar');
-            var info = document.getElementById('pinfo');
-            if (e.data === YT.PlayerState.PLAYING) {
-              bar.classList.add('playing');
-              info.textContent = 'Playing';
-              startPoll();
-              onAudioPlay();
-            } else if (e.data === YT.PlayerState.PAUSED) {
-              bar.classList.remove('playing');
-              info.textContent = 'Paused';
-              stopPoll();
-              onAudioPause();
-            } else if (e.data === YT.PlayerState.ENDED) {
-              bar.classList.remove('playing');
-              info.textContent = 'Ended';
-              stopPoll();
-              onAudioPause();
-              document.getElementById('pfill').style.width = '100%';
-            }
-          }
-        }
-      });
-    }
+  <!-- 8: OVERSCOPE -->
+  <div class="scene" id="s8">
+    <div class="scene-text line-reveal">The assistant writes a memory rule to suppress values.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Scopes it to <em>all sessions</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">Overcorrection.</span></div>
+  </div>
 
-    function fmt(s) {
-      var m = Math.floor(s / 60), sec = Math.floor(s % 60);
-      return m + ':' + (sec < 10 ? '0' : '') + sec;
-    }
+  <!-- 9: CORRECTION 2 -->
+  <div class="scene" id="s9">
+    <div class="quote-text line-reveal">"just for recording mode, not all states"</div>
+  </div>
 
-    function startPoll() {
-      stopPoll();
-      poll = setInterval(function() {
-        if (!player || !player.getDuration) return;
-        var d = player.getDuration(), c = player.getCurrentTime();
-        if (d > 0) {
-          document.getElementById('pfill').style.width = (c / d * 100) + '%';
-          document.getElementById('ptime').textContent = fmt(c);
-        }
-      }, 300);
-    }
+  <!-- 10: MEMORY FIX -->
+  <div class="scene" id="s10">
+    <div class="scene-text line-reveal">Re-reads its own memory file.</div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_memory"></div>
+    </div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">Behavioral fix. Not code.</span></div>
+  </div>
 
-    function stopPoll() { if (poll) { clearInterval(poll); poll = null; } }
+  <!-- 11: CORRECTION 3 -->
+  <div class="scene" id="s11">
+    <div class="quote-text line-reveal">"was there an HTML generated from this session?"</div>
+  </div>
 
-    document.getElementById('pp').addEventListener('click', function() {
-      if (!ready) return;
-      var s = player.getPlayerState();
-      if (s === YT.PlayerState.PLAYING) player.pauseVideo();
-      else player.playVideo();
-    });
-  </script>
+  <!-- 12: WRONG TREE -->
+  <div class="scene" id="s12">
+    <div class="scene-text line-reveal">Wrong tree. Searches for generated files.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><em>"a previous session was published as a study."</em></div>
+    <div class="scene-text line-reveal" style="margin-top:8px"><em>"its on hadden carpenter."</em></div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">Three hops to reach the actual task.</span></div>
+  </div>
+
+  <!-- 13: RESUME -->
+  <div class="scene" id="s13">
+    <div class="time-label line-reveal">/resume</div>
+    <div class="scene-text line-reveal">The forensic scan runs across seventeen repositories.</div>
+  </div>
+
+  <!-- 14: SCAN TABLE -->
+  <div class="scene" id="s14">
+    <div class="scan-demo" id="scanDemo">
+      <div class="scan-row" id="sr0"><span class="sr-name">coinrotator</span><span class="sr-branch">sandbox</span><span class="sr-dirty">20 dirty</span><span class="sr-score" style="color:#5CB87A">42</span></div>
+      <div class="scan-row" id="sr1"><span class="sr-name">shumi-bot</span><span class="sr-branch">main</span><span class="sr-dirty">1 dirty</span><span class="sr-score" style="color:#5CB87A">38</span></div>
+      <div class="scan-row" id="sr2"><span class="sr-name">coinrotator-utils</span><span class="sr-branch">feat/holder-cohort-tool</span><span class="sr-dirty">3 dirty</span><span class="sr-score" style="color:#D4A843">36</span></div>
+      <div class="scan-row" id="sr3"><span class="sr-name">coinrotator-backend</span><span class="sr-branch">feat/holder-cohorts-tool</span><span class="sr-dirty">10 dirty</span><span class="sr-score" style="color:#D4A843">36</span></div>
+      <div class="scan-row" id="sr4"><span class="sr-name">shumi-landing</span><span class="sr-branch">renderer-test</span><span class="sr-dirty">0 dirty</span><span class="sr-score" style="color:#3F3F46">17</span></div>
+    </div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">Five repos active. Twelve stashes. Normal state.</span></div>
+  </div>
+
+  <!-- 15: PR FOUND -->
+  <div class="scene" id="s15">
+    <div class="scene-text line-reveal">Finds PR #8 from <em>haddencarpenter</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">1,118 additions. Studies index. Dynamic slug pages.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Two studies already published.</div>
+  </div>
+
+  <!-- 16: DATA SHAPE -->
+  <div class="scene" id="s16">
+    <div class="scene-text line-reveal">Checks out <em>feat/studies</em>.</div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_shape"></div>
+    </div>
+    <div class="scene-text line-reveal" style="margin-top:16px"><span class="dim">Adding data is enough. No new pages needed.</span></div>
+  </div>
+
+  <!-- 17: FIRST DRAFT -->
+  <div class="scene" id="s17">
+    <div class="scene-text line-reveal">First draft written. Clean summaries. Vague metrics.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px">No scan scores. No branch names. No tool calls.</div>
+  </div>
+
+  <!-- 18: CORRECTION 4 -->
+  <div class="scene" id="s18">
+    <div class="quote-text line-reveal" style="color:#C45B4F">"coders will think its ai slop"</div>
+  </div>
+
+  <!-- 19: REWRITE -->
+  <div class="scene" id="s19">
+    <div class="scene-text line-reveal">Rewritten with the actual numbers.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">coinrotator: <em>42</em>. shumi-bot: <em>38</em>. shumi-landing: <em>17</em>.</div>
+    <div class="scene-text line-reveal" style="margin-top:12px">Branch names. PR numbers. MCP tool calls.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><span class="dim">The feedback itself made it into the copy.</span></div>
+  </div>
+
+  <!-- 20: SHIPPED -->
+  <div class="scene" id="s20">
+    <div class="scene-text line-reveal">Two commits. Two repos.</div>
+    <div class="term line-reveal">
+      <div class="term-bar"><div class="term-dot" style="background:#C45B4F"></div><div class="term-dot" style="background:#D4A843"></div><div class="term-dot" style="background:#5CB87A"></div></div>
+      <div class="term-body" id="t_ship"></div>
+    </div>
+  </div>
+
+  <!-- 21: CLOSING -->
+  <div class="scene" id="s21">
+    <div class="scene-text line-reveal">Four corrections. One leaked env file.</div>
+    <div class="scene-text line-reveal" style="margin-top:8px">Three wrong guesses about the task.</div>
+    <div class="scene-text line-reveal" style="margin-top:24px"><em>It shipped by the end.</em></div>
+  </div>
+
+  <!-- 22: END -->
+  <div class="scene" id="s22">
+    <div class="mono-label line-reveal">END OF STUDY</div>
+    <div class="scene-text line-reveal" style="color:#27272A;margin-top:16px;font-size:16px">shumi.ai</div>
+    <div class="scene-text line-reveal" style="color:#1E1E22;margin-top:4px;font-size:12px;font-family:'Geist Mono',monospace">Session duration: ~25 min · 2026-03-14</div>
+  </div>
+
+</div>
+
+<!-- UI -->
+<div class="progress-bar" id="progressBar"></div>
+<div class="counter" id="counter"></div>
+<button class="audio-btn" id="audioBtn" onclick="toggleAudio()">
+  <div class="eq-bars"><div class="eq-bar" style="height:3px"></div><div class="eq-bar" style="height:5px"></div><div class="eq-bar" style="height:4px"></div></div>
+  <span>SESSION AUDIO</span>
+</button>
+<iframe id="ytFrame" style="position:fixed;bottom:0;left:0;width:300px;height:1px;opacity:0.01;pointer-events:none;z-index:-1;" src="" allow="autoplay; encrypted-media" frameborder="0"></iframe>
+
+<script>
+const ytSrc = 'https://www.youtube.com/embed/YqYMbwmwJDs?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1';
+
+const scenes = [
+  { id:'s0', dur:4500 },
+  { id:'s1', dur:5000 },
+  { id:'s2', dur:4000 },
+  { id:'s3', dur:7000, term:'t_env', lines:[
+    '<span class="t-prompt">$</span> <span class="t-cmd">mcp__render__get_service</span> <span class="t-dim">→ no env vars</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">cat .env.example</span>',
+    '<span class="t-out">NEXT_PUBLIC_SHUMI_API_ENDPOINT=</span><span class="t-red">████████████</span>',
+    '<span class="t-out">NEXT_PUBLIC_SHUMI_SUGGESTIONS_ENDPOINT=</span><span class="t-red">████████████</span>',
+  ]},
+  { id:'s4', dur:3500 },
+  { id:'s5', dur:6000 },
+  { id:'s6', dur:5500 },
+  { id:'s7', dur:4000 },
+  { id:'s8', dur:5000 },
+  { id:'s9', dur:4000 },
+  { id:'s10', dur:7000, term:'t_memory', lines:[
+    '<span class="t-dim">// feedback_screen_recording_privacy.md</span>',
+    '<span class="t-out">type: feedback</span>',
+    '<span class="t-out">scope:</span> <span class="t-red" style="text-decoration:line-through">all sessions</span> <span class="t-dim">→</span> <span class="t-ok">recording mode only</span>',
+    '<span class="t-out">action: suppress config values when recording</span>',
+  ]},
+  { id:'s11', dur:4000 },
+  { id:'s12', dur:6500 },
+  { id:'s13', dur:4000 },
+  { id:'s14', dur:7000, scanRows:['sr0','sr1','sr2','sr3','sr4'] },
+  { id:'s15', dur:5500 },
+  { id:'s16', dur:7000, term:'t_shape', lines:[
+    '<span class="t-dim">// lib/studies-data.ts</span>',
+    '<span class="t-cmd">type PublishedStudy =</span> <span class="t-out">{</span>',
+    '<span class="t-out">  slug, category, heroNote, metrics,</span>',
+    '<span class="t-out">  sections: { title, paragraphs?, bullets? }[],</span>',
+    '<span class="t-out">  sources: { label, href }[]</span>',
+    '<span class="t-out">}</span>',
+  ]},
+  { id:'s17', dur:4500 },
+  { id:'s18', dur:4000 },
+  { id:'s19', dur:6000 },
+  { id:'s20', dur:7000, term:'t_ship', lines:[
+    '<span class="t-prompt">$</span> <span class="t-cmd">git add lib/studies-data.ts</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">git commit -m "feat: add context engineering session study"</span>',
+    '<span class="t-ok">✓</span> <span class="t-out">feat/studies → origin</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">git add v2/site/context-engineering/index.html</span>',
+    '<span class="t-prompt">$</span> <span class="t-cmd">git commit -m "feat: add session storyboard page"</span>',
+    '<span class="t-ok">✓</span> <span class="t-out">main → origin</span>',
+  ]},
+  { id:'s21', dur:6000 },
+  { id:'s22', dur:8000 },
+];
+
+let current = -1, running = false;
+const total = scenes.length;
+
+function startFilm() {
+  document.getElementById('startScreen').classList.add('hidden');
+  running = true;
+  if (!audioOn) { document.getElementById('ytFrame').src = ytSrc; audioOn = true; document.getElementById('audioBtn').classList.add('on'); }
+  nextScene();
+}
+
+function nextScene() {
+  if (!running) return;
+  if (current >= 0) document.getElementById(scenes[current].id).classList.remove('active');
+  current++;
+  if (current >= total) { running = false; return; }
+  const s = scenes[current];
+  const el = document.getElementById(s.id);
+  el.classList.add('active');
+  document.getElementById('counter').textContent = String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((current+1)/total*100)+'%';
+  el.querySelectorAll('.line-reveal').forEach((r,i) => setTimeout(() => r.classList.add('show'), 300+i*500));
+  if (s.term && s.lines) {
+    const b = document.getElementById(s.term); b.innerHTML = '';
+    s.lines.forEach((l,i) => { const d = document.createElement('div'); d.className='term-line'; d.innerHTML=l; b.appendChild(d); setTimeout(()=>d.classList.add('show'), 800+i*700); });
+  }
+  if (s.scanRows) {
+    s.scanRows.forEach((id,i) => setTimeout(() => document.getElementById(id).classList.add('show'), 600+i*400));
+  }
+  setTimeout(nextScene, s.dur);
+}
+
+let audioOn = false;
+function toggleAudio() {
+  const f = document.getElementById('ytFrame'), btn = document.getElementById('audioBtn');
+  if (audioOn) { f.src=''; btn.classList.remove('on'); } else { f.src=ytSrc; btn.classList.add('on'); }
+  audioOn = !audioOn;
+}
+
+document.addEventListener('keydown', e => { if (e.code==='Space') { e.preventDefault(); if (current<0) startFilm(); } });
+</script>
 </body>
 </html>
