@@ -258,22 +258,21 @@ var scenes = [
   { term:'term_bugs', tb:'tb_bugs', dur:4500, lines:[
     '<span class="t-tool">  ⏵ Read</span> <span class="t-cmd">scripts/sentiment_crossref.js</span>',
     '',
-    '<span class="t-red" style="text-decoration:line-through">  htfAggregation: \'week\'</span> <span class="t-dim">→</span> <span class="t-ok">5</span>  <span class="t-comment">← string, not number. silent zero.</span>',
-    '<span class="t-red" style="text-decoration:line-through">  startDate: \'2025-09-01\'</span> <span class="t-dim">→</span> <span class="t-ok">\'2021-01-01\'</span>  <span class="t-comment">← 4 years of warmup missing</span>',
-    '<span class="t-red" style="text-decoration:line-through">  endDate: \'2026-02-11\'</span> <span class="t-dim">→</span> <span class="t-ok">\'2026-03-17\'</span>  <span class="t-comment">← 5 weeks short</span>',
-  ], label:'HOUSEKEEPING', narr:'Three bugs from the last session. The word <span class="red">\'week\'</span> produced zero signals.' },
+    '<span class="t-red" style="text-decoration:line-through">  htfAggregation: \'week\'</span> <span class="t-dim">→</span> <span class="t-ok">5</span>  <span class="t-comment">← expected a number, got a string. zero output.</span>',
+    '<span class="t-red" style="text-decoration:line-through">  startDate: \'2025-09-01\'</span> <span class="t-dim">→</span> <span class="t-ok">\'2021-01-01\'</span>  <span class="t-comment">← needs 4 years of history to calibrate</span>',
+    '<span class="t-red" style="text-decoration:line-through">  endDate: \'2026-02-11\'</span> <span class="t-dim">→</span> <span class="t-ok">\'2026-03-17\'</span>  <span class="t-comment">← missing the last 5 weeks</span>',
+  ], label:'HOUSEKEEPING', narr:'Previous session left three wrong params. One silently <span class="red">produced nothing.</span>' },
 
   // ACT 5: CROSSREF — THIN
   { term:'term_crossref', tb:'tb_crossref', dur:5500, lines:[
     '<span class="t-out">  TEST: when bearish headlines spike, do prices drop?</span>',
-    '<span class="t-out">  permutation test — 1000 iterations, de-clustered</span>',
     '',
-    '<span class="t-out">   5d: lift=−1.7pp  p=0.808  </span><span class="t-red">NO</span>',
-    '<span class="t-out">  10d: lift=−19.9pp p=0.064  </span><span class="t-warn">MAYBE</span>',
-    '<span class="t-out">  14d: lift=−20.3pp p=0.033  </span><span class="t-ok">YES</span> <span class="t-dim">← but only 11 events</span>',
+    '<span class="t-out">  after 5 days:   <span class="t-red">no</span></span>             <span class="t-dim">(p=0.808)</span>',
+    '<span class="t-out">  after 10 days:  <span class="t-warn">maybe</span></span>          <span class="t-dim">(p=0.064)</span>',
+    '<span class="t-out">  after 14 days:  <span class="t-ok">yes, but...</span></span>     <span class="t-dim">(p=0.033)</span>  <span class="t-comment">← only happened 11 times</span>',
     '',
-    '<span class="t-warn">  Direction is right. Sample is too thin to ship.</span>',
-  ], label:'TEST 1 OF 4', narr:'Right direction, wrong sample size. <span class="red">11 data points is a coin flip with extra steps.</span>' },
+    '<span class="t-warn">  Suggestive. Not enough data to act on.</span>',
+  ], label:'TEST 1 OF 4', narr:'The pattern is real. But 11 occurrences in six months — <span class="red">you can\'t build a product on that.</span>' },
 
   // ACT 6: MARKET EXTREMES — FAIL
   { term:'term_mkt', tb:'tb_mkt', dur:5500, lines:[
