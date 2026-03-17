@@ -59,6 +59,22 @@
   }
   .title-card.active { opacity: 1; }
   #tc_end { inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+  /* ── PHYSARUM BLAST + PULSE ────────────────── */
+  #physarum { opacity: 0; transform: scale(1.3); filter: brightness(1); transition: none; }
+  #physarum.blast {
+    animation: physBlast 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+               physPulse 4s ease-in-out 2.5s infinite;
+  }
+  @keyframes physBlast {
+    0%   { opacity: 0;    transform: scale(1.3); filter: brightness(3); }
+    25%  { opacity: 0.55; transform: scale(1.05); filter: brightness(1.6); }
+    100% { opacity: 0.3;  transform: scale(1);   filter: brightness(1); }
+  }
+  @keyframes physPulse {
+    0%, 100% { opacity: 0.3;  transform: scale(1);    filter: brightness(1); }
+    50%      { opacity: 0.38; transform: scale(1.015); filter: brightness(1.15); }
+  }
   .title-mono { font-family: 'Geist Mono', monospace; font-size: 14px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 24px; }
   .title-big { font-size: 56px; font-weight: 600; color: #E8E4DE; line-height: 1.2; letter-spacing: -0.03em; }
   .title-big .sub { font-size: 28px; font-weight: 400; color: #52525B; margin-top: 16px; display: block; }
@@ -164,7 +180,7 @@
     </div>
 
     <div class="title-card" id="tc_end">
-      <iframe id="physarum" src="about:blank" style="position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity 2s ease;z-index:0;pointer-events:none" allow="autoplay" loading="lazy"></iframe>
+      <iframe id="physarum" src="about:blank" style="position:absolute;inset:0;width:100%;height:100%;border:0;z-index:0;pointer-events:none" allow="autoplay" loading="lazy"></iframe>
       <div style="position:relative;z-index:1">
         <div class="title-mono line-reveal">END OF STUDY</div>
         <div style="color:#27272A;margin-top:16px;font-size:20px" class="line-reveal">shumi.ai</div>
@@ -397,11 +413,11 @@ function showScene(idx) {
   if (s.title === 'tc_ship' && phys.src === 'about:blank') {
     phys.src = 'https://shumi-landing.onrender.com/physarum/stencil.html?lp&seed=60&es=0.57&ew=0.28';
   }
-  // fade in physarum on end card
+  // blast physarum on end card
   if (s.title === 'tc_end') {
-    phys.style.opacity = '0.25';
+    phys.classList.add('blast');
   } else {
-    phys.style.opacity = '0';
+    phys.classList.remove('blast');
   }
 
   if (s.title) {
