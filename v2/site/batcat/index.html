@@ -253,17 +253,17 @@ var scenes = [
     '<span class="t-out">  14:01:16  GET  502</span>  <span class="t-red">105.0s  TIMEOUT</span>',
     '',
     '<span class="t-comment">  # 5 concurrent requests. All computing independently.</span>',
-  ], label:'FEB 16, 2026', narr:'Users hitting the endpoint. <span class="red">105 seconds. 502 timeout.</span>', rec:true },
+  ], label:'FEB 16, 2026', narr:'Real users. Real requests. <span class="red">The last one never came back.</span>', rec:true },
 
   // ACT 3: THUNDERING HERD
   { term:'term_herd', tb:'tb_herd', dur:5500, lines:[
     '<span class="t-warn">  THUNDERING HERD</span>',
     '',
     '<span class="t-out">  Each request runs the full pipeline independently:</span>',
-    '<span class="t-out">    55 individual OHLC queries</span>  <span class="t-dim">(one per coin)</span>',
-    '<span class="t-out">    ARRAY_AGG sort across 8,250 daily groups</span>',
-    '<span class="t-out">    Full table scan on 3,886 rows per resolution</span>',
-    '<span class="t-red">    No request deduplication. No caching. No pool limits.</span>',
+    '<span class="t-out">    55 individual price queries</span>  <span class="t-dim">(one per coin)</span>',
+    '<span class="t-out">    sorting 8,250 daily groups</span>',
+    '<span class="t-out">    scanning 3,886 rows per resolution</span>',
+    '<span class="t-red">    No deduplication. No caching. No pool limits.</span>',
   ], label:'DIAGNOSIS', narr:'Five users ask the same question. <span class="red">Five independent 54-second pipelines.</span>' },
 
   // ACT 4: FIRST FIX WAVE
@@ -291,7 +291,7 @@ var scenes = [
     '<span class="t-comment">  // Fastify AJV rejects "30" because schema says: number</span>',
     '',
     '<span class="t-ok">  Fix: ajv: { coerceTypes: true }</span>  <span class="t-dim">+2 lines</span>',
-  ], label:'LAYER 1', narr:'Every AI agent historical metadata call. <span class="red">All returning 400.</span>' },
+  ], label:'LAYER 1', narr:'Every time the AI asked for price history. <span class="red">400. Every time.</span>' },
 
   // ACT 7: BTC CODE
   { term:'term_btc', tb:'tb_btc', dur:6000, lines:[
@@ -306,8 +306,8 @@ var scenes = [
   ], label:'LAYER 2', narr:'CoinGecko resolves BTC to <span class="red">batcat</span>. ETH to <span class="red">bifrost</span>.', sound:'caution' },
 
   // ACT 8: BATCAT
-  { title:'tc_batcat', dur:3500,
-    label:'', narr:'String similarity beats market cap. <span class="red">The biggest coin in the world resolves to a meme.</span>' },
+  { title:'tc_batcat', dur:5000,
+    label:'', narr:'Sorted by spelling, not by size.' },
 
   // ACT 9: HYBRID FIX
   { term:'term_hybrid', tb:'tb_hybrid', dur:5500, lines:[
@@ -319,7 +319,7 @@ var scenes = [
     '',
     '<span class="t-ok">  getCoinBySymbol("BTC") \u2192 bitcoin  (rank #1)</span>',
     '<span class="t-ok">  getCoinBySymbol("ETH") \u2192 ethereum (rank #2)</span>',
-  ], label:'FIX', narr:'Unique symbols use cached list. Ambiguous ones <span class="hi">rank by market cap.</span>' },
+  ], label:'FIX', narr:'One match? Use the cache. Multiple? <span class="hi">Ask which one\'s biggest.</span>' },
 
   // ACT 10: YOUTUBE INVISIBLE
   { term:'term_yt', tb:'tb_yt', dur:6000, lines:[
@@ -347,12 +347,12 @@ var scenes = [
   ], label:'LAYER 4', narr:'The AI was treating <span class="red">Bloomberg as a random person\u2019s opinion.</span>' },
 
   // ACT 12: BLOOMBERG IS A PERSON
-  { title:'tc_human', dur:3000, sound:'caution',
-    label:'', narr:'9 orgs in the list. 33 in the database. <span class="red">24 classified as human.</span>' },
+  { title:'tc_human', dur:4000, sound:'caution',
+    label:'', narr:'9 in the list. 33 in the database. <span class="red">24 misclassified.</span>' },
 
   // ACT 13: EVERY LAYER
   { title:'tc_every', dur:3000,
-    label:'', narr:'Performance. Type coercion. Symbol resolution. Source taxonomy.' },
+    label:'', narr:'Four layers. <span class="red">Each one broken differently.</span>' },
 
   // ACT 14: SHIP
   { term:'term_ship', tb:'tb_ship', dur:6500, lines:[
@@ -372,8 +372,8 @@ var scenes = [
     label:'', narr:'Started fixing speed. Ended fixing <span class="hi">what the AI sees.</span>' },
 
   // ACT 16: END
-  { title:'tc_end', dur:4000,
-    label:'', narr:'' },
+  { title:'tc_end', dur:6000,
+    label:'', narr:'The work continues.' },
 ];
 
 var current = -1, running = false, timer = null;
