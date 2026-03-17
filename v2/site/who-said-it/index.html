@@ -67,13 +67,13 @@
                physPulse 4s ease-in-out 2.5s infinite;
   }
   @keyframes physBlast {
-    0%   { opacity: 0;    transform: scale(1.3); filter: brightness(3); }
-    25%  { opacity: 0.55; transform: scale(1.05); filter: brightness(1.6); }
-    100% { opacity: 0.3;  transform: scale(1);   filter: brightness(1); }
+    0%   { opacity: 0;   transform: scale(1.3); filter: brightness(3); }
+    20%  { opacity: 0.7; transform: scale(1.05); filter: brightness(1.8); }
+    100% { opacity: 0.5; transform: scale(1);   filter: brightness(1); }
   }
   @keyframes physPulse {
-    0%, 100% { opacity: 0.3;  transform: scale(1);    filter: brightness(1); }
-    50%      { opacity: 0.38; transform: scale(1.015); filter: brightness(1.15); }
+    0%, 100% { opacity: 0.5;  transform: scale(1);    filter: brightness(1); }
+    50%      { opacity: 0.58; transform: scale(1.015); filter: brightness(1.15); }
   }
   .title-mono { font-family: 'Geist Mono', monospace; font-size: 14px; color: #27272A; letter-spacing: 0.12em; margin-bottom: 24px; }
   .title-big { font-size: 56px; font-weight: 600; color: #E8E4DE; line-height: 1.2; letter-spacing: -0.03em; }
@@ -181,9 +181,10 @@
 
     <div class="title-card" id="tc_end">
       <iframe id="physarum" src="about:blank" style="position:absolute;inset:0;width:100%;height:100%;border:0;z-index:0;pointer-events:none" allow="autoplay" loading="lazy"></iframe>
-      <div style="position:relative;z-index:1">
-        <div class="title-mono line-reveal">END OF STUDY</div>
-        <div style="color:#27272A;margin-top:16px;font-size:20px" class="line-reveal">shumi.ai</div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, transparent 30%, #09090B 75%);z-index:1;pointer-events:none"></div>
+      <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px">
+        <div class="line-reveal" style="font-family:'Geist Mono',monospace;font-size:12px;color:#3F3F46;letter-spacing:0.2em">END OF STUDY</div>
+        <div class="line-reveal" style="font-size:32px;font-weight:600;color:#E8E4DE;letter-spacing:-0.02em">shumi.ai</div>
       </div>
     </div>
 
