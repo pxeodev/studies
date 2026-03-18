@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study — The Output Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/snd-lib/snd-lib@v1.2.4/dist/browser/snd.js?kit=01"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #262626; color: #F9FAFB;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden; width: 100vw; height: 100vh;
+  }
+  .film { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
+  .demo-area {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 60px 48px 24px; position: relative;
+  }
+  .term {
+    background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 6px;
+    width: 100%; max-width: 960px; overflow: hidden;
+    position: absolute; opacity: 0; transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+  .term.active { opacity: 1; pointer-events: auto; }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px; padding: 14px 18px;
+    border-bottom: 1px solid #1E1E22;
+  }
+  .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .term-title { font-family: 'Space Mono', monospace; font-size: 12px; color: #404040; margin-left: 12px; }
+  .term-body { padding: 24px 28px; font-family: 'Space Mono', monospace; font-size: 14px; line-height: 2.2; }
+  .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
+  .term-line.show { opacity: 1; transform: translateY(0); }
+  .t-prompt { color: #22D3EE; } .t-path { color: #60A5FA; } .t-caret { color: #FACC15; }
+  .t-cmd { color: #A1A1AA; } .t-dim { color: #333333; } .t-out { color: #6B7280; }
+  .t-ok { color: #5CB87A; } .t-red { color: #E84749; } .t-warn { color: #D4A843; }
+  .t-tool { color: #A78BFA; } .t-comment { color: #4B5563; font-style: italic; }
+  .title-card {
+    position: absolute; text-align: center;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  .title-card.active { opacity: 1; }
+  .title-mono { font-family: 'Space Mono', monospace; font-size: 14px; color: #404040; letter-spacing: 0.12em; margin-bottom: 24px; }
+  .title-big { font-size: 56px; font-weight: 700; color: #F9FAFB; line-height: 1.2; letter-spacing: -0.03em; }
+  .title-big .sub { font-size: 28px; font-weight: 400; color: #9CA3AF; margin-top: 16px; display: block; }
+  .title-mid { font-size: 36px; font-weight: 600; color: #F9FAFB; line-height: 1.3; letter-spacing: -0.02em; max-width: 800px; }
+  .title-quote { font-size: 44px; font-weight: 500; color: #F9FAFB; line-height: 1.3; letter-spacing: -0.02em; font-style: italic; max-width: 800px; }
+  .title-stat { font-family: 'Space Mono', monospace; font-size: 72px; font-weight: 700; letter-spacing: -0.04em; }
+  .title-stat .red { color: #E84749; }
+  .title-stat .gold { color: #D4A843; }
+  .title-stat .green { color: #5CB87A; }
+  .line-reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .line-reveal.show { opacity: 1; transform: translateY(0); }
+  .rec-badge {
+    position: fixed; top: 24px; right: 32px;
+    font-family: 'Space Mono', monospace; font-size: 12px; color: #E84749;
+    letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;
+    opacity: 0; transition: opacity 0.5s ease; z-index: 50;
+  }
+  .rec-badge.show { opacity: 1; }
+  .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: #E84749; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .narration-area {
+    height: 160px; flex-shrink: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 16px 48px 48px; text-align: center;
+    border-top: 1px solid #404040;
+  }
+  .narration-label {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: #6B7280;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .narration-label.show { opacity: 1; }
+  .narration-text {
+    font-size: 24px; font-weight: 600; color: #F9FAFB;
+    line-height: 1.4; max-width: 900px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .narration-text.show { opacity: 1; transform: translateY(0); }
+  .narration-text .hi { color: #D4A843; }
+  .narration-text .red { color: #E84749; }
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 24px; right: 32px; font-family: 'Space Mono', monospace; font-size: 14px; color: #333333; letter-spacing: 0.06em; z-index: 100; }
+  .start-screen {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #262626; cursor: pointer; transition: opacity 0.8s ease;
+  }
+  .start-screen.hidden { opacity: 0; pointer-events: none; }
+  .play-btn {
+    width: 100px; height: 100px; border-radius: 50%; border: 1px solid #404040;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .start-screen:hover .play-btn { border-color: #D4A843; transform: scale(1.05); }
+  .play-btn svg { margin-left: 6px; }
+  .start-label { font-family: 'Space Mono', monospace; font-size: 14px; color: #404040; letter-spacing: 0.12em; }
+</style>
+</head>
+<body>
+
+<div class="start-screen" id="startScreen" onclick="startFilm()">
+  <div class="start-label" style="margin-bottom:32px">THE OUTPUT PIPELINE</div>
+  <div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#6B7280"/></svg></div>
+  <div class="start-label">PRESS TO PLAY</div>
+</div>
+
+<div class="rec-badge" id="recBadge"><div class="rec-dot"></div>REC</div>
+
+<div class="film">
+  <div class="demo-area">
+
+    <!-- Scene 1: Title -->
+    <div class="title-card" id="tc1">
+      <div class="title-mono">SHUMI STUDY</div>
+      <div class="title-big line-reveal">The Output Pipeline
+        <span class="sub line-reveal">32 prompt versions. Still fixing em dashes.</span>
+      </div>
+    </div>
+
+    <!-- Scene 2: The problem -->
+    <div class="term" id="t2">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">shumi.ai/app — before</div>
+      </div>
+      <div class="term-body" id="tb2"></div>
+    </div>
+
+    <!-- Scene 3: The user question -->
+    <div class="title-card" id="tc3">
+      <div class="title-quote line-reveal">"is this the right way to optimize the output format?<br><span class="red line-reveal">will we be at this forever?"</span></div>
+    </div>
+
+    <!-- Scene 4: Research finding -->
+    <div class="title-card" id="tc4">
+      <div class="title-stat line-reveal"><span class="red">19%</span> <span style="font-size:36px;color:#6B7280">vs</span> <span class="green">97%</span></div>
+      <div class="line-reveal" style="margin-top:32px;font-size:22px;color:#9CA3AF;max-width:700px">Rules compliance vs few-shot example compliance.<br>Gemini deep research, 80+ sources.</div>
+    </div>
+
+    <!-- Scene 5: The insight -->
+    <div class="title-card" id="tc5">
+      <div class="title-mid line-reveal">Prompt <span class="hi">thinks.</span></div>
+      <div class="title-mid line-reveal" style="margin-top:12px">Examples <span class="hi">teach.</span></div>
+      <div class="title-mid line-reveal" style="margin-top:12px">Code <span class="hi">enforces.</span></div>
+    </div>
+
+    <!-- Scene 6: Building the post-processor -->
+    <div class="term" id="t6">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">components/shumi/Shumi.js</div>
+      </div>
+      <div class="term-body" id="tb6"></div>
+    </div>
+
+    <!-- Scene 7: Glyph colorizer -->
+    <div class="term" id="t7">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">shumi.module.css</div>
+      </div>
+      <div class="term-body" id="tb7"></div>
+    </div>
+
+    <!-- Scene 8: Eval harness -->
+    <div class="term" id="t8">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">eval-prompt.js — scorecard</div>
+      </div>
+      <div class="term-body" id="tb8"></div>
+    </div>
+
+    <!-- Scene 9: 37 versions -->
+    <div class="term" id="t9">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">langfuse — all 37 versions</div>
+      </div>
+      <div class="term-body" id="tb9"></div>
+    </div>
+
+    <!-- Scene 10: The real insight -->
+    <div class="title-card" id="tc10">
+      <div class="title-quote line-reveal">"We were <span class="red">reducing words</span><br>when we should have been<br><span class="hi line-reveal">reducing thinking.</span>"</div>
+    </div>
+
+    <!-- Scene 11: Shipped -->
+    <div class="term" id="t11">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">shipped</div>
+      </div>
+      <div class="term-body" id="tb11"></div>
+    </div>
+
+    <!-- Scene 12: Closing -->
+    <div class="title-card" id="tc12">
+      <div class="title-mono" style="color:#6B7280">THE OUTPUT PIPELINE</div>
+      <div class="title-big line-reveal" style="font-size:44px">5 corrections. 37 versions studied.<br><span class="sub line-reveal" style="font-size:22px">One eval harness. One post-processor. It shipped.</span></div>
+    </div>
+
+  </div>
+
+  <div class="narration-area">
+    <div class="narration-label" id="nLabel"></div>
+    <div class="narration-text" id="nText"></div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+var snd = new Snd(); snd.load(Snd.KITS.SND01);
+
+var scenes = [
+  // 1: Title
+  { title: 'tc1', dur: 5000,
+    label: 'SETUP',
+    narr: 'Shumi\'s output was a mess. <span class="hi">20-row tables</span> full of stablecoins, em dashes the prompt banned 8 versions ago, no color glyphs.' },
+
+  // 2: The chaotic output
+  { term: 't2', tb: 'tb2', dur: 6000,
+    lines: [
+      '<span class="t-out">| Bitget Token      | ▼ Down | Exchange exposure  |</span>',
+      '<span class="t-out">| Hedera            | ▼ Down | Weak support       |</span>',
+      '<span class="t-out">| PayPal USD        | ▼ Down | Stable/low vol     |</span>',
+      '<span class="t-out">| Tether Gold       | ▼ Down | Defensive asset    |</span>',
+      '<span class="t-out">| GHO               | ▼ Down | Stable/low vol     |</span>',
+      '<span class="t-out">| Global Dollar     | ▼ Down | Stable/low vol     |</span>',
+      '<span class="t-red">  // 20 rows. 15 are stablecoins.</span>',
+    ],
+    label: 'THE PROBLEM',
+    narr: 'The prompt said <span class="red">"exclude stablecoins."</span> The LLM included them anyway, with "ignore" labels.' },
+
+  // 3: The pivotal question
+  { title: 'tc3', dur: 5500, sound: 'caution',
+    label: 'CORRECTION 1',
+    narr: 'The user stopped us cold. We had been tweaking prompts for 32 versions.' },
+
+  // 4: Research finding
+  { title: 'tc4', dur: 6000, sound: 'notification',
+    label: 'DEEP RESEARCH',
+    narr: 'Gemini deep research across 80+ sources. Rules get <span class="red">19% compliance</span>. Few-shot examples get <span class="hi">97%</span>.' },
+
+  // 5: The three-layer insight
+  { title: 'tc5', dur: 5500, sound: 'notification',
+    label: 'THE ARCHITECTURE',
+    narr: 'Three layers, each with one job. Stop asking the prompt to do all three.' },
+
+  // 6: Post-processor
+  { term: 't6', tb: 'tb6', dur: 6000,
+    lines: [
+      '<span class="t-dim">// deterministic format enforcement</span>',
+      '<span class="t-cmd">  .replace(<span class="t-warn">/\u2014/g</span>, \',\')</span>',
+      '<span class="t-cmd">  .replace(<span class="t-warn">/\u25b2\\s*UP/g</span>, \'\u25b2\')</span>',
+      '<span class="t-cmd">  .replace(<span class="t-warn">/\u25bc\\s*DOWN/g</span>, \'\u25bc\')</span>',
+      '<span class="t-cmd">  .filter(line => !STABLE_FILTER.test(line))</span>',
+      '<span class="t-ok">  // 100% reliable. it\'s code.</span>',
+    ],
+    label: 'LAYER 3: CODE ENFORCES',
+    narr: 'Em dashes, stablecoin rows, redundant direction text. <span class="hi">Code catches what the prompt misses.</span>' },
+
+  // 7: Glyph colors
+  { term: 't7', tb: 'tb7', dur: 4500,
+    lines: [
+      '<span class="t-ok">.glyphUp    { color: #22C55E; }</span>  <span class="t-dim">// \u25b2 green</span>',
+      '<span class="t-red">.glyphDown  { color: #E84749; }</span>  <span class="t-dim">// \u25bc red</span>',
+      '<span class="t-cmd" style="color:#5273E0">.glyphNeutral { color: #5273E0; }</span>  <span class="t-dim">// \u21d4 blue</span>',
+      '<span class="t-warn">.glyphCaution { color: #F59E0B; }</span>  <span class="t-dim">// \u25b3 amber</span>',
+    ],
+    label: 'GLYPH COLORIZER',
+    narr: 'Direction in color. No reading required.' },
+
+  // 8: Eval harness results
+  { term: 't8', tb: 'tb8', dur: 6500,
+    lines: [
+      '<span class="t-cmd">SHUMI EVAL SCORECARD  (version: sandbox)</span>',
+      '<span class="t-out">  [RAW]           <span class="t-warn">36/42 (86%)</span></span>',
+      '<span class="t-out">  [POST-PROCESSED] <span class="t-ok">42/42 (100%)</span></span>',
+      '',
+      '<span class="t-red">  Failures (raw): em dash x5, stablecoin x1</span>',
+      '<span class="t-ok">  Post-processor fixed all 6 issues</span>',
+    ],
+    label: 'EVAL HARNESS',
+    narr: '6 canonical queries. 7 deterministic checks. <span class="hi">The post-processor catches every failure.</span>' },
+
+  // 9: Studying all 37 versions
+  { term: 't9', tb: 'tb9', dur: 6000, sound: 'notification',
+    lines: [
+      '<span class="t-out">v1-v7   5.4k chars  identical, emoji-heavy</span>',
+      '<span class="t-out">v10     12.3k chars  band proximity formulas</span>',
+      '<span class="t-red">v18     6.7k chars   Response Scaling REVERT</span>',
+      '<span class="t-out">v24     6.7k chars   soul.md alignment</span>',
+      '<span class="t-out">v25     9.0k chars   glyph philosophy rewrite</span>',
+      '<span class="t-warn">v27     12.5k chars  PRODUCTION (before us)</span>',
+      '<span class="t-ok">v40     15.0k chars  cognitive load redesign</span>',
+    ],
+    label: 'ARCHAEOLOGY',
+    narr: 'We pulled all 37 prompt versions. Found <span class="red">rich data rules stripped in v18</span> that were never recovered.' },
+
+  // 10: The real insight
+  { title: 'tc10', dur: 5500, sound: 'notification',
+    label: 'THE DISCOVERY',
+    narr: 'A clean table with 6 rows has <span class="hi">more data and less friction</span> than 3 prose paragraphs.' },
+
+  // 11: Shipped
+  { term: 't11', tb: 'tb11', dur: 6000, sound: 'celebration',
+    lines: [
+      '<span class="t-ok">\u2713 Langfuse v40 \u2192 production</span>',
+      '<span class="t-ok">\u2713 PR #427 \u2192 post-processor + glyph colorizer</span>',
+      '<span class="t-ok">\u2713 PR #62  \u2192 eval harness + classifier eval</span>',
+      '',
+      '<span class="t-out">  raw: 88%  |  post-processed: 100%</span>',
+    ],
+    label: 'SHIPPED',
+    narr: 'Prompt v40 live. Post-processor deployed. Eval harness measuring.' },
+
+  // 12: Closing
+  { title: 'tc12', dur: 6000,
+    label: '',
+    narr: '<span style="color:#6B7280">coinrotatordev</span>' },
+];
+
+var current = -1, running = false;
+var total = scenes.length;
+
+function clearAll() {
+  document.querySelectorAll('.term').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.title-card').forEach(function(t) { t.classList.remove('active'); });
+}
+
+function showNarr(label, html) {
+  var nl = document.getElementById('nLabel');
+  var nt = document.getElementById('nText');
+  nl.classList.remove('show'); nt.classList.remove('show');
+  setTimeout(function() {
+    nl.textContent = label || '';
+    nt.innerHTML = html || '';
+    if (label) nl.classList.add('show');
+    if (html) nt.classList.add('show');
+  }, 200);
+}
+
+function startFilm() {
+  document.getElementById('startScreen').classList.add('hidden');
+  running = true; nextScene();
+}
+
+function nextScene() {
+  if (!running) return;
+  clearAll();
+  current++;
+  if (current >= total) { running = false; showNarr('',''); return; }
+  var s = scenes[current];
+  document.getElementById('counter').textContent = String(current+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((current+1)/total*100)+'%';
+
+  if (current >= 1) document.getElementById('recBadge').classList.add('show');
+
+  try { snd.play(Snd.SOUNDS.TRANSITION_UP,{volume:0.35}); } catch(e) {}
+  if (s.sound === 'caution') try { setTimeout(function() { snd.play(Snd.SOUNDS.CAUTION); }, 300); } catch(e) {}
+  if (s.sound === 'notification') try { setTimeout(function() { snd.play(Snd.SOUNDS.NOTIFICATION); }, 300); } catch(e) {}
+  if (s.sound === 'celebration') try { setTimeout(function() { snd.play(Snd.SOUNDS.CELEBRATION); }, 300); } catch(e) {}
+
+  showNarr(s.label, s.narr);
+
+  if (s.title) {
+    var tc = document.getElementById(s.title);
+    tc.classList.add('active');
+    tc.querySelectorAll('.line-reveal').forEach(function(r,i) {
+      setTimeout(function() { r.classList.add('show'); try { snd.play(Snd.SOUNDS.TAP,{volume:0.2}); } catch(e) {} }, 300+i*500);
+    });
+  }
+
+  if (s.term) {
+    var term = document.getElementById(s.term);
+    term.classList.add('active');
+    var b = document.getElementById(s.tb); b.innerHTML = '';
+    s.lines.forEach(function(l,i) {
+      var d = document.createElement('div');
+      d.className = 'term-line';
+      d.innerHTML = l || '&nbsp;';
+      b.appendChild(d);
+      setTimeout(function() {
+        d.classList.add('show');
+        if (l) try { snd.play(Snd.SOUNDS.TYPE,{volume:0.25}); } catch(e) {}
+      }, 600+i*600);
+    });
+  }
+
+  setTimeout(nextScene, s.dur);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.code==='Space') {
+    e.preventDefault();
+    if (current<0) startFilm();
+    else { running = !running; if (running) nextScene(); }
+  }
+  if (e.code==='ArrowRight' || e.code==='PageDown') {
+    e.preventDefault();
+    if (current<0) startFilm();
+    else { running = false; current--; nextScene(); running = false; }
+  }
+  if ((e.code==='ArrowLeft' || e.code==='PageUp') && current > 0) {
+    e.preventDefault();
+    running = false; current -= 2; nextScene(); running = false;
+  }
+});
+</script>
+</body>
+</html>
