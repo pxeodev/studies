@@ -482,11 +482,11 @@ function showScene(i) {
   document.getElementById('counter').textContent = (i + 1) + ' / ' + scenes.length;
 
   // Sound
-  if (s.sound && snd) {
-    if (s.sound === 'caution') snd.play(Snd.names.CAUTION, 1.0);
-    else if (s.sound === 'notification') snd.play(Snd.names.NOTIFICATION, 1.0);
-    else if (s.sound === 'celebration') snd.play(Snd.names.CELEBRATION, 1.0);
-  }
+  try {
+    if (s.sound === 'caution') snd.play(Snd.SOUNDS.CAUTION, {volume:1.0});
+    else if (s.sound === 'notification') snd.play(Snd.SOUNDS.NOTIFICATION, {volume:1.0});
+    else if (s.sound === 'celebration') snd.play(Snd.SOUNDS.CELEBRATION, {volume:1.0});
+  } catch(e) {}
 
   // Show title card
   if (s.title) {
