@@ -148,7 +148,7 @@
     </div>
 
     <!-- Scene 3: CORRECTION 1 — Anti-council -->
-    <div class="term" id="tc-corr1" style="opacity:1;background:red;min-height:200px">
+    <div class="term" id="tc-corr1">
       <div class="term-bar">
         <div class="term-dot" style="background:#E84749"></div>
         <div class="term-dot" style="background:#D4A843"></div>
@@ -461,6 +461,7 @@ function showScene(i) {
   // Hide all
   document.querySelectorAll('.title-card, .term').forEach(function(el) {
     el.classList.remove('active');
+    el.style.opacity = '';
     el.querySelectorAll('.term-line, .line-reveal').forEach(function(l) { l.classList.remove('show'); });
   });
 
@@ -492,6 +493,7 @@ function showScene(i) {
     var tc = document.getElementById(s.title);
     if (tc) {
       tc.classList.add('active');
+      tc.style.opacity = '1';
       tc.querySelectorAll('.line-reveal').forEach(function(el, j) {
         setTimeout(function() { el.classList.add('show'); }, 400 + j * 300);
       });
@@ -505,6 +507,7 @@ function showScene(i) {
     if (term && tb) {
       tb.innerHTML = '';
       term.classList.add('active');
+      term.style.opacity = '1';
       (s.lines || []).forEach(function(line, j) {
         var div = document.createElement('div');
         div.className = 'term-line';
