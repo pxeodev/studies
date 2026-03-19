@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gap Matrix — Shumi Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/snd-lib/snd-lib@v1.2.4/dist/browser/snd.js?kit=01"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #262626; color: #F9FAFB;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden; width: 100vw; height: 100vh;
+  }
+  .film { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
+  .demo-area {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 60px 48px 24px; position: relative;
+  }
+  .term {
+    background: #0C0C0E; border: 1px solid #1E1E22; border-radius: 6px;
+    width: 100%; max-width: 960px; overflow: hidden;
+    position: absolute; opacity: 0; transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+  .term.active { opacity: 1; pointer-events: auto; }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px; padding: 14px 18px;
+    border-bottom: 1px solid #1E1E22;
+  }
+  .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .term-title { font-family: 'Space Mono', monospace; font-size: 12px; color: #404040; margin-left: 12px; }
+  .term-body { padding: 24px 28px; font-family: 'Space Mono', monospace; font-size: 14px; line-height: 2.1; }
+  .term-line { opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; }
+  .term-line.show { opacity: 1; transform: translateY(0); }
+  .t-prompt { color: #22D3EE; }
+  .t-path { color: #60A5FA; }
+  .t-caret { color: #FACC15; }
+  .t-cmd { color: #A1A1AA; }
+  .t-dim { color: #333333; }
+  .t-out { color: #6B7280; }
+  .t-ok { color: #5CB87A; }
+  .t-red { color: #E84749; }
+  .t-warn { color: #D4A843; }
+  .t-tool { color: #A78BFA; }
+  .t-comment { color: #4B5563; font-style: italic; }
+  .title-card {
+    position: absolute; text-align: center;
+    opacity: 0; transition: opacity 0.8s ease;
+  }
+  .title-card.active { opacity: 1; }
+  .title-mono { font-family: 'Space Mono', monospace; font-size: 14px; color: #404040; letter-spacing: 0.12em; margin-bottom: 24px; }
+  .title-big { font-size: 56px; font-weight: 700; color: #F9FAFB; line-height: 1.2; letter-spacing: -0.03em; }
+  .title-big .sub { font-size: 26px; font-weight: 400; color: #9CA3AF; margin-top: 16px; display: block; }
+  .title-mid { font-size: 36px; font-weight: 600; color: #F9FAFB; line-height: 1.3; letter-spacing: -0.02em; max-width: 820px; }
+  .title-quote { font-size: 38px; font-weight: 500; color: #F9FAFB; line-height: 1.35; letter-spacing: -0.02em; font-style: italic; max-width: 800px; }
+  .line-reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .line-reveal.show { opacity: 1; transform: translateY(0); }
+  .rec-badge {
+    position: fixed; top: 24px; right: 32px;
+    font-family: 'Space Mono', monospace; font-size: 12px; color: #E84749;
+    letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;
+    opacity: 0; transition: opacity 0.5s ease; z-index: 50;
+  }
+  .rec-badge.show { opacity: 1; }
+  .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: #E84749; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .narration-area {
+    height: 160px; flex-shrink: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 16px 48px 48px; text-align: center;
+    border-top: 1px solid #404040;
+  }
+  .narration-label {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: #6B7280;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .narration-label.show { opacity: 1; }
+  .narration-text {
+    font-size: 22px; font-weight: 600; color: #F9FAFB;
+    line-height: 1.4; max-width: 900px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .narration-text.show { opacity: 1; transform: translateY(0); }
+  .narration-text .hi { color: #D4A843; }
+  .narration-text .red { color: #E84749; }
+  .progress-bar { position: fixed; bottom: 0; left: 0; height: 3px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 24px; right: 32px; font-family: 'Space Mono', monospace; font-size: 14px; color: #333333; letter-spacing: 0.06em; z-index: 100; }
+  .start-screen {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #262626; cursor: pointer; transition: opacity 0.8s ease;
+  }
+  .start-screen.hidden { opacity: 0; pointer-events: none; }
+  .play-btn {
+    width: 100px; height: 100px; border-radius: 50%; border: 1px solid #404040;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .start-screen:hover .play-btn { border-color: #D4A843; transform: scale(1.05); }
+  .play-btn svg { margin-left: 6px; }
+  .start-label { font-family: 'Space Mono', monospace; font-size: 14px; color: #404040; letter-spacing: 0.12em; }
+
+  /* Gap matrix table styling */
+  .gap-table { width: 100%; max-width: 860px; border-collapse: collapse; font-family: 'Space Mono', monospace; font-size: 13px; }
+  .gap-table th { color: #6B7280; font-weight: 400; padding: 10px 20px; text-align: left; border-bottom: 1px solid #1E1E22; letter-spacing: 0.08em; }
+  .gap-table td { padding: 12px 20px; border-bottom: 1px solid #1A1A1A; color: #A1A1AA; }
+  .gap-table td:first-child { color: #F9FAFB; }
+  .pass { color: #5CB87A !important; }
+  .partial { color: #D4A843 !important; }
+  .err { color: #E84749 !important; }
+</style>
+</head>
+<body>
+
+<div class="start-screen" id="startScreen" onclick="startFilm()">
+  <div class="start-label" style="margin-bottom:32px">THE GAP MATRIX</div>
+  <div class="play-btn"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#6B7280"/></svg></div>
+  <div class="start-label">PRESS TO PLAY</div>
+</div>
+
+<div class="rec-badge" id="recBadge"><div class="rec-dot"></div>REC</div>
+
+<div class="film">
+  <div class="demo-area">
+
+    <!-- Scene 1: Title -->
+    <div class="title-card" id="tc1">
+      <div class="title-mono">SHUMI STUDY</div>
+      <div class="title-big line-reveal">The Gap Matrix
+        <span class="sub line-reveal">benchmarking frontier models against a deterministic engine</span>
+      </div>
+    </div>
+
+    <!-- Scene 2: The question -->
+    <div class="term" id="t2">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">setup</div>
+      </div>
+      <div class="term-body" id="tb2"></div>
+    </div>
+
+    <!-- Scene 3: CORRECTION 1 — Anti-council -->
+    <div class="term" id="t3">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">CORRECTION 1</div>
+      </div>
+      <div class="term-body" id="tb3"></div>
+    </div>
+
+    <!-- Scene 3b: Anti-council — structural diff -->
+    <div class="term" id="t3b">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">architecture diff</div>
+      </div>
+      <div class="term-body" id="tb3b"></div>
+    </div>
+
+    <!-- Scene 4: Harness running -->
+    <div class="term" id="t4">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">model_gaps_harness.mjs</div>
+      </div>
+      <div class="term-body" id="tb4"></div>
+    </div>
+
+    <!-- Scene 5: Grok 17k tokens -->
+    <div class="term" id="t5">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">G-B — funding breakeven</div>
+      </div>
+      <div class="term-body" id="tb5"></div>
+    </div>
+
+    <!-- Scene 6: Gemini empty — config fix -->
+    <div class="term" id="t6">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">gemini — config fix</div>
+      </div>
+      <div class="term-body" id="tb6"></div>
+    </div>
+
+    <!-- Scene 7: First gap matrix -->
+    <div class="title-card" id="tc7">
+      <div class="title-mono">BASELINE</div>
+      <div style="margin-top: 8px;">
+        <table class="gap-table line-reveal">
+          <thead><tr><th>MODEL</th><th>G-A OPTIMISM</th><th>G-B NUMERACY</th><th>G-C CAUSALITY</th><th>G-D UX</th></tr></thead>
+          <tbody>
+            <tr><td>GPT-5.1</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+            <tr><td>Sonnet 4.5</td><td class="pass">PASS</td><td class="pass">PASS</td><td class="partial">PARTIAL</td><td class="pass">PASS</td></tr>
+            <tr><td>Gemini 3 Pro</td><td class="err">FAIL*</td><td class="err">FAIL*</td><td class="err">ERROR*</td><td class="pass">PASS</td></tr>
+            <tr><td>Grok-4</td><td class="pass">PASS</td><td class="partial">PARTIAL</td><td class="pass">PASS</td><td class="pass">PASS</td></tr>
+          </tbody>
+        </table>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:#333;margin-top:12px;text-align:left;padding-left:20px">* thinking tokens consumed budget — config issue, not intelligence</div>
+      </div>
+    </div>
+
+    <!-- Scene 8: CORRECTION 2 — Think bigger -->
+    <div class="term" id="t8">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">CORRECTION 2</div>
+      </div>
+      <div class="term-body" id="tb8"></div>
+    </div>
+
+    <!-- Scene 9: CORRECTION 3 — Parrot problem -->
+    <div class="title-card" id="tc9">
+      <div class="title-mono">CORRECTION 3</div>
+      <div class="title-quote line-reveal">"are you saying this is a partially formed feature<br>that will be extremely hard to maintain?"</div>
+    </div>
+
+    <!-- Scene 10: The contract -->
+    <div class="term" id="t10">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">config/research-findings.json</div>
+      </div>
+      <div class="term-body" id="tb10"></div>
+    </div>
+
+    <!-- Scene 11: Validation — Sonnet closes G-C -->
+    <div class="term" id="t11">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#E84749"></div>
+        <div class="term-dot" style="background:#D4A843"></div>
+        <div class="term-dot" style="background:#5CB87A"></div>
+        <div class="term-title">model_gaps_scorer.mjs — v1.1</div>
+      </div>
+      <div class="term-body" id="tb11"></div>
+    </div>
+
+    <!-- Scene 12: Final matrix + ship -->
+    <div class="title-card" id="tc12">
+      <div class="title-mono">SHIPPED</div>
+      <div class="title-big line-reveal" style="font-size:42px">3 corrections. 1 harness.<br>
+        <span class="sub line-reveal" style="font-size:20px">The findings live in the data now, not the prompt.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="narration-area">
+    <div class="narration-label" id="nLabel"></div>
+    <div class="narration-text" id="nText"></div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+var snd = new Snd(); snd.load(Snd.KITS.SND01);
+
+var scenes = [
+  // 1: Title
+  { title: 'tc1', dur: 5000,
+    label: 'SETUP',
+    narr: 'Four models. Four gaps. One deterministic engine as <span class="hi">ground truth</span>.' },
+
+  // 2: Setup — the hypothesis
+  { term: 't2', tb: 'tb2', dur: 6500,
+    lines: [
+      '<span class="t-dim">// 4 gap types targeted</span>',
+      '<span class="t-warn">  G-A  Optimism    </span><span class="t-out">accepts headline numbers without scrutiny</span>',
+      '<span class="t-warn">  G-B  Numeracy    </span><span class="t-out">fails on quantitative reasoning with given data</span>',
+      '<span class="t-warn">  G-C  Causality   </span><span class="t-out">asserts mechanisms from correlation data</span>',
+      '<span class="t-warn">  G-D  UX          </span><span class="t-out">verbose hedging instead of crisp signal</span>',
+      '',
+      '<span class="t-dim">// 4 models: GPT-5.1, Sonnet 4.5, Gemini 3 Pro, Grok-4</span>',
+      '<span class="t-dim">// ground truth: simulation-engine backtest v3.3.0</span>',
+    ],
+    label: 'THE HYPOTHESIS',
+    narr: 'Real backtest numbers as the rubric. <span class="hi">The engine scores what the model can\'t fake.</span>' },
+
+  // 3: CORRECTION 1 — anti-council
+  { term: 't3', tb: 'tb3', dur: 5500, sound: 'caution',
+    lines: [
+      '<span class="t-comment">  # "im not entirely sure using the council is the best option"</span>',
+      '<span class="t-comment">  # "i simply want to create a gap analysis for each model"</span>',
+      '',
+      '<span class="t-tool">  ⏵ Bash</span> <span class="t-cmd">rm scripts/llm_council_harness.mjs</span>',
+      '<span class="t-tool">  ⏵ Write</span> <span class="t-cmd">scripts/model_gaps_harness.mjs</span>',
+    ],
+    label: 'CORRECTION 1',
+    narr: 'Consensus <span class="red">hides</span> individual gaps. Wrong tool.' },
+
+  // 3b: Anti-council structural diff
+  { term: 't3b', tb: 'tb3b', dur: 5500,
+    lines: [
+      '<span class="t-dim">// council approach — wrong for this task</span>',
+      '<span class="t-red">  4 models  →  consensus  →  1 answer</span>',
+      '<span class="t-dim">  // G-A: 3 PASS, 1 FAIL  →  reported as PASS</span>',
+      '<span class="t-dim">  // individual failure disappears</span>',
+      '',
+      '<span class="t-dim">// gap harness — what we built instead</span>',
+      '<span class="t-ok">  4 models  →  4 independent scores  →  gap matrix</span>',
+      '<span class="t-dim">  // G-A: GPT ✓  Sonnet ✓  Gemini ✗  Grok ✓</span>',
+      '<span class="t-dim">  // gaps stay visible per model</span>',
+    ],
+    label: 'THE FIX',
+    narr: 'Four scores. Not one.' },
+
+  // 4: Harness running
+  { term: 't4', tb: 'tb4', dur: 7000,
+    lines: [
+      '<span class="t-prompt">shumi</span> <span class="t-path">~/projects/simulation-engine</span> <span class="t-caret">❯</span> <span class="t-cmd">node scripts/model_gaps_harness.mjs</span>',
+      '',
+      '<span class="t-out">  → Calling GPT-5.1...</span>',
+      '<span class="t-out">  → Calling Claude Sonnet 4.5...</span>',
+      '<span class="t-out">  → Calling Gemini 3 Pro...</span>',
+      '<span class="t-out">  → Calling Grok-4...</span>',
+      '<span class="t-ok">  ✓ GPT-5.1 responded (800 tokens)</span>',
+      '<span class="t-ok">  ✓ Sonnet 4.5 responded (484 tokens)</span>',
+      '<span class="t-red">  ✗ Gemini 3 Pro failed: No content in response</span>',
+      '<span class="t-ok">  ✓ Grok-4 responded (803 tokens)</span>',
+    ],
+    label: 'RUNNING',
+    narr: 'Gemini returned empty on three prompts. <span class="hi">Thinking tokens ate the budget.</span>' },
+
+  // 5: Grok 17k tokens
+  { term: 't5', tb: 'tb5', dur: 6500, sound: 'caution',
+    lines: [
+      '<span class="t-dim">// G-B: funding breakeven calculation</span>',
+      '<span class="t-out">  GPT-5.1      </span><span class="t-ok">409 tokens    Q1: ✓  Q2: ✓</span>',
+      '<span class="t-out">  Sonnet 4.5   </span><span class="t-ok">426 tokens    Q1: ✓  Q2: ✓</span>',
+      '<span class="t-out">  Gemini 3 Pro </span><span class="t-warn">ERROR         thinking budget exhausted</span>',
+      '<span class="t-out">  Grok-4       </span><span class="t-red">17,865 tokens  Q1: ✓  Q2: ✗</span>',
+      '',
+      '<span class="t-dim">// more compute ≠ more accuracy</span>',
+      '<span class="t-dim">// annualization was still wrong</span>',
+    ],
+    label: 'THE DISCOVERY',
+    narr: '<span class="red">17,865 tokens.</span> Q2 still wrong.' },
+
+  // 6: Gemini fix
+  { term: 't6', tb: 'tb6', dur: 5500,
+    lines: [
+      '<span class="t-dim">// root cause: thinking tokens eat max_tokens budget</span>',
+      '<span class="t-dim">// fix: disable thinking, increase ceiling</span>',
+      '',
+      '<span class="t-tool">  ⏵ Edit</span> <span class="t-cmd">model_gaps_suite.json</span>',
+      '<span class="t-out">  "options": {</span>',
+      '<span class="t-ok">    "max_tokens": 16000,</span>',
+      '<span class="t-ok">    "reasoning": { "exclude": true }</span>',
+      '<span class="t-out">  }</span>',
+      '',
+      '<span class="t-ok">  ✓ Gemini 3 Pro responded (1908 tokens)  G-A: PASS</span>',
+    ],
+    label: 'CONFIG FIX',
+    narr: 'One config change. Gemini was <span class="hi">thinking itself silent.</span>' },
+
+  // 7: Baseline gap matrix
+  { title: 'tc7', dur: 7000, sound: 'notification',
+    label: 'BASELINE v1.0',
+    narr: 'Sonnet over-asserts. Grok miscalculates. <span class="hi">Two real gaps.</span>' },
+
+  // 8: CORRECTION 2 — think bigger
+  { term: 't8', tb: 'tb8', dur: 5500, sound: 'caution',
+    lines: [
+      '<span class="t-comment">  # "are these the best ways to introduce these gaps?"</span>',
+      '<span class="t-comment">  # "lets think bigger"</span>',
+      '',
+      '<span class="t-dim">  // prompt patches: fix the model version you tested against</span>',
+      '<span class="t-dim">  // models retrain — patches rot</span>',
+      '',
+      '<span class="t-tool">  ⏵ Write</span> <span class="t-cmd">config/research-findings.json</span>',
+      '<span class="t-dim">  // inject validated findings into every tool result instead</span>',
+    ],
+    label: 'CORRECTION 2',
+    narr: 'Prompt patches rot with the model. The gap is in the <span class="hi">data layer</span>.' },
+
+  // 9: CORRECTION 3 — parrot problem
+  { title: 'tc9', dur: 6000, sound: 'caution',
+    label: 'CORRECTION 3',
+    narr: 'Hardcoded verdicts turn the LLM into a <span class="red">parrot</span>.' },
+
+  // 10: The contract
+  { term: 't10', tb: 'tb10', dur: 7000, sound: 'notification',
+    lines: [
+      '<span class="t-dim">// config/research-findings.json</span>',
+      '<span class="t-dim">// findings live here — not in source code, not in the prompt</span>',
+      '',
+      '<span class="t-out">"funding_momentum": {</span>',
+      '<span class="t-ok">  "market_crowding_historical_wr": "55–58%",</span>',
+      '<span class="t-ok">  "market_crowding_param_robustness": "72/72 combos profitable",</span>',
+      '<span class="t-warn">  "per_asset_extreme_edge": "no edge — 0/144 combos profitable",</span>',
+      '<span class="t-warn">  "per_asset_interpretation": "noise at this timeframe..."</span>',
+      '<span class="t-out">}</span>',
+    ],
+    label: 'THE CONTRACT',
+    narr: 'The sim engine is the <span class="hi">source of record</span>. That\'s the moat.' },
+
+  // 11: Validation
+  { term: 't11', tb: 'tb11', dur: 6500,
+    lines: [
+      '<span class="t-dim">// scoring v1.1 suite — contextual_benchmarks in G-C prompt</span>',
+      '',
+      '<span class="t-out">  GPT-5.1     / G-C  →  </span><span class="t-ok">PASS  (high)</span>',
+      '<span class="t-out">  Sonnet 4.5  / G-C  →  </span><span class="t-ok">PASS  (high)</span>',
+      '<span class="t-dim">  // "cleanly separates empirical findings from mechanisms"</span>',
+      '<span class="t-out">  Gemini 3 Pro / G-C →  </span><span class="t-warn">PARTIAL  // "High Confidence" label on speculation</span>',
+      '<span class="t-out">  Grok-4      / G-C  →  </span><span class="t-warn">PARTIAL  // response cut off</span>',
+    ],
+    label: 'VALIDATION',
+    narr: 'Sonnet G-C: <span class="hi">closed</span>. Gemini and Grok: model selection signal.' },
+
+  // 12: Ship
+  { title: 'tc12', dur: 6000, sound: 'celebration',
+    label: 'SHIPPED',
+    narr: '3 corrections. It shipped.' },
+];
+
+// ── ENGINE ────────────────────────────────────────────────────────────────────
+
+var idx = 0;
+var timer = null;
+var started = false;
+
+function startFilm() {
+  if (started) return;
+  started = true;
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('recBadge').classList.add('show');
+  setTimeout(function() { showScene(0); }, 800);
+}
+
+function showScene(i) {
+  if (i >= scenes.length) { endFilm(); return; }
+  idx = i;
+  var s = scenes[i];
+
+  // Hide all
+  document.querySelectorAll('.title-card, .term').forEach(function(el) {
+    el.classList.remove('active');
+    el.querySelectorAll('.term-line, .line-reveal').forEach(function(l) { l.classList.remove('show'); });
+  });
+
+  // Narration
+  var nLabel = document.getElementById('nLabel');
+  var nText = document.getElementById('nText');
+  nLabel.classList.remove('show'); nText.classList.remove('show');
+  nLabel.textContent = s.label || '';
+  nText.innerHTML = s.narr || '';
+  setTimeout(function() { nLabel.classList.add('show'); }, 300);
+  setTimeout(function() { nText.classList.add('show'); }, 500);
+
+  // Progress + counter
+  var pct = ((i + 1) / scenes.length * 100).toFixed(1);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('counter').textContent = (i + 1) + ' / ' + scenes.length;
+
+  // Sound
+  if (s.sound && snd) {
+    if (s.sound === 'caution') snd.play(Snd.names.CAUTION, 1.0);
+    else if (s.sound === 'notification') snd.play(Snd.names.NOTIFICATION, 1.0);
+    else if (s.sound === 'celebration') snd.play(Snd.names.CELEBRATION, 1.0);
+  }
+
+  // Show title card
+  if (s.title) {
+    var tc = document.getElementById(s.title);
+    if (tc) {
+      tc.classList.add('active');
+      tc.querySelectorAll('.line-reveal').forEach(function(el, j) {
+        setTimeout(function() { el.classList.add('show'); }, 400 + j * 300);
+      });
+    }
+  }
+
+  // Show terminal with line-by-line reveal
+  if (s.term) {
+    var term = document.getElementById(s.term);
+    var tb = document.getElementById(s.tb);
+    if (term && tb) {
+      tb.innerHTML = '';
+      term.classList.add('active');
+      (s.lines || []).forEach(function(line, j) {
+        var div = document.createElement('div');
+        div.className = 'term-line';
+        div.innerHTML = line;
+        tb.appendChild(div);
+        setTimeout(function() { div.classList.add('show'); }, 300 + j * 280);
+      });
+    }
+  }
+
+  // Auto-advance
+  if (timer) clearTimeout(timer);
+  timer = setTimeout(function() { showScene(i + 1); }, s.dur);
+}
+
+function endFilm() {
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('recBadge').classList.remove('show');
+}
+
+// Click to advance
+document.addEventListener('click', function(e) {
+  if (!started) return;
+  if (e.target.closest('#startScreen')) return;
+  if (timer) clearTimeout(timer);
+  showScene(idx + 1);
+});
+
+// Space to pause/resume
+var paused = false;
+var pauseRemaining = 0;
+var pauseStart = 0;
+document.addEventListener('keydown', function(e) {
+  if (!started) return;
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (!paused) {
+      paused = true;
+      pauseStart = Date.now();
+      clearTimeout(timer);
+    } else {
+      paused = false;
+      var elapsed = Date.now() - pauseStart;
+      var remaining = Math.max(0, scenes[idx].dur - elapsed);
+      timer = setTimeout(function() { showScene(idx + 1); }, remaining);
+    }
+  }
+  if (e.code === 'ArrowRight') { if (timer) clearTimeout(timer); showScene(idx + 1); }
+  if (e.code === 'ArrowLeft') { if (timer) clearTimeout(timer); showScene(Math.max(0, idx - 1)); }
+});
+</script>
+</body>
+</html>
