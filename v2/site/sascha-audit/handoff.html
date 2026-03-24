@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sascha Handoff — 2026-03-24</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #141414; color: #D4D4D8;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.7; padding: 60px 24px 100px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  .back {
+    font-family: 'Space Mono', monospace; font-size: 12px;
+    color: #555; text-decoration: none; letter-spacing: 0.08em;
+    display: inline-block; margin-bottom: 48px;
+    transition: color 0.2s;
+  }
+  .back:hover { color: #D4A843; }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+    color: #F9FAFB; letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .date {
+    font-family: 'Space Mono', monospace; font-size: 12px;
+    color: #444; letter-spacing: 0.12em; margin-bottom: 48px;
+  }
+
+  h2 {
+    font-size: 20px; font-weight: 700; color: #F9FAFB;
+    margin: 48px 0 16px; padding-top: 32px;
+    border-top: 1px solid #222;
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+
+  p { margin: 12px 0; color: #999; }
+  strong { color: #F9FAFB; font-weight: 600; }
+  em { color: #D4A843; font-style: italic; }
+  code {
+    font-family: 'Space Mono', monospace; font-size: 0.88em;
+    background: #1E1E22; padding: 2px 6px; border-radius: 3px;
+    color: #A1A1AA;
+  }
+
+  .priority-badge {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: 12px; font-weight: 700; padding: 3px 10px;
+    border-radius: 4px; margin-right: 8px; vertical-align: middle;
+  }
+  .p1 { background: rgba(92,184,122,0.15); color: #5CB87A; }
+  .p2 { background: rgba(212,168,67,0.15); color: #D4A843; }
+  .ex { background: rgba(232,71,73,0.1); color: #E84749; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    text-align: left; font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #555; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 10px 12px;
+    border-bottom: 1px solid #2A2A2E;
+  }
+  td {
+    padding: 10px 12px; border-bottom: 1px solid #1A1A1E;
+    color: #999; vertical-align: top;
+  }
+  td strong { color: #D4D4D8; }
+
+  .arch {
+    background: #0A0A0C; border: 1px solid #1E1E22;
+    border-radius: 8px; padding: 20px 24px; margin: 16px 0;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+    line-height: 2; color: #6B7280; white-space: pre-line;
+  }
+  .arch .label { color: #22D3EE; }
+  .arch .note { color: #555; }
+
+  ol, ul { margin: 12px 0; padding-left: 24px; color: #999; }
+  li { margin: 6px 0; }
+  li strong { color: #D4D4D8; }
+
+  .surface-status { display: inline-block; font-size: 13px; }
+  .live { color: #5CB87A; }
+  .blocked { color: #E84749; }
+  .deferred { color: #D4A843; }
+
+  .note-box {
+    background: #1A1A1C; border: 1px solid #2A2A2E;
+    border-radius: 8px; padding: 16px 20px; margin: 24px 0;
+    font-size: 14px; color: #777;
+  }
+  .note-box strong { color: #999; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="./" class="back">← BACK TO FILM</a>
+
+<h1>Sascha Handoff</h1>
+<div class="date">2026-03-24 · CODEBASE-VERIFIED</div>
+
+<p>Backend & infrastructure lead. Owns <code>coinrotator-backend</code>, Render deploys, schema/DB, Redis, service health. Does <strong>not</strong> own prompts, classifiers, Langfuse versioning, or simulation optimization.</p>
+
+<h2><span class="priority-badge p1">P1</span> Bridge shumi-bot endpoints to web</h2>
+
+<p>shumi-bot has <strong>~40 Telegram-only commands</strong> with no HTTP equivalent. These are the product's most valuable features and they're locked behind Telegram. The web stack can't reach them — shumi-bot doesn't go through <code>coinrotator-utils</code>.</p>
+
+<table>
+  <tr><th>Category</th><th>Commands</th><th>Data source</th></tr>
+  <tr><td><strong>Live signals</strong></td><td><code>/signals</code> <code>/regime</code> <code>/funding</code> <code>/momentum</code></td><td>Hyperliquid, regime scanner</td></tr>
+  <tr><td><strong>Whale/wallet</strong></td><td><code>/holders</code> <code>/wallettrack</code> <code>/basket</code></td><td>SimpleHash, SIM/Dune</td></tr>
+  <tr><td><strong>Market intel</strong></td><td><code>/sentiment</code> <code>/dislocation</code> <code>/council</code> <code>/scan</code></td><td>Multi-LLM analysis</td></tr>
+  <tr><td><strong>Personal state</strong></td><td><code>/notes</code> <code>/remember</code> <code>/watch</code> <code>/alert</code></td><td>pgvector, user prefs</td></tr>
+</table>
+
+<p><strong>What to do:</strong></p>
+<ol>
+  <li>Extract query logic from bot command handlers into reusable functions</li>
+  <li>Add HTTP endpoints for top-priority lookups: regime signals, funding momentum, holder snapshots</li>
+  <li>Return <strong>JSON</strong> (not Telegram markdown) so web + landing page can consume it</li>
+  <li>Auth mapping: JWT ↔ Telegram OWNER_ID for personal state endpoints</li>
+</ol>
+
+<h2><span class="priority-badge p2">P2</span> Glassbowl — validate landing page surfaces</h2>
+
+<p>The landing page hero has a <strong>HeroGlassBox</strong> component showing <em>"one signal, four delivery surfaces"</em> (Web, Telegram, CLI, API). The glassbowl design is pxeo's domain. Sascha's role is <strong>technical validation</strong>: ensuring each surface can actually deliver data.</p>
+
+<table>
+  <tr><th>Surface</th><th>Glass box shows</th><th>Status</th></tr>
+  <tr><td><strong>Telegram</strong></td><td>Funding divergence signal</td><td><span class="surface-status live">✓ Live</span></td></tr>
+  <tr><td><strong>Web</strong></td><td>Same signal in web UI</td><td><span class="surface-status blocked">✗ Needs endpoint</span></td></tr>
+  <tr><td><strong>API</strong></td><td>JSON response</td><td><span class="surface-status blocked">✗ Needs endpoint</span></td></tr>
+  <tr><td><strong>CLI</strong></td><td>Terminal output</td><td><span class="surface-status deferred">○ Deferred</span></td></tr>
+</table>
+
+<p><strong>Phase 2 goal:</strong> Replace hardcoded <code>SHUMI_SIGNAL_RECEIPTS</code> in <code>shumi-landing/lib/shumi-data.ts</code> with live data from <code>regime_outcomes</code> table. Requires merging <code>feat/regime-signal-api</code>.</p>
+
+<h2><span class="priority-badge ex">—</span> NOT Sascha's scope</h2>
+
+<p><strong>Simulation optimization is entirely pxeo's domain:</strong></p>
+<ul>
+  <li><code>simulation-engine/</code> repo — all 152 backtest/sweep/validation scripts</li>
+  <li>Engine A (confluence mean reversion) & Engine B (trend ratchet) calibration</li>
+  <li>Parameter sweeps, walkforward validation, OOS testing, Monte Carlo</li>
+  <li>Autoresearch harnesses (market-health, oscillator, futures)</li>
+  <li><code>config/stack_config.json</code> tuning</li>
+  <li>BNB/HYPE futures calibration</li>
+</ul>
+
+<p>Sascha's boundary ends at: <em>"the signal arrived via HTTP and needs to be stored/served."</em> Everything upstream is pxeo.</p>
+
+<h2>Architecture (verified)</h2>
+
+<div class="arch"><span class="label">simulation-engine</span>  →  pxeo only. Backtesting, validation, signal discovery.
+<span class="label">shumi-bot</span>          →  Telegram bot + own PG + read-only crSql into CoinRotator DB
+<span class="label">coinrotator-backend</span> →  Fastify monolith (4,328-line index.js), primary PG + Redis
+<span class="label">coinrotator-utils</span>   →  Pure ES module library, no runtime. NOT used by shumi-bot.
+<span class="label">shumi-doctor</span>        →  Monitors everything every 15min, Telegram alerts</div>
+
+<p>Deploy: push-to-main on Render, no staging. Test in forks.</p>
+<p><strong>Key constraint:</strong> Schema changes in <code>coinrotator-backend</code> can silently break <code>shumi-bot</code> <code>crSql</code> queries. Coordinate.</p>
+
+<h2>Open items</h2>
+
+<table>
+  <tr><th>Item</th><th>Status</th><th>Owner</th></tr>
+  <tr><td>Merge <code>feat/regime-signal-api</code></td><td>Ready, needs deploy</td><td>Sascha</td></tr>
+  <tr><td>Add <code>getSignalData</code> tool to <code>shumi.js</code></td><td>Blocked on above</td><td>Sascha + pxeo</td></tr>
+  <tr><td>Update Langfuse Tool Definitions</td><td>Blocked on above</td><td>pxeo</td></tr>
+  <tr><td><code>hotfix/ai-config-fallback</code> (SSH auth)</td><td>Local branch, not merged</td><td>Sascha</td></tr>
+  <tr><td>Heartbeat writes for scanners</td><td>Not started</td><td>Sascha</td></tr>
+</table>
+
+<div class="note-box">
+  <strong>PAT token note:</strong> Sascha flagged the inline GitHub PAT in <code>coinrotator-ai/package.json</code> as a false positive. Fix branch exists (<code>hotfix/ai-config-fallback</code>) but is unmerged. Both repos are private. Sascha's call on priority.
+</div>
+
+</div>
+</body>
+</html>
