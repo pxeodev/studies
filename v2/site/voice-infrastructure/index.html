@@ -339,16 +339,16 @@ function blastPhysarum() {
 }
 
 var scenes = [
-  // ACT 1: TITLE
-  { title:'tc0', dur:4000,
+  // ACT 1: TITLE — durations scaled 1.2x to match 94s narration track
+  { title:'tc0', dur:5000,
     label:'', narr:'' },
 
   // ACT 2: THE MEMORY PROBLEM
-  { title:'tc_memory_problem', dur:4000, sound:'notification',
+  { title:'tc_memory_problem', dur:5000, sound:'notification',
     label:'', narr:'Every Claude Code session starts from <span class="red">zero.</span>' },
 
   // ACT 3: MEMORY ARCHITECTURE
-  { term:'term_memory', tb:'tb_memory', dur:7000, lines:[
+  { term:'term_memory', tb:'tb_memory', dur:8500, lines:[
     '<span class="t-tool">  ⏵ Write</span> <span class="t-cmd">~/.claude/memory/</span>',
     '',
     '<span class="t-out">  Types:</span>',
@@ -362,14 +362,14 @@ var scenes = [
   ], label:'THE MEMORY LAYER', narr:'Four types of memory. Indexed, searchable, <span class="hi">persistent across sessions.</span>' },
 
   // ACT 4: THE SOLUTION
-  { title:'tc_memory_solution', dur:4000, sound:'notification',
+  { title:'tc_memory_solution', dur:5000, sound:'notification',
     label:'', narr:'Not a database. A <span class="hi">briefing system.</span>' },
 
   // ACT 5: THE HARNESS
-  { title:'tc_harness', dur:3500,
+  { title:'tc_harness', dur:4000,
     label:'', narr:'Memory updates hit <span class="hi">every surface at once.</span>' },
 
-  { term:'term_harness', tb:'tb_harness', dur:7000, lines:[
+  { term:'term_harness', tb:'tb_harness', dur:8500, lines:[
     '<span class="t-out">  Session hooks:</span>',
     '<span class="t-out">    <span class="t-ok">SessionStart</span>  → load memory, read HANDOFF.md, resume context</span>',
     '<span class="t-out">    <span class="t-warn">Stop</span>          → speak [SPOKEN] summary via Jordan TTS</span>',
@@ -383,7 +383,7 @@ var scenes = [
   ], label:'THE HARNESS', narr:'One write. Four surfaces. The CLI hears you. Telegram briefs Sascha. QMD indexes it. <span class="hi">The next session remembers.</span>' },
 
   // ACT 6: TELEGRAM DELIVERY
-  { term:'term_telegram', tb:'tb_telegram', dur:6500, lines:[
+  { term:'term_telegram', tb:'tb_telegram', dur:8000, lines:[
     '<span class="t-dim">  voice-handoff.sh pipeline:</span>',
     '',
     '<span class="t-out">  1. Read HANDOFF.md</span>           <span class="t-comment">raw markdown, git snapshot</span>',
@@ -395,10 +395,10 @@ var scenes = [
   ], label:'TELEGRAM VOICE', narr:'Markdown in. Voice note out. Sascha gets a briefing he can <span class="hi">listen to while walking.</span>', sound:'notification' },
 
   // ACT 7: THE VOICE SEARCH
-  { title:'tc_voice_pivot', dur:3500,
+  { title:'tc_voice_pivot', dur:4000,
     label:'', narr:'But first we needed a voice that didn\'t sound like <span class="red">a robot.</span>' },
 
-  { term:'term_voices', tb:'tb_voices', dur:6500, lines:[
+  { term:'term_voices', tb:'tb_voices', dur:8000, lines:[
     '<span class="t-red">  ✗ Edge TTS</span>         <span class="t-comment">"insanely sharp and trebly"</span>',
     '<span class="t-red">  ✗ macOS say</span>         <span class="t-comment">"extremely robotic and stiff"</span>',
     '<span class="t-red">  ✗ ElevenLabs free</span>   <span class="t-comment">"still pretty harsh"</span>',
@@ -409,10 +409,10 @@ var scenes = [
     '<span class="t-ok">  Selected:   Jordan — Warm Narrator</span>  <span class="t-comment">"this is the one"</span>',
   ], label:'THE AUDITION', narr:'Twenty voices. Three engines. Most sounded like <span class="red">a newsreader in a tile bathroom.</span>' },
 
-  { title:'tc_voice_found', dur:3000, sound:'celebration',
+  { title:'tc_voice_found', dur:3500, sound:'celebration',
     label:'', narr:'Soft. Earthy. <span class="hi">North American.</span>' },
 
-  { term:'term_settings', tb:'tb_settings', dur:5000, lines:[
+  { term:'term_settings', tb:'tb_settings', dur:6000, lines:[
     '<span class="t-out">  voice:     Jordan — Warm Narrator</span>',
     '<span class="t-out">  stability: <span class="t-warn">0.25</span></span>   <span class="t-comment">← emotional variation</span>',
     '<span class="t-out">  similarity: 0.6</span>    <span class="t-comment">← enough to stay grounded</span>',
@@ -422,7 +422,7 @@ var scenes = [
   ], label:'THE SETTINGS', narr:'Low stability for feeling. Break tags for <span class="hi">breathing room.</span>' },
 
   // ACT 8: ALSO SHIPPED
-  { term:'term_prs', tb:'tb_prs', dur:6000, lines:[
+  { term:'term_prs', tb:'tb_prs', dur:7000, lines:[
     '<span class="t-ok">  ✓</span> <span class="t-out">coinrotator-ai  #68</span>  <span class="t-comment">narrative slope pipeline — 17 categories</span>',
     '<span class="t-ok">  ✓</span> <span class="t-out">shumi-doctor    #2</span>   <span class="t-comment">alert suppression + /context command</span>',
     '<span class="t-ok">  ✓</span> <span class="t-out">shumi-landing   #8</span>   <span class="t-comment">studies section + Who Said It</span>',
@@ -432,7 +432,7 @@ var scenes = [
   ], label:'ALSO SHIPPED', narr:'Four PRs across four repos. <span class="hi">While building the voice system.</span>' },
 
   // ACT 9: STUDY BATCH
-  { term:'term_studies', tb:'tb_studies', dur:5500, lines:[
+  { term:'term_studies', tb:'tb_studies', dur:6500, lines:[
     '<span class="t-out">  Ran all 15 study films through the voice pipeline</span>',
     '',
     '<span class="t-ok">  ✓</span> batcat, biorhythm, buying-losers, cohort-signal,',
@@ -445,7 +445,7 @@ var scenes = [
   ], label:'15 STUDY FILMS', narr:'Every study narrated by Jordan. The whole product story in <span class="hi">eight minutes.</span>', sound:'notification' },
 
   // SCORECARD
-  { term:'term_score', tb:'tb_score', dur:7000, lines:[
+  { term:'term_score', tb:'tb_score', dur:8500, lines:[
     '<span class="t-out">  Built                         Status</span>',
     '<span class="t-dim">  ──────────────────────────────────────────</span>',
     '<span class="t-ok">  Persistent memory (65 files)   running</span>',
@@ -460,7 +460,7 @@ var scenes = [
   ], label:'SCORECARD', narr:'Memory that persists. A voice that speaks. Surfaces that <span class="hi">stay in sync.</span> That\'s the harness.', sound:'celebration' },
 
   // END
-  { title:'tc_end', dur:6000,
+  { title:'tc_end', dur:6500,
     label:'', narr:'The work continues.' },
 ];
 
