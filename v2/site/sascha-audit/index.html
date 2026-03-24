@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codebase Audit — When the Handoff Doesn't Match the Code</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/snd-lib/snd-lib@v1.2.4/dist/browser/snd.js?kit=01"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #141414; color: #F9FAFB;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden; width: 100vw; height: 100vh;
+  }
+  .film { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; }
+
+  /* ── MAIN STAGE ──────────────────── */
+  .stage {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 40px; position: relative; overflow: hidden;
+  }
+
+  /* ── SCENES (all absolutely positioned, fade in/out) ── */
+  .scene {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.7s ease;
+    padding: 40px;
+  }
+  .scene.active { opacity: 1; }
+
+  /* ── HERO NUMBERS — massive impact text ── */
+  .hero-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(120px, 20vw, 280px);
+    font-weight: 700; line-height: 0.85;
+    letter-spacing: -0.04em;
+    text-align: center;
+  }
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(12px, 1.4vw, 18px);
+    color: #555; letter-spacing: 0.15em;
+    text-transform: uppercase; margin-top: 24px;
+    text-align: center;
+  }
+
+  /* ── TITLE CARDS ── */
+  .tc { text-align: center; max-width: 900px; }
+  .tc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(11px, 1.2vw, 14px);
+    color: #444; letter-spacing: 0.15em;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .tc-big {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+  .tc-sub {
+    font-size: clamp(18px, 2.4vw, 30px);
+    font-weight: 400; color: #777; line-height: 1.4;
+    margin-top: 16px;
+  }
+  .tc-quote {
+    font-size: clamp(24px, 3.5vw, 48px);
+    font-weight: 500; line-height: 1.3;
+    letter-spacing: -0.02em; font-style: italic;
+    max-width: 800px;
+  }
+
+  /* ── VISUAL STATUS GRID ── */
+  .status-grid {
+    display: grid; grid-template-columns: 1fr;
+    gap: 12px; width: 100%; max-width: 640px;
+  }
+  .status-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px; border-left: 4px solid #333;
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(13px, 1.4vw, 16px);
+  }
+  .status-row.red { border-left-color: #E84749; }
+  .status-row.green { border-left-color: #5CB87A; }
+  .status-row.gold { border-left-color: #D4A843; }
+  .status-icon { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
+  .status-text { color: #999; }
+  .status-text strong { color: #F9FAFB; font-weight: 600; }
+
+  /* ── MINI TERMINAL (compact, max 3 lines) ── */
+  .mini-term {
+    background: #0A0A0C; border: 1px solid #1E1E22;
+    border-radius: 8px; width: 100%; max-width: 700px;
+    overflow: hidden;
+  }
+  .mini-term-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 12px 16px; border-bottom: 1px solid #1E1E22;
+  }
+  .mini-term-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .mini-term-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #333; margin-left: 10px;
+  }
+  .mini-term-body {
+    padding: 20px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(12px, 1.3vw, 15px);
+    line-height: 2.4;
+  }
+  .mini-term-line {
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.35s, transform 0.35s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mini-term-line.show { opacity: 1; transform: translateY(0); }
+
+  .t-cyan { color: #22D3EE; }
+  .t-blue { color: #60A5FA; }
+  .t-yellow { color: #FACC15; }
+  .t-purple { color: #A78BFA; }
+  .t-gray { color: #555; }
+  .t-green { color: #5CB87A; }
+  .t-red { color: #E84749; }
+  .t-gold { color: #D4A843; }
+  .t-dim { color: #2A2A2A; }
+  .t-leaked { color: #E84749; background: rgba(232,71,73,0.12); padding: 1px 4px; border-radius: 2px; }
+
+  /* ── SPLIT LAYOUT (side by side) ── */
+  .split {
+    display: flex; gap: 32px; align-items: stretch;
+    width: 100%; max-width: 900px;
+  }
+  .split-col {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; gap: 10px;
+  }
+
+  /* ── LINE REVEALS ── */
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.show { opacity: 1; transform: translateY(0); }
+
+  /* ── COLORS ── */
+  .c-red { color: #E84749; }
+  .c-green { color: #5CB87A; }
+  .c-gold { color: #D4A843; }
+  .c-white { color: #F9FAFB; }
+  .c-dim { color: #555; }
+
+  /* ── REC BADGE ── */
+  .rec-badge {
+    position: fixed; top: 20px; right: 28px;
+    font-family: 'Space Mono', monospace; font-size: 11px; color: #E84749;
+    letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;
+    opacity: 0; transition: opacity 0.5s ease; z-index: 50;
+  }
+  .rec-badge.show { opacity: 1; }
+  .rec-dot { width: 7px; height: 7px; border-radius: 50%; background: #E84749; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── NARRATION STRIP ── */
+  .narr-strip {
+    height: 120px; flex-shrink: 0;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 12px 48px 32px; text-align: center;
+    border-top: 1px solid #222;
+    background: #141414;
+  }
+  .narr-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #444;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .narr-label.show { opacity: 1; }
+  .narr-text {
+    font-size: clamp(16px, 2vw, 22px); font-weight: 600;
+    color: #CCC; line-height: 1.45; max-width: 800px;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .narr-text.show { opacity: 1; transform: translateY(0); }
+  .narr-text .hi { color: #D4A843; }
+  .narr-text .red { color: #E84749; }
+
+  /* ── PROGRESS ── */
+  .progress { position: fixed; bottom: 0; left: 0; height: 3px; background: #D4A843; z-index: 100; transition: width 0.3s linear; }
+  .counter { position: fixed; bottom: 16px; right: 28px; font-family: 'Space Mono', monospace; font-size: 12px; color: #2A2A2A; z-index: 100; }
+
+  /* ── START SCREEN ── */
+  .start {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #141414; cursor: pointer; transition: opacity 0.8s;
+  }
+  .start.hidden { opacity: 0; pointer-events: none; }
+  .play-ring {
+    width: 90px; height: 90px; border-radius: 50%; border: 1px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px; transition: border-color 0.3s, transform 0.3s;
+  }
+  .start:hover .play-ring { border-color: #D4A843; transform: scale(1.06); }
+  .play-ring svg { margin-left: 5px; }
+  .start-label { font-family: 'Space Mono', monospace; font-size: 12px; color: #333; letter-spacing: 0.14em; }
+
+  /* ── HANDOFF CARD ── */
+  .handoff-card {
+    background: #1A1A1C; border: 1px solid #2A2A2E; border-radius: 12px;
+    width: 100%; max-width: 620px; overflow: hidden;
+  }
+  .handoff-header {
+    padding: 20px 28px 16px; border-bottom: 1px solid #2A2A2E;
+  }
+  .handoff-body { padding: 8px 28px 24px; }
+  .handoff-section {
+    display: flex; align-items: flex-start; gap: 18px;
+    padding: 16px 0;
+  }
+  .handoff-p1, .handoff-p2, .handoff-ex {
+    font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700;
+    flex-shrink: 0; width: 32px; text-align: center;
+    padding: 4px 0; border-radius: 4px; margin-top: 2px;
+  }
+  .handoff-p1 { background: rgba(92,184,122,0.15); color: #5CB87A; }
+  .handoff-p2 { background: rgba(212,168,67,0.15); color: #D4A843; }
+  .handoff-ex { background: rgba(232,71,73,0.1); color: #E84749; font-size: 16px; line-height: 1; }
+  .handoff-detail {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .handoff-detail strong {
+    font-size: clamp(15px, 1.6vw, 18px); color: #F9FAFB; font-weight: 600;
+  }
+  .handoff-detail span {
+    font-size: clamp(12px, 1.2vw, 14px); color: #666; line-height: 1.4;
+  }
+  .handoff-divider {
+    height: 1px; background: #2A2A2E; margin: 4px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="start" id="startScreen" onclick="startFilm()">
+  <div class="start-label" style="margin-bottom:28px">CODEBASE AUDIT</div>
+  <div class="play-ring"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#555"/></svg></div>
+  <div class="start-label">PRESS TO PLAY</div>
+</div>
+
+<div class="rec-badge" id="recBadge"><div class="rec-dot"></div>REC</div>
+
+<div class="film">
+  <div class="stage">
+
+    <!-- S0: TITLE -->
+    <div class="scene" id="s0">
+      <div class="tc">
+        <div class="tc-label reveal">CODEBASE AUDIT</div>
+        <div class="tc-big reveal">When the handoff<br>doesn't match the code</div>
+      </div>
+    </div>
+
+    <!-- S1: THE BRIEF — what was claimed -->
+    <div class="scene" id="s1">
+      <div class="status-grid">
+        <div class="status-row reveal" style="border-left-color:#555">
+          <div class="status-icon">📄</div>
+          <div class="status-text"><strong>200-line write-up</strong> — completed infra work</div>
+        </div>
+        <div class="status-row reveal" style="border-left-color:#555">
+          <div class="status-icon">🔒</div>
+          <div class="status-text"><strong>"Migrated to git+ssh"</strong> — security fix</div>
+        </div>
+        <div class="status-row reveal" style="border-left-color:#555">
+          <div class="status-icon">🔄</div>
+          <div class="status-text"><strong>"Provider fallback shipped"</strong> — resilience</div>
+        </div>
+        <div class="status-row reveal" style="border-left-color:#555">
+          <div class="status-icon">🧹</div>
+          <div class="status-text"><strong>"5 files ready to delete"</strong> — cleanup</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: SCANNING — 3 parallel agents -->
+    <div class="scene" id="s2">
+      <div class="tc">
+        <div class="hero-num c-gold reveal">97</div>
+        <div class="hero-label reveal">TOOL CALLS ACROSS 3 PARALLEL AGENTS</div>
+      </div>
+    </div>
+
+    <!-- S3: THE SEVEN — debunked list -->
+    <div class="scene" id="s3">
+      <div class="status-grid">
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>action-log.js</strong> — never existed</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>walkforward-publisher.js</strong> — never existed</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>walkforward-scanner.js</strong> — never existed</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>check-env.sh</strong> — never existed</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>pipeline_heartbeats</strong> — no app code</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>LLM fallback</strong> — throws, no fallback</div></div>
+        <div class="status-row red reveal"><div class="status-icon c-red">✗</div><div class="status-text"><strong>SSH migration</strong> — PAT still inline</div></div>
+      </div>
+    </div>
+
+    <!-- S4: IMPACT — the big number -->
+    <div class="scene" id="s4">
+      <div class="tc">
+        <div class="hero-num c-red reveal">7</div>
+        <div class="hero-label reveal">CLAIMS. ZERO MATCHING FILES.</div>
+      </div>
+    </div>
+
+    <!-- S5: THE TOKEN -->
+    <div class="scene" id="s5">
+      <div class="mini-term">
+        <div class="mini-term-bar">
+          <div class="mini-term-dot" style="background:#E84749"></div>
+          <div class="mini-term-dot" style="background:#D4A843"></div>
+          <div class="mini-term-dot" style="background:#5CB87A"></div>
+          <div class="mini-term-title">package.json:22</div>
+        </div>
+        <div class="mini-term-body" id="tb5"></div>
+      </div>
+    </div>
+
+    <!-- S6: CORRECTION 1 — quote -->
+    <div class="scene" id="s6">
+      <div class="tc">
+        <div class="tc-label reveal">CORRECTION 1</div>
+        <div class="tc-quote reveal">"keep it as <span class="c-gold">brief</span> and as <span class="c-gold">impactful</span> as possible"</div>
+      </div>
+    </div>
+
+    <!-- S7: CORRECTION 2 — PAT verdict -->
+    <div class="scene" id="s7">
+      <div class="split">
+        <div class="split-col">
+          <div class="status-row green reveal"><div class="status-icon c-green">✓</div><div class="status-text"><strong>Fix branch exists</strong></div></div>
+          <div class="status-row green reveal"><div class="status-icon c-green">✓</div><div class="status-text"><strong>Both repos private</strong></div></div>
+          <div class="status-row gold reveal"><div class="status-icon c-gold">⚠</div><div class="status-text"><strong>Not merged</strong></div></div>
+        </div>
+        <div class="split-col" style="justify-content:center">
+          <div class="tc-sub reveal" style="color:#999; font-size:clamp(14px,1.6vw,18px)">Sascha's call on priority.<br><span class="c-dim" style="font-size:0.85em">Exposure contained.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8: CORRECTION 3 — scope shift quote -->
+    <div class="scene" id="s8">
+      <div class="tc">
+        <div class="tc-label reveal">CORRECTION 3</div>
+        <div class="tc-quote reveal">"connect each surface to the <span class="c-gold">glass bowl</span> hero"</div>
+      </div>
+    </div>
+
+    <!-- S9: THE GAP — glassbowl surfaces -->
+    <div class="scene" id="s9">
+      <div class="status-grid" style="max-width:540px">
+        <div class="status-row green reveal"><div class="status-icon" style="font-size:24px">💬</div><div class="status-text"><strong>Telegram</strong> — <span class="c-green">live</span></div></div>
+        <div class="status-row red reveal"><div class="status-icon" style="font-size:24px">🌐</div><div class="status-text"><strong>Web</strong> — <span class="c-red">no endpoint</span></div></div>
+        <div class="status-row red reveal"><div class="status-icon" style="font-size:24px">⚡</div><div class="status-text"><strong>API</strong> — <span class="c-red">no endpoint</span></div></div>
+        <div class="status-row gold reveal"><div class="status-icon" style="font-size:24px">▶</div><div class="status-text"><strong>CLI</strong> — <span class="c-gold">deferred</span></div></div>
+      </div>
+    </div>
+
+    <!-- S10: 40 ORPHANED — big number -->
+    <div class="scene" id="s10">
+      <div class="tc">
+        <div class="hero-num c-gold reveal">40</div>
+        <div class="hero-label reveal">TELEGRAM COMMANDS WITH NO HTTP LAYER</div>
+      </div>
+    </div>
+
+    <!-- S11: SHIPPED -->
+    <div class="scene" id="s11">
+      <div class="mini-term">
+        <div class="mini-term-bar">
+          <div class="mini-term-dot" style="background:#E84749"></div>
+          <div class="mini-term-dot" style="background:#D4A843"></div>
+          <div class="mini-term-dot" style="background:#5CB87A"></div>
+          <div class="mini-term-title">SASCHA-HANDOFF.md</div>
+        </div>
+        <div class="mini-term-body" id="tb11"></div>
+      </div>
+    </div>
+
+    <!-- S12: CLOSING -->
+    <div class="scene" id="s12">
+      <div class="tc">
+        <div class="tc-label reveal">CODEBASE AUDIT</div>
+        <div class="tc-big reveal" style="font-size:clamp(28px,4vw,48px)">Trust the code,<br>not the changelog.</div>
+        <div class="tc-sub reveal">3 corrections · 7 debunked · 97 lines shipped</div>
+      </div>
+    </div>
+
+    <!-- S13: HANDOFF CARD -->
+    <div class="scene" id="s13">
+      <div class="handoff-card">
+        <div class="handoff-header reveal">
+          <div class="tc-label">SASCHA HANDOFF · 2026-03-24</div>
+        </div>
+        <div class="handoff-body">
+          <div class="handoff-section reveal">
+            <div class="handoff-p1">P1</div>
+            <div class="handoff-detail">
+              <strong>Bridge shumi-bot to HTTP</strong>
+              <span>40 TG-only commands need JSON endpoints for web + API surfaces</span>
+            </div>
+          </div>
+          <div class="handoff-section reveal">
+            <div class="handoff-p2">P2</div>
+            <div class="handoff-detail">
+              <strong>Validate glassbowl surfaces</strong>
+              <span>Confirm each glass box tab can deliver real data · merge feat/regime-signal-api</span>
+            </div>
+          </div>
+          <div class="handoff-divider reveal"></div>
+          <div class="handoff-section reveal">
+            <div class="handoff-ex">—</div>
+            <div class="handoff-detail">
+              <strong class="c-dim">Sim optimization excluded</strong>
+              <span>All 152 backtest scripts, Engine A/B calibration, autoresearch = pxeo only</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="narr-strip">
+    <div class="narr-label" id="nLabel"></div>
+    <div class="narr-text" id="nText"></div>
+  </div>
+</div>
+
+<div class="progress" id="progressBar"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+var snd = new Snd(); snd.load(Snd.KITS.SND01);
+
+var scenes = [
+  // S0: Title
+  { el: 's0', dur: 5500,
+    label: 'SETUP',
+    narr: 'A 200-line write-up claims <span class="hi">completed infrastructure work</span>. Time to check.' },
+
+  // S1: The brief
+  { el: 's1', dur: 5500,
+    label: 'THE BRIEF',
+    narr: 'Security migration, provider fallback, five files to delete.' },
+
+  // S2: 97 tool calls
+  { el: 's2', dur: 4000,
+    label: 'VERIFICATION',
+    narr: 'Three agents scan <span class="hi">every repo in parallel</span>.',
+    sound: 'notification' },
+
+  // S3: The seven
+  { el: 's3', dur: 7000,
+    label: 'DEBUNKED',
+    narr: 'Seven claims. <span class="red">Seven misses.</span>',
+    sound: 'caution' },
+
+  // S4: Big 7
+  { el: 's4', dur: 4000,
+    label: '',
+    narr: 'Described as shipped. <span class="red">Absent from code.</span>' },
+
+  // S5: The token
+  { el: 's5', dur: 5500,
+    term: { id: 'tb5', lines: [
+      '<span class="t-gray">"coinrotator-utils":</span>',
+      '<span class="t-leaked">  git+https://████:github_pat_████████@github.com</span>',
+      '<span class="t-dim">  // on main + 15 branches</span>'
+    ]},
+    label: 'THE TOKEN',
+    narr: 'Inline <span class="red">GitHub PAT</span>. Still in package.json.' },
+
+  // S6: Correction 1
+  { el: 's6', dur: 4500,
+    label: 'CORRECTION 1',
+    narr: 'Strip aspirational claims. Keep what the code confirms.',
+    sound: 'caution' },
+
+  // S7: PAT verdict
+  { el: 's7', dur: 5000,
+    label: 'CORRECTION 2',
+    narr: 'Fix branch exists. <span class="hi">Not merged.</span> Sascha\'s call.' },
+
+  // S8: Correction 3
+  { el: 's8', dur: 4500,
+    label: 'CORRECTION 3',
+    narr: 'Redraw the <span class="hi">ownership boundary</span>. Connect surfaces to landing page.',
+    sound: 'caution' },
+
+  // S9: Glassbowl surfaces
+  { el: 's9', dur: 5500,
+    label: 'THE GLASSBOWL',
+    narr: 'Promises <span class="hi">four surfaces</span>. Only Telegram works.',
+    sound: 'notification' },
+
+  // S10: 40 orphaned
+  { el: 's10', dur: 4000,
+    label: 'THE GAP',
+    narr: '<span class="red">40 commands</span> locked behind a bot with no HTTP layer.' },
+
+  // S11: Shipped
+  { el: 's11', dur: 5500,
+    term: { id: 'tb11', lines: [
+      '<span class="t-green">P1</span> <span class="t-gray">Bridge 40 TG endpoints to HTTP</span>',
+      '<span class="t-green">P2</span> <span class="t-gray">Validate glassbowl surfaces</span>',
+      '<span class="t-red">——</span> <span class="t-gray">Sim optimization excluded</span>'
+    ]},
+    label: 'SHIPPED',
+    narr: '<span class="hi">97 lines.</span> Two priorities, one exclusion. Verified.',
+    sound: 'celebration' },
+
+  // S12: Closing
+  { el: 's12', dur: 5000,
+    label: '',
+    narr: 'Trust the code, not the changelog.',
+    sound: 'notification' },
+
+  // S13: Handoff card
+  { el: 's13', dur: 8000,
+    label: 'HANDOFF',
+    narr: 'Two priorities. One exclusion. <span class="hi">Everything verified.</span>',
+    sound: 'celebration' },
+];
+
+var cur = -1, running = false, total = scenes.length;
+var sceneTimer = null;   // track the auto-advance timer
+var revealTimers = [];   // track all in-scene animation timers
+
+function killTimers() {
+  clearTimeout(sceneTimer);
+  sceneTimer = null;
+  revealTimers.forEach(function(t) { clearTimeout(t); });
+  revealTimers = [];
+}
+
+function clearAll() {
+  killTimers();
+  document.querySelectorAll('.scene').forEach(function(s) {
+    s.classList.remove('active');
+    // immediately reset all reveals so nothing bleeds through
+    s.querySelectorAll('.reveal').forEach(function(r) { r.classList.remove('show'); });
+    s.querySelectorAll('.mini-term-line').forEach(function(r) { r.classList.remove('show'); });
+  });
+}
+
+function showNarr(label, html) {
+  var nl = document.getElementById('nLabel');
+  var nt = document.getElementById('nText');
+  nl.classList.remove('show'); nt.classList.remove('show');
+  setTimeout(function() {
+    nl.textContent = label || '';
+    nt.innerHTML = html || '';
+    if (label) nl.classList.add('show');
+    if (html) nt.classList.add('show');
+  }, 180);
+}
+
+function startFilm() {
+  document.getElementById('startScreen').classList.add('hidden');
+  running = true; nextScene();
+}
+
+function playScene() {
+  var s = scenes[cur];
+  document.getElementById('counter').textContent = String(cur+1).padStart(2,'0')+'/'+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((cur+1)/total*100)+'%';
+  if (cur >= 1) document.getElementById('recBadge').classList.add('show');
+
+  // Sounds
+  try { snd.play(Snd.SOUNDS.TRANSITION_UP,{volume:0.35}); } catch(e) {}
+  if (s.sound === 'caution') try { revealTimers.push(setTimeout(function(){snd.play(Snd.SOUNDS.CAUTION);},300)); } catch(e) {}
+  if (s.sound === 'notification') try { revealTimers.push(setTimeout(function(){snd.play(Snd.SOUNDS.NOTIFICATION);},300)); } catch(e) {}
+  if (s.sound === 'celebration') try { revealTimers.push(setTimeout(function(){snd.play(Snd.SOUNDS.CELEBRATION);},300)); } catch(e) {}
+
+  // Narration
+  showNarr(s.label, s.narr);
+
+  // Activate scene
+  var el = document.getElementById(s.el);
+  el.classList.add('active');
+
+  // Reveal children with tracked timers
+  var reveals = el.querySelectorAll('.reveal');
+  reveals.forEach(function(r, i) {
+    revealTimers.push(setTimeout(function() {
+      r.classList.add('show');
+      try { snd.play(Snd.SOUNDS.TAP,{volume:0.18}); } catch(e) {}
+    }, 300 + i * 400));
+  });
+
+  // Terminal lines (if any)
+  if (s.term) {
+    var tb = document.getElementById(s.term.id);
+    tb.innerHTML = '';
+    s.term.lines.forEach(function(l, i) {
+      var d = document.createElement('div');
+      d.className = 'mini-term-line';
+      d.innerHTML = l;
+      tb.appendChild(d);
+      revealTimers.push(setTimeout(function() {
+        d.classList.add('show');
+        try { snd.play(Snd.SOUNDS.TYPE,{volume:0.22}); } catch(e) {}
+      }, 600 + i * 550));
+    });
+  }
+
+  // Auto-advance (single tracked timer)
+  sceneTimer = setTimeout(nextScene, s.dur);
+}
+
+function nextScene() {
+  clearAll();
+  cur++;
+  if (cur >= total) { running = false; showNarr('',''); return; }
+  playScene();
+}
+
+function goTo(index) {
+  clearAll();
+  cur = index;
+  if (cur < 0) cur = 0;
+  if (cur >= total) cur = total - 1;
+  playScene();
+}
+
+// Keyboard
+document.addEventListener('keydown', function(e) {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (cur < 0) { startFilm(); return; }
+    if (running) { running = false; killTimers(); }
+    else { running = true; nextScene(); }
+  }
+  if (e.code === 'ArrowRight' || e.code === 'PageDown') {
+    e.preventDefault();
+    if (cur < 0) { startFilm(); return; }
+    running = true;
+    nextScene();
+  }
+  if (e.code === 'ArrowLeft' || e.code === 'PageUp') {
+    e.preventDefault();
+    if (cur <= 0) return;
+    running = true;
+    goTo(cur - 1);
+  }
+});
+</script>
+</body>
+</html>
