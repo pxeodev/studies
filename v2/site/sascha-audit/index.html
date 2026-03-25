@@ -263,7 +263,7 @@
     <div class="tc">
       <div class="tc-label">SASCHA HANDOFF</div>
       <div class="tc-big">March 25, 2026</div>
-      <div class="tc-sub" style="color:#555">confidence map + open items</div>
+      <div class="tc-sub" style="color:#555">what shipped, what's blocked, what's new</div>
     </div>
     <div class="start-hint">CLICK OR PRESS SPACE</div>
   </div>
@@ -274,8 +274,7 @@
     <div class="scene" id="s0">
       <div class="tc">
         <div class="tc-label reveal">HANDOFF UPDATE</div>
-        <div class="tc-big reveal">63 coins.<br>4 confidence tiers.</div>
-        <div class="tc-sub reveal">The OOS test was right. We just asked the wrong question.</div>
+        <div class="tc-big reveal">4 shipped. 40 blocked.<br>63 coins mapped.</div>
       </div>
     </div>
 
@@ -455,49 +454,49 @@ function startNarration() {
 
 var scenes = [
   { el: 's0', dur: 6000,
-    label: 'RECAP',
-    narr: 'The OOS test kept failing. Turns out it was <span class="hi">telling us something useful</span>.' },
+    label: 'WHAT SHIPPED',
+    narr: 'Four things landed. Signal API, signal tool, cross-surface memory, glass box intel.' },
 
-  { el: 's1', dur: 5500,
+  { el: 's1', dur: 6500,
     label: 'SHIPPED',
-    narr: 'Four items already live. Regime API, signal tool, memory, glassbowl.',
+    narr: 'Web app can pull signals. Bot memory is <span class="hi">no longer locked to Telegram</span>. Landing page has real data.',
     sound: 'notification' },
 
-  { el: 's2', dur: 4000,
-    label: 'P1',
-    narr: '<span class="hi">40 commands</span> locked behind Telegram. No HTTP layer.' },
+  { el: 's2', dur: 5000,
+    label: 'P1 — THE GAP',
+    narr: 'But the bigger issue hasn\'t moved. <span class="hi">40 commands</span> stuck behind a bot with no HTTP.' },
 
-  { el: 's3', dur: 5000,
+  { el: 's3', dur: 6000,
     label: 'P2 GLASSBOWL',
-    narr: 'Four surfaces promised. <span class="red">Only Telegram works.</span>',
+    narr: 'Four surfaces promised. <span class="red">Only Telegram works.</span> Until this moves, the web app is flying blind.',
     sound: 'caution' },
 
-  { el: 's4', dur: 4500,
-    label: 'THE SWEEP',
-    narr: 'Tested every coin in the engine. <span class="hi">Three consensus thresholds.</span>',
+  { el: 's4', dur: 5000,
+    label: 'SIM ENGINE',
+    narr: 'On the research side... ran every coin in the engine. <span class="hi">63 coins, 3 thresholds.</span>',
     sound: 'notification' },
 
   { el: 's5', dur: 6000,
     label: 'CONSENSUS',
-    narr: 'Unanimous wins. The strict filter <span class="hi">IS the edge</span>. Not the obstacle.' },
+    narr: 'The strict filter wins. Unanimous consensus passes <span class="hi">19 coins</span>. Relaxing it makes things worse.' },
 
   { el: 's6', dur: 5000,
     label: '2025 OOS',
-    narr: 'Longs only in a three-year bleed. <span class="red">One survivor.</span>',
+    narr: 'Longs only in a multi-year alt bleed. <span class="red">One survivor.</span>',
     sound: 'caution' },
 
   { el: 's7', dur: 5500,
     label: 'WITH SHORTS',
-    narr: 'Six coins survive 2025 with both directions enabled.',
+    narr: 'Six coins survive 2025 with shorts enabled.',
     sound: 'celebration' },
 
   { el: 's8', dur: 5500,
     label: 'TRADEOFF',
-    narr: 'Shorts rescue alts but <span class="red">break BTC and ETH</span>. Each coin needs its own setting.' },
+    narr: 'Shorts rescue alts but <span class="red">break BTC and ETH</span>. Per-coin direction settings... bigger research project.' },
 
-  { el: 's9', dur: 5500,
+  { el: 's9', dur: 5000,
     label: 'CONFIDENCE MAP',
-    narr: '<span class="hi">63 coins, 4 tiers.</span> Backtest quality in every signal response.',
+    narr: 'Shipped what we know. <span class="hi">63 coins, 4 tiers.</span> Shumi includes the tier automatically.',
     sound: 'notification' },
 
   { el: 's10', dur: 6000,
@@ -507,22 +506,21 @@ var scenes = [
       '<span class="t-green">PR #69</span> <span class="t-gray">coinrotator-ai</span> <span class="t-dim">feat/confidence-map</span>',
       '<span class="t-green">PR #9</span>  <span class="t-gray">coinrotator-utils</span> <span class="t-dim">feat/confidence-map</span>',
     ]},
-    label: 'ENDPOINTS',
-    narr: 'Two PRs. No schema changes. <span class="hi">Merge and deploy.</span>' },
+    label: 'PRS READY',
+    narr: 'Two PRs. No schema changes. No breaking changes. <span class="hi">Merge and deploy.</span>' },
 
   { el: 's11', dur: 6500,
     term: { id: 'tb11', lines: [
       '<span class="t-gold">MERGE</span> <span class="t-gray">feat/confidence-map on backend + utils</span>',
-      '<span class="t-gold">DEFER</span> <span class="t-gray">Langfuse Tool Definitions update</span>',
-      '<span class="t-gold">DEFER</span> <span class="t-gray">Heartbeat writes for scanners</span>',
-      '<span class="t-red">NOTE</span>  <span class="t-gray">PAT token in package.json &#8212; Sascha\'s call</span>',
+      '<span class="t-gold">DEFER</span> <span class="t-gray">Langfuse tool defs + heartbeat writes</span>',
+      '<span class="t-red">NOTE</span>  <span class="t-gray">PAT token still inline &#8212; fix branch removed, your call</span>',
     ]},
     label: 'OPEN ITEMS',
-    narr: 'Confidence map is the only blocker. Everything else can wait.' },
+    narr: 'Confidence map merge is the quick win. Langfuse and heartbeats can wait. PAT is contained.' },
 
-  { el: 's12', dur: 8000,
+  { el: 's12', dur: 7000,
     label: 'HANDOFF',
-    narr: '63 coins. 6 validated. 2 PRs. <span class="hi">The handoff page has the details.</span>',
+    narr: '4 shipped. 40 blocked. 63 mapped. <span class="hi">That\'s the brief.</span>',
     sound: 'celebration' },
 ];
 
