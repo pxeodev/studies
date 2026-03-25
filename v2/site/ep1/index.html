@@ -414,18 +414,22 @@
     <div class="scene" id="s7">
       <div class="kill-stamp" id="ks7">KILLED</div>
       <div class="stat-single">
-        <div class="hero-sub reveal" style="margin-bottom:16px">FUNDING RATE SIGNAL</div>
-        <div class="vs reveal">
+        <div class="vs reveal" style="margin-bottom:12px">
           <div class="vs-col">
-            <div class="vs-num c-green">74%</div>
+            <div class="vs-num c-green" style="font-size:clamp(40px,7vw,80px)">74%</div>
             <div class="vs-label">WIN RATE</div>
           </div>
-          <div class="vs-slash">/</div>
+          <div class="vs-slash" style="font-size:clamp(24px,4vw,48px)">/</div>
           <div class="vs-col">
-            <div class="vs-num c-red">-8%</div>
+            <div class="vs-num c-red" style="font-size:clamp(40px,7vw,80px)">-8%</div>
             <div class="vs-label">AVG RETURN</div>
           </div>
         </div>
+        <svg width="480" height="100" viewBox="0 0 480 100" class="reveal" style="max-width:85vw">
+          <line x1="0" y1="50" x2="480" y2="50" stroke="#1E1E22" stroke-width="1" stroke-dasharray="4,4"/>
+          <polyline fill="none" stroke="#E84749" stroke-width="2" stroke-linejoin="round" opacity="0.7" points="0,50 15,45 30,48 45,38 60,30 75,15 90,20 105,35 120,28 135,25 150,30 165,35 180,42 195,38 210,45 225,50 240,48 255,55 270,52 285,58 300,55 315,62 330,65 345,60 360,68 375,72 390,70 405,78 420,82 435,85 450,90 465,88 480,95"/>
+        </svg>
+        <div class="hero-sub reveal" style="margin-top:6px">43 TRADES · 18 MONTHS</div>
       </div>
     </div>
 
@@ -520,24 +524,16 @@
     <!-- S16: Signal 2 — concentration: real equity curve + bar chart -->
     <div class="scene" id="s16">
       <div class="stat-single">
-        <div class="bar-chart reveal" id="concBars">
-          <div class="bar-col">
-            <div class="bar-val c-green">+87%</div>
-            <div class="bar" style="height:260px;background:#5CB87A"></div>
-            <div class="bar-label">BASELINE</div>
-          </div>
-          <div class="bar-col">
-            <div class="bar-val c-gold">+37%</div>
-            <div class="bar" style="height:111px;background:#D4A843"></div>
-            <div class="bar-label">−1 TRADE</div>
-          </div>
-          <div class="bar-col">
-            <div class="bar-val c-red">−10%</div>
-            <div class="bar" style="height:30px;background:#E84749"></div>
-            <div class="bar-label">−3 TRADES</div>
-          </div>
-        </div>
-        <div class="badge badge-red reveal" style="margin-top:16px">CONCENTRATION RISK</div>
+        <svg width="480" height="140" viewBox="0 0 480 140" class="reveal" style="max-width:85vw">
+          <line x1="0" y1="90" x2="480" y2="90" stroke="#1E1E22" stroke-width="1" stroke-dasharray="4,4"/>
+          <!-- Steady climb, ONE massive spike (the trade), then collapse back -->
+          <polyline fill="none" stroke="#5CB87A" stroke-width="2.5" stroke-linejoin="round" opacity="0.8" points="0,95 30,92 60,88 90,85 120,82 150,80 180,78 210,75 240,72 270,68 290,55 300,30 310,10 315,5 320,12 330,35 340,55 350,65 370,72 400,75 430,78 460,80 480,82"/>
+          <!-- Mark the spike -->
+          <circle cx="315" cy="5" r="4" fill="#E84749"/>
+          <text x="315" y="130" fill="#E84749" font-family="Space Mono,monospace" font-size="10" text-anchor="middle">ONE TRADE</text>
+        </svg>
+        <div class="stat-num c-red reveal" style="font-size:clamp(36px,5vw,56px);margin-top:8px">57%</div>
+        <div class="hero-sub reveal">OF ALL PROFIT</div>
       </div>
     </div>
 
@@ -624,11 +620,11 @@ var killTargets = { 's7': 197, 's8': 397 }; // cumulative kills at each scene
 
 var scenes = [
   // S0: Paradox cold open
-  { el:'s0', dur:16000,
+  { el:'s0', dur:18000,
     narr:'74% win rate... loses money.' },
 
   // S1: Auto-research loop
-  { el:'s1', dur:14000,
+  { el:'s1', dur:15000,
     term: { id:'tb1', lines:[
       '<span class="t-cyan">$</span> <span class="t-gray">run autoresearch</span>',
       '<span class="t-dim">  hypothesis → test → kill → repeat</span>',
@@ -637,7 +633,7 @@ var scenes = [
     narr:'Auto-research. Machines don\'t get attached.' },
 
   // S2: Batcat terminal
-  { el:'s2', dur:16000,
+  { el:'s2', dur:10000,
     term: { id:'tb0', lines:[
       '<span class="t-cyan">$</span> <span class="t-gray">shumi analyze BTC</span>',
       '<span class="t-dim">  resolving ticker...</span>',
@@ -646,7 +642,7 @@ var scenes = [
     narr:'Batcat. That was the easy one.' },
 
   // S3: Four bugs
-  { el:'s3', dur:12000,
+  { el:'s3', dur:13000,
     term: { id:'tb3', lines:[
       '<span class="t-red">✗</span> <span class="t-gray">metadata: wrong coin</span>',
       '<span class="t-red">✗</span> <span class="t-gray">cache: stale</span>',
@@ -660,7 +656,7 @@ var scenes = [
     narr:'Forty-six hours. Every layer.' },
 
   // S5: Phantom table
-  { el:'s5', dur:13000,
+  { el:'s5', dur:17000,
     term: { id:'tb5', lines:[
       '<span class="t-cyan">SELECT</span> <span class="t-gray">* FROM trend_streak_daily</span>',
       '<span class="t-red">ERROR: relation does not exist</span>',
@@ -669,7 +665,7 @@ var scenes = [
     narr:'Built on air.' },
 
   // S6: WHAT WE KILLED
-  { el:'s6', dur:4000, sound:'caution',
+  { el:'s6', dur:3000, sound:'caution',
     narr:'' },
 
   // S7: Funding paradox
@@ -693,7 +689,7 @@ var scenes = [
     narr:'Three survived.' },
 
   // S13: Redacted
-  { el:'s13', dur:15000,
+  { el:'s13', dur:14000,
     term: { id:'tb13', lines:[
       '<span class="t-green">strategy:</span> <span class="t-dim">████████████</span>',
       '<span class="t-green">params:</span>   <span class="t-dim">████████████████</span>',
@@ -702,15 +698,15 @@ var scenes = [
     narr:'Not the rules. What we learned.' },
 
   // S14: 127/128
-  { el:'s14', dur:20000,
+  { el:'s14', dur:21000,
     narr:'Five folds passed. But 2022 was training data.' },
 
   // S15: +16.8% OOS
-  { el:'s15', dur:8000,
+  { el:'s15', dur:7000,
     narr:'Sixteen percent out of sample. Survived.' },
 
   // S16: Concentration pie
-  { el:'s16', dur:28000, sound:'caution',
+  { el:'s16', dur:30000, sound:'caution',
     narr:'57% of profit. One trade. Unsolved.' },
 
   // S17: n=5
