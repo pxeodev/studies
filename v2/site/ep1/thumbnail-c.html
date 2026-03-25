@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thumbnail C — 397 KILLED</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px;
+    background: linear-gradient(160deg, #1A0808 0%, #0A0A0C 50%, #081A0A 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  /* Subtle grid texture */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(239,68,68,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239,68,68,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .main {
+    position: relative; z-index: 1;
+    display: flex; align-items: flex-end; gap: 60px;
+  }
+
+  .kill-side { text-align: center; }
+
+  .big-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 340px; font-weight: 800;
+    color: #EF4444; line-height: 0.8;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 80px rgba(239,68,68,0.25);
+  }
+
+  .stamp {
+    font-family: 'Space Mono', monospace;
+    font-size: 28px; font-weight: 700;
+    color: #EF4444; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 12px;
+    padding: 8px 24px;
+    border: 3px solid rgba(239,68,68,0.4);
+    border-radius: 4px;
+    background: rgba(239,68,68,0.08);
+    display: inline-block;
+  }
+
+  .survive-side {
+    text-align: center; margin-bottom: 40px;
+  }
+
+  .survive-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 180px; font-weight: 800;
+    color: #4ADE80; line-height: 0.85;
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 60px rgba(74,222,128,0.3);
+  }
+
+  .survive-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px; font-weight: 700;
+    color: #22C55E; letter-spacing: 0.14em;
+    text-transform: uppercase; margin-top: 8px;
+  }
+
+  /* Divider line */
+  .divider {
+    width: 3px; height: 300px;
+    background: linear-gradient(to bottom, rgba(239,68,68,0.4), rgba(74,222,128,0.4));
+    border-radius: 2px;
+    margin-bottom: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="main">
+  <div class="kill-side">
+    <div class="big-num">397</div>
+    <div class="stamp">KILLED</div>
+  </div>
+  <div class="divider"></div>
+  <div class="survive-side">
+    <div class="survive-num">3</div>
+    <div class="survive-label">Survived</div>
+  </div>
+</div>
+
+</body>
+</html>

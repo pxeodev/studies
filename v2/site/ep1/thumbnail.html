@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thumbnail A — 74% Win Rate</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px;
+    background: linear-gradient(135deg, #0F1A0F 0%, #0A0A0C 40%, #1A0A0A 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  /* Subtle grid texture */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .content {
+    display: flex; align-items: center; gap: 40px;
+    position: relative; z-index: 1;
+  }
+
+  .col { text-align: center; }
+
+  .num {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800; line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-size: 260px;
+  }
+
+  .green {
+    color: #4ADE80;
+    text-shadow: 0 0 60px rgba(74,222,128,0.3), 0 0 120px rgba(74,222,128,0.1);
+  }
+  .red {
+    color: #EF4444;
+    text-shadow: 0 0 60px rgba(239,68,68,0.3), 0 0 120px rgba(239,68,68,0.1);
+  }
+
+  .sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .sub-green { color: #22C55E; }
+  .sub-red { color: #DC2626; }
+
+  .slash {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 160px; color: #333; font-weight: 300;
+  }
+
+  /* Losing equity curve — more visible */
+  .chart {
+    position: absolute; bottom: 40px; left: 40px; right: 40px;
+  }
+
+  /* Bottom bar */
+  .bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 56px; background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center; gap: 24px;
+  }
+  .bottom-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 18px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #555;
+  }
+  .bottom-text span { color: #A1A1AA; }
+
+  /* Corner badge */
+  .badge {
+    position: absolute; top: 28px; right: 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px; font-weight: 700;
+    color: #EF4444; letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border: 2px solid rgba(239,68,68,0.3);
+    border-radius: 4px;
+    background: rgba(239,68,68,0.08);
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="badge">KILLED</div>
+
+<div class="content">
+  <div class="col">
+    <div class="num green">74%</div>
+    <div class="sub sub-green">Win Rate</div>
+  </div>
+  <div class="slash">/</div>
+  <div class="col">
+    <div class="num red">-8%</div>
+    <div class="sub sub-red">Return</div>
+  </div>
+</div>
+
+<svg class="chart" width="1200" height="200" viewBox="0 0 1200 200">
+  <!-- Area fill under curve -->
+  <polygon fill="rgba(239,68,68,0.08)" points="0,200 0,80 50,70 100,76 150,50 200,36 250,10 300,24 350,56 400,40 450,36 500,48 550,60 600,76 650,64 700,84 750,96 800,90 850,110 900,100 950,116 1000,124 1050,130 1100,144 1150,150 1200,160 1200,200"/>
+  <polyline fill="none" stroke="#EF4444" stroke-width="4" stroke-linejoin="round" opacity="0.5" points="0,80 50,70 100,76 150,50 200,36 250,10 300,24 350,56 400,40 450,36 500,48 550,60 600,76 650,64 700,84 750,96 800,90 850,110 900,100 950,116 1000,124 1050,130 1100,144 1150,150 1200,160"/>
+</svg>
+
+<div class="bottom">
+  <div class="bottom-text"><span>400</span> experiments</div>
+  <div class="bottom-text" style="color:#333">·</div>
+  <div class="bottom-text"><span>3</span> survived</div>
+</div>
+
+</body>
+</html>

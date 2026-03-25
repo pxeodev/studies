@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><title>Thumbnail Size Test</title>
+<style>
+  body { background: #fff; padding: 40px; font-family: system-ui; }
+  h3 { color: #333; margin: 20px 0 8px; }
+  .row { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+  .size-label { color: #999; font-size: 12px; margin-bottom: 8px; }
+  .thumb-wrap { overflow: hidden; border: 1px solid #ddd; border-radius: 8px; }
+  .thumb-wrap iframe { border: none; display: block; }
+
+  /* Full: 640x360 (50% of 1280x720) */
+  .full { width: 640px; height: 360px; }
+  .full iframe { width: 1280px; height: 720px; transform: scale(0.5); transform-origin: top left; }
+
+  /* Feed: 320x180 */
+  .feed { width: 320px; height: 180px; }
+  .feed iframe { width: 1280px; height: 720px; transform: scale(0.25); transform-origin: top left; }
+
+  /* Mobile: 200x112 */
+  .mobile { width: 200px; height: 112px; }
+  .mobile iframe { width: 1280px; height: 720px; transform: scale(0.15625); transform-origin: top left; }
+</style>
+</head>
+<body>
+<h2>Thumbnail A at actual YouTube sizes</h2>
+
+<div class="row">
+  <div>
+    <div class="size-label">Half size (640x360)</div>
+    <div class="thumb-wrap full">
+      <iframe src="thumbnail.html"></iframe>
+    </div>
+  </div>
+  <div>
+    <div class="size-label">Feed size (320x180)</div>
+    <div class="thumb-wrap feed">
+      <iframe src="thumbnail.html"></iframe>
+    </div>
+  </div>
+  <div>
+    <div class="size-label">Mobile (200x112)</div>
+    <div class="thumb-wrap mobile">
+      <iframe src="thumbnail.html"></iframe>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Thumbnail B — 400 → 3</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px;
+    background: #0A0A0C;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+    gap: 2px; padding: 20px;
+  }
+  .dot {
+    border-radius: 2px;
+    background: #E84749;
+    opacity: 0.15;
+  }
+  .dot.alive {
+    background: #4ADE80;
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(74,222,128,0.6), 0 0 30px rgba(74,222,128,0.2);
+  }
+
+  .overlay {
+    position: relative; z-index: 1;
+    text-align: center;
+    background: rgba(10,10,12,0.85);
+    padding: 40px 80px;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 120px; font-weight: 800;
+    letter-spacing: -0.04em; line-height: 1;
+    color: #F9FAFB;
+  }
+  .title .dim { color: #555; }
+  .title .green { color: #4ADE80; }
+
+  .sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px; font-weight: 700;
+    color: #555; letter-spacing: 0.14em;
+    text-transform: uppercase; margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid" id="grid"></div>
+
+<div class="overlay">
+  <div class="title"><span class="dim">400</span> → <span class="green">3</span></div>
+  <div class="sub">experiments · survived</div>
+</div>
+
+<script>
+var grid = document.getElementById('grid');
+var alive = [47, 203, 351];
+for (var i = 0; i < 400; i++) {
+  var d = document.createElement('div');
+  d.className = 'dot' + (alive.includes(i) ? ' alive' : '');
+  grid.appendChild(d);
+}
+</script>
+
+</body>
+</html>
