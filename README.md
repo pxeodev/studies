@@ -17,3 +17,5 @@ accuracy 25% and risk awareness 15%. Shumi was left out of the scored field.
 - `benchmark/data.js` holds all 270 scores.
 - `benchmark/index.html` renders the rankings, the per-question breakdown and the heatmap.
 - One AI evaluator scored every answer, and answers were collected over about 26 hours.
+- `benchmark/answers/chatgpt.md` holds ChatGPT's nine answers, word for word, asked on 2026-03-10.
+  Only ChatGPT's answers from this run were kept.
